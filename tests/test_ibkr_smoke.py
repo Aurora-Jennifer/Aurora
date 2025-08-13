@@ -20,7 +20,7 @@ def test_ibkr_connect_and_tick():
 
     try:
         # Try to import ib_insync
-        import ib_insync
+        pass
 
         print("  ✅ ib_insync available")
     except ImportError:

@@ -1,0 +1,18 @@
+{
+  "parquet_file": "results/features/SPY_v1.parquet",
+  "train_days": 100,
+  "test_days": 30,
+  "stride_days": 30,
+  "anchored": false,
+  "min_live_months": 6,
+  "run_timestamp": "2025-08-13T06:03:09.701845",
+  "total_folds": 38,
+  "data_shape": [
+    1257,
+    4
+  ],
+  "date_range": [
+    "2020-01-02T00:00:00.000000",
+    "2024-12-30T00:00:00.000000"
+  ]
+}

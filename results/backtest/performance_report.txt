@@ -4,8 +4,8 @@
 
 📅 BACKTEST PERIOD
   Start Date: 2024-01-01
-  End Date: 2024-08-01
-  Trading Days: 147
+  End Date: 2024-01-31
+  Trading Days: 433
 
 💰 PORTFOLIO METRICS
   Total Return: 0.00%
@@ -28,7 +28,7 @@
 
 📊 EQUITY CURVE
   Initial Equity: $100,000.00
-  Final Equity: $100,000.00
+  Final Equity: $99,982.50
   Peak Equity: $100,000.00
 
 ============================================================

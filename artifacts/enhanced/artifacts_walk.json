@@ -1,0 +1,302 @@
+[
+  {
+    "fold_id": 0,
+    "n_bars": 63,
+    "n_trades": 2,
+    "win_rate": 0.5,
+    "median_hold_bars": 1,
+    "sharpe_nw": -1.929677542946473,
+    "sortino": 0.0,
+    "max_dd": 0.0,
+    "turnover": 0.06451612710952759,
+    "psr": 7.984113949033311e-06,
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "psr_low"
+    ],
+    "weight": 0.1451950100909924
+  },
+  {
+    "fold_id": 1,
+    "n_bars": 63,
+    "n_trades": 1,
+    "win_rate": 0.0,
+    "median_hold_bars": 1,
+    "sharpe_nw": -2.1248933970325496,
+    "sortino": 0.0,
+    "max_dd": 0.0,
+    "turnover": 0.032258063554763794,
+    "psr": 1.0100349154273935e-06,
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "psr_low"
+    ],
+    "weight": 0.119445700854202
+  },
+  {
+    "fold_id": 2,
+    "n_bars": 63,
+    "n_trades": 2,
+    "win_rate": 0.5,
+    "median_hold_bars": 2,
+    "sharpe_nw": -1.9697407028919662,
+    "sortino": 0.0,
+    "max_dd": -15.504229474697388,
+    "turnover": 0.06451612710952759,
+    "psr": 5.302040186616619e-06,
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "psr_low",
+      "dd_high"
+    ],
+    "weight": 1.8483577513766112
+  },
+  {
+    "fold_id": 3,
+    "n_bars": 63,
+    "n_trades": 2,
+    "win_rate": 0.5,
+    "median_hold_bars": 1,
+    "sharpe_nw": 1.5699964528592487,
+    "sortino": 0.0,
+    "max_dd": -0.33306080448029796,
+    "turnover": 0.06451612710952759,
+    "psr": 0.9997764674976173,
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "dd_high"
+    ],
+    "weight": 5.08099234968482
+  },
+  {
+    "fold_id": 4,
+    "n_bars": 63,
+    "n_trades": 0,
+    "win_rate": 0.0,
+    "median_hold_bars": 0,
+    "sharpe_nw": 0.0,
+    "sortino": 0.0,
+    "max_dd": 0.0,
+    "turnover": 0.0,
+    "psr": 0.5,
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "psr_low"
+    ],
+    "weight": 1.0
+  },
+  {
+    "fold_id": 5,
+    "n_bars": 63,
+    "n_trades": 1,
+    "win_rate": 1.0,
+    "median_hold_bars": 1,
+    "sharpe_nw": 2.1248933970325496,
+    "sortino": Infinity,
+    "max_dd": 0.0,
+    "turnover": 0.032258063554763794,
+    "psr": 0.9999989899650845,
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades"
+    ],
+    "weight": Infinity
+  },
+  {
+    "fold_id": 6,
+    "n_bars": 63,
+    "n_trades": 1,
+    "win_rate": 0.0,
+    "median_hold_bars": 1,
+    "sharpe_nw": -2.0641471779896188,
+    "sortino": 0.0,
+    "max_dd": 0.0,
+    "turnover": 0.032258063554763794,
+    "psr": 1.960057238625801e-06,
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "psr_low"
+    ],
+    "weight": 0.12692649012843588
+  },
+  {
+    "fold_id": 7,
+    "n_bars": 63,
+    "n_trades": 9,
+    "win_rate": 0.5555555555555556,
+    "median_hold_bars": 1,
+    "sharpe_nw": 2.1765158478376216,
+    "sortino": 2.8320102993859178,
+    "max_dd": -0.2518842169875754,
+    "turnover": 0.27419355511665344,
+    "psr": 0.9999999999670157,
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "dd_high"
+    ],
+    "weight": 37.882971122339484
+  },
+  {
+    "fold_id": 8,
+    "n_bars": 63,
+    "n_trades": 5,
+    "win_rate": 0.2,
+    "median_hold_bars": 1,
+    "sharpe_nw": -3.0205637605760347,
+    "sortino": -1.105032721484796,
+    "max_dd": 0.0,
+    "turnover": 0.19354838132858276,
+    "psr": 7.181977235148906e-12,
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "psr_low"
+    ],
+    "weight": 0.02806926365748604
+  },
+  {
+    "fold_id": 9,
+    "n_bars": 63,
+    "n_trades": 7,
+    "win_rate": 0.5714285714285714,
+    "median_hold_bars": 1,
+    "sharpe_nw": 1.534583610955992,
+    "sortino": 1.2353462144165672,
+    "max_dd": -0.4656794116437428,
+    "turnover": 0.22580644488334656,
+    "psr": 0.9999754769424742,
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "dd_high"
+    ],
+    "weight": 9.298656742511813
+  },
+  {
+    "fold_id": 10,
+    "n_bars": 63,
+    "n_trades": 5,
+    "win_rate": 0.8,
+    "median_hold_bars": 3,
+    "sharpe_nw": 2.6851418007839265,
+    "sortino": 0.0,
+    "max_dd": -0.34297165608194374,
+    "turnover": 0.16129031777381897,
+    "psr": 0.9999999990383728,
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "dd_high"
+    ],
+    "weight": 15.522704265139907
+  },
+  {
+    "fold_id": 11,
+    "n_bars": 63,
+    "n_trades": 2,
+    "win_rate": 1.0,
+    "median_hold_bars": 1,
+    "sharpe_nw": 3.1451869767332727,
+    "sortino": Infinity,
+    "max_dd": 0.0,
+    "turnover": 0.06451612710952759,
+    "psr": 0.9999999999989883,
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades"
+    ],
+    "weight": Infinity
+  },
+  {
+    "fold_id": 12,
+    "n_bars": 63,
+    "n_trades": 1,
+    "win_rate": 1.0,
+    "median_hold_bars": 3,
+    "sharpe_nw": 2.124893397032549,
+    "sortino": Infinity,
+    "max_dd": 0.0,
+    "turnover": 0.032258063554763794,
+    "psr": 0.9999989899650845,
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades"
+    ],
+    "weight": Infinity
+  },
+  {
+    "fold_id": 13,
+    "n_bars": 63,
+    "n_trades": 0,
+    "win_rate": 0.0,
+    "median_hold_bars": 0,
+    "sharpe_nw": 0.0,
+    "sortino": 0.0,
+    "max_dd": 0.0,
+    "turnover": 0.0,
+    "psr": 0.5,
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "psr_low"
+    ],
+    "weight": 1.0
+  },
+  {
+    "fold_id": 14,
+    "n_bars": 63,
+    "n_trades": 0,
+    "win_rate": 0.0,
+    "median_hold_bars": 0,
+    "sharpe_nw": 0.0,
+    "sortino": 0.0,
+    "max_dd": 0.0,
+    "turnover": 0.016129031777381897,
+    "psr": 0.5,
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "psr_low"
+    ],
+    "weight": 1.0
+  },
+  {
+    "fold_id": 15,
+    "n_bars": 40,
+    "n_trades": 6,
+    "win_rate": 0.6666666666666666,
+    "median_hold_bars": 1,
+    "sharpe_nw": 4.656970334983487,
+    "sortino": 22.825305001948063,
+    "max_dd": -0.17419889553935558,
+    "turnover": 0.28205129504203796,
+    "psr": 1.0,
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades"
+    ],
+    "weight": 9807480.66108285
+  },
+  {
+    "aggregate": {
+      "weighted_sharpe": NaN,
+      "weighted_sortino": NaN,
+      "weighted_max_dd": NaN,
+      "weighted_win_rate": NaN,
+      "weighted_turnover": NaN,
+      "stitched_sharpe": 0.7298674489250717,
+      "stitched_max_dd": -0.8446813159937315,
+      "total_folds": 16,
+      "trusted_folds": 0,
+      "avg_weight": NaN,
+      "weight_std": NaN
+    }
+  }
+]

@@ -42,9 +42,9 @@ class PnLReconciler:
                 "total_return": perf_data.get("total_return", 0.0),
                 "current_capital": perf_data.get("current_capital", 0.0),
                 "total_trades": perf_data.get("total_trades", 0),
-                "daily_returns": daily_returns.to_dict("records")
-                if len(daily_returns) > 0
-                else [],
+                "daily_returns": (
+                    daily_returns.to_dict("records") if len(daily_returns) > 0 else []
+                ),
             }
 
         except Exception as e:

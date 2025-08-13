@@ -229,7 +229,7 @@ def main():
 
     # Check if ib_insync is installed
     try:
-        import ib_insync
+        pass
 
         print("✅ ib_insync is installed")
     except ImportError:

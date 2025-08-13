@@ -1,0 +1,9 @@
+run_key,start_date,end_date,symbols,carryover,fast_mode,warmup_days,total_trades,total_fees,total_pnl,final_equity,max_dd,sharpe_like,win_rate,avg_trade_pnl
+SPY_QQQ@2023-08-01_2025-08-12_[carry=False][fast=False],2023-08-01,2025-08-12,SPY QQQ,False,False,411,947,452.85,-23946.97,69001.95,25.26,-1.39,8.03,NA
+AAPL_MSFT_NVDA@2023-08-01_2025-08-12_[carry=False][fast=False],2023-08-01,2025-08-12,AAPL MSFT NVDA,False,False,411,996,413.58,-31250.48,38618.33,48.61,-1.25,28.29,NA
+SPY_QQQ@2023-08-01_2025-08-12_[carry=True][fast=False],2023-08-01,2025-08-12,SPY QQQ,True,False,411,947,452.85,-23946.97,69001.95,25.26,-1.39,8.03,NA
+SPY_AAPL@2023-08-01_2025-08-12_[carry=False][fast=True],2023-08-01,2025-08-12,SPY AAPL,False,True,136,562,414.99,-10046.02,88492.67,12.66,-1.01,16.00,NA
+SPY_QQQ@2023-10-01_2023-12-31_[carry=False][fast=False],2023-10-01,2023-12-31,SPY QQQ,False,False,413,126,100.80,-5443.38,86354.29,9.96,-3.38,12.35,NA
+SPY_QQQ@2024-01-01_2024-03-31_[carry=False][fast=False],2024-01-01,2024-03-31,SPY QQQ,False,False,412,122,50.38,-4537.83,82992.10,6.64,-2.66,0.00,NA
+SPY_QQQ@2025-01-01_2025-03-31_[carry=False][fast=False],2025-01-01,2025-03-31,SPY QQQ,False,False,412,120,64.66,-576.94,94686.38,3.73,0.28,16.13,NA
+AAPL_MSFT_NVDA@2024-04-01_2024-06-30_[carry=False][fast=False],2024-04-01,2024-06-30,AAPL MSFT NVDA,False,False,411,114,118.23,-5482.45,73801.57,10.76,-1.59,60.00,NA

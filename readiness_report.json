@@ -1,0 +1,127 @@
+{
+  "timestamp": "2025-08-13T11:04:05Z",
+  "passed": true,
+  "checks": [
+    {
+      "name": "env_versions",
+      "passed": true,
+      "details": {
+        "numpy": "2.2.6",
+        "pandas": "2.3.1",
+        "polars": "1.32.2",
+        "numba": "0.61.2",
+        "yfinance": "0.2.65",
+        "python": "3.13"
+      }
+    },
+    {
+      "name": "unit_tests",
+      "passed": true,
+      "details": {
+        "exit_code": 0,
+        "passed": true,
+        "total_tests": 33,
+        "passed_tests": 33,
+        "failed_tests": 0,
+        "stdout_tail": [
+          "  /home/Jennifer/miniconda3/lib/python3.13/site-packages/eventkit/util.py:21: DeprecationWarning: There is no current event loop",
+          "    return asyncio.get_event_loop_policy().get_event_loop()",
+          "",
+          "tests/test_accounting.py: 4 warnings",
+          "tests/test_integration_backtest.py: 6 warnings",
+          "  /home/Jennifer/projects/trader/core/portfolio.py:189: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.",
+          "    self.ledger = pd.concat([self.ledger, pd.DataFrame([mtm_row])], ignore_index=True)",
+          "",
+          "-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html",
+          "33 passed, 11 warnings in 94.10s (0:01:34)"
+        ],
+        "stderr_tail": []
+      }
+    },
+    {
+      "name": "backtest_smoke",
+      "passed": true,
+      "details": {
+        "total_return": 0.0,
+        "sharpe": 0.0,
+        "max_dd": 0.0,
+        "has_slippage": true,
+        "has_risk_limits": true,
+        "stdout_tail": [
+          "   Calmar Ratio: 0.00",
+          "",
+          "\ud83d\udcc8 TRADING METRICS",
+          "   Total Trades: 0",
+          "   Win Rate: 0.00%",
+          "   Profit Factor: 0.0",
+          "   Total PnL: $0.00",
+          "   Total Fees: $0.00",
+          "   Largest Win: $0.00",
+          "   Largest Loss: $0.00",
+          "   Average Win: $0.00",
+          "   Average Loss: $0.00",
+          "",
+          "\ud83d\udcca TRADING SUMMARY",
+          "   Initial Capital: $100,000.00",
+          "   Final Capital: $100,000.00",
+          "   Total PnL: $0.00",
+          "   Total Trades: 0",
+          "",
+          "\ud83c\udf89 Backtest completed successfully!"
+        ]
+      }
+    },
+    {
+      "name": "walk_forward_integrity",
+      "passed": true,
+      "details": {
+        "total_folds": 60,
+        "trusted_folds": 0,
+        "has_folds": true
+      }
+    },
+    {
+      "name": "leakage_sentry",
+      "passed": true,
+      "details": {
+        "weighted_sharpe": 0.606,
+        "reasonable": true
+      }
+    },
+    {
+      "name": "risk_invariants",
+      "passed": true,
+      "details": {
+        "violations": [],
+        "clean": true
+      }
+    },
+    {
+      "name": "benchmark_sanity",
+      "passed": true,
+      "details": {
+        "bh_return": 0.0,
+        "reasonable": true
+      }
+    },
+    {
+      "name": "pnl_reconciliation",
+      "passed": true,
+      "details": {
+        "has_total_pnl": true,
+        "has_total_fees": true,
+        "has_total_return": true,
+        "has_sharpe": true,
+        "has_drawdown": true,
+        "has_trades": true,
+        "has_win_rate": true
+      }
+    }
+  ],
+  "summary": {
+    "total_checks": 8,
+    "passed_checks": 8,
+    "failed_checks": 0,
+    "pass_rate": 100.0
+  }
+}

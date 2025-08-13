@@ -88,3 +88,13 @@
   "regime": "trend",
   "regime_confidence": 0.5555555555555556
 }
+2025-08-13 01:46:27 - performance - INFO - PERFORMANCE: {
+  "timestamp": "2025-08-13T01:46:27.935629",
+  "total_return": 0.0,
+  "current_capital": 100000,
+  "sharpe_ratio": 0.0,
+  "max_drawdown": 0.0,
+  "total_trades": 0,
+  "regime": "trend",
+  "regime_confidence": 0.5555555555555556
+}

@@ -1,0 +1,87 @@
+{
+  "timestamp": "2025-08-13T05:07:28.075647",
+  "symbols_tested": 8,
+  "successful_runs": 8,
+  "results": {
+    "QQQ": {
+      "stitched_sharpe": -0.9524769347627302,
+      "stitched_max_dd": -7.5922619389020705,
+      "weighted_sharpe": 2.380175907043353,
+      "weighted_win_rate": 0.9999997713058636,
+      "trusted_folds": 0,
+      "total_folds": 16,
+      "avg_weight": 0.0625,
+      "weight_std": 0.1301040479233283
+    },
+    "SPY": {
+      "stitched_sharpe": 0.7298724267440114,
+      "stitched_max_dd": -0.8446604858005395,
+      "weighted_sharpe": 2.8137888968089895,
+      "weighted_win_rate": 0.9469590423084558,
+      "trusted_folds": 0,
+      "total_folds": 16,
+      "avg_weight": 0.06249999999999999,
+      "weight_std": 0.11138649909578305
+    },
+    "TSLA": {
+      "stitched_sharpe": 0.7711736071466594,
+      "stitched_max_dd": -0.5573096592487916,
+      "weighted_sharpe": 2.703047809421337,
+      "weighted_win_rate": 0.9999945826965229,
+      "trusted_folds": 0,
+      "total_folds": 16,
+      "avg_weight": 0.06250000000000001,
+      "weight_std": 0.16535638814989526
+    },
+    "AAPL": {
+      "stitched_sharpe": 0.4159578363708977,
+      "stitched_max_dd": -1.205906583382874,
+      "weighted_sharpe": 2.499945656507953,
+      "weighted_win_rate": 0.9259255033476145,
+      "trusted_folds": 1,
+      "total_folds": 16,
+      "avg_weight": 0.06249999999999999,
+      "weight_std": 0.13010373165515332
+    },
+    "NVDA": {
+      "stitched_sharpe": 0.014357430258482353,
+      "stitched_max_dd": -7.997512729584074,
+      "weighted_sharpe": 2.522249186101291,
+      "weighted_win_rate": 0.9999997746502971,
+      "trusted_folds": 0,
+      "total_folds": 16,
+      "avg_weight": 0.06249999999999999,
+      "weight_std": 0.1301040594614012
+    },
+    "AMZN": {
+      "stitched_sharpe": -0.029693576982340084,
+      "stitched_max_dd": -2.0803320004634567,
+      "weighted_sharpe": 2.4311595626584426,
+      "weighted_win_rate": 0.8999922113610841,
+      "trusted_folds": 0,
+      "total_folds": 16,
+      "avg_weight": 0.06249999999999999,
+      "weight_std": 0.10825035131292272
+    },
+    "GOOGL": {
+      "stitched_sharpe": 0.08850045175834474,
+      "stitched_max_dd": -0.5034161415297188,
+      "weighted_sharpe": 2.477885828883141,
+      "weighted_win_rate": 0.9999991867137712,
+      "trusted_folds": 0,
+      "total_folds": 16,
+      "avg_weight": 0.06250000000000001,
+      "weight_std": 0.1301039182203884
+    },
+    "MSFT": {
+      "stitched_sharpe": -0.6335938222030881,
+      "stitched_max_dd": -10.285914106188287,
+      "weighted_sharpe": 2.1248914345048417,
+      "weighted_win_rate": 0.9999987096127358,
+      "trusted_folds": 0,
+      "total_folds": 16,
+      "avg_weight": 0.0625,
+      "weight_std": 0.24206079844332892
+    }
+  }
+}

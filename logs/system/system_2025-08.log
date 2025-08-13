@@ -359,3 +359,4232 @@
   ],
   "config_file": "config/enhanced_paper_trading_config.json"
 }
+2025-08-13 01:45:37 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:45:37.940136",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:45:37 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:45:37.969149",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:45:38 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:45:38.344153",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:45:38 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:45:38.374987",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:45:45 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:45:45.849561",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:46:26 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:46:26.857123",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:47:16 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:47:16.472441",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:48:05 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:48:05.294210",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:48:05 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:48:05.301660",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:48:05 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:48:05.963576",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:48:48 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:48:48.614923",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:48:58 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:48:58.990251",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:51:47 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:51:47.013935",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:52:48 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:52:48.325037",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:53:16 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:53:16.179527",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:59:45 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:59:45.998312",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:00:59 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:00:59.058628",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:02:18 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:02:18.986464",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:03:30 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:03:30.464812",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:05:56 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:05:56.796847",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:07:31 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:07:31.994052",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:08:22 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:08:22.135968",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:26:42 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:26:42.457668",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:26:58 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:26:58.355325",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:27:13 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:27:13.633052",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:27:29 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:27:29.106239",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "/tmp/tmp7j57djwg.json"
+}
+2025-08-13 02:27:44 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:27:44.599647",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:28:00 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:28:00.212454",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:28:25 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:28:25.623472",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:28:41 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:28:41.430300",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:28:56 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:28:56.765412",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:29:12 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:29:12.062404",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "/tmp/tmp6r3owt8a.json"
+}
+2025-08-13 02:29:27 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:29:27.394485",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:29:42 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:29:42.579851",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:31:38 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:31:38.610733",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:32:09 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:32:09.251559",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:32:24 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:32:24.897606",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:32:40 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:32:40.414035",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:32:55 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:32:55.824671",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "/tmp/tmp3ak4bdh5.json"
+}
+2025-08-13 02:33:10 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:33:10.923153",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:33:25 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:33:25.930612",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:34:05 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:34:05.537379",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:35:15 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:35:15.107320",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:35:31 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:35:31.149128",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:35:46 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:35:46.853623",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:36:02 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:36:02.306261",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "/tmp/tmplr_04qph.json"
+}
+2025-08-13 02:36:17 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:36:17.715950",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:36:32 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:36:32.983534",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:37:16 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:37:16.812545",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:37:32 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:37:32.735115",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:37:48 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:37:48.273670",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:38:03 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:38:03.826703",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "/tmp/tmp7d6kc473.json"
+}
+2025-08-13 02:38:19 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:38:19.124846",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:38:34 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:38:34.583121",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:39:15 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:39:15.260547",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:50:38 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:50:38.384520",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:51:51 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:51:51.146624",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:55:37 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:55:37.798119",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:55:53 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:55:53.520739",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:56:09 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:56:09.117157",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:56:24 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:56:24.550552",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "/tmp/tmp8wu96h2z.json"
+}
+2025-08-13 02:56:40 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:56:40.005125",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:56:55 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:56:55.336683",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 02:58:02 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:58:02.767248",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "/tmp/tmplj7r86ro.json"
+}
+2025-08-13 02:59:14 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:59:14.491613",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "/tmp/tmpun9hu4an.json"
+}
+2025-08-13 02:59:45 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T02:59:45.711181",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 03:00:01 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:00:01.950254",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 03:00:17 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:00:17.529895",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 03:00:32 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:00:32.923736",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "/tmp/tmpbkhy_xrn.json"
+}
+2025-08-13 03:00:48 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:00:48.403731",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 03:01:03 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:01:03.649148",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 03:01:28 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:01:28.779410",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 03:08:00 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:08:00.283697",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 03:08:16 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:08:16.138403",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 03:08:32 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:08:32.030305",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 03:08:47 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:08:47.517585",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "/tmp/tmpihab9fau.json"
+}
+2025-08-13 03:09:02 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:09:02.730030",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 03:09:17 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:09:17.774813",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 03:10:18 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:10:18.979521",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 03:14:48 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:14:48.289675",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 03:14:57 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:14:57.328014",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 03:19:23 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:19:23.388208",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 03:24:09 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:24:09.948509",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 03:27:20 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:27:20.974842",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 03:29:37 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:29:37.091317",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 03:30:49 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:30:49.030662",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 03:32:09 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:32:09.593917",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 03:33:21 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:33:21.335053",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 03:40:43 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:40:43.037948",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/run_bab9a63e.json"
+}
+2025-08-13 03:45:16 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:45:16.238930",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/run_bb601583.json"
+}
+2025-08-13 03:48:04 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T03:48:04.725484",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/run_58617500.json"
+}
+2025-08-13 04:01:57 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:01:57.573673",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:02:58 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:02:58.111464",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:09:09 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:09:09.572571",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:09:53 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:09:53.833457",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:10:58 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:10:58.416004",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:11:42 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:11:42.711336",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:12:47 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:12:47.171240",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:13:32 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:13:32.419962",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:14:40 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:14:40.056737",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:15:27 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:15:27.635017",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:16:35 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:16:35.561365",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:17:22 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:17:22.298878",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:18:30 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:18:30.869095",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:19:18 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:19:18.789070",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:20:27 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:20:27.460058",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:21:14 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:21:14.451907",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:22:22 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:22:22.876902",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:23:00 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:23:00.265348",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:30:17 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:30:17.048931",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:50:24 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:50:24.827052",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:50:40 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:50:40.748484",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:50:56 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:50:56.493614",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:51:12 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:51:12.147379",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "/tmp/tmpx8ew3n6z.json"
+}
+2025-08-13 04:51:27 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:51:27.657383",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 04:51:43 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T04:51:43.173333",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:01:07 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:01:07.056494",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:01:23 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:01:23.110605",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:01:38 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:01:38.692239",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:01:53 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:01:53.932856",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "/tmp/tmpus_xmptm.json"
+}
+2025-08-13 05:02:09 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:02:09.336728",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:02:24 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:02:24.834305",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:08:55 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:08:55.500124",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:09:11 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:09:11.153495",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:09:27 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:09:27.064867",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:09:42 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:09:42.832531",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "/tmp/tmp5_6ept3o.json"
+}
+2025-08-13 05:09:58 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:09:58.607005",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:10:14 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:10:14.384986",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:18:37 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:18:37.394363",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:18:53 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:18:53.045062",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:19:08 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:19:08.239925",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:19:23 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:19:23.642612",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "/tmp/tmprm0nce4k.json"
+}
+2025-08-13 05:19:39 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:19:39.277338",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:19:54 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:19:54.823031",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:27:07 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:27:07.416906",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:27:23 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:27:23.147977",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:27:38 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:27:38.712265",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:27:54 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:27:54.258071",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "/tmp/tmpd46azbe1.json"
+}
+2025-08-13 05:28:09 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:28:09.930661",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:28:25 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:28:25.276230",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:49:36 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:49:36.872472",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "config/smoke_test_config.json"
+}
+2025-08-13 05:49:57 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:49:57.898230",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "config/risk_test_config.json"
+}
+2025-08-13 05:50:16 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:50:16.062659",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "config/bh_test_config.json"
+}
+2025-08-13 05:50:33 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:50:33.984077",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "config/pnl_test_config.json"
+}
+2025-08-13 05:57:04 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:57:04.521481",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:57:20 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:57:20.299309",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:57:35 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:57:35.749507",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:57:50 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:57:50.893723",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "/tmp/tmpvaha3a4v.json"
+}
+2025-08-13 05:58:06 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:58:06.194522",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:58:21 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:58:21.444058",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 05:58:38 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:58:38.694686",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "config/smoke_test_config.json"
+}
+2025-08-13 05:58:59 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:58:59.490125",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "config/risk_test_config.json"
+}
+2025-08-13 05:59:17 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:59:17.627337",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "config/bh_test_config.json"
+}
+2025-08-13 05:59:36 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T05:59:36.175073",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "config/pnl_test_config.json"
+}
+2025-08-13 06:00:13 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T06:00:13.523496",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 06:01:16 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T06:01:16.056925",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 06:01:31 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T06:01:31.862466",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 06:01:47 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T06:01:47.077204",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 06:02:02 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T06:02:02.178666",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "/tmp/tmpp_a_5w2g.json"
+}
+2025-08-13 06:02:17 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T06:02:17.701426",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 06:02:33 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T06:02:33.073505",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 06:02:49 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T06:02:49.932542",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "config/smoke_test_config.json"
+}
+2025-08-13 06:03:10 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T06:03:10.698338",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "config/risk_test_config.json"
+}
+2025-08-13 06:03:29 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T06:03:29.107231",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "config/bh_test_config.json"
+}
+2025-08-13 06:03:47 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T06:03:47.742090",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "config/pnl_test_config.json"
+}
+2025-08-13 06:04:20 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T06:04:20.835199",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "config/adversarial_test_config.json"
+}
+2025-08-13 06:04:39 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T06:04:39.214679",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "config/realistic_test_config.json"
+}
+2025-08-13 06:04:57 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T06:04:57.419919",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "config/zero_fee_test_config.json"
+}
+2025-08-13 06:05:16 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T06:05:16.085645",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "config/consistency_test_config.json"
+}
+2025-08-13 06:05:34 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T06:05:34.088437",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "config/consistency_test_config.json"
+}

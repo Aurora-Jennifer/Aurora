@@ -1,0 +1,41 @@
+{
+  "timestamp": "2025-08-13T11:05:51Z",
+  "passed": false,
+  "tests": [
+    {
+      "test": "adversarial_replay",
+      "passed": true,
+      "total_return": 0.0,
+      "sharpe": 0.0,
+      "suspicious": false,
+      "reason": "Performance degraded as expected"
+    },
+    {
+      "test": "zero_fee_guard",
+      "passed": false,
+      "realistic_return": 0.0,
+      "zero_fee_return": 0.0,
+      "improvement": 0.0,
+      "realistic_improvement": false,
+      "reason": "Zero fees didn't improve performance - fees may not be wired correctly"
+    },
+    {
+      "test": "consistency_audit",
+      "passed": true,
+      "run1_return": 0.0,
+      "run2_return": 0.0,
+      "run1_sharpe": 0.0,
+      "run2_sharpe": 0.0,
+      "return_diff": 0.0,
+      "sharpe_diff": 0.0,
+      "consistent": true,
+      "reason": "Results are consistent"
+    }
+  ],
+  "summary": {
+    "total_tests": 3,
+    "passed_tests": 2,
+    "failed_tests": 1,
+    "pass_rate": 66.66666666666666
+  }
+}

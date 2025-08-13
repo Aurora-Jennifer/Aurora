@@ -1,0 +1,320 @@
+[
+  {
+    "fold_id": 0,
+    "n_bars": 63,
+    "n_trades": 4,
+    "win_rate": 1.0,
+    "median_hold_bars": 1,
+    "sharpe_nw": 3.272243809375628,
+    "sortino": Infinity,
+    "max_dd": 0.0,
+    "turnover": 0.12903225421905518,
+    "psr": 0.9999999999998732,
+    "regime": "volatile",
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades"
+    ],
+    "weight": 17307779.95336729
+  },
+  {
+    "fold_id": 1,
+    "n_bars": 63,
+    "n_trades": 5,
+    "win_rate": 0.6,
+    "median_hold_bars": 1,
+    "sharpe_nw": 1.3588492791177518,
+    "sortino": 45.42073549243646,
+    "max_dd": -2.305706704062663,
+    "turnover": 0.16129031777381897,
+    "psr": 0.9988111230354897,
+    "regime": "volatile",
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "dd_high"
+    ],
+    "weight": 17307779.95336729
+  },
+  {
+    "fold_id": 2,
+    "n_bars": 63,
+    "n_trades": 2,
+    "win_rate": 0.5,
+    "median_hold_bars": 2,
+    "sharpe_nw": 1.6175945885166076,
+    "sortino": 0.0,
+    "max_dd": 0.0,
+    "turnover": 0.06451612710952759,
+    "psr": 0.9998510109601961,
+    "regime": "volatile",
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades"
+    ],
+    "weight": 5.040950161976994
+  },
+  {
+    "fold_id": 3,
+    "n_bars": 63,
+    "n_trades": 5,
+    "win_rate": 0.4,
+    "median_hold_bars": 1,
+    "sharpe_nw": 0.121635689019712,
+    "sortino": 0.07165702440887259,
+    "max_dd": 0.0,
+    "turnover": 0.16129031777381897,
+    "psr": 0.6071834807561803,
+    "regime": "volatile",
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "psr_low"
+    ],
+    "weight": 1.1705388533735936
+  },
+  {
+    "fold_id": 4,
+    "n_bars": 63,
+    "n_trades": 0,
+    "win_rate": 0.0,
+    "median_hold_bars": 0,
+    "sharpe_nw": 0.0,
+    "sortino": 0.0,
+    "max_dd": 0.0,
+    "turnover": 0.0,
+    "psr": 0.5,
+    "regime": "volatile",
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "psr_low"
+    ],
+    "weight": 1.0
+  },
+  {
+    "fold_id": 5,
+    "n_bars": 63,
+    "n_trades": 1,
+    "win_rate": 0.0,
+    "median_hold_bars": 3,
+    "sharpe_nw": -2.12489339703255,
+    "sortino": 0.0,
+    "max_dd": 0.0,
+    "turnover": 0.032258063554763794,
+    "psr": 1.0100349154273935e-06,
+    "regime": "volatile",
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "psr_low"
+    ],
+    "weight": 0.11944570085420195
+  },
+  {
+    "fold_id": 6,
+    "n_bars": 63,
+    "n_trades": 1,
+    "win_rate": 1.0,
+    "median_hold_bars": 1,
+    "sharpe_nw": 2.1248933970325474,
+    "sortino": Infinity,
+    "max_dd": 0.0,
+    "turnover": 0.04838709533214569,
+    "psr": 0.9999989899650845,
+    "regime": "volatile",
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades"
+    ],
+    "weight": 17307779.95336729
+  },
+  {
+    "fold_id": 7,
+    "n_bars": 63,
+    "n_trades": 8,
+    "win_rate": 0.125,
+    "median_hold_bars": 1,
+    "sharpe_nw": -4.8388513111180975,
+    "sortino": -3.8148339567214378,
+    "max_dd": 0.0,
+    "turnover": 0.29032257199287415,
+    "psr": 0.0,
+    "regime": "unknown",
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "psr_low"
+    ],
+    "weight": 0.0011752571673794324
+  },
+  {
+    "fold_id": 8,
+    "n_bars": 63,
+    "n_trades": 6,
+    "win_rate": 0.5,
+    "median_hold_bars": 1,
+    "sharpe_nw": -0.24811610037137175,
+    "sortino": -0.185466750922404,
+    "max_dd": -1.2342793290907177,
+    "turnover": 0.19354838132858276,
+    "psr": 0.27167404660277317,
+    "regime": "unknown",
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "psr_low",
+      "dd_high"
+    ],
+    "weight": 0.8735968722328427
+  },
+  {
+    "fold_id": 9,
+    "n_bars": 63,
+    "n_trades": 9,
+    "win_rate": 0.3333333333333333,
+    "median_hold_bars": 1,
+    "sharpe_nw": -2.6388404319985552,
+    "sortino": -4.753560106939574,
+    "max_dd": -5.334327841491248,
+    "turnover": 0.27419355511665344,
+    "psr": 1.2212453270876722e-15,
+    "regime": "unknown",
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "psr_low",
+      "dd_high"
+    ],
+    "weight": 0.01613820486249499
+  },
+  {
+    "fold_id": 10,
+    "n_bars": 63,
+    "n_trades": 5,
+    "win_rate": 0.4,
+    "median_hold_bars": 2,
+    "sharpe_nw": -2.1535080215117266,
+    "sortino": -0.9382237399174677,
+    "max_dd": 0.0,
+    "turnover": 0.16129031777381897,
+    "psr": 7.345621780840972e-07,
+    "regime": "volatile",
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "psr_low"
+    ],
+    "weight": 0.07261237686332049
+  },
+  {
+    "fold_id": 11,
+    "n_bars": 63,
+    "n_trades": 2,
+    "win_rate": 0.0,
+    "median_hold_bars": 2,
+    "sharpe_nw": -2.275052282990435,
+    "sortino": -0.5835006076541531,
+    "max_dd": 0.0,
+    "turnover": 0.06451612710952759,
+    "psr": 1.8172152282946996e-07,
+    "regime": "volatile",
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "psr_low"
+    ],
+    "weight": 0.0767806528317871
+  },
+  {
+    "fold_id": 12,
+    "n_bars": 63,
+    "n_trades": 2,
+    "win_rate": 0.5,
+    "median_hold_bars": 1,
+    "sharpe_nw": -2.0250312682277656,
+    "sortino": 0.0,
+    "max_dd": -9.74219046964791,
+    "turnover": 0.06451612710952759,
+    "psr": 2.975714194553003e-06,
+    "regime": "volatile",
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "psr_low",
+      "dd_high"
+    ],
+    "weight": 0.669427200674513
+  },
+  {
+    "fold_id": 13,
+    "n_bars": 63,
+    "n_trades": 2,
+    "win_rate": 0.5,
+    "median_hold_bars": 3,
+    "sharpe_nw": -2.082179416419096,
+    "sortino": 0.0,
+    "max_dd": -55.584091557052524,
+    "turnover": 0.06451612710952759,
+    "psr": 1.612883773760565e-06,
+    "regime": "volatile",
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades",
+      "psr_low",
+      "dd_high"
+    ],
+    "weight": 1315.3207656138304
+  },
+  {
+    "fold_id": 14,
+    "n_bars": 63,
+    "n_trades": 18,
+    "win_rate": 0.6111111111111112,
+    "median_hold_bars": 1,
+    "sharpe_nw": 1.9397977244498494,
+    "sortino": 2.660234123234563,
+    "max_dd": -0.8496458405680386,
+    "turnover": 0.5806451439857483,
+    "psr": 0.9999999999999999,
+    "regime": "unknown",
+    "trusted": false,
+    "gate_reasons": [
+      "dd_high"
+    ],
+    "weight": 30.311355950970405
+  },
+  {
+    "fold_id": 15,
+    "n_bars": 40,
+    "n_trades": 2,
+    "win_rate": 1.0,
+    "median_hold_bars": 1,
+    "sharpe_nw": 2.968996538992547,
+    "sortino": Infinity,
+    "max_dd": 0.0,
+    "turnover": 0.07692307978868484,
+    "psr": 0.999999999984196,
+    "regime": "volatile",
+    "trusted": false,
+    "gate_reasons": [
+      "few_trades"
+    ],
+    "weight": 17307779.95336729
+  },
+  {
+    "aggregate": {
+      "weighted_sharpe": 2.4311595626584426,
+      "weighted_sortino": Infinity,
+      "weighted_max_dd": -0.5774719005410345,
+      "weighted_win_rate": 0.8999922113610841,
+      "weighted_turnover": 0.1039076443960533,
+      "stitched_sharpe": -0.029693576982340084,
+      "stitched_max_dd": -2.0803320004634567,
+      "total_folds": 16,
+      "trusted_folds": 0,
+      "avg_weight": 0.06249999999999999,
+      "weight_std": 0.10825035131292272
+    }
+  }
+]

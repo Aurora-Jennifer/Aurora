@@ -1,0 +1,35 @@
+
+============================================================
+📊 BACKTEST RESULTS
+============================================================
+📅 Period: 2023-08-01 to 2025-08-12
+📈 Trading Days: 510
+
+💰 PORTFOLIO METRICS
+   Total Return: -23.80%
+   Annualized Return: -12.57%
+   Volatility: 9.01%
+   Sharpe Ratio: -1.39
+   Max Drawdown: 25.26%
+   Calmar Ratio: -0.50
+
+📈 TRADING METRICS
+   Total Trades: 947
+   Win Rate: 8.03%
+   Profit Factor: 0.21544200213385914
+   Total PnL: $-23946.95
+   Total Fees: $452.85
+   Largest Win: $1280.12
+   Largest Loss: $-1553.09
+   Average Win: $149.45
+   Average Loss: $-60.56
+
+📊 TRADING SUMMARY
+   Initial Capital: $100,000.00
+   Final Equity: $69,001.96
+   Total PnL: $-23,946.95
+   Total Fees: $452.85
+
+⚠️  NOTE: No losing trades recorded; verify accounting.
+
+🎉 Backtest completed successfully!

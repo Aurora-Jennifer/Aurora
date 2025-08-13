@@ -3,150 +3,372 @@ Portfolio State Management
 Single source of truth for position tracking and PnL calculation.
 """
 
-from dataclasses import dataclass, field
-from typing import Dict, Optional
 import logging
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional
+
+import pandas as pd
 
 logger = logging.getLogger(__name__)
 
 
 @dataclass
 class Position:
-    """Individual position tracking with average price."""
+    """Individual position tracking with average price and realized PnL."""
+
     qty: float = 0.0
     avg_price: float = 0.0
-    
+    realized_pnl: float = 0.0
+
     def __post_init__(self):
-        if self.qty < 0:
-            logger.warning(f"Negative quantity detected: {self.qty}, clamping to 0")
-            self.qty = 0.0
-            self.avg_price = 0.0
+        # Allow negative quantities for short positions
+        # The validation will be handled at the portfolio level
+        pass
+
+    def apply_fill(
+        self, side: str, qty: float, price: float, fee: float = 0.0
+    ) -> float:
+        """
+        Apply a trade fill to this position.
+
+        Args:
+            side: "BUY" or "SELL"
+            qty: Quantity (positive for both sides)
+            price: Fill price
+            fee: Fee amount
+
+        Returns:
+            Realized PnL for this fill
+        """
+        if side.upper() == "BUY":
+            # Determine if this increases or reduces exposure
+            if self.qty >= 0:
+                # Long position or flat - this increases exposure
+                new_qty = self.qty + qty
+                if new_qty == 0:
+                    self.avg_price = 0.0
+                else:
+                    # Update VWAP
+                    total_cost = (self.qty * self.avg_price) + (qty * price)
+                    self.avg_price = total_cost / new_qty
+                self.qty = new_qty
+                return 0.0  # No realized PnL on position increase
+            else:
+                # Short position - this reduces exposure (covers short)
+                if qty <= abs(self.qty):
+                    # Partial cover
+                    realized = (
+                        self.avg_price - price
+                    ) * qty  # For shorts: profit when price falls
+                    self.qty += qty  # qty is positive, so this reduces the negative
+                    if abs(self.qty) < 1e-6:
+                        self.avg_price = 0.0
+                    return realized
+                else:
+                    # Full cover plus new long
+                    cover_qty = abs(self.qty)
+                    new_long_qty = qty - cover_qty
+
+                    # Realized PnL on the cover portion
+                    realized = (self.avg_price - price) * cover_qty
+
+                    # Set up new long position
+                    self.qty = new_long_qty
+                    self.avg_price = price
+
+                    return realized
+
+        elif side.upper() == "SELL":
+            # Determine if this increases or reduces exposure
+            if self.qty <= 0:
+                # Short position or flat - this increases short exposure
+                new_qty = self.qty - qty
+                if abs(new_qty) < 1e-6:
+                    self.avg_price = 0.0
+                else:
+                    # Update VWAP for short
+                    total_value = (self.qty * self.avg_price) - (qty * price)
+                    self.avg_price = total_value / new_qty
+                self.qty = new_qty
+                return 0.0  # No realized PnL on position increase
+            else:
+                # Long position - this reduces exposure (sells long)
+                if qty <= self.qty:
+                    # Partial sell
+                    realized = (price - self.avg_price) * qty
+                    self.qty -= qty
+                    if abs(self.qty) < 1e-6:
+                        self.avg_price = 0.0
+                    return realized
+                else:
+                    # Full sell plus new short
+                    sell_qty = self.qty
+                    new_short_qty = qty - sell_qty
+
+                    # Realized PnL on the sell portion
+                    realized = (price - self.avg_price) * sell_qty
+
+                    # Set up new short position
+                    self.qty = -new_short_qty
+                    self.avg_price = price
+
+                    return realized
+        else:
+            raise ValueError(f"Invalid side: {side}")
+
+    def unrealized_pnl(self, price: float) -> float:
+        """Calculate unrealized PnL at given price."""
+        return self.qty * (price - self.avg_price)
 
 
 @dataclass
 class PortfolioState:
     """Portfolio state with cash, positions, and mark-to-market functionality."""
+
     cash: float
     positions: Dict[str, Position] = field(default_factory=dict)
     last_prices: Dict[str, float] = field(default_factory=dict)
-    
-    def mark_to_market(self) -> float:
-        """Calculate total portfolio value including unrealized PnL."""
+    realized_pnl: float = 0.0
+    fees_paid: float = 0.0
+    total_trades: int = 0
+    trades: List[Dict] = field(default_factory=list)
+    ledger: pd.DataFrame = field(default_factory=lambda: pd.DataFrame())
+    shorting_enabled: bool = True
+
+    def __post_init__(self):
+        if not hasattr(self, "ledger") or self.ledger.empty:
+            self.ledger = pd.DataFrame(
+                columns=[
+                    "date",
+                    "equity",
+                    "cash",
+                    "gross_exposure",
+                    "net_exposure",
+                    "unrealized_pnl_total",
+                    "realized_pnl_total",
+                    "fees_paid",
+                    "total_trades",
+                ]
+            )
+
+    def value_at(self, prices_by_symbol: Dict[str, float]) -> float:
+        """Calculate portfolio value at given prices."""
         pos_val = 0.0
-        for sym, pos in self.positions.items():
-            if pos.qty != 0:
-                px = self.last_prices.get(sym, pos.avg_price)
-                pos_val += pos.qty * px
-        return self.cash + pos_val
-    
-    def get_position_value(self, symbol: str) -> float:
-        """Get current value of a specific position."""
-        pos = self.positions.get(symbol)
-        if pos is None or pos.qty == 0:
-            return 0.0
-        px = self.last_prices.get(symbol, pos.avg_price)
-        return pos.qty * px
-    
-    def get_unrealized_pnl(self, symbol: str) -> float:
-        """Get unrealized PnL for a specific position."""
-        pos = self.positions.get(symbol)
-        if pos is None or pos.qty == 0:
-            return 0.0
-        px = self.last_prices.get(symbol, pos.avg_price)
-        return pos.qty * (px - pos.avg_price)
-    
-    def apply_fill(self, symbol: str, side: str, qty: float, price: float, fee_bps: float) -> float:
-        """
-        Apply a trade fill to the portfolio.
-        
-        Args:
-            symbol: Trading symbol
-            side: "BUY" or "SELL"
-            qty: Quantity (positive for both sides)
-            price: Fill price
-            fee_bps: Fee rate in basis points
-            
-        Returns:
-            Realized PnL for this fill (0 for buys, calculated for sells)
-        """
-        fees = (abs(qty) * price) * (fee_bps / 10_000.0)
-        
-        if side.upper() == "SELL":
-            # For sells, check if position exists first
-            pos = self.positions.get(symbol)
-            if pos is None:
-                logger.warning(f"Cannot sell {qty} of {symbol} - no position exists")
-                return 0.0
-        else:
-            # For buys, create position if it doesn't exist
-            pos = self.positions.setdefault(symbol, Position())
-        
-        if side.upper() == "BUY":
-            new_qty = pos.qty + qty
-            if new_qty <= 0:  # should not happen with shorting disabled
-                logger.warning(f"Buy would result in negative quantity: {new_qty}, clamping to 0")
-                new_qty = 0
-                pos.avg_price = 0.0
-            else:
-                # Update average price
-                total_cost = (pos.qty * pos.avg_price) + (qty * price)
-                pos.avg_price = total_cost / new_qty
-            pos.qty = new_qty
-            self.cash -= (qty * price + fees)
-            return 0.0  # No realized PnL on buys
-            
-        elif side.upper() == "SELL":
-            # Reduce-only: clamp to available quantity
-            sell_qty = min(qty, pos.qty)
-            if sell_qty <= 0:
-                logger.warning(f"Cannot sell {qty} of {symbol} - only {pos.qty} available")
-                return 0.0
-            
-            # Calculate realized PnL for this partial close
-            realized = (price - pos.avg_price) * sell_qty
-            
-            # Update position
-            pos.qty -= sell_qty
-            if pos.qty == 0:
-                pos.avg_price = 0.0
-                # Remove position from portfolio if quantity is 0
-                self.positions.pop(symbol, None)
-            
-            # Update cash
-            self.cash += (sell_qty * price - fees)
-            
-            return realized
-            
-        else:
-            logger.error(f"Invalid side: {side}")
-            return 0.0
-    
-    def update_price(self, symbol: str, price: float):
-        """Update the last known price for a symbol."""
-        self.last_prices[symbol] = price
-    
-    def get_total_exposure(self) -> float:
-        """Get total position exposure as percentage of portfolio."""
-        total_value = self.mark_to_market()
-        if total_value == 0:
-            return 0.0
-        
-        pos_value = sum(self.get_position_value(sym) for sym in self.positions)
-        return pos_value / total_value
-    
-    def get_position_summary(self) -> Dict[str, Dict]:
-        """Get summary of all positions."""
-        summary = {}
         for symbol, pos in self.positions.items():
             if pos.qty != 0:
-                current_price = self.last_prices.get(symbol, pos.avg_price)
-                unrealized_pnl = self.get_unrealized_pnl(symbol)
-                summary[symbol] = {
-                    "quantity": pos.qty,
-                    "avg_price": pos.avg_price,
-                    "current_price": current_price,
-                    "market_value": pos.qty * current_price,
-                    "unrealized_pnl": unrealized_pnl,
-                    "unrealized_pnl_pct": (unrealized_pnl / (pos.qty * pos.avg_price)) if pos.qty * pos.avg_price != 0 else 0.0
-                }
-        return summary
+                price = prices_by_symbol.get(symbol, pos.avg_price)
+                pos_val += pos.qty * price
+        return self.cash + pos_val
+
+    def mark_to_market(self, date, prices_by_symbol):
+        """Mark portfolio to market and record daily state."""
+        unrealized_pnl_total = 0.0
+        gross_exposure = 0.0
+        net_exposure = 0.0
+
+        # Calculate unrealized PnL for each position
+        for symbol, position in self.positions.items():
+            if symbol in prices_by_symbol:
+                price = prices_by_symbol[symbol]
+                unrealized = position.unrealized_pnl(price)
+                unrealized_pnl_total += unrealized
+                position_value = position.qty * price
+                gross_exposure += abs(position_value)
+                net_exposure += position_value
+
+        # Calculate total equity
+        equity = self.cash + net_exposure
+
+        # Create MTM row
+        mtm_row = {
+            "date": date,
+            "equity": equity,
+            "cash": self.cash,
+            "gross_exposure": gross_exposure,
+            "net_exposure": net_exposure,
+            "unrealized_pnl_total": unrealized_pnl_total,
+            "realized_pnl_total": self.realized_pnl,
+            "fees_paid": self.fees_paid,
+            "total_trades": self.total_trades,
+            "open_positions": self.get_open_positions_count(),
+        }
+
+        # Log MTM data
+        if isinstance(date, str):
+            date_str = date
+        else:
+            date_str = date.strftime("%Y-%m-%d")
+
+        logger.debug(
+            f"MTM {date_str} equity=${equity:,.2f} cash=${self.cash:,.2f} unreal=${unrealized_pnl_total:,.2f} realized=${self.realized_pnl:,.2f} gross=${gross_exposure:,.0f} net=${net_exposure:,.0f}"
+        )
+
+        # Append to ledger
+        self.ledger = pd.concat(
+            [self.ledger, pd.DataFrame([mtm_row])], ignore_index=True
+        )
+
+    def execute_order(
+        self,
+        symbol: str,
+        target_qty: float,
+        price: float,
+        fee: float = 0.0,
+        *,
+        timestamp: Optional[pd.Timestamp] = None,
+        log_trade: bool = True,
+    ) -> bool:
+        """
+        Execute an order to reach target quantity.
+
+        Args:
+            symbol: Trading symbol
+            target_qty: Target quantity (negative for shorts)
+            price: Execution price
+            fee: Fee amount
+            timestamp: Fill timestamp (timezone-naive)
+            log_trade: Whether to append this fill to the trades log and count it
+
+        Returns:
+            True if trade was executed, False if blocked or no change
+        """
+        current_qty = self.positions.get(symbol, Position()).qty
+        delta = target_qty - current_qty
+
+        # Check if change is significant
+        if abs(delta) < 1e-6:
+            return False
+
+        # Determine side and quantity
+        if delta > 0:
+            side = "BUY"
+            qty = delta
+        else:
+            side = "SELL"
+            qty = abs(delta)
+
+        # Check guards for selling when flat or short (but allow short creation)
+        if side == "SELL" and current_qty <= 0:
+            # If we're trying to sell more than we have, and we're not creating a short position
+            if abs(delta) > abs(current_qty) and (
+                target_qty >= 0 or not self.shorting_enabled
+            ):
+                logger.warning(
+                    f"Cannot sell {abs(delta):.2f} of {symbol} - only {abs(current_qty):.2f} available"
+                )
+                return False
+        elif side == "SELL" and current_qty > 0:
+            # If we're trying to sell more than we have, and we're not creating a short position
+            if abs(delta) > current_qty and (
+                target_qty >= 0 or not self.shorting_enabled
+            ):
+                logger.warning(
+                    f"Cannot sell {abs(delta):.2f} of {symbol} - only {current_qty:.2f} available"
+                )
+                return False
+
+        # Execute the trade
+        pos = self.positions.setdefault(symbol, Position())
+        before_qty = pos.qty
+
+        # Apply fill to position
+        realized_pnl = pos.apply_fill(side, qty, price, fee)
+
+        # Update portfolio cash
+        if side == "BUY":
+            self.cash -= qty * price + fee
+        else:
+            self.cash += qty * price - fee
+
+        # Update tracking
+        self.realized_pnl += realized_pnl
+        self.fees_paid += fee
+
+        # Log trade if requested
+        if log_trade:
+            self.total_trades += 1
+            trade_record = {
+                "trade_id": self.total_trades,
+                "timestamp": timestamp if timestamp is not None else pd.Timestamp.now(),
+                "symbol": symbol,
+                "side": side,
+                "delta_qty": float(delta),
+                "price": float(price),
+                "fee": float(fee),
+                "before_qty": float(before_qty),
+                "after_qty": float(pos.qty),
+                "realized_pnl": float(realized_pnl),
+            }
+            self.trades.append(trade_record)
+
+        # Log debug
+        logger.debug(
+            f"TRADE fill {symbol} delta={delta:+.2f}@{price:.2f} before={before_qty:.2f} after={pos.qty:.2f} fee={fee:.2f}"
+        )
+
+        # Remove position if quantity is zero
+        if abs(pos.qty) < 1e-6:
+            self.positions.pop(symbol, None)
+
+        return True
+
+    def close_all_positions(
+        self,
+        prices_by_symbol: Dict[str, float],
+        fee: float = 0.0,
+        *,
+        timestamp: Optional[pd.Timestamp] = None,
+        log_trade: bool = True,
+    ):
+        """Close all positions at given prices."""
+        for symbol, pos in list(self.positions.items()):
+            if pos.qty != 0:
+                if pos.qty > 0:
+                    # Close long position
+                    self.execute_order(
+                        symbol,
+                        0.0,
+                        prices_by_symbol.get(symbol, pos.avg_price),
+                        fee,
+                        timestamp=timestamp,
+                        log_trade=log_trade,
+                    )
+                else:
+                    # Close short position
+                    self.execute_order(
+                        symbol,
+                        0.0,
+                        prices_by_symbol.get(symbol, pos.avg_price),
+                        fee,
+                        timestamp=timestamp,
+                        log_trade=log_trade,
+                    )
+
+    def get_open_positions_count(self) -> int:
+        """Get count of open positions."""
+        return len([pos for pos in self.positions.values() if abs(pos.qty) > 1e-6])
+
+    def get_summary(self) -> Dict:
+        """Get portfolio summary."""
+        return {
+            "initial_capital": (
+                self.ledger.iloc[0]["equity"] if not self.ledger.empty else self.cash
+            ),
+            "final_equity": (
+                self.ledger.iloc[-1]["equity"] if not self.ledger.empty else self.cash
+            ),
+            "total_pnl": (
+                (self.ledger.iloc[-1]["equity"] - self.ledger.iloc[0]["equity"])
+                if not self.ledger.empty
+                else 0.0
+            ),
+            "realized_pnl": self.realized_pnl,
+            "unrealized_pnl": (
+                self.ledger.iloc[-1]["unrealized_pnl_total"]
+                if not self.ledger.empty
+                else 0.0
+            ),
+            "total_fees": self.fees_paid,
+            "total_trades": self.total_trades,
+            "open_positions": self.get_open_positions_count(),
+        }

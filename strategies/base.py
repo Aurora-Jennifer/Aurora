@@ -14,8 +14,6 @@ import pandas as pd
 class StrategyParams:
     """Base class for strategy parameters."""
 
-    pass
-
 
 class BaseStrategy(ABC):
     """
@@ -42,17 +40,14 @@ class BaseStrategy(ABC):
         Returns:
             pd.Series: Trading signals (1 = long, 0 = flat, -1 = short)
         """
-        pass
 
     @abstractmethod
     def get_default_params(self) -> StrategyParams:
         """Return default parameters for this strategy."""
-        pass
 
     @abstractmethod
     def get_param_ranges(self) -> Dict[str, Any]:
         """Return parameter ranges for optimization."""
-        pass
 
     def backtest(self, df: pd.DataFrame, fee_bps: float = 5.0) -> tuple[pd.Series, int]:
         """

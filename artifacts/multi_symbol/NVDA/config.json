@@ -1,0 +1,18 @@
+{
+  "parquet_file": "results/features/NVDA_v1.parquet",
+  "train_days": 252,
+  "test_days": 63,
+  "stride_days": 63,
+  "anchored": false,
+  "min_live_months": 6,
+  "run_timestamp": "2025-08-13T05:07:24.767367",
+  "total_folds": 16,
+  "data_shape": [
+    1257,
+    4
+  ],
+  "date_range": [
+    "2020-01-02T00:00:00.000000",
+    "2024-12-30T00:00:00.000000"
+  ]
+}

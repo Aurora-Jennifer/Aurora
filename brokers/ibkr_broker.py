@@ -12,7 +12,7 @@ from typing import Dict, Optional
 import pandas as pd
 
 try:
-    from ib_insync import *
+    from ib_insync import LimitOrder, MarketOrder, Stock, StopLimitOrder, StopOrder
 except ImportError:
     print("Warning: ib_insync not installed. Install with: pip install ib_insync")
     IB = None
