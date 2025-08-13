@@ -18,3 +18,23 @@
   "regime": "trend",
   "regime_confidence": 0.7777777777777778
 }
+2025-08-13 00:53:22 - performance - INFO - PERFORMANCE: {
+  "timestamp": "2025-08-13T00:53:22.771661",
+  "total_return": 0.0,
+  "current_capital": -19180700.07324219,
+  "sharpe_ratio": 0.0,
+  "max_drawdown": 0.0,
+  "total_trades": 1,
+  "regime": "trend",
+  "regime_confidence": 0.7777777777777778
+}
+2025-08-13 01:03:12 - performance - INFO - PERFORMANCE: {
+  "timestamp": "2025-08-13T01:03:12.940142",
+  "total_return": 0.0,
+  "current_capital": 100000,
+  "sharpe_ratio": 0.0,
+  "max_drawdown": 0.0,
+  "total_trades": 0,
+  "regime": "trend",
+  "regime_confidence": 0.7777777777777778
+}

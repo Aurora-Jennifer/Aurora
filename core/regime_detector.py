@@ -420,9 +420,9 @@ class RegimeAwareFeatureEngine:
         elif regime_name == "chop":
             # Chop-specific features
             features["chop_oscillation"] = self._calculate_chop_oscillation(close)
-            features["mean_reversion_strength"] = (
-                self._calculate_mean_reversion_strength(close)
-            )
+            features[
+                "mean_reversion_strength"
+            ] = self._calculate_mean_reversion_strength(close)
 
         elif regime_name == "volatile":
             # Volatile-specific features

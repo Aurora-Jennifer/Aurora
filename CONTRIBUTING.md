@@ -92,10 +92,10 @@ def test_strategy_generates_signals():
     # Arrange
     strategy = RegimeAwareEnsembleStrategy(params)
     data = create_test_data()
-    
+
     # Act
     signals = strategy.generate_signals(data)
-    
+
     # Assert
     assert len(signals) > 0
     assert signals.dtype == float

@@ -281,9 +281,9 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
             features["oscillation_frequency"] = self._calculate_oscillation_frequency(
                 close
             )
-            features["mean_reversion_strength"] = (
-                self._calculate_mean_reversion_strength(close)
-            )
+            features[
+                "mean_reversion_strength"
+            ] = self._calculate_mean_reversion_strength(close)
 
         elif regime_name == "volatile":
             features["volatility_regime"] = self._calculate_volatility_regime(close)

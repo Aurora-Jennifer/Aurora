@@ -1,11 +1,11 @@
 {
-  "total_return": -192.80700073242193,
-  "annualized_return": Infinity,
+  "total_return": 0.0,
+  "annualized_return": 0.0,
   "volatility": NaN,
   "sharpe_ratio": NaN,
-  "max_drawdown": -0.0,
-  "total_trades": 1,
-  "current_capital": -19180700.07324219,
+  "max_drawdown": 0.0,
+  "total_trades": 0,
+  "current_capital": 100000,
   "regime_stats": {
     "trend": {
       "count": 1,

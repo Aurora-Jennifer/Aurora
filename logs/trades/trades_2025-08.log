@@ -20,3 +20,14 @@
   "confidence": 0.3,
   "signal_strength": 0.9344422754725447
 }
+2025-08-13 00:53:19 - trades - INFO - TRADE: {
+  "timestamp": "2025-08-13T00:53:19.825148",
+  "symbol": "SPY",
+  "action": "SELL",
+  "size": 46.67880297816689,
+  "price": 642.6900024414062,
+  "value": 30000.000000000004,
+  "regime": "trend",
+  "confidence": 0.3,
+  "signal_strength": 0.9344422754725447
+}

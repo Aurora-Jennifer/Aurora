@@ -22,7 +22,7 @@ Based on the regime-aware ensemble strategy, your system has excellent potential
 
 #### **Regime-Specific Performance:**
 - **Trend Regimes**: 80%+ capture of trending moves
-- **Chop Regimes**: 60%+ win rate on mean-reversion trades  
+- **Chop Regimes**: 60%+ win rate on mean-reversion trades
 - **Volatile Regimes**: 40%+ win rate with tight risk management
 
 ---
@@ -141,7 +141,7 @@ The `data/models/` and `config/models/` folders are designed for **Machine Learn
 # Example future ML integration
 models/
 ├── feature_models/          # Feature prediction models
-├── regime_models/          # Regime classification models  
+├── regime_models/          # Regime classification models
 ├── signal_models/          # Signal generation models
 └── ensemble_models/        # Model ensemble weights
 ```

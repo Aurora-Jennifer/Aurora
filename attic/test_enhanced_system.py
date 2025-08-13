@@ -55,9 +55,7 @@ def test_regime_detection():
 
     print(f"  ✅ Detected regime: {regime_name} (confidence: {confidence:.2f})")
     print(f"  ✅ Regime parameters: {regime_params.regime_name}")
-    print(
-        f"  ✅ Position sizing multiplier: {regime_params.position_sizing_multiplier}"
-    )
+    print(f"  ✅ Position sizing multiplier: {regime_params.position_sizing_multiplier}")
 
     return True
 

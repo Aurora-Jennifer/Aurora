@@ -25,7 +25,7 @@
             <p>Real-time monitoring of your automated trading system</p>
             <button class="refresh-btn" onclick="refreshData()">🔄 Refresh Data</button>
         </div>
-        
+
         <div class="metrics">
             <div class="metric-card">
                 <h3>Total Return</h3>
@@ -44,24 +44,24 @@
                 <div class="metric-value" id="win-rate">Loading...</div>
             </div>
         </div>
-        
+
         <div class="chart-container">
             <h2>Portfolio Performance</h2>
             <div id="performance-chart"></div>
         </div>
-        
+
         <div class="chart-container">
             <h2>Trade PnL</h2>
             <div id="trade-chart"></div>
         </div>
     </div>
-    
+
     <script>
         function refreshData() {
             loadMetrics();
             loadCharts();
         }
-        
+
         function loadMetrics() {
             $.get('/api/performance', function(data) {
                 $('#total-return').text((data.total_return * 100).toFixed(1) + '%')
@@ -70,7 +70,7 @@
                 $('#sharpe-ratio').text(data.sharpe_ratio ? data.sharpe_ratio.toFixed(2) : 'N/A');
                 $('#total-trades').text(data.total_trades || 0);
             });
-            
+
             $.get('/api/trades', function(data) {
                 if (data.length > 0) {
                     const wins = data.filter(trade => trade.pnl > 0).length;
@@ -81,26 +81,26 @@
                 }
             });
         }
-        
+
         function loadCharts() {
             $.get('/api/charts/performance', function(data) {
                 if (data.data) {
                     Plotly.newPlot('performance-chart', data.data, data.layout);
                 }
             });
-            
+
             $.get('/api/charts/trades', function(data) {
                 if (data.data) {
                     Plotly.newPlot('trade-chart', data.data, data.layout);
                 }
             });
         }
-        
+
         // Load data on page load
         $(document).ready(function() {
             loadMetrics();
             loadCharts();
-            
+
             // Auto-refresh every 30 seconds
             setInterval(refreshData, 30000);
         });

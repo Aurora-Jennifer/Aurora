@@ -10,7 +10,7 @@ The codebase has been cleaned and organized to focus only on the essential compo
 
 ### **Files Removed (22 files):**
 - `test_ensemble_system.py` - Old test file
-- `comprehensive_test.py` - Old test file  
+- `comprehensive_test.py` - Old test file
 - `paper_trading_system.py` - Old paper trading system
 - `live_trading.py` - Old live trading system
 - `backtest_engine.py` - Old backtest engine

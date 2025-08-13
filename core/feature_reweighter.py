@@ -379,15 +379,15 @@ class AdaptiveFeatureEngine:
             features["trend_adaptive_momentum"] = self._calculate_adaptive_momentum(
                 close, regime_summary
             )
-            features["trend_adaptive_strength"] = (
-                self._calculate_adaptive_trend_strength(close, regime_summary)
-            )
+            features[
+                "trend_adaptive_strength"
+            ] = self._calculate_adaptive_trend_strength(close, regime_summary)
 
         elif regime == "chop":
             # Chop-adaptive features
-            features["chop_adaptive_oscillation"] = (
-                self._calculate_adaptive_oscillation(close, regime_summary)
-            )
+            features[
+                "chop_adaptive_oscillation"
+            ] = self._calculate_adaptive_oscillation(close, regime_summary)
             features["chop_adaptive_reversion"] = self._calculate_adaptive_reversion(
                 close, regime_summary
             )

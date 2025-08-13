@@ -394,36 +394,54 @@ class EnhancedPaperTradingSystem:
     def _execute_trades(
         self, symbol: str, signals: Dict[str, float], date: date_class, regime_params
     ):
-        """Execute trades based on signals."""
+        """Execute trades based on signals with position-aware logic."""
         current_price = self._get_current_price(symbol, date)
         if current_price is None:
             return
 
+        # Get current position
+        current_position = self.positions.get(symbol, 0.0)
+
         # Calculate position size based on regime
         position_multiplier = regime_params.position_sizing_multiplier
         max_position_size = (
-            self.config.get("max_position_size", 0.2) * position_multiplier
+            self.config.get("risk_params", {}).get("max_weight_per_symbol", 0.25)
+            * position_multiplier
         )
 
         # Get regime-aware ensemble signal
         regime_signal = signals.get("regime_ensemble", 0.0)
 
-        # Calculate target position
+        # Calculate target position with position-aware logic
         signal_strength = abs(regime_signal)
         if signal_strength < regime_params.confidence_threshold:
             target_position = 0.0
         else:
+            # Calculate target position based on signal direction
             target_position = np.sign(regime_signal) * min(
                 signal_strength, max_position_size
             )
 
-        # Execute trade if position changed
-        current_position = self.positions.get(symbol, 0.0)
-        if abs(target_position - current_position) > 0.01:  # 1% threshold
+            # ENFORCE REDUCE-ONLY LOGIC: No shorting unless explicitly enabled
+            if target_position < 0 and current_position <= 0:
+                # Cannot sell if we don't have a position
+                target_position = 0.0
+                self.logger.warning(f"Cannot sell {symbol} - no position to reduce")
 
+            # ENFORCE POSITION LIMITS: Cannot exceed max position size
+            if abs(target_position) > max_position_size:
+                target_position = np.sign(target_position) * max_position_size
+
+        # Execute trade if position changed significantly
+        position_change = target_position - current_position
+        if abs(position_change) > 0.01:  # 1% threshold
             # Calculate trade size
-            trade_value = (target_position - current_position) * self.capital
+            trade_value = position_change * self.capital
             trade_size = trade_value / current_price
+
+            # Validate trade size
+            if abs(trade_size) < 0.01:  # Minimum trade size
+                return
 
             # Enhanced trade logging
             trade_data = {
@@ -435,6 +453,8 @@ class EnhancedPaperTradingSystem:
                 "regime": regime_params.regime_name,
                 "confidence": regime_params.confidence_threshold,
                 "signal_strength": signal_strength,
+                "current_position": current_position,
+                "target_position": target_position,
             }
 
             self.trading_logger.log_trade(trade_data)
@@ -462,12 +482,72 @@ class EnhancedPaperTradingSystem:
                 "value": abs(trade_value),
                 "regime": regime_params.regime_name,
                 "signal_strength": signal_strength,
+                "current_position": current_position,
+                "target_position": target_position,
             }
 
             self.trade_history.append(trade)
 
             # Update position
             self.positions[symbol] = target_position
+
+            # Update capital based on actual trade execution
+            self._update_capital_from_trade(trade_value, current_price, trade_size)
+
+    def _update_capital_from_trade(self, trade_value: float, price: float, size: float):
+        """Update capital based on actual trade execution."""
+        # Calculate transaction costs (fees, slippage)
+        fees_bps = self.config.get("execution_params", {}).get("max_slippage_bps", 10)
+        fees = abs(trade_value) * (fees_bps / 10000)
+
+        # Update capital: subtract fees from trade value
+        self.capital -= fees
+
+        self.logger.info(
+            f"Trade executed: ${trade_value:.2f}, Fees: ${fees:.2f}, Capital: ${self.capital:.2f}"
+        )
+
+    def _update_performance_tracking(self, date: date_class):
+        """Update performance tracking with proper PnL calculation."""
+        # Calculate total portfolio value including all positions
+        total_value = self.capital  # Start with cash
+
+        for symbol, position in self.positions.items():
+            current_price = self._get_current_price(symbol, date)
+            if current_price and position != 0:
+                # Calculate position value correctly
+                # Position is a fraction of capital, so value = position * capital
+                position_value = position * self.capital
+                total_value += position_value
+
+                self.logger.debug(
+                    f"Position {symbol}: {position:.4f} @ ${current_price:.2f} = ${position_value:.2f}"
+                )
+
+        # Calculate daily return based on total value change
+        if hasattr(self, "_previous_total_value"):
+            daily_return = (
+                total_value - self._previous_total_value
+            ) / self._previous_total_value
+        else:
+            # First day - no return
+            daily_return = 0.0
+
+        self._previous_total_value = total_value
+
+        # Store daily return
+        self.daily_returns.append(
+            {
+                "date": date,
+                "return": daily_return,
+                "total_value": total_value,
+                "cash": self.capital,
+                "positions_value": total_value - self.capital,
+            }
+        )
+
+        # Don't update capital here - keep it as cash
+        # Capital should only change due to trades, not price movements
 
     def _get_current_price(self, symbol: str, date: date_class) -> Optional[float]:
         """Get current price for symbol."""
@@ -480,23 +560,6 @@ class EnhancedPaperTradingSystem:
         except Exception as e:
             self.logger.error(f"Error getting price for {symbol}: {e}")
             return None
-
-    def _update_performance_tracking(self, date: date_class):
-        """Update performance tracking."""
-        # Calculate daily return
-        total_value = self.capital
-        for symbol, position in self.positions.items():
-            current_price = self._get_current_price(symbol, date)
-            if current_price:
-                total_value += position * self.capital * current_price
-
-        daily_return = (total_value - self.capital) / self.capital
-        self.daily_returns.append(
-            {"date": date, "return": daily_return, "total_value": total_value}
-        )
-
-        # Update capital
-        self.capital = total_value
 
     def _log_daily_summary(self, date: date_class, regime_name: str, confidence: float):
         """Log daily trading summary."""

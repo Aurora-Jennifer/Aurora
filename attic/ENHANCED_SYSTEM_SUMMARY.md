@@ -16,7 +16,7 @@ I have successfully implemented a comprehensive enhanced trading system that add
 
 **Regime Types:**
 - **Trend**: Higher position sizes (1.5x), wider stops, longer lookbacks
-- **Chop**: Lower position sizes (0.7x), tighter stops, shorter lookbacks  
+- **Chop**: Lower position sizes (0.7x), tighter stops, shorter lookbacks
 - **Volatile**: Smallest positions (0.5x), tightest stops, shortest lookbacks
 
 ### 2. **Feature Re-weighting System** (`core/feature_reweighter.py`)
@@ -198,7 +198,7 @@ python enhanced_paper_trading.py --setup-cron
 
 ### **Expected Timeline:**
 - **Week 4**: 35-40% annualized returns
-- **Week 6**: 50-55% annualized returns  
+- **Week 6**: 50-55% annualized returns
 - **Week 8**: 65%+ annualized returns
 
 ---

@@ -72,7 +72,7 @@ def validate_system():
     """Validate all system components."""
     print("🔍 System Validation Report")
     print("=" * 50)
-    
+
     # Check IBKR connection
     try:
         from brokers.ibkr_broker import IBKRConfig, IBKRBroker
@@ -87,7 +87,7 @@ def validate_system():
         broker.disconnect()
     except Exception as e:
         print(f"❌ IBKR Connection: Error - {e}")
-    
+
     # Check data provider
     try:
         from brokers.data_provider import IBKRDataProvider
@@ -99,7 +99,7 @@ def validate_system():
             print("❌ Data Provider: No data")
     except Exception as e:
         print(f"❌ Data Provider: Error - {e}")
-    
+
     # Check strategy
     try:
         from strategies.regime_aware_ensemble import RegimeAwareEnsembleStrategy, RegimeAwareEnsembleParams
@@ -114,33 +114,33 @@ def validate_system():
             print("❌ Strategy: No signals")
     except Exception as e:
         print(f"❌ Strategy: Error - {e}")
-    
+
     # Check logs
     log_files = [
         'logs/trading_bot.log',
         'logs/trades/trades_2025-08.log',
         'logs/performance/performance_2025-08.log'
     ]
-    
+
     for log_file in log_files:
         if os.path.exists(log_file):
             print(f"✅ Log File: {log_file}")
         else:
             print(f"❌ Log File: {log_file} - Missing")
-    
+
     # Check results
     result_files = [
         'results/performance_report.json',
         'results/trade_history.csv',
         'results/daily_returns.csv'
     ]
-    
+
     for result_file in result_files:
         if os.path.exists(result_file):
             print(f"✅ Result File: {result_file}")
         else:
             print(f"❌ Result File: {result_file} - Missing")
-    
+
     print("=" * 50)
     print("Validation Complete!")
 
@@ -251,10 +251,10 @@ from email.mime.text import MIMEText
 
 def check_service_health():
     """Check if trading bot service is healthy."""
-    
+
     # Check if service is running
     try:
-        result = subprocess.run(['systemctl', 'is-active', 'trading-bot.service'], 
+        result = subprocess.run(['systemctl', 'is-active', 'trading-bot.service'],
                               capture_output=True, text=True)
         if result.stdout.strip() == 'active':
             print("✅ Service Status: Running")
@@ -268,12 +268,12 @@ def check_service_health():
 
 def check_recent_logs():
     """Check for recent log activity."""
-    
+
     log_file = f"logs/trading_bot.log"
     if not os.path.exists(log_file):
         print("❌ Log file not found")
         return False
-    
+
     # Check if logs are recent (within last hour)
     stat = os.stat(log_file)
     last_modified = datetime.fromtimestamp(stat.st_mtime)
@@ -286,16 +286,16 @@ def check_recent_logs():
 
 def check_performance():
     """Check recent performance."""
-    
+
     perf_file = "results/performance_report.json"
     if not os.path.exists(perf_file):
         print("❌ Performance file not found")
         return False
-    
+
     try:
         with open(perf_file, 'r') as f:
             data = json.load(f)
-        
+
         total_return = data.get('total_return', 0)
         if total_return > -0.5:  # Less than 50% loss
             print(f"✅ Performance OK: {total_return:.1%}")
@@ -317,19 +317,19 @@ def main():
     """Main health check."""
     print("🔍 Trading Bot Health Check")
     print("=" * 40)
-    
+
     checks = [
         check_service_health(),
         check_recent_logs(),
         check_performance()
     ]
-    
+
     if all(checks):
         print("✅ All health checks passed")
     else:
         print("❌ Health check failed")
         send_alert("Trading bot health check failed")
-    
+
     print("=" * 40)
 
 if __name__ == "__main__":
@@ -400,10 +400,10 @@ def create_performance_chart():
     returns_df = load_daily_returns()
     if returns_df.empty:
         return None
-    
+
     # Create cumulative returns
     returns_df['cumulative_return'] = (1 + returns_df['return']).cumprod()
-    
+
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=returns_df['date'],
@@ -412,14 +412,14 @@ def create_performance_chart():
         name='Cumulative Return',
         line=dict(color='blue', width=2)
     ))
-    
+
     fig.update_layout(
         title='Portfolio Performance',
         xaxis_title='Date',
         yaxis_title='Cumulative Return',
         template='plotly_white'
     )
-    
+
     return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
 def create_trade_chart():
@@ -427,7 +427,7 @@ def create_trade_chart():
     trades_df = load_trade_history()
     if trades_df.empty:
         return None
-    
+
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=trades_df['timestamp'],
@@ -439,14 +439,14 @@ def create_trade_chart():
             size=8
         )
     ))
-    
+
     fig.update_layout(
         title='Trade PnL',
         xaxis_title='Date',
         yaxis_title='PnL',
         template='plotly_white'
     )
-    
+
     return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
 @app.route('/')
@@ -455,12 +455,12 @@ def dashboard():
     perf_data = load_performance_data()
     trades_df = load_trade_history()
     returns_df = load_daily_returns()
-    
+
     # Calculate metrics
     total_trades = len(trades_df) if not trades_df.empty else 0
     win_rate = (trades_df['pnl'] > 0).mean() if not trades_df.empty else 0
     total_pnl = trades_df['pnl'].sum() if not trades_df.empty else 0
-    
+
     return render_template('dashboard.html',
                          performance=perf_data,
                          total_trades=total_trades,
@@ -528,7 +528,7 @@ cat > templates/dashboard.html << 'EOF'
             <p>Real-time monitoring of your automated trading system</p>
             <button class="refresh-btn" onclick="refreshData()">🔄 Refresh Data</button>
         </div>
-        
+
         <div class="metrics">
             <div class="metric-card">
                 <h3>Total Return</h3>
@@ -547,24 +547,24 @@ cat > templates/dashboard.html << 'EOF'
                 <div class="metric-value" id="win-rate">Loading...</div>
             </div>
         </div>
-        
+
         <div class="chart-container">
             <h2>Portfolio Performance</h2>
             <div id="performance-chart"></div>
         </div>
-        
+
         <div class="chart-container">
             <h2>Trade PnL</h2>
             <div id="trade-chart"></div>
         </div>
     </div>
-    
+
     <script>
         function refreshData() {
             loadMetrics();
             loadCharts();
         }
-        
+
         function loadMetrics() {
             $.get('/api/performance', function(data) {
                 $('#total-return').text((data.total_return * 100).toFixed(1) + '%')
@@ -573,7 +573,7 @@ cat > templates/dashboard.html << 'EOF'
                 $('#sharpe-ratio').text(data.sharpe_ratio ? data.sharpe_ratio.toFixed(2) : 'N/A');
                 $('#total-trades').text(data.total_trades || 0);
             });
-            
+
             $.get('/api/trades', function(data) {
                 if (data.length > 0) {
                     const wins = data.filter(trade => trade.pnl > 0).length;
@@ -584,26 +584,26 @@ cat > templates/dashboard.html << 'EOF'
                 }
             });
         }
-        
+
         function loadCharts() {
             $.get('/api/charts/performance', function(data) {
                 if (data.data) {
                     Plotly.newPlot('performance-chart', data.data, data.layout);
                 }
             });
-            
+
             $.get('/api/charts/trades', function(data) {
                 if (data.data) {
                     Plotly.newPlot('trade-chart', data.data, data.layout);
                 }
             });
         }
-        
+
         // Load data on page load
         $(document).ready(function() {
             loadMetrics();
             loadCharts();
-            
+
             // Auto-refresh every 30 seconds
             setInterval(refreshData, 30000);
         });
@@ -641,20 +641,20 @@ import curses
 def load_data():
     """Load all trading data."""
     data = {}
-    
+
     # Load performance
     try:
         with open('results/performance_report.json', 'r') as f:
             data['performance'] = json.load(f)
     except:
         data['performance'] = {}
-    
+
     # Load trades
     try:
         data['trades'] = pd.read_csv('results/trade_history.csv')
     except:
         data['trades'] = pd.DataFrame()
-    
+
     # Load recent logs
     try:
         with open('logs/trading_bot.log', 'r') as f:
@@ -662,78 +662,78 @@ def load_data():
             data['recent_logs'] = lines[-10:]  # Last 10 lines
     except:
         data['recent_logs'] = []
-    
+
     return data
 
 def display_dashboard(stdscr, data):
     """Display dashboard in terminal."""
     stdscr.clear()
     height, width = stdscr.getmaxyx()
-    
+
     # Title
     title = "🚀 Trading Bot Dashboard"
     stdscr.addstr(0, (width - len(title)) // 2, title, curses.A_BOLD)
-    
+
     # Performance metrics
     perf = data.get('performance', {})
     row = 2
-    
+
     stdscr.addstr(row, 0, "📊 Performance Metrics:", curses.A_BOLD)
     row += 1
-    
+
     total_return = perf.get('total_return', 0)
     sharpe = perf.get('sharpe_ratio', 0)
     trades = perf.get('total_trades', 0)
-    
+
     stdscr.addstr(row, 2, f"Total Return: {total_return:.1%}")
     row += 1
     stdscr.addstr(row, 2, f"Sharpe Ratio: {sharpe:.2f}")
     row += 1
     stdscr.addstr(row, 2, f"Total Trades: {trades}")
     row += 2
-    
+
     # Recent trades
     if not data['trades'].empty:
         stdscr.addstr(row, 0, "💰 Recent Trades:", curses.A_BOLD)
         row += 1
-        
+
         recent_trades = data['trades'].tail(5)
         for _, trade in recent_trades.iterrows():
             symbol = trade.get('symbol', 'N/A')
             action = trade.get('action', 'N/A')
             pnl = trade.get('pnl', 0)
             timestamp = trade.get('timestamp', 'N/A')
-            
+
             trade_str = f"{symbol} {action} ${pnl:.2f} ({timestamp})"
             stdscr.addstr(row, 2, trade_str)
             row += 1
-    
+
     row += 1
-    
+
     # Recent logs
     stdscr.addstr(row, 0, "📝 Recent Logs:", curses.A_BOLD)
     row += 1
-    
+
     for log in data['recent_logs']:
         if row < height - 2:
             stdscr.addstr(row, 2, log.strip()[:width-4])
             row += 1
-    
+
     # Footer
     footer = f"Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Press 'q' to quit, 'r' to refresh"
     stdscr.addstr(height-1, 0, footer[:width-1])
-    
+
     stdscr.refresh()
 
 def main(stdscr):
     """Main dashboard loop."""
     curses.curs_set(0)  # Hide cursor
     stdscr.timeout(1000)  # 1 second timeout
-    
+
     while True:
         data = load_data()
         display_dashboard(stdscr, data)
-        
+
         # Handle input
         try:
             key = stdscr.getch()
@@ -805,29 +805,29 @@ def run_test():
     """Run complete end-to-end test."""
     print("🧪 Running End-to-End Test")
     print("=" * 40)
-    
+
     # Step 1: Run trading system
     print("1. Running trading system...")
-    result = subprocess.run(['python', 'enhanced_paper_trading.py', '--daily'], 
+    result = subprocess.run(['python', 'enhanced_paper_trading.py', '--daily'],
                           capture_output=True, text=True)
-    
+
     if result.returncode == 0:
         print("✅ Trading system completed successfully")
     else:
         print("❌ Trading system failed")
         print(result.stderr)
         return False
-    
+
     # Step 2: Check outputs
     print("\n2. Checking outputs...")
-    
+
     checks = [
         ('Trade log exists', 'logs/trades/trades_2025-08.log'),
         ('Performance log exists', 'logs/performance/performance_2025-08.log'),
         ('Performance report exists', 'results/performance_report.json'),
         ('Trade history exists', 'results/trade_history.csv')
     ]
-    
+
     all_passed = True
     for check_name, file_path in checks:
         if os.path.exists(file_path):
@@ -835,42 +835,42 @@ def run_test():
         else:
             print(f"❌ {check_name}")
             all_passed = False
-    
+
     # Step 3: Validate data
     print("\n3. Validating data...")
-    
+
     try:
         with open('results/performance_report.json', 'r') as f:
             perf_data = json.load(f)
-        
+
         if 'total_trades' in perf_data and perf_data['total_trades'] > 0:
             print("✅ Trades recorded")
         else:
             print("❌ No trades recorded")
             all_passed = False
-            
+
     except Exception as e:
         print(f"❌ Data validation failed: {e}")
         all_passed = False
-    
+
     # Step 4: Check logs
     print("\n4. Checking logs...")
-    
+
     try:
         with open('logs/trading_bot.log', 'r') as f:
             logs = f.readlines()
-        
+
         recent_logs = [log for log in logs[-10:] if 'Trade executed' in log]
         if recent_logs:
             print("✅ Trade execution logged")
         else:
             print("❌ No trade execution found in logs")
             all_passed = False
-            
+
     except Exception as e:
         print(f"❌ Log check failed: {e}")
         all_passed = False
-    
+
     print("\n" + "=" * 40)
     if all_passed:
         print("🎉 End-to-End Test PASSED!")
