@@ -289,3 +289,73 @@
 2025-08-13 01:27:23 - trading_bot - INFO -   Max Drawdown: 0.00%
 2025-08-13 01:27:23 - trading_bot - INFO -   Positions: 0
 2025-08-13 01:27:23 - trading_bot - INFO - Results saved to results
+2025-08-13 01:40:12 - trading_bot - INFO - Loaded config from config/enhanced_paper_trading_config.json
+2025-08-13 01:40:12 - trading_bot - INFO - Loaded profile from config/live_profile.json
+2025-08-13 01:40:12 - trading_bot - INFO - Kill switches configured:
+2025-08-13 01:40:12 - trading_bot - INFO -   enabled: True
+2025-08-13 01:40:12 - trading_bot - INFO -   max_daily_loss_pct: 2.0
+2025-08-13 01:40:12 - trading_bot - INFO -   max_daily_loss_dollars: 2000
+2025-08-13 01:40:12 - trading_bot - INFO -   max_gross_exposure_pct: 50.0
+2025-08-13 01:40:12 - trading_bot - INFO -   max_order_rate_per_minute: 1
+2025-08-13 01:40:12 - trading_bot - INFO -   max_unhandled_exceptions: 1
+2025-08-13 01:40:12 - trading_bot - INFO - Discord notifications disabled or not configured
+2025-08-13 01:40:12 - trading_bot - INFO - Initialized IBKR data provider
+2025-08-13 01:40:12 - trading_bot - INFO - Initialized strategy: regime_ensemble
+2025-08-13 01:40:12 - trading_bot - INFO - 🚀 System started: $100,000 capital, 1 strategies active
+2025-08-13 01:40:12 - trading_bot - INFO - Initialized EnhancedPaperTradingSystem with $100,000 capital
+2025-08-13 01:40:38 - trading_bot - INFO - Loaded config from config/enhanced_paper_trading_config.json
+2025-08-13 01:40:38 - trading_bot - INFO - Loaded profile from config/live_profile.json
+2025-08-13 01:40:38 - trading_bot - INFO - Kill switches configured:
+2025-08-13 01:40:38 - trading_bot - INFO -   enabled: True
+2025-08-13 01:40:38 - trading_bot - INFO -   max_daily_loss_pct: 2.0
+2025-08-13 01:40:38 - trading_bot - INFO -   max_daily_loss_dollars: 2000
+2025-08-13 01:40:38 - trading_bot - INFO -   max_gross_exposure_pct: 50.0
+2025-08-13 01:40:38 - trading_bot - INFO -   max_order_rate_per_minute: 1
+2025-08-13 01:40:38 - trading_bot - INFO -   max_unhandled_exceptions: 1
+2025-08-13 01:40:38 - trading_bot - INFO - Discord notifications disabled or not configured
+2025-08-13 01:40:38 - trading_bot - INFO - Initialized IBKR data provider
+2025-08-13 01:40:38 - trading_bot - INFO - Initialized strategy: regime_ensemble
+2025-08-13 01:40:38 - trading_bot - INFO - 🚀 System started: $100,000 capital, 1 strategies active
+2025-08-13 01:40:38 - trading_bot - INFO - Initialized EnhancedPaperTradingSystem with $100,000 capital
+2025-08-13 01:41:18 - trading_bot - INFO - Loaded config from config/enhanced_paper_trading_config.json
+2025-08-13 01:41:18 - trading_bot - INFO - Loaded profile from config/live_profile.json
+2025-08-13 01:41:18 - trading_bot - INFO - Kill switches configured:
+2025-08-13 01:41:18 - trading_bot - INFO -   enabled: True
+2025-08-13 01:41:18 - trading_bot - INFO -   max_daily_loss_pct: 2.0
+2025-08-13 01:41:18 - trading_bot - INFO -   max_daily_loss_dollars: 2000
+2025-08-13 01:41:18 - trading_bot - INFO -   max_gross_exposure_pct: 50.0
+2025-08-13 01:41:18 - trading_bot - INFO -   max_order_rate_per_minute: 1
+2025-08-13 01:41:18 - trading_bot - INFO -   max_unhandled_exceptions: 1
+2025-08-13 01:41:18 - trading_bot - INFO - Discord notifications disabled or not configured
+2025-08-13 01:41:18 - trading_bot - INFO - Initialized IBKR data provider
+2025-08-13 01:41:18 - trading_bot - INFO - Initialized strategy: regime_ensemble
+2025-08-13 01:41:18 - trading_bot - INFO - 🚀 System started: $100,000 capital, 1 strategies active
+2025-08-13 01:41:18 - trading_bot - INFO - Initialized EnhancedPaperTradingSystem with $100,000 capital
+2025-08-13 01:41:41 - trading_bot - INFO - Loaded config from config/enhanced_paper_trading_config.json
+2025-08-13 01:41:41 - trading_bot - INFO - Loaded profile from config/live_profile.json
+2025-08-13 01:41:41 - trading_bot - INFO - Kill switches configured:
+2025-08-13 01:41:41 - trading_bot - INFO -   enabled: True
+2025-08-13 01:41:41 - trading_bot - INFO -   max_daily_loss_pct: 2.0
+2025-08-13 01:41:41 - trading_bot - INFO -   max_daily_loss_dollars: 2000
+2025-08-13 01:41:41 - trading_bot - INFO -   max_gross_exposure_pct: 50.0
+2025-08-13 01:41:41 - trading_bot - INFO -   max_order_rate_per_minute: 1
+2025-08-13 01:41:41 - trading_bot - INFO -   max_unhandled_exceptions: 1
+2025-08-13 01:41:41 - trading_bot - INFO - Discord notifications disabled or not configured
+2025-08-13 01:41:41 - trading_bot - INFO - Initialized IBKR data provider
+2025-08-13 01:41:41 - trading_bot - INFO - Initialized strategy: regime_ensemble
+2025-08-13 01:41:41 - trading_bot - INFO - 🚀 System started: $100,000 capital, 1 strategies active
+2025-08-13 01:41:41 - trading_bot - INFO - Initialized EnhancedPaperTradingSystem with $100,000 capital
+2025-08-13 01:42:02 - trading_bot - INFO - Loaded config from config/enhanced_paper_trading_config.json
+2025-08-13 01:42:02 - trading_bot - INFO - Loaded profile from config/live_profile.json
+2025-08-13 01:42:02 - trading_bot - INFO - Kill switches configured:
+2025-08-13 01:42:02 - trading_bot - INFO -   enabled: True
+2025-08-13 01:42:02 - trading_bot - INFO -   max_daily_loss_pct: 2.0
+2025-08-13 01:42:02 - trading_bot - INFO -   max_daily_loss_dollars: 2000
+2025-08-13 01:42:02 - trading_bot - INFO -   max_gross_exposure_pct: 50.0
+2025-08-13 01:42:02 - trading_bot - INFO -   max_order_rate_per_minute: 1
+2025-08-13 01:42:02 - trading_bot - INFO -   max_unhandled_exceptions: 1
+2025-08-13 01:42:02 - trading_bot - INFO - Discord notifications disabled or not configured
+2025-08-13 01:42:02 - trading_bot - INFO - Initialized IBKR data provider
+2025-08-13 01:42:02 - trading_bot - INFO - Initialized strategy: regime_ensemble
+2025-08-13 01:42:02 - trading_bot - INFO - 🚀 System started: $100,000 capital, 1 strategies active
+2025-08-13 01:42:02 - trading_bot - INFO - Initialized EnhancedPaperTradingSystem with $100,000 capital

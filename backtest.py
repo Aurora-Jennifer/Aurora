@@ -6,6 +6,7 @@ Tests the trading strategy over historical data with full simulation.
 
 import argparse
 import json
+import logging
 import sys
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -16,6 +17,9 @@ import pandas as pd
 import yfinance as yf
 
 from enhanced_paper_trading import EnhancedPaperTradingSystem
+from core.portfolio import PortfolioState
+from core.trade_logger import TradeBook
+from core.performance import calculate_trade_metrics, calculate_portfolio_metrics, validate_daily_returns, generate_performance_report
 
 
 class BacktestEngine:
@@ -33,20 +37,21 @@ class BacktestEngine:
         self.start_date = None
         self.end_date = None
         self.initial_capital = self.trading_system.capital
-        self.current_capital = self.initial_capital
-        self.positions = {}
-        self.trades = []
+        
+        # Portfolio and trade tracking
+        self.portfolio = PortfolioState(cash=self.initial_capital)
+        self.trade_book = TradeBook()
+        
+        # Data storage
         self.daily_returns = []
         self.equity_curve = []
         
-        # Performance metrics
-        self.total_return = 0.0
-        self.annualized_return = 0.0
-        self.volatility = 0.0
-        self.sharpe_ratio = 0.0
-        self.max_drawdown = 0.0
-        self.win_rate = 0.0
-        self.profit_factor = 0.0
+        # Logging control
+        self.insufficient_data_logged = set()  # Rate limit insufficient data logs
+        self.logger = logging.getLogger(__name__)
+        
+        # Constants
+        self.MIN_HISTORY = 252  # Minimum trading days for warmup
         
     def run_backtest(
         self, 
@@ -66,55 +71,147 @@ class BacktestEngine:
         print(f"💰 Initial Capital: ${self.initial_capital:,.2f}")
         print("=" * 60)
         
-        # Get trading dates
-        trading_dates = self._get_trading_dates()
+        # Load data with warmup period
+        print("📊 Loading data with warmup period...")
+        warmup_start = self.start_date - timedelta(days=365)  # 1 year warmup
+        all_data = self._load_historical_data(warmup_start, self.end_date)
+        
+        if all_data is None or all_data.empty:
+            print("❌ No data available for backtest period")
+            return {}
+        
+        print(f"📊 Loaded {len(all_data)} data points")
+        print(f"📊 Data columns: {list(all_data.columns)}")
+        print(f"📊 Data shape: {all_data.shape}")
+        
+        # Get trading dates from data
+        trading_dates = self._get_trading_dates_from_data(all_data)
         print(f"📅 Trading days: {len(trading_dates)}")
+        
+        if len(trading_dates) == 0:
+            print("❌ No trading dates found in data")
+            return {}
         
         # Run simulation
         for i, current_date in enumerate(trading_dates):
             if i % 50 == 0:  # Progress indicator
                 print(f"📈 Processing day {i+1}/{len(trading_dates)}: {current_date}")
             
-            # Run daily trading
-            self._run_daily_trading(current_date)
+            # Update portfolio prices
+            self._update_portfolio_prices(current_date, all_data)
+            
+            # Mark to market and record equity
+            equity_today = self.portfolio.mark_to_market()
+            if i == 0:
+                equity_prev = equity_today
+            else:
+                # Calculate daily return
+                daily_return = (equity_today - equity_prev) / max(equity_prev, 1e-12)
+                self.daily_returns.append({
+                    "date": current_date,
+                    "return": daily_return,
+                    "equity": equity_today
+                })
+                equity_prev = equity_today
             
             # Record equity curve
-            self._record_equity_curve(current_date)
+            self.equity_curve.append({
+                "date": current_date,
+                "equity": equity_today,
+                "cash": self.portfolio.cash,
+                "positions_value": equity_today - self.portfolio.cash
+            })
+            
+            # Run daily trading (only if we have enough history)
+            if i >= self.MIN_HISTORY:
+                self._run_daily_trading(current_date, all_data)
         
         # Calculate performance metrics
-        self._calculate_performance_metrics()
+        trade_metrics = calculate_trade_metrics(self.trade_book.get_closed_trades())
+        portfolio_metrics = calculate_portfolio_metrics(self.equity_curve)
         
         # Generate results
-        results = self._generate_results()
+        results = self._generate_results(trade_metrics, portfolio_metrics)
         
         # Save results
         self._save_results(results)
         
         return results
     
-    def _get_trading_dates(self) -> List[date]:
-        """Get list of trading dates between start and end."""
-        dates = []
-        current_date = self.start_date
+    def _load_historical_data(self, start_date: date, end_date: date) -> Optional[pd.DataFrame]:
+        """Load historical data for all symbols with proper error handling."""
+        all_data = []
+        symbols = self.trading_system.config.get("symbols", ["SPY"])
         
-        while current_date <= self.end_date:
-            # Skip weekends (simple approach)
-            if current_date.weekday() < 5:  # Monday = 0, Friday = 4
-                dates.append(current_date)
-            current_date += timedelta(days=1)
+        for symbol in symbols:
+            try:
+                ticker = yf.Ticker(symbol)
+                data = ticker.history(start=start_date, end=end_date + timedelta(days=1))
+                
+                if not data.empty:
+                    data["Symbol"] = symbol
+                    all_data.append(data)
+                    
+            except Exception as e:
+                # Demote yfinance errors to DEBUG level
+                self.logger.debug(f"Failed to get data for {symbol}: {e}")
         
-        return dates
+        if all_data:
+            # Preserve the index (dates) when concatenating
+            combined_data = pd.concat(all_data, axis=0)
+            return combined_data
+        else:
+            return None
     
-    def _run_daily_trading(self, current_date: date):
+    def _get_trading_dates_from_data(self, data: pd.DataFrame) -> List[date]:
+        """Get trading dates from actual data."""
+        if data.empty:
+            return []
+        
+        # Extract unique dates from data
+        try:
+            if hasattr(data.index, 'date'):
+                dates = data.index.date
+            elif 'Date' in data.columns:
+                dates = pd.to_datetime(data['Date']).dt.date
+            else:
+                # Try to parse the index as dates
+                dates = pd.to_datetime(data.index).date
+            
+            unique_dates = sorted(list(set(dates)))
+            print(f"📊 Found {len(unique_dates)} unique dates in data")
+            print(f"📊 Date range: {min(unique_dates)} to {max(unique_dates)}")
+            
+            # Filter to backtest period
+            trading_dates = [d for d in unique_dates if self.start_date <= d <= self.end_date]
+            print(f"📊 Filtered to {len(trading_dates)} trading dates in backtest period")
+            
+            return trading_dates
+            
+        except Exception as e:
+            print(f"❌ Error extracting dates: {e}")
+            print(f"📊 Data index type: {type(data.index)}")
+            print(f"📊 Data index sample: {data.index[:5]}")
+            return []
+    
+    def _update_portfolio_prices(self, current_date: date, data: pd.DataFrame):
+        """Update portfolio prices for mark-to-market."""
+        symbols = self.trading_system.config.get("symbols", ["SPY"])
+        
+        for symbol in symbols:
+            # Get price for current date
+            symbol_data = data[data["Symbol"] == symbol] if "Symbol" in data.columns else data
+            if not symbol_data.empty:
+                # Use close price for mark-to-market
+                close_price = symbol_data["Close"].iloc[-1] if "Close" in symbol_data.columns else None
+                if close_price and not pd.isna(close_price):
+                    self.portfolio.update_price(symbol, float(close_price))
+    
+    def _run_daily_trading(self, current_date: date, data: pd.DataFrame):
         """Run daily trading simulation."""
         try:
-            # Get market data for the day
-            data = self._get_historical_data(current_date)
-            if data is None or data.empty:
-                return
-            
-            # Detect regime
-            regime_name, confidence, regime_params = self.trading_system.regime_detector.detect_regime(data)
+            # Detect regime (rate limit insufficient data logs)
+            regime_name, confidence, regime_params = self._detect_regime_with_rate_limit(data)
             
             # Generate signals for each symbol
             symbols = self.trading_system.config.get("symbols", ["SPY"])
@@ -128,14 +225,25 @@ class BacktestEngine:
                 # Generate regime-aware signals
                 signals = self._generate_signals(symbol_data, regime_name, regime_params)
                 
-                # Execute trades
-                self._execute_trades(symbol, signals, current_date, regime_params)
-            
-            # Update performance tracking
-            self._update_performance_tracking(current_date)
+                # Execute trades using portfolio system
+                self._execute_trades_with_portfolio(symbol, signals, current_date, regime_params)
             
         except Exception as e:
-            print(f"❌ Error in daily trading for {current_date}: {e}")
+            self.logger.error(f"Error in daily trading for {current_date}: {e}")
+    
+    def _detect_regime_with_rate_limit(self, data: pd.DataFrame):
+        """Detect regime with rate-limited logging."""
+        try:
+            return self.trading_system.regime_detector.detect_regime(data)
+        except Exception as e:
+            if "insufficient data" in str(e).lower():
+                # Only log once per symbol
+                if "insufficient_data" not in self.insufficient_data_logged:
+                    self.logger.warning(f"Insufficient data for regime detection: {e}")
+                    self.insufficient_data_logged.add("insufficient_data")
+            else:
+                self.logger.error(f"Regime detection error: {e}")
+            return "trend", 0.5, None  # Default fallback
     
     def _get_historical_data(self, current_date: date) -> Optional[pd.DataFrame]:
         """Get historical market data for backtesting."""
@@ -177,19 +285,20 @@ class BacktestEngine:
             print(f"❌ Error generating signals: {e}")
             return {}
     
-    def _execute_trades(self, symbol: str, signals: Dict[str, float], current_date: date, regime_params):
-        """Execute trades based on signals."""
+    def _execute_trades_with_portfolio(self, symbol: str, signals: Dict[str, float], current_date: date, regime_params):
+        """Execute trades using portfolio system with proper PnL tracking."""
         try:
-            # Get current price (use close price for backtesting)
-            current_price = self._get_current_price(symbol, current_date)
+            # Get current price from portfolio
+            current_price = self.portfolio.last_prices.get(symbol)
             if current_price is None:
                 return
             
-            # Get current position
-            current_position = self.positions.get(symbol, 0.0)
+            # Get current position from portfolio
+            current_position = self.portfolio.positions.get(symbol, None)
+            current_qty = current_position.qty if current_position else 0.0
             
             # Calculate position size based on regime
-            position_multiplier = regime_params.position_sizing_multiplier
+            position_multiplier = regime_params.position_sizing_multiplier if regime_params else 1.0
             max_position_size = (
                 self.trading_system.config.get("risk_params", {}).get("max_weight_per_symbol", 0.25)
                 * position_multiplier
@@ -200,56 +309,59 @@ class BacktestEngine:
             
             # Calculate target position with position-aware logic
             signal_strength = abs(regime_signal)
-            if signal_strength < regime_params.confidence_threshold:
+            confidence_threshold = regime_params.confidence_threshold if regime_params else 0.3
+            
+            if signal_strength < confidence_threshold:
                 target_position = 0.0
             else:
                 # Calculate target position based on signal direction
                 target_position = np.sign(regime_signal) * min(signal_strength, max_position_size)
                 
                 # ENFORCE REDUCE-ONLY LOGIC: No shorting unless explicitly enabled
-                if target_position < 0 and current_position <= 0:
-                    # Cannot sell if we don't have a position
+                if target_position < 0 and current_qty <= 0:
                     target_position = 0.0
                 
                 # ENFORCE POSITION LIMITS: Cannot exceed max position size
                 if abs(target_position) > max_position_size:
                     target_position = np.sign(target_position) * max_position_size
             
+            # Calculate target quantity
+            portfolio_value = self.portfolio.mark_to_market()
+            target_qty = (target_position * portfolio_value) / current_price
+            
             # Execute trade if position changed significantly
-            position_change = target_position - current_position
-            if abs(position_change) > 0.01:  # 1% threshold
-                # Calculate trade size
-                trade_value = position_change * self.current_capital
-                trade_size = trade_value / current_price
+            qty_change = target_qty - current_qty
+            if abs(qty_change) > 0.01:  # Minimum trade size
+                # Determine trade side
+                if qty_change > 0:
+                    side = "BUY"
+                    qty = qty_change
+                else:
+                    side = "SELL"
+                    qty = abs(qty_change)
                 
-                # Validate trade size
-                if abs(trade_size) < 0.01:  # Minimum trade size
-                    return
+                # Get fee rate
+                fee_bps = self.trading_system.config.get("execution_params", {}).get("max_slippage_bps", 10)
                 
-                # Record trade
-                trade = {
-                    "date": current_date,
-                    "symbol": symbol,
-                    "action": "BUY" if trade_size > 0 else "SELL",
-                    "size": abs(trade_size),
-                    "price": current_price,
-                    "value": abs(trade_value),
-                    "regime": regime_params.regime_name,
-                    "signal_strength": signal_strength,
-                    "current_position": current_position,
-                    "target_position": target_position,
-                }
+                # Apply fill to portfolio
+                realized_pnl = self.portfolio.apply_fill(symbol, side, qty, current_price, fee_bps)
                 
-                self.trades.append(trade)
+                # Calculate fees
+                fees = (qty * current_price) * (fee_bps / 10000.0)
                 
-                # Update position
-                self.positions[symbol] = target_position
+                # Record in trade book
+                if side == "BUY":
+                    self.trade_book.on_buy(str(current_date), symbol, qty, current_price, fees)
+                else:
+                    # Get remaining quantity after sell
+                    remaining_qty = self.portfolio.positions.get(symbol, None)
+                    remaining_qty = remaining_qty.qty if remaining_qty else 0.0
+                    self.trade_book.on_sell(str(current_date), symbol, qty, current_price, fees, remaining_qty)
                 
-                # Update capital based on actual trade execution
-                self._update_capital_from_trade(trade_value, current_price, trade_size)
+                self.logger.info(f"Trade: {side} {qty:.2f} {symbol} @ ${current_price:.2f}, PnL: ${realized_pnl:.2f}")
                 
         except Exception as e:
-            print(f"❌ Error executing trades for {symbol}: {e}")
+            self.logger.error(f"Error executing trades for {symbol}: {e}")
     
     def _get_current_price(self, symbol: str, current_date: date) -> Optional[float]:
         """Get current price for symbol on given date."""
@@ -364,7 +476,7 @@ class BacktestEngine:
             
             self.profit_factor = total_wins / total_losses if total_losses > 0 else float('inf')
     
-    def _generate_results(self) -> Dict:
+    def _generate_results(self, trade_metrics: Dict, portfolio_metrics: Dict) -> Dict:
         """Generate comprehensive backtest results."""
         return {
             "backtest_period": {
@@ -372,22 +484,15 @@ class BacktestEngine:
                 "end_date": self.end_date.strftime("%Y-%m-%d"),
                 "trading_days": len(self.equity_curve),
             },
-            "performance_metrics": {
-                "total_return": self.total_return,
-                "annualized_return": self.annualized_return,
-                "volatility": self.volatility,
-                "sharpe_ratio": self.sharpe_ratio,
-                "max_drawdown": self.max_drawdown,
-                "win_rate": self.win_rate,
-                "profit_factor": self.profit_factor,
-            },
+            "performance_metrics": portfolio_metrics,
+            "trade_metrics": trade_metrics,
             "trading_summary": {
                 "initial_capital": self.initial_capital,
                 "final_capital": self.equity_curve[-1]["equity"] if self.equity_curve else self.initial_capital,
-                "total_trades": len(self.trades),
-                "total_pnl": (self.equity_curve[-1]["equity"] - self.initial_capital) if self.equity_curve else 0,
+                "total_trades": trade_metrics.get("total_trades", 0),
+                "total_pnl": trade_metrics.get("total_pnl", 0),
             },
-            "trades": self.trades,
+            "trades": self.trade_book.export_trades_csv(),
             "daily_returns": self.daily_returns,
             "equity_curve": self.equity_curve,
         }
@@ -402,7 +507,7 @@ class BacktestEngine:
         with open(results_dir / "backtest_results.json", "w") as f:
             json.dump(results, f, indent=2, default=str)
         
-        # Save trades
+        # Save trades with new format
         if results["trades"]:
             trades_df = pd.DataFrame(results["trades"])
             trades_df.to_csv(results_dir / "backtest_trades.csv", index=False)
@@ -417,6 +522,17 @@ class BacktestEngine:
             equity_df = pd.DataFrame(results["equity_curve"])
             equity_df.to_csv(results_dir / "backtest_equity_curve.csv", index=False)
         
+        # Generate and save performance report
+        if results.get("trade_metrics") and results.get("performance_metrics"):
+            report = generate_performance_report(
+                results["trade_metrics"],
+                results["performance_metrics"],
+                results["equity_curve"],
+                results["backtest_period"]
+            )
+            with open(results_dir / "performance_report.txt", "w") as f:
+                f.write(report)
+        
         print(f"✅ Backtest results saved to {results_dir}")
     
     def print_results(self, results: Dict):
@@ -430,38 +546,40 @@ class BacktestEngine:
         print(f"📅 Period: {period['start_date']} to {period['end_date']}")
         print(f"📈 Trading Days: {period['trading_days']}")
         
-        # Performance metrics
-        metrics = results["performance_metrics"]
-        print(f"\n💰 PERFORMANCE METRICS")
-        print(f"   Total Return: {metrics['total_return']:.2%}")
-        print(f"   Annualized Return: {metrics['annualized_return']:.2%}")
-        print(f"   Volatility: {metrics['volatility']:.2%}")
-        print(f"   Sharpe Ratio: {metrics['sharpe_ratio']:.2f}")
-        print(f"   Max Drawdown: {metrics['max_drawdown']:.2%}")
-        print(f"   Win Rate: {metrics['win_rate']:.2%}")
-        print(f"   Profit Factor: {metrics['profit_factor']:.2f}")
+        # Portfolio performance metrics
+        portfolio_metrics = results["performance_metrics"]
+        print(f"\n💰 PORTFOLIO METRICS")
+        print(f"   Total Return: {portfolio_metrics.get('total_return', 0):.2%}")
+        print(f"   Annualized Return: {portfolio_metrics.get('annualized_return', 0):.2%}")
+        print(f"   Volatility: {portfolio_metrics.get('volatility', 0):.2%}")
+        print(f"   Sharpe Ratio: {portfolio_metrics.get('sharpe_ratio', 0):.2f}")
+        print(f"   Max Drawdown: {portfolio_metrics.get('max_drawdown', 0):.2%}")
+        print(f"   Calmar Ratio: {portfolio_metrics.get('calmar_ratio', 0):.2f}")
+        
+        # Trade metrics
+        trade_metrics = results.get("trade_metrics", {})
+        print(f"\n📈 TRADING METRICS")
+        print(f"   Total Trades: {trade_metrics.get('total_trades', 0)}")
+        print(f"   Win Rate: {trade_metrics.get('win_rate', 0):.2%}")
+        print(f"   Profit Factor: {trade_metrics.get('profit_factor', 'N/A')}")
+        print(f"   Total PnL: ${trade_metrics.get('total_pnl', 0):,.2f}")
+        print(f"   Total Fees: ${trade_metrics.get('total_fees', 0):,.2f}")
+        print(f"   Largest Win: ${trade_metrics.get('largest_win', 0):,.2f}")
+        print(f"   Largest Loss: ${trade_metrics.get('largest_loss', 0):,.2f}")
+        print(f"   Average Win: ${trade_metrics.get('avg_win', 0):,.2f}")
+        print(f"   Average Loss: ${trade_metrics.get('avg_loss', 0):,.2f}")
         
         # Trading summary
         summary = results["trading_summary"]
-        print(f"\n📈 TRADING SUMMARY")
+        print(f"\n📊 TRADING SUMMARY")
         print(f"   Initial Capital: ${summary['initial_capital']:,.2f}")
         print(f"   Final Capital: ${summary['final_capital']:,.2f}")
         print(f"   Total PnL: ${summary['total_pnl']:,.2f}")
         print(f"   Total Trades: {summary['total_trades']}")
         
-        # Regime analysis
-        if results["trades"]:
-            regime_stats = {}
-            for trade in results["trades"]:
-                regime = trade.get("regime", "unknown")
-                if regime not in regime_stats:
-                    regime_stats[regime] = {"count": 0, "pnl": 0}
-                regime_stats[regime]["count"] += 1
-                regime_stats[regime]["pnl"] += trade.get("value", 0)
-            
-            print(f"\n🎯 REGIME ANALYSIS")
-            for regime, stats in regime_stats.items():
-                print(f"   {regime.title()}: {stats['count']} trades, PnL: ${stats['pnl']:,.2f}")
+        # Note about profit factor
+        if trade_metrics.get('profit_factor') == 'N/A':
+            print(f"\n⚠️  NOTE: No losing trades recorded; verify accounting.")
 
 
 def main():
