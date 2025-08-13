@@ -31,3 +31,47 @@
   "confidence": 0.3,
   "signal_strength": 0.9344422754725447
 }
+2025-08-13 01:26:38 - trades - INFO - TRADE: {
+  "timestamp": "2025-08-13T01:26:38.458764",
+  "symbol": "SPY",
+  "action": "BUY",
+  "size": 38.899002481805745,
+  "price": 642.6900024414062,
+  "value": 25000.0,
+  "regime": "trend",
+  "confidence": 0.3,
+  "signal_strength": 0.8
+}
+2025-08-13 01:26:38 - trades - INFO - TRADE: {
+  "timestamp": "2025-08-13T01:26:38.491702",
+  "symbol": "SPY",
+  "action": "SELL",
+  "size": 77.77855546237058,
+  "price": 642.6900024414062,
+  "value": 49987.5,
+  "regime": "trend",
+  "confidence": 0.3,
+  "signal_strength": 0.6
+}
+2025-08-13 01:26:38 - trades - INFO - TRADE: {
+  "timestamp": "2025-08-13T01:26:38.525636",
+  "symbol": "SPY",
+  "action": "BUY",
+  "size": 38.869833092319695,
+  "price": 642.6900024414062,
+  "value": 24981.253125,
+  "regime": "trend",
+  "confidence": 0.3,
+  "signal_strength": 0.7
+}
+2025-08-13 01:26:38 - trades - INFO - TRADE: {
+  "timestamp": "2025-08-13T01:26:38.557070",
+  "symbol": "SPY",
+  "action": "BUY",
+  "size": 23.316069380427965,
+  "price": 642.6900024414062,
+  "value": 14985.004687031247,
+  "regime": "trend",
+  "confidence": 0.3,
+  "signal_strength": 1.0
+}

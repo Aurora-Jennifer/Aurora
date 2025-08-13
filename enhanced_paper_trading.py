@@ -539,6 +539,11 @@ class EnhancedPaperTradingSystem:
             # ENFORCE POSITION LIMITS: Cannot exceed max position size
             if abs(target_position) > max_position_size:
                 target_position = np.sign(target_position) * max_position_size
+            
+            # ENFORCE NO SHORTING: If shorting is disabled, clamp negative positions to 0
+            if not self.config.get("shorting_enabled", False) and target_position < 0:
+                target_position = 0.0
+                self.logger.warning(f"Shorting disabled - cannot take short position in {symbol}")
 
         # Execute trade if position changed significantly
         position_change = target_position - current_position

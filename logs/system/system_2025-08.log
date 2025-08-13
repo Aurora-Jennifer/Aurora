@@ -164,3 +164,123 @@
   ],
   "config_file": "config/enhanced_paper_trading_config.json"
 }
+2025-08-13 01:19:29 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:19:29.833306",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:20:58 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:20:58.239278",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:23:53 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:23:53.725649",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:26:38 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:26:38.106135",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:26:38 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:26:38.134549",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:26:38 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:26:38.558259",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:26:38 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:26:38.589554",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:27:21 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:27:21.106462",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
