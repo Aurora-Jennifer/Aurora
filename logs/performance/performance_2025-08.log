@@ -38,3 +38,33 @@
   "regime": "trend",
   "regime_confidence": 0.7777777777777778
 }
+2025-08-13 01:05:54 - performance - INFO - PERFORMANCE: {
+  "timestamp": "2025-08-13T01:05:54.140303",
+  "total_return": 0.0,
+  "current_capital": 100000,
+  "sharpe_ratio": 0.0,
+  "max_drawdown": 0.0,
+  "total_trades": 0,
+  "regime": "trend",
+  "regime_confidence": 0.7777777777777778
+}
+2025-08-13 01:12:46 - performance - INFO - PERFORMANCE: {
+  "timestamp": "2025-08-13T01:12:46.068483",
+  "total_return": 0.0,
+  "current_capital": 100000,
+  "sharpe_ratio": 0.0,
+  "max_drawdown": 0.0,
+  "total_trades": 0,
+  "regime": "trend",
+  "regime_confidence": 0.5555555555555556
+}
+2025-08-13 01:16:14 - performance - INFO - PERFORMANCE: {
+  "timestamp": "2025-08-13T01:16:14.101888",
+  "total_return": 0.0,
+  "current_capital": 100000,
+  "sharpe_ratio": 0.0,
+  "max_drawdown": 0.0,
+  "total_trades": 0,
+  "regime": "trend",
+  "regime_confidence": 0.5555555555555556
+}

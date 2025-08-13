@@ -1,0 +1,23 @@
+
+📊 Daily Trading Report - 2025-08-13
+==================================================
+
+💰 PERFORMANCE SUMMARY
+  Total Return: 0.00%
+  Current Capital: $100,000.00
+  Sharpe Ratio: nan
+  Max Drawdown: 0.00%
+  Total Trades: 0
+
+📈 TRADING ACTIVITY
+  Trades Today: 0
+  No trades executed today
+
+📅 DAILY RETURNS
+  Today's Return: 0.00%
+
+🎯 REGIME ANALYSIS
+  Trend: 1 days, avg confidence: 0.56
+
+==================================================
+Report generated: 2025-08-13 01:16:19

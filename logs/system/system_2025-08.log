@@ -104,3 +104,63 @@
   ],
   "config_file": "config/enhanced_paper_trading_config.json"
 }
+2025-08-13 01:05:50 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:05:50.931648",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT",
+    "TSLA",
+    "AMZN",
+    "META",
+    "NFLX",
+    "GOOG",
+    "BTC-USD",
+    "ETH-USD",
+    "XRP-USD",
+    "DOGE-USD",
+    "SOL-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "LINK-USD",
+    "BCH-USD",
+    "LTC-USD"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:12:45 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:12:45.002361",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}
+2025-08-13 01:16:13 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T01:16:13.046068",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "AAPL",
+    "NVDA",
+    "GOOGL",
+    "MSFT"
+  ],
+  "config_file": "config/enhanced_paper_trading_config.json"
+}

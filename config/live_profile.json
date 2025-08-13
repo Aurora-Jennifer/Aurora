@@ -1,0 +1,40 @@
+{
+  "param_source": "optimizer_2025-08-12.json",
+  "method": "sharpe",
+  "confidence": 0.3,
+  "regime_switching": true,
+  "fees_bps_roundtrip": 15,
+  "exec": "next_open",
+  "risk_params": {
+    "max_weight_per_symbol": 0.25,
+    "max_drawdown": 0.15,
+    "max_daily_loss": 0.02,
+    "max_intraday_loss": 0.01,
+    "max_gross_exposure": 0.5,
+    "order_rate_limit": 1,
+    "cooldown_seconds": 60
+  },
+  "execution_params": {
+    "max_slippage_bps": 10,
+    "paper_trading": true,
+    "order_types": ["MKT"],
+    "default_tif": "DAY",
+    "one_order_per_symbol_per_bar": true
+  },
+  "kill_switches": {
+    "enabled": true,
+    "max_daily_loss_pct": 2.0,
+    "max_daily_loss_dollars": 2000,
+    "max_gross_exposure_pct": 50.0,
+    "max_order_rate_per_minute": 1,
+    "max_unhandled_exceptions": 1
+  },
+  "symbols": ["SPY", "AAPL", "NVDA", "GOOGL", "MSFT"],
+  "initial_capital": 100000,
+  "shorting_enabled": false,
+  "position_sizing": {
+    "trend": 1.0,
+    "chop": 0.7,
+    "volatile": 0.5
+  }
+}

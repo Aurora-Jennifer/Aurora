@@ -40,14 +40,20 @@ class EnhancedPaperTradingSystem:
     Enhanced paper trading system with regime detection and adaptive features.
     """
 
-    def __init__(self, config_file: str = "config/enhanced_paper_trading_config.json"):
+    def __init__(
+        self,
+        config_file: str = "config/enhanced_paper_trading_config.json",
+        profile_file: str = None,
+    ):
         """
         Initialize enhanced paper trading system.
 
         Args:
             config_file: Configuration file path
+            profile_file: Profile configuration file path (optional)
         """
         self.config_file = config_file
+        self.profile_file = profile_file
 
         # Setup enhanced logging
         self.trading_logger = TradingLogger()
@@ -55,6 +61,13 @@ class EnhancedPaperTradingSystem:
 
         # Load config after logging is set up
         self.config = self.load_config()
+
+        # Load profile configuration if provided
+        if profile_file and Path(profile_file).exists():
+            self.load_profile_config(profile_file)
+
+        # Initialize kill switches
+        self.kill_switches = self._initialize_kill_switches()
 
         # Initialize Discord notifications
         self.discord_notifier = self._setup_discord_notifications()
@@ -147,11 +160,101 @@ class EnhancedPaperTradingSystem:
                 config = json.load(f)
             self.logger.info(f"Loaded config from {self.config_file}")
             return config
-        except FileNotFoundError:
-            self.logger.warning(
-                f"Config file {self.config_file} not found, using defaults"
-            )
-            return self._get_default_config()
+        except Exception as e:
+            self.logger.error(f"Failed to load config: {e}")
+            return {}
+
+    def load_profile_config(self, profile_file: str):
+        """Load and apply profile configuration."""
+        try:
+            with open(profile_file) as f:
+                profile = json.load(f)
+
+            # Override config with profile settings
+            if "risk_params" in profile:
+                self.config["risk_params"].update(profile["risk_params"])
+
+            if "execution_params" in profile:
+                self.config["execution_params"].update(profile["execution_params"])
+
+            if "symbols" in profile:
+                self.config["symbols"] = profile["symbols"]
+
+            if "initial_capital" in profile:
+                self.config["initial_capital"] = profile["initial_capital"]
+                self.capital = profile["initial_capital"]
+
+            self.logger.info(f"Loaded profile from {profile_file}")
+
+        except Exception as e:
+            self.logger.error(f"Failed to load profile: {e}")
+
+    def _initialize_kill_switches(self) -> Dict:
+        """Initialize kill switches for risk management."""
+        kill_switches = self.config.get("kill_switches", {})
+
+        # Set defaults if not provided
+        defaults = {
+            "enabled": True,
+            "max_daily_loss_pct": 2.0,
+            "max_daily_loss_dollars": 2000,
+            "max_gross_exposure_pct": 50.0,
+            "max_order_rate_per_minute": 1,
+            "max_unhandled_exceptions": 1,
+        }
+
+        for key, default_value in defaults.items():
+            if key not in kill_switches:
+                kill_switches[key] = default_value
+
+        # Log kill switch configuration
+        self.logger.info("Kill switches configured:")
+        for key, value in kill_switches.items():
+            self.logger.info(f"  {key}: {value}")
+
+        return kill_switches
+
+    def check_kill_switches(self) -> bool:
+        """Check if any kill switches should be triggered."""
+        if not self.kill_switches.get("enabled", True):
+            return True
+
+        try:
+            # Check daily loss percentage
+            initial_capital = self.config.get("initial_capital", 100000)
+            current_capital = self.capital
+            daily_loss_pct = (initial_capital - current_capital) / initial_capital * 100
+
+            if daily_loss_pct > self.kill_switches.get("max_daily_loss_pct", 2.0):
+                self.logger.error(
+                    f"KILL SWITCH: Daily loss {daily_loss_pct:.2f}% exceeds limit {self.kill_switches.get('max_daily_loss_pct', 2.0)}%"
+                )
+                return False
+
+            # Check daily loss dollars
+            daily_loss_dollars = initial_capital - current_capital
+            if daily_loss_dollars > self.kill_switches.get(
+                "max_daily_loss_dollars", 2000
+            ):
+                self.logger.error(
+                    f"KILL SWITCH: Daily loss ${daily_loss_dollars:.2f} exceeds limit ${self.kill_switches.get('max_daily_loss_dollars', 2000)}"
+                )
+                return False
+
+            # Check gross exposure
+            total_exposure = sum(abs(pos) for pos in self.positions.values())
+            exposure_pct = total_exposure * 100
+            if exposure_pct > self.kill_switches.get("max_gross_exposure_pct", 50.0):
+                self.logger.error(
+                    f"KILL SWITCH: Gross exposure {exposure_pct:.2f}% exceeds limit {self.kill_switches.get('max_gross_exposure_pct', 50.0)}%"
+                )
+                return False
+
+            return True
+
+        except Exception as e:
+            self.logger.error(f"Error checking kill switches: {e}")
+            return False
 
     def _get_default_config(self) -> Dict:
         """Get default configuration."""
@@ -207,6 +310,11 @@ class EnhancedPaperTradingSystem:
         self.logger.info(f"Running daily trading for {date}")
 
         try:
+            # Check kill switches before trading
+            if not self.check_kill_switches():
+                self.logger.error("KILL SWITCH TRIGGERED - Trading halted")
+                return
+
             # Get market data
             symbols = self.config.get("symbols", ["SPY"])
             data = self._get_market_data(symbols, date)
@@ -703,12 +811,16 @@ def main():
         default="config/enhanced_paper_trading_config.json",
         help="Configuration file path",
     )
+    parser.add_argument("--profile", help="Profile configuration file path")
+    parser.add_argument(
+        "--paper", action="store_true", help="Run in paper trading mode"
+    )
 
     args = parser.parse_args()
 
     try:
         # Initialize system
-        system = EnhancedPaperTradingSystem(args.config)
+        system = EnhancedPaperTradingSystem(args.config, args.profile)
 
         if args.daily or args.cron:
             # Run daily trading
