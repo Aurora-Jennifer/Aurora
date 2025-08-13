@@ -1,8 +1,104 @@
 # 🚀 Enhanced Trading System
 
-A sophisticated trading system with regime detection, adaptive features, and ensemble strategies designed to achieve **65%+ returns**.
+A sophisticated algorithmic trading system with regime detection, adaptive features, and IBKR integration designed to achieve **65%+ returns**.
 
-## 📁 Project Structure
+## 🎯 Features
+
+- **🎯 Regime Detection**: Identifies trend, chop, and volatile market conditions
+- **⚖️ Multi-Signal Blending**: Combines trend-following, mean-reversion, and breakout signals
+- **📊 Risk Management**: Built-in position sizing and drawdown protection
+- **🔄 Adaptive Features**: Feature importance based on rolling performance
+- **🏦 IBKR Integration**: Professional-grade data and execution
+- **📈 Performance Tracking**: Comprehensive metrics and logging
+- **🔔 Discord Notifications**: Real-time alerts and summaries
+- **🧪 Paper Trading**: Risk-free testing environment
+
+## 📊 Expected Performance
+
+| Metric | Target | Current System | Improvement |
+|--------|--------|----------------|-------------|
+| **Total Return** | 65%+ annually | 27.42% | +137% |
+| **Sharpe Ratio** | 2.0+ | 1.27 | +57% |
+| **Max Drawdown** | < 10% | -15% | +33% |
+| **Win Rate** | 65%+ | 55% | +18% |
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Python 3.8 or higher
+- IBKR Gateway (for live data)
+- Git
+
+### Installation
+```bash
+# Clone the repository
+git clone <repository-url>
+cd trader
+
+# Install dependencies
+pip install -e ".[dev]"
+
+# Install pre-commit hooks
+pre-commit install
+```
+
+### Configuration
+1. **Copy environment template**:
+   ```bash
+   cp config/env_example.txt .env
+   ```
+
+2. **Configure IBKR settings** in `config/enhanced_paper_trading_config.json`:
+   ```json
+   {
+     "use_ibkr": true,
+     "ibkr_config": {
+       "paper_trading": true,
+       "host": "127.0.0.1",
+       "port": 7497,
+       "client_id": 12399
+     }
+   }
+   ```
+
+3. **Set up IBKR Gateway** (see `IBKR_GATEWAY_SETUP.md`)
+
+### Running the System
+
+#### Paper Trading
+```bash
+# Run daily trading session
+python enhanced_paper_trading.py --daily
+
+# Run with specific date
+python enhanced_paper_trading.py --date 2025-08-13
+```
+
+#### Automated Trading
+```bash
+# Setup systemd service (recommended)
+sudo systemctl enable trading-bot.service
+sudo systemctl start trading-bot.service
+
+# Or use cron
+crontab -e
+# Add: 30 9 * * 1-5 /path/to/run_trading_cron.sh
+```
+
+#### Monitoring
+```bash
+# Terminal dashboard
+python attic/simple_dashboard.py
+
+# Web dashboard
+python attic/dashboard.py
+# Access at: http://localhost:5000
+
+# Check logs
+tail -f logs/trading_bot.log
+```
+
+## 🏗️ Project Structure
 
 ```
 📁 Enhanced Trading System/
@@ -22,160 +118,157 @@ A sophisticated trading system with regime detection, adaptive features, and ens
 ├── 📁 features/                # Feature engineering
 │   ├── feature_engine.py       # Feature generation
 │   └── ensemble.py             # Feature combination
+├── 📁 brokers/                 # Broker integrations
+│   ├── ibkr_broker.py          # IBKR broker integration
+│   └── data_provider.py        # Data provider abstraction
+├── 📁 config/                  # Configuration files
+│   ├── enhanced_paper_trading_config.json # Main config
+│   ├── ibkr_config.json        # IBKR settings
+│   └── notifications/          # Notification settings
 ├── 📁 logs/                    # Comprehensive logging
 │   ├── trades/                 # Trade execution logs
 │   ├── performance/            # Performance metrics
 │   ├── errors/                 # Error tracking
-│   ├── system/                 # System operations
-│   └── daily_summaries/        # Daily summaries
+│   └── system/                 # System operations
 ├── 📁 results/                 # Performance results
-│   ├── performance/            # Performance reports
-│   ├── trades/                 # Trade analysis
-│   ├── backtests/              # Backtest results
-│   └── charts/                 # Performance charts
-├── 📁 config/                  # Configuration files
-│   ├── strategies/             # Strategy configs
-│   ├── regimes/                # Regime parameters
-│   └── notifications/          # Discord settings
+│   ├── performance_report.json # Performance metrics
+│   ├── trade_history.csv       # Trade history
+│   └── daily_returns.csv       # Daily returns
 ├── 📁 data/                    # Data storage
-│   ├── market/                 # Market data
-│   ├── features/               # Feature data
-│   └── cache/                  # Cached data
-├── 📁 monitoring/              # System monitoring
-│   ├── dashboards/             # Monitoring dashboards
-│   └── alerts/                 # Alert configurations
-├── 📁 scripts/                 # Utility scripts
-│   ├── maintenance/            # Maintenance scripts
-│   └── analysis/               # Analysis scripts
-└── 📁 docs/                    # Documentation
-    ├── guides/                 # User guides
-    └── examples/               # Usage examples
+│   └── ibkr/                   # IBKR cached data
+├── 📁 attic/                   # Development tools (moved)
+├── 📄 enhanced_paper_trading.py # Main trading system
+├── 📄 pyproject.toml           # Python packaging
+├── 📄 requirements.txt         # Dependencies
+└── 📄 README.md               # This file
 ```
 
-## 🚀 Quick Start
+## 🧪 Development
 
-### 1. Setup Discord Notifications
+### Running Tests
 ```bash
-# Edit Discord webhook URL
-nano config/notifications/discord_config.json
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=core --cov=strategies --cov=features --cov=brokers
+
+# Run specific test
+pytest tests/test_strategies.py
 ```
 
-### 2. Run Daily Trading
+### Code Quality
 ```bash
-python enhanced_paper_trading.py --daily
+# Format code
+black .
+
+# Sort imports
+isort .
+
+# Lint code
+ruff check .
+
+# Run all checks
+pre-commit run --all-files
 ```
 
-### 3. Setup Automated Trading
+### Development Setup
 ```bash
-python enhanced_paper_trading.py --setup-cron
+# Install development dependencies
+pip install -e ".[dev]"
+
+# Install pre-commit hooks
+pre-commit install
+
+# Run validation
+python attic/validate_system.py
 ```
 
-### 4. Monitor Performance
+## 📋 Configuration
+
+### Environment Variables
+- `IBKR_PAPER_TRADING`: Set to `true` for paper trading
+- `IBKR_HOST`: IBKR Gateway host (default: `127.0.0.1`)
+- `IBKR_PORT`: IBKR Gateway port (default: `7497`)
+- `IBKR_CLIENT_ID`: Unique client ID for IBKR connection
+
+### Configuration Files
+- `config/enhanced_paper_trading_config.json`: Main configuration
+- `config/ibkr_config.json`: IBKR connection settings
+- `config/notifications/discord_config.json`: Discord settings
+
+See `CONFIGURATION.md` for detailed configuration options.
+
+## 📈 Performance Tracking
+
+### Key Metrics
+- **Total Return**: Overall portfolio performance
+- **Sharpe Ratio**: Risk-adjusted returns
+- **Max Drawdown**: Largest peak-to-trough decline
+- **Win Rate**: Percentage of profitable trades
+- **Regime Performance**: Returns by market regime
+
+### Monitoring
+- **Real-time logs**: `logs/trading_bot.log`
+- **Trade history**: `logs/trades/trades_YYYY-MM.log`
+- **Performance metrics**: `results/performance_report.json`
+- **Daily summaries**: `logs/performance/performance_YYYY-MM.log`
+
+## 🔧 Troubleshooting
+
+### Common Issues
+1. **IBKR Connection Failed**: Check host, port, and client ID
+2. **No Trades Generated**: Check signal confidence thresholds
+3. **Poor Performance**: Review regime detection accuracy
+4. **High Drawdown**: Adjust position sizing parameters
+
+### Health Check
 ```bash
-# Check logs
+# Run system validation
+python attic/validate_system.py
+
+# Check service status
+sudo systemctl status trading-bot.service
+
+# Monitor logs
 tail -f logs/trading_bot.log
-
-# View daily summary
-cat logs/daily_summaries/summary_$(date +%Y-%m-%d).md
 ```
 
-## 🎯 Key Features
+## 📚 Documentation
 
-- **🎯 Regime Detection**: Identifies trend, chop, and volatile market conditions
-- **⚖️ Adaptive Features**: Feature importance based on rolling performance
-- **📊 Ensemble Strategies**: Combines multiple signal types intelligently
-- **📈 Performance Tracking**: Comprehensive metrics and logging
-- **🔔 Discord Notifications**: Real-time alerts and summaries
-- **📁 Organized Structure**: Clean, maintainable codebase
-- **🤖 Automated Trading**: Cron job support for daily execution
+- `CONFIGURATION.md`: Configuration options and environment variables
+- `CONTRIBUTING.md`: Development guidelines and contribution process
+- `CHANGELOG.md`: Version history and changes
+- `attic/IBKR_GATEWAY_SETUP.md`: IBKR Gateway setup instructions
+- `attic/TRADING_PERFORMANCE_GUIDE.md`: Performance tracking guide
+- `attic/END_TO_END_TESTING_GUIDE.md`: Testing and validation guide
 
-## 📊 Performance Targets
+## 🤝 Contributing
 
-- **Total Return**: 65%+ annually
-- **Sharpe Ratio**: 2.0+
-- **Max Drawdown**: < 10%
-- **Win Rate**: 65%+
+We welcome contributions! Please see `CONTRIBUTING.md` for guidelines.
 
-## 🔧 Configuration
+### Development Workflow
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Run code quality checks
+6. Submit a pull request
 
-### Discord Notifications
-Edit `config/notifications/discord_config.json`:
-```json
-{
-  "webhook_url": "YOUR_DISCORD_WEBHOOK_URL",
-  "bot_name": "Trading Bot",
-  "enabled": true
-}
-```
+## 📄 License
 
-### Trading Parameters
-Edit `config/enhanced_paper_trading_config.json`:
-- Trading symbols
-- Position sizing
-- Risk parameters
-- Strategy weights
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 📊 Monitoring
+## ⚠️ Disclaimer
 
-### Logs
-- **Main Log**: `logs/trading_bot.log`
-- **Trades**: `logs/trades/trades_YYYY-MM.log`
-- **Performance**: `logs/performance/performance_YYYY-MM.log`
-- **Errors**: `logs/errors/errors_YYYY-MM.log`
-
-### Results
-- **Performance**: `results/performance/`
-- **Trades**: `results/trades/`
-- **Reports**: `results/reports/`
-
-### Discord Notifications
-- **Startup**: System initialization
-- **Trades**: Real-time trade execution
-- **Daily Summary**: End-of-day performance
-- **Errors**: System errors and alerts
-
-## 🛡️ Risk Management
-
-- Regime-based position sizing
-- Dynamic stop losses
-- Feature performance monitoring
-- Confidence thresholds
-- Portfolio diversification
-
-## 📋 Requirements
-
-- Python 3.8+
-- pandas, numpy, yfinance
-- scikit-learn
-- requests (for Discord)
-- matplotlib, seaborn
-
-Install with: `pip install -r requirements.txt`
-
-## 🔄 Maintenance
-
-### Daily
-- Monitor logs in `logs/` directory
-- Check Discord notifications
-- Review daily summary
-
-### Weekly
-- Analyze performance in `results/performance/`
-- Review error logs in `logs/errors/`
-- Update strategy parameters if needed
-
-### Monthly
-- Archive old logs
-- Generate monthly performance report
-- Review and optimize strategies
+This software is for educational and research purposes only. Trading involves substantial risk of loss and is not suitable for all investors. Past performance does not guarantee future results.
 
 ## 🆘 Support
 
-- **Logs**: Check `logs/` directory for detailed information
-- **Errors**: Review `logs/errors/` for troubleshooting
-- **Configuration**: Verify settings in `config/` directory
-- **Discord**: Ensure webhook URL is correct
+- **Issues**: Create a GitHub issue for bugs or feature requests
+- **Discussions**: Use GitHub Discussions for questions
+- **Documentation**: Check the documentation files first
 
 ---
 
-**The enhanced system is ready to help you achieve 65%+ returns through intelligent regime detection, adaptive features, and optimized signal blending!** 🎯
+**Start your automated trading journey today!** 🚀

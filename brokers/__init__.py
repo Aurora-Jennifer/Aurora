@@ -2,7 +2,7 @@
 Broker integrations for trading system.
 """
 
-from .ibkr_broker import IBKRBroker, IBKRConfig
 from .data_provider import IBKRDataProvider
+from .ibkr_broker import IBKRBroker, IBKRConfig
 
-__all__ = ['IBKRBroker', 'IBKRConfig', 'IBKRDataProvider']
+__all__ = ["IBKRBroker", "IBKRConfig", "IBKRDataProvider"]
