@@ -1,0 +1,130 @@
+{
+  "SPY_data": {
+    "status": "success",
+    "days": 502,
+    "date_range": "2023-01-03 to 2024-12-31"
+  },
+  "QQQ_data": {
+    "status": "failed",
+    "error": "No data"
+  },
+  "IWM_data": {
+    "status": "failed",
+    "error": "No data"
+  },
+  "feature_engineering": {
+    "status": "success",
+    "features_generated": 55,
+    "feature_names": [
+      "SMA_Crossover_5_50",
+      "SMA_Slope_5",
+      "SMA_Crossover_10_200",
+      "SMA_Slope_10",
+      "SMA_Crossover_20_180",
+      "SMA_Slope_20",
+      "EMA_Crossover_5_50",
+      "EMA_Slope_5",
+      "EMA_Crossover_10_200",
+      "EMA_Slope_10",
+      "EMA_Crossover_20_180",
+      "EMA_Slope_20",
+      "Donchian_Breakout_20",
+      "Donchian_Breakout_50",
+      "Donchian_Breakout_100",
+      "MACD_Line",
+      "MACD_Signal",
+      "MACD_Histogram",
+      "MACD_Crossover",
+      "RSI",
+      "RSI_Momentum",
+      "RSI_Overbought",
+      "RSI_Oversold",
+      "ROC_10",
+      "ATR",
+      "ATR_Pct",
+      "Realized_Vol_10",
+      "Realized_Vol_20",
+      "Realized_Vol_50",
+      "ADX",
+      "ADX_Trend",
+      "Vol_High",
+      "Vol_Low",
+      "RSI_2_Extreme",
+      "RSI_3_Extreme",
+      "ZScore_20",
+      "ZScore_50",
+      "ZScore_100",
+      "BB_Touch_Upper",
+      "BB_Touch_Lower",
+      "BB_Penetrate_Upper",
+      "BB_Penetrate_Lower",
+      "BB_Position",
+      "VWAP_Deviation",
+      "OBV_Slope",
+      "Volume_ZScore",
+      "AD_Slope",
+      "MFI",
+      "MFI_Overbought",
+      "MFI_Oversold",
+      "Choppiness",
+      "Choppy_Market",
+      "Trend_Strength",
+      "Trend_Regime",
+      "Mean_Reversion_Regime"
+    ]
+  },
+  "strategy_backtesting": {
+    "ensemble_basic": {
+      "cagr": -0.04287330844453019,
+      "sharpe": -0.44851754452510645,
+      "max_dd": -0.19346202459094536,
+      "total_return": -0.08396344700184488,
+      "trades": 106,
+      "final_equity": 0.9160365529981551
+    },
+    "ensemble_regime": {
+      "cagr": 0.03306823346159615,
+      "sharpe": 0.38709897694544215,
+      "max_dd": -0.12797796851047255,
+      "total_return": 0.0672775057524555,
+      "trades": 54,
+      "final_equity": 1.0672775057524555
+    },
+    "ensemble_conservative": {
+      "cagr": 0.03823540664134106,
+      "sharpe": 0.5199510169406861,
+      "max_dd": -0.08761967116870213,
+      "total_return": 0.07798812965463009,
+      "trades": 88,
+      "final_equity": 1.07798812965463
+    },
+    "sma": {
+      "cagr": 0.1287263882850329,
+      "sharpe": 1.2743353675989997,
+      "max_dd": -0.11804324416373009,
+      "total_return": 0.274234463094972,
+      "trades": 9,
+      "final_equity": 1.274234463094972
+    },
+    "momentum": {
+      "cagr": 0.08720565912151756,
+      "sharpe": 1.0693321274161403,
+      "max_dd": -0.08164138096332313,
+      "total_return": 0.18215144291053176,
+      "trades": 48,
+      "final_equity": 1.1821514429105318
+    },
+    "mean_reversion": {
+      "cagr": -0.017815024495371756,
+      "sharpe": -0.4794094176882634,
+      "max_dd": -0.059420247505275865,
+      "total_return": -0.03533641193764181,
+      "trades": 54,
+      "final_equity": 0.9646635880623582
+    }
+  },
+  "paper_trading": {
+    "status": "failed",
+    "error": "'PaperTradingSystem' object has no attribute 'logger'"
+  }
+}

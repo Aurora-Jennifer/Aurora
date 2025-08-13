@@ -1,0 +1,27 @@
+{
+  "timestamp": "20250812_172400",
+  "ticker": "SPY",
+  "strategy": "sma",
+  "best_result": {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 20,
+      "slow_period": 180
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.09906116050531444,
+    "sharpe": 0.8053633828900552,
+    "max_dd": -0.26668446251323685,
+    "trades": 15,
+    "final_equity": 2.7163469524080153,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  "total_results": 54,
+  "date_range": "SPY optimization",
+  "metadata": {
+    "created_at": "2025-08-12T17:24:00.735241",
+    "description": "Best parameters for SPY sma optimization"
+  }
+}

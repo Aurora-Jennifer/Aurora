@@ -1,0 +1,35 @@
+{
+  "sma_crossover": {
+    "description": "Simple Moving Average Crossover Strategy",
+    "default_params": {
+      "fast_period": 20,
+      "slow_period": 180
+    },
+    "param_ranges": {
+      "fast_period": [5, 10, 15, 20, 25, 30],
+      "slow_period": [50, 100, 150, 180, 200, 250]
+    }
+  },
+  "momentum": {
+    "description": "Price Momentum Strategy",
+    "default_params": {
+      "lookback_period": 20,
+      "threshold": 0.02
+    },
+    "param_ranges": {
+      "lookback_period": [10, 15, 20, 25, 30],
+      "threshold": [0.01, 0.015, 0.02, 0.025, 0.03]
+    }
+  },
+  "mean_reversion": {
+    "description": "Mean Reversion Strategy",
+    "default_params": {
+      "lookback_period": 20,
+      "std_dev_threshold": 2.0
+    },
+    "param_ranges": {
+      "lookback_period": [10, 15, 20, 25, 30],
+      "std_dev_threshold": [1.5, 1.8, 2.0, 2.2, 2.5]
+    }
+  }
+}

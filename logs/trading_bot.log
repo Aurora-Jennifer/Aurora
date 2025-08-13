@@ -1,0 +1,38 @@
+2025-08-12 19:10:22 - trading_bot - INFO - Loaded config from config/enhanced_paper_trading_config.json
+2025-08-12 19:10:22 - trading_bot - INFO - Discord notifications disabled or not configured
+2025-08-12 19:10:22 - trading_bot - INFO - Initialized strategy: regime_ensemble
+2025-08-12 19:10:22 - trading_bot - INFO - Initialized strategy: ensemble
+2025-08-12 19:10:22 - trading_bot - INFO - Initialized strategy: sma
+2025-08-12 19:10:22 - trading_bot - INFO - Initialized strategy: momentum
+2025-08-12 19:10:22 - trading_bot - INFO - 🚀 System started: $100,000 capital, 4 strategies active
+2025-08-12 19:10:22 - trading_bot - INFO - Initialized EnhancedPaperTradingSystem with $100,000 capital
+2025-08-12 19:10:22 - trading_bot - INFO - Running daily trading for 2025-08-12
+2025-08-12 19:10:24 - trading_bot - INFO - Detected regime: chop (confidence: 0.92)
+2025-08-12 19:10:25 - trading_bot - INFO - 💰 Trade executed: SELL 21.78 SPY @ $642.69 (Value: $14,000)
+2025-08-12 19:10:26 - trading_bot - INFO - 📊 Performance: Return: +0.00%, Capital: $-8,897,660, Sharpe: 0.00
+2025-08-12 19:10:26 - trading_bot - INFO - Daily Summary - 2025-08-12:
+2025-08-12 19:10:26 - trading_bot - INFO -   Regime: chop (confidence: 0.92)
+2025-08-12 19:10:26 - trading_bot - INFO -   Capital: $-8,897,660.03
+2025-08-12 19:10:26 - trading_bot - INFO -   Total Return: 0.00%
+2025-08-12 19:10:26 - trading_bot - INFO -   Sharpe Ratio: 0.00
+2025-08-12 19:10:26 - trading_bot - INFO -   Max Drawdown: 0.00%
+2025-08-12 19:10:26 - trading_bot - INFO -   Positions: 1
+2025-08-12 19:10:26 - trading_bot - INFO - Results saved to results
+2025-08-13 00:20:51 - trading_bot - INFO - Loaded config from config/enhanced_paper_trading_config.json
+2025-08-13 00:20:51 - trading_bot - INFO - Discord notifications disabled or not configured
+2025-08-13 00:20:51 - trading_bot - INFO - Initialized IBKR data provider
+2025-08-13 00:20:51 - trading_bot - INFO - Initialized strategy: regime_ensemble
+2025-08-13 00:20:51 - trading_bot - INFO - 🚀 System started: $100,000 capital, 1 strategies active
+2025-08-13 00:20:51 - trading_bot - INFO - Initialized EnhancedPaperTradingSystem with $100,000 capital
+2025-08-13 00:20:51 - trading_bot - INFO - Running daily trading for 2025-08-13
+2025-08-13 00:20:56 - trading_bot - INFO - Detected regime: trend (confidence: 0.78)
+2025-08-13 00:20:56 - trading_bot - INFO - 💰 Trade executed: SELL 46.68 SPY @ $642.69 (Value: $30,000)
+2025-08-13 00:20:59 - trading_bot - INFO - 📊 Performance: Return: +0.00%, Capital: $-19,180,700, Sharpe: 0.00
+2025-08-13 00:20:59 - trading_bot - INFO - Daily Summary - 2025-08-13:
+2025-08-13 00:20:59 - trading_bot - INFO -   Regime: trend (confidence: 0.78)
+2025-08-13 00:20:59 - trading_bot - INFO -   Capital: $-19,180,700.07
+2025-08-13 00:20:59 - trading_bot - INFO -   Total Return: 0.00%
+2025-08-13 00:20:59 - trading_bot - INFO -   Sharpe Ratio: 0.00
+2025-08-13 00:20:59 - trading_bot - INFO -   Max Drawdown: 0.00%
+2025-08-13 00:20:59 - trading_bot - INFO -   Positions: 1
+2025-08-13 00:20:59 - trading_bot - INFO - Results saved to results

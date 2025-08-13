@@ -1,0 +1,26 @@
+{
+  "SPY": {
+    "ensemble_basic": -0.6857759682892643,
+    "ensemble_regime": 0.0,
+    "ensemble_conservative": 0.0,
+    "sma_crossover": 0.0,
+    "momentum": "0",
+    "mean_reversion": 0.0
+  },
+  "AAPL": {
+    "ensemble_basic": 1.0,
+    "ensemble_regime": 1.0,
+    "ensemble_conservative": 1.0,
+    "sma_crossover": 0.0,
+    "momentum": "1",
+    "mean_reversion": -1.0
+  },
+  "NVDA": {
+    "ensemble_basic": -1.0,
+    "ensemble_regime": 0.0,
+    "ensemble_conservative": 0.0,
+    "sma_crossover": 0.0,
+    "momentum": "1",
+    "mean_reversion": 0.0
+  }
+}

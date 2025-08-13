@@ -1,0 +1,866 @@
+[
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 20,
+      "slow_period": 180
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.09906116050531444,
+    "sharpe": 0.8053633828900552,
+    "max_dd": -0.26668446251323685,
+    "trades": 15,
+    "final_equity": 2.7163469524080153,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 15,
+      "slow_period": 180
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.09717908210581006,
+    "sharpe": 0.8245315768097559,
+    "max_dd": -0.21786973322078418,
+    "trades": 21,
+    "final_equity": 2.667537781480624,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 5,
+      "slow_period": 180
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.09641061206073043,
+    "sharpe": 0.8607276290511613,
+    "max_dd": -0.2403198762270745,
+    "trades": 29,
+    "final_equity": 2.6478379211653205,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 10,
+      "slow_period": 100
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.09577605089599284,
+    "sharpe": 0.8609349820615613,
+    "max_dd": -0.21928959510457258,
+    "trades": 33,
+    "final_equity": 2.631670241976508,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 5,
+      "slow_period": 160
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.09526027145866234,
+    "sharpe": 0.8501710846662448,
+    "max_dd": -0.22014297436248376,
+    "trades": 33,
+    "final_equity": 2.6185948597251425,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 5,
+      "slow_period": 120
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.09396931657095364,
+    "sharpe": 0.8533935902154701,
+    "max_dd": -0.19789619631153188,
+    "trades": 37,
+    "final_equity": 2.586125689199425,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 5,
+      "slow_period": 140
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.09364755446371564,
+    "sharpe": 0.8493306864871495,
+    "max_dd": -0.22046077471237335,
+    "trades": 37,
+    "final_equity": 2.5780899236614703,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 5,
+      "slow_period": 200
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.09318721373801786,
+    "sharpe": 0.8134641010770401,
+    "max_dd": -0.19808456943372665,
+    "trades": 27,
+    "final_equity": 2.5666325711680056,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 10,
+      "slow_period": 200
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.09303915718680122,
+    "sharpe": 0.8050286233658849,
+    "max_dd": -0.20338187933750396,
+    "trades": 19,
+    "final_equity": 2.5629574244243494,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 25,
+      "slow_period": 180
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.09088361100457676,
+    "sharpe": 0.7207465074781079,
+    "max_dd": -0.29662194693664856,
+    "trades": 13,
+    "final_equity": 2.5099881262834236,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 15,
+      "slow_period": 200
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0906909671624816,
+    "sharpe": 0.758222475026517,
+    "max_dd": -0.29270186209846105,
+    "trades": 13,
+    "final_equity": 2.5053027909842234,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 30,
+      "slow_period": 180
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.08988862164824507,
+    "sharpe": 0.7159737380973935,
+    "max_dd": -0.3161571326017325,
+    "trades": 13,
+    "final_equity": 2.4858738175755244,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 25,
+      "slow_period": 160
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.08976820542896191,
+    "sharpe": 0.7154356936591286,
+    "max_dd": -0.29109783572492565,
+    "trades": 17,
+    "final_equity": 2.482969716404366,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 20,
+      "slow_period": 200
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.08787225045331826,
+    "sharpe": 0.70474931443754,
+    "max_dd": -0.34130807530406504,
+    "trades": 15,
+    "final_equity": 2.4376477360211815,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 10,
+      "slow_period": 120
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.08692438522359192,
+    "sharpe": 0.7794430831411767,
+    "max_dd": -0.2227456862744005,
+    "trades": 29,
+    "final_equity": 2.4152714731553107,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 10,
+      "slow_period": 80
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0866555916169236,
+    "sharpe": 0.7887020222612494,
+    "max_dd": -0.20603390796858867,
+    "trades": 41,
+    "final_equity": 2.408959999026953,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 30,
+      "slow_period": 160
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.08447882910215099,
+    "sharpe": 0.6698170287049761,
+    "max_dd": -0.3133033579013115,
+    "trades": 15,
+    "final_equity": 2.358395542574166,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 15,
+      "slow_period": 160
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.08441336202081562,
+    "sharpe": 0.7226755037055324,
+    "max_dd": -0.23741938798486684,
+    "trades": 21,
+    "final_equity": 2.3568897935775466,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 10,
+      "slow_period": 180
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.08433222906140703,
+    "sharpe": 0.7374719008559406,
+    "max_dd": -0.2154882036080551,
+    "trades": 21,
+    "final_equity": 2.3550249358148574,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 10,
+      "slow_period": 140
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.08002777195932187,
+    "sharpe": 0.716768176588422,
+    "max_dd": -0.25936248907470794,
+    "trades": 27,
+    "final_equity": 2.2579808699828785,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 15,
+      "slow_period": 60
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.07988273716519334,
+    "sharpe": 0.7378169036041546,
+    "max_dd": -0.24757337309131944,
+    "trades": 51,
+    "final_equity": 2.254775059662281,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 20,
+      "slow_period": 60
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.07985821460230258,
+    "sharpe": 0.7232380922909722,
+    "max_dd": -0.2674894663236018,
+    "trades": 45,
+    "final_equity": 2.254233426996444,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 20,
+      "slow_period": 160
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.07975376916014043,
+    "sharpe": 0.66437218077925,
+    "max_dd": -0.26668446251323663,
+    "trades": 19,
+    "final_equity": 2.2519278477097306,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 25,
+      "slow_period": 200
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.07921541678670563,
+    "sharpe": 0.6354372106767077,
+    "max_dd": -0.33594375932587184,
+    "trades": 13,
+    "final_equity": 2.240077827519004,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 15,
+      "slow_period": 80
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.07858896533395798,
+    "sharpe": 0.7097096401305274,
+    "max_dd": -0.22658049651525225,
+    "trades": 35,
+    "final_equity": 2.226359699083714,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 5,
+      "slow_period": 100
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0783999734877856,
+    "sharpe": 0.7314555067821527,
+    "max_dd": -0.24709985485422592,
+    "trades": 47,
+    "final_equity": 2.2222360891534243,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 10,
+      "slow_period": 160
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0782279920747424,
+    "sharpe": 0.6950797585155469,
+    "max_dd": -0.26804943142742765,
+    "trades": 27,
+    "final_equity": 2.218489640942581,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 30,
+      "slow_period": 200
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.07741362045368749,
+    "sharpe": 0.6241251278901516,
+    "max_dd": -0.33302404304618294,
+    "trades": 11,
+    "final_equity": 2.2008268839792184,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 15,
+      "slow_period": 140
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.07717368478024356,
+    "sharpe": 0.6758781940089367,
+    "max_dd": -0.21444067725194227,
+    "trades": 27,
+    "final_equity": 2.1956473026177092,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 15,
+      "slow_period": 40
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.07692602954649241,
+    "sharpe": 0.7264372820446697,
+    "max_dd": -0.19398449428145403,
+    "trades": 63,
+    "final_equity": 2.190312654698799,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 25,
+      "slow_period": 120
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0768814473332744,
+    "sharpe": 0.6351823918348108,
+    "max_dd": -0.26668446251323674,
+    "trades": 21,
+    "final_equity": 2.189353573546981,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 10,
+      "slow_period": 40
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.07663681912401699,
+    "sharpe": 0.7336324266738965,
+    "max_dd": -0.16324265441441554,
+    "trades": 73,
+    "final_equity": 2.1840977391900323,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 25,
+      "slow_period": 60
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0754700368827379,
+    "sharpe": 0.6760399617761935,
+    "max_dd": -0.27842997317309237,
+    "trades": 41,
+    "final_equity": 2.1591862841822804,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 5,
+      "slow_period": 40
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0741456686762676,
+    "sharpe": 0.7222102056719538,
+    "max_dd": -0.15115062440027116,
+    "trades": 89,
+    "final_equity": 2.1312222338428772,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 20,
+      "slow_period": 100
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.07321046812725673,
+    "sharpe": 0.6387061249426448,
+    "max_dd": -0.21993481835535122,
+    "trades": 27,
+    "final_equity": 2.111673456997903,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 15,
+      "slow_period": 120
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0716087923367772,
+    "sharpe": 0.6421403598943985,
+    "max_dd": -0.2210724616040175,
+    "trades": 23,
+    "final_equity": 2.078569964682752,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 30,
+      "slow_period": 140
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0710803376850977,
+    "sharpe": 0.5803193260875883,
+    "max_dd": -0.31760723543275093,
+    "trades": 19,
+    "final_equity": 2.067751387584528,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 25,
+      "slow_period": 140
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.07052198886944172,
+    "sharpe": 0.5846208560087077,
+    "max_dd": -0.2914522868070629,
+    "trades": 21,
+    "final_equity": 2.0563762311501286,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 5,
+      "slow_period": 80
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.06986703983390252,
+    "sharpe": 0.6705522211083139,
+    "max_dd": -0.22546493146578894,
+    "trades": 57,
+    "final_equity": 2.0431052869130815,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 25,
+      "slow_period": 40
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.06876241282395057,
+    "sharpe": 0.6425167206897139,
+    "max_dd": -0.2672110064376597,
+    "trades": 57,
+    "final_equity": 2.020898306049746,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 20,
+      "slow_period": 40
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.06865604989381802,
+    "sharpe": 0.6443730808725077,
+    "max_dd": -0.28199579380865136,
+    "trades": 59,
+    "final_equity": 2.018771606296235,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 5,
+      "slow_period": 60
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.06858629450717513,
+    "sharpe": 0.6685272621911881,
+    "max_dd": -0.21952506903443236,
+    "trades": 77,
+    "final_equity": 2.017377965601647,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 20,
+      "slow_period": 140
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.06853871378930254,
+    "sharpe": 0.5906614488370534,
+    "max_dd": -0.3135042311279397,
+    "trades": 23,
+    "final_equity": 2.016427851753559,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 20,
+      "slow_period": 80
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.06833674961668468,
+    "sharpe": 0.6110026468265005,
+    "max_dd": -0.24131547296583744,
+    "trades": 33,
+    "final_equity": 2.0123994457523495,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 30,
+      "slow_period": 80
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0674430461116653,
+    "sharpe": 0.5876734489494791,
+    "max_dd": -0.2618847596805317,
+    "trades": 27,
+    "final_equity": 1.9946608328836684,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 25,
+      "slow_period": 80
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.06580005852716231,
+    "sharpe": 0.5791067742102255,
+    "max_dd": -0.26258777174306813,
+    "trades": 35,
+    "final_equity": 1.962419066283109,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 30,
+      "slow_period": 120
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.06552149622278458,
+    "sharpe": 0.5401260251800195,
+    "max_dd": -0.2910978357249254,
+    "trades": 21,
+    "final_equity": 1.9569996269512733,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 30,
+      "slow_period": 40
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.06402158283752235,
+    "sharpe": 0.5906533663387592,
+    "max_dd": -0.3072129899886492,
+    "trades": 67,
+    "final_equity": 1.9280509932511725,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 30,
+      "slow_period": 100
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0627748584306913,
+    "sharpe": 0.5308530088181287,
+    "max_dd": -0.26668446251323696,
+    "trades": 23,
+    "final_equity": 1.904284661077619,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 20,
+      "slow_period": 120
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.060254042131629104,
+    "sharpe": 0.5275599124956125,
+    "max_dd": -0.3186238565225188,
+    "trades": 23,
+    "final_equity": 1.8570388889032645,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 15,
+      "slow_period": 100
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.059952331307289386,
+    "sharpe": 0.5490305395632908,
+    "max_dd": -0.26867861178094277,
+    "trades": 31,
+    "final_equity": 1.8514558622195072,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 10,
+      "slow_period": 60
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0588919001470154,
+    "sharpe": 0.5782737528807145,
+    "max_dd": -0.2191220449331226,
+    "trades": 59,
+    "final_equity": 1.8319534195102913,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 30,
+      "slow_period": 60
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.056103375740183425,
+    "sharpe": 0.513508742704343,
+    "max_dd": -0.34903799621781284,
+    "trades": 45,
+    "final_equity": 1.781553982050843,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "sma",
+    "strategy_params": {
+      "fast_period": 25,
+      "slow_period": 100
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.049453240497355555,
+    "sharpe": 0.4438461545782087,
+    "max_dd": -0.29270186209846094,
+    "trades": 23,
+    "final_equity": 1.6663883202105438,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  }
+]

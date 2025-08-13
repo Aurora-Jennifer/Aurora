@@ -1,0 +1,82 @@
+[
+  {
+    "timestamp": "2025-08-12 18:48:48.693041",
+    "symbol": "SPY",
+    "strategy": "ensemble_basic",
+    "action": "sell",
+    "shares": 10.783997778320355,
+    "price": 635.9199829101562,
+    "value": 6857.7596828926435,
+    "commission": 6.8577596828926435
+  },
+  {
+    "timestamp": "2025-08-12 18:48:48.693103",
+    "symbol": "AAPL",
+    "strategy": "ensemble_basic",
+    "action": "buy",
+    "shares": 44.01796074653215,
+    "price": 227.17999267578125,
+    "value": 10000.0,
+    "commission": 10.0
+  },
+  {
+    "timestamp": "2025-08-12 18:48:48.693137",
+    "symbol": "AAPL",
+    "strategy": "ensemble_regime",
+    "action": "buy",
+    "shares": 44.01796074653215,
+    "price": 227.17999267578125,
+    "value": 10000.0,
+    "commission": 10.0
+  },
+  {
+    "timestamp": "2025-08-12 18:48:48.693163",
+    "symbol": "AAPL",
+    "strategy": "ensemble_conservative",
+    "action": "buy",
+    "shares": 44.01796074653215,
+    "price": 227.17999267578125,
+    "value": 10000.0,
+    "commission": 10.0
+  },
+  {
+    "timestamp": "2025-08-12 18:48:48.693187",
+    "symbol": "AAPL",
+    "strategy": "momentum",
+    "action": "buy",
+    "shares": 44.01796074653215,
+    "price": 227.17999267578125,
+    "value": 10000.0,
+    "commission": 10.0
+  },
+  {
+    "timestamp": "2025-08-12 18:48:48.693211",
+    "symbol": "AAPL",
+    "strategy": "mean_reversion",
+    "action": "sell",
+    "shares": 44.01796074653215,
+    "price": 227.17999267578125,
+    "value": 10000.0,
+    "commission": 10.0
+  },
+  {
+    "timestamp": "2025-08-12 18:48:48.693236",
+    "symbol": "NVDA",
+    "strategy": "ensemble_basic",
+    "action": "sell",
+    "shares": 54.92694789684167,
+    "price": 182.05999755859375,
+    "value": 10000.0,
+    "commission": 10.0
+  },
+  {
+    "timestamp": "2025-08-12 18:48:48.693259",
+    "symbol": "NVDA",
+    "strategy": "momentum",
+    "action": "buy",
+    "shares": 54.92694789684167,
+    "price": 182.05999755859375,
+    "value": 10000.0,
+    "commission": 10.0
+  }
+]

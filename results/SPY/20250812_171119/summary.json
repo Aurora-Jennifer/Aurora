@@ -1,0 +1,21 @@
+{
+  "timestamp": "20250812_171119",
+  "ticker": "SPY",
+  "best_result": {
+    "ticker": "SPY",
+    "fast": 20,
+    "slow": 180,
+    "fee_bps": 5.0,
+    "cagr": 0.09906120177030386,
+    "sharpe": 0.8053629930034003,
+    "max_dd": -0.2666843679100013,
+    "trades": 15,
+    "final_equity": 2.7163480313666604
+  },
+  "total_results": 54,
+  "date_range": "SPY optimization",
+  "metadata": {
+    "created_at": "2025-08-12T17:11:19.356538",
+    "description": "Best parameters for SPY optimization"
+  }
+}

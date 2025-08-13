@@ -1,0 +1,20 @@
+2025-08-12 19:10:26 - performance - INFO - PERFORMANCE: {
+  "timestamp": "2025-08-12T19:10:26.159064",
+  "total_return": 0.0,
+  "current_capital": -8897660.034179686,
+  "sharpe_ratio": 0.0,
+  "max_drawdown": 0.0,
+  "total_trades": 1,
+  "regime": "chop",
+  "regime_confidence": 0.9166666666666666
+}
+2025-08-13 00:20:59 - performance - INFO - PERFORMANCE: {
+  "timestamp": "2025-08-13T00:20:59.989679",
+  "total_return": 0.0,
+  "current_capital": -19180700.07324219,
+  "sharpe_ratio": 0.0,
+  "max_drawdown": 0.0,
+  "total_trades": 1,
+  "regime": "trend",
+  "regime_confidence": 0.7777777777777778
+}

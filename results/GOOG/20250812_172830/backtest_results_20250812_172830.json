@@ -1,0 +1,1010 @@
+[
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 20,
+      "std_dev_threshold": 1.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.06614838580760485,
+    "sharpe": 0.5318453747978374,
+    "max_dd": -0.24375950364650867,
+    "trades": 413,
+    "final_equity": 1.969214904718841,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 20,
+      "std_dev_threshold": 1.5
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.06437642569134527,
+    "sharpe": 0.4557901904698571,
+    "max_dd": -0.23326226410998996,
+    "trades": 555,
+    "final_equity": 1.9348642940316616,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 45,
+      "std_dev_threshold": 1.5
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.061960425669357555,
+    "sharpe": 0.43219253104311367,
+    "max_dd": -0.2397406252233928,
+    "trades": 413,
+    "final_equity": 1.8889026916405849,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 25,
+      "std_dev_threshold": 1.5
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.05357703203072517,
+    "sharpe": 0.3874622680829402,
+    "max_dd": -0.2901188982005076,
+    "trades": 479,
+    "final_equity": 1.7369807438564948,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 30,
+      "std_dev_threshold": 1.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.05245070282878661,
+    "sharpe": 0.4199909649861551,
+    "max_dd": -0.2110681298883521,
+    "trades": 359,
+    "final_equity": 1.7174359545268494,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 15,
+      "std_dev_threshold": 1.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.05032559845073803,
+    "sharpe": 0.44250629375012757,
+    "max_dd": -0.25561712483068133,
+    "trades": 447,
+    "final_equity": 1.6811011844299262,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 25,
+      "std_dev_threshold": 2.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.04936950528644668,
+    "sharpe": 0.449365507319926,
+    "max_dd": -0.23403457015362505,
+    "trades": 268,
+    "final_equity": 1.6649822245219918,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 25,
+      "std_dev_threshold": 1.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.04912750122536669,
+    "sharpe": 0.4008044128473735,
+    "max_dd": -0.24489138751663497,
+    "trades": 396,
+    "final_equity": 1.6609244888359775,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 50,
+      "std_dev_threshold": 1.5
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.04617851735870926,
+    "sharpe": 0.3475510869430805,
+    "max_dd": -0.22810667019386444,
+    "trades": 393,
+    "final_equity": 1.612192486019842,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 30,
+      "std_dev_threshold": 2.25
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.045628593558886044,
+    "sharpe": 0.5017794663968058,
+    "max_dd": -0.19767985814790345,
+    "trades": 190,
+    "final_equity": 1.603249551303778,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 15,
+      "std_dev_threshold": 1.5
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.04185528894452184,
+    "sharpe": 0.33531824345140876,
+    "max_dd": -0.3235781127816617,
+    "trades": 577,
+    "final_equity": 1.543089064956231,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 40,
+      "std_dev_threshold": 1.5
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.04046074701529978,
+    "sharpe": 0.3153675040272739,
+    "max_dd": -0.31126128707237544,
+    "trades": 401,
+    "final_equity": 1.521377445675118,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 35,
+      "std_dev_threshold": 2.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.03444471145368966,
+    "sharpe": 0.3344702734454516,
+    "max_dd": -0.26033505975012494,
+    "trades": 234,
+    "final_equity": 1.4308487319723247,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 25,
+      "std_dev_threshold": 2.25
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.033246447852699035,
+    "sharpe": 0.3896734122632123,
+    "max_dd": -0.1930807459310987,
+    "trades": 188,
+    "final_equity": 1.4134109935136256,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 40,
+      "std_dev_threshold": 2.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.03219930737801735,
+    "sharpe": 0.31171295432753543,
+    "max_dd": -0.21339877353072023,
+    "trades": 222,
+    "final_equity": 1.398330276680922,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 45,
+      "std_dev_threshold": 1.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.030897054366731513,
+    "sharpe": 0.2771908330928216,
+    "max_dd": -0.3050166282600366,
+    "trades": 293,
+    "final_equity": 1.3797788054197844,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 20,
+      "std_dev_threshold": 2.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.029561066059746066,
+    "sharpe": 0.3115462775358256,
+    "max_dd": -0.2482978776091923,
+    "trades": 306,
+    "final_equity": 1.3609786120208196,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 30,
+      "std_dev_threshold": 2.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.029404106009605968,
+    "sharpe": 0.2974223935237958,
+    "max_dd": -0.2369425334388069,
+    "trades": 252,
+    "final_equity": 1.358785146451667,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 30,
+      "std_dev_threshold": 1.5
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.028139046674143797,
+    "sharpe": 0.24581373288157382,
+    "max_dd": -0.37372840349612846,
+    "trades": 437,
+    "final_equity": 1.3412228811725802,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 50,
+      "std_dev_threshold": 2.25
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.027149567823889997,
+    "sharpe": 0.30869401615272474,
+    "max_dd": -0.20805001457252914,
+    "trades": 156,
+    "final_equity": 1.3276299160540075,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 35,
+      "std_dev_threshold": 2.25
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0245095210790518,
+    "sharpe": 0.2883590557416152,
+    "max_dd": -0.1899393374158722,
+    "trades": 168,
+    "final_equity": 1.291970479060632,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 50,
+      "std_dev_threshold": 2.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0241544442824706,
+    "sharpe": 0.36899098008852743,
+    "max_dd": -0.2008182574918861,
+    "trades": 60,
+    "final_equity": 1.2872411703043054,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 35,
+      "std_dev_threshold": 2.5
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.023121259166352326,
+    "sharpe": 0.3232579776139917,
+    "max_dd": -0.19145434492424807,
+    "trades": 122,
+    "final_equity": 1.2735690861144173,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 40,
+      "std_dev_threshold": 2.25
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.02155640215637833,
+    "sharpe": 0.2584774107531981,
+    "max_dd": -0.19260167691491625,
+    "trades": 158,
+    "final_equity": 1.2531116886907896,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 45,
+      "std_dev_threshold": 2.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.020007262202598408,
+    "sharpe": 0.31894078618996685,
+    "max_dd": -0.1899393374158722,
+    "trades": 70,
+    "final_equity": 1.2331532988983858,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 50,
+      "std_dev_threshold": 2.5
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.01994962555161406,
+    "sharpe": 0.2747844328398876,
+    "max_dd": -0.20531525245072502,
+    "trades": 108,
+    "final_equity": 1.2324163207513474,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 50,
+      "std_dev_threshold": 1.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.019903022034285067,
+    "sharpe": 0.20579441538332938,
+    "max_dd": -0.30336983381573246,
+    "trades": 291,
+    "final_equity": 1.231820710759604,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 40,
+      "std_dev_threshold": 2.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.019072031585255056,
+    "sharpe": 0.303511104227545,
+    "max_dd": -0.1899393374158722,
+    "trades": 74,
+    "final_equity": 1.2212440137246734,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 35,
+      "std_dev_threshold": 1.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.018446715731411212,
+    "sharpe": 0.19616923465797564,
+    "max_dd": -0.29511011051968017,
+    "trades": 329,
+    "final_equity": 1.2133394013616898,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 40,
+      "std_dev_threshold": 2.5
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.016324959035252995,
+    "sharpe": 0.2344941602988924,
+    "max_dd": -0.20365501132248542,
+    "trades": 114,
+    "final_equity": 1.1868623395511506,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 45,
+      "std_dev_threshold": 2.5
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.015785204314832768,
+    "sharpe": 0.23028433540130344,
+    "max_dd": -0.20185001427354776,
+    "trades": 114,
+    "final_equity": 1.1802108431896796,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 10,
+      "std_dev_threshold": 1.5
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.014333194612742073,
+    "sharpe": 0.17017165308232354,
+    "max_dd": -0.3206794408967404,
+    "trades": 703,
+    "final_equity": 1.1624846538549345,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 35,
+      "std_dev_threshold": 1.5
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.012793691450909028,
+    "sharpe": 0.16070827884079922,
+    "max_dd": -0.33743685088774,
+    "trades": 413,
+    "final_equity": 1.1439539509657641,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 45,
+      "std_dev_threshold": 2.25
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.011013162023885581,
+    "sharpe": 0.15809101713074833,
+    "max_dd": -0.19979281803485305,
+    "trades": 152,
+    "final_equity": 1.1228558988965547,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 10,
+      "std_dev_threshold": 1.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.010938663865543763,
+    "sharpe": 0.15293125905956265,
+    "max_dd": -0.24927337997522248,
+    "trades": 489,
+    "final_equity": 1.1219808766721762,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 40,
+      "std_dev_threshold": 3.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.010046488388814057,
+    "sharpe": 0.1873813695347004,
+    "max_dd": -0.16184359341997112,
+    "trades": 50,
+    "final_equity": 1.1115496465711991,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 40,
+      "std_dev_threshold": 1.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.008172090245377017,
+    "sharpe": 0.1308171685120734,
+    "max_dd": -0.3706362063978764,
+    "trades": 305,
+    "final_equity": 1.0899198679050146,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 35,
+      "std_dev_threshold": 2.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.007805102680781939,
+    "sharpe": 0.14664190388572648,
+    "max_dd": -0.16184359341997112,
+    "trades": 82,
+    "final_equity": 1.0857298702029454,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 20,
+      "std_dev_threshold": 3.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.007053869409531455,
+    "sharpe": 0.3973967696573533,
+    "max_dd": -0.03594360642520111,
+    "trades": 30,
+    "final_equity": 1.0771982870704055,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 15,
+      "std_dev_threshold": 2.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.006512911492895679,
+    "sharpe": 0.11530926999063466,
+    "max_dd": -0.22096318756045086,
+    "trades": 305,
+    "final_equity": 1.0710923976659947,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 50,
+      "std_dev_threshold": 3.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.004970189240137035,
+    "sharpe": 0.11114766709368062,
+    "max_dd": -0.1899393374158722,
+    "trades": 40,
+    "final_equity": 1.05385114129488,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 15,
+      "std_dev_threshold": 2.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0043124719947746915,
+    "sharpe": 0.1888950789232867,
+    "max_dd": -0.09471628889925887,
+    "trades": 42,
+    "final_equity": 1.046577297571139,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 10,
+      "std_dev_threshold": 2.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0033827881451697905,
+    "sharpe": 0.0829074663546513,
+    "max_dd": -0.15112752956384146,
+    "trades": 252,
+    "final_equity": 1.036373246759865,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 50,
+      "std_dev_threshold": 2.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0030418700861643,
+    "sharpe": 0.0892806395184697,
+    "max_dd": -0.3018661751425725,
+    "trades": 189,
+    "final_equity": 1.0326540213038167,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 25,
+      "std_dev_threshold": 2.5
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.002911380459672097,
+    "sharpe": 0.07809305140232156,
+    "max_dd": -0.1647647914512297,
+    "trades": 122,
+    "final_equity": 1.0312336536467386,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 45,
+      "std_dev_threshold": 3.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.002576043905379244,
+    "sharpe": 0.07407299681306644,
+    "max_dd": -0.17328335831633634,
+    "trades": 46,
+    "final_equity": 1.0275916564399175,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 15,
+      "std_dev_threshold": 3.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0008727225861293597,
+    "sharpe": 0.06673578486680219,
+    "max_dd": -0.03603948256370526,
+    "trades": 12,
+    "final_equity": 1.0092715412425788,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 10,
+      "std_dev_threshold": 2.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0007340261491566302,
+    "sharpe": 0.288389755982962,
+    "max_dd": -0.000500000000000056,
+    "trades": 2,
+    "final_equity": 1.0077928896816601,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 10,
+      "std_dev_threshold": 3.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0,
+    "sharpe": 0.0,
+    "max_dd": 0.0,
+    "trades": 0,
+    "final_equity": 1.0,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 20,
+      "std_dev_threshold": 2.25
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.0001378311108458652,
+    "sharpe": 0.040247616285474054,
+    "max_dd": -0.1614437555987186,
+    "trades": 190,
+    "final_equity": 0.9985427966129509,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 30,
+      "std_dev_threshold": 2.5
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.0013499594815821192,
+    "sharpe": 0.023735973429749785,
+    "max_dd": -0.20062081257848796,
+    "trades": 114,
+    "final_equity": 0.9858102740223866,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 30,
+      "std_dev_threshold": 2.75
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.003765543428194573,
+    "sharpe": -0.0330195622911347,
+    "max_dd": -0.16209662660562674,
+    "trades": 62,
+    "final_equity": 0.9608737506286452,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 20,
+      "std_dev_threshold": 2.75
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.005235884275560876,
+    "sharpe": -0.19269792293640126,
+    "max_dd": -0.1444592506317257,
+    "trades": 52,
+    "final_equity": 0.9459762146118799,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 10,
+      "std_dev_threshold": 2.5
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.007304853346701834,
+    "sharpe": -0.2142380483542904,
+    "max_dd": -0.12801139240246395,
+    "trades": 40,
+    "final_equity": 0.9253674707361429,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 25,
+      "std_dev_threshold": 3.0
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.007709546058038308,
+    "sharpe": -0.11721408266143721,
+    "max_dd": -0.16144375559871882,
+    "trades": 30,
+    "final_equity": 0.9213842399599788,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 15,
+      "std_dev_threshold": 2.5
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.009863711128017094,
+    "sharpe": -0.265259327626241,
+    "max_dd": -0.1882412698520135,
+    "trades": 90,
+    "final_equity": 0.9004416997654667,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 30,
+      "std_dev_threshold": 3.0
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.010524122796827129,
+    "sharpe": -0.16183897762788613,
+    "max_dd": -0.20189580660696582,
+    "trades": 34,
+    "final_equity": 0.8941081386544525,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 15,
+      "std_dev_threshold": 2.25
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.011320093771044148,
+    "sharpe": -0.11430380860936824,
+    "max_dd": -0.1752689269045753,
+    "trades": 167,
+    "final_equity": 0.8865281428799529,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 45,
+      "std_dev_threshold": 2.0
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.01417026637343266,
+    "sharpe": -0.049890708951384304,
+    "max_dd": -0.3044972395606955,
+    "trades": 181,
+    "final_equity": 0.8598608436563889,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 35,
+      "std_dev_threshold": 3.0
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.014327120340124955,
+    "sharpe": -0.2304044588781859,
+    "max_dd": -0.18964162841387067,
+    "trades": 36,
+    "final_equity": 0.8584145701600185,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 20,
+      "std_dev_threshold": 2.5
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.01488266581737474,
+    "sharpe": -0.20403189365377777,
+    "max_dd": -0.19244404658336878,
+    "trades": 110,
+    "final_equity": 0.8533098563872248,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 25,
+      "std_dev_threshold": 2.75
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.014989840596362658,
+    "sharpe": -0.22112390091746756,
+    "max_dd": -0.20158084686930777,
+    "trades": 56,
+    "final_equity": 0.8523282334278547,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 10,
+      "std_dev_threshold": 2.25
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.016902179305043563,
+    "sharpe": -0.3396693729704104,
+    "max_dd": -0.18244364598614748,
+    "trades": 110,
+    "final_equity": 0.8349839729968634,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  }
+]

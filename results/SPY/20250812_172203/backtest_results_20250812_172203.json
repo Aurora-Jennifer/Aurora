@@ -1,0 +1,18 @@
+[
+  {
+    "ticker": "SPY",
+    "strategy_name": "Momentum",
+    "strategy_params": {
+      "lookback_period": 15,
+      "threshold": 0.025
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.024339084994992266,
+    "sharpe": 0.37588222245127884,
+    "max_dd": -0.09098050430305338,
+    "trades": 348,
+    "final_equity": 1.2896984613013973,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  }
+]

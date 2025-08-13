@@ -1,0 +1,12 @@
+{
+  "default_strategy": "sma_crossover",
+  "default_symbols": ["SPY", "AAPL", "NVDA"],
+  "default_start_date": "2020-01-01",
+  "default_end_date": "2025-01-01",
+  "data_cache_dir": "data",
+  "results_dir": "results",
+  "optimization_params": {
+    "max_workers": 4,
+    "timeout": 300
+  }
+}

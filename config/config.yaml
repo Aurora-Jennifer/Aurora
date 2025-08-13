@@ -1,0 +1,141 @@
+# Trading System Configuration
+# This file configures the automated trading system
+
+# Watchlist and Universe Configuration
+watchlist:
+  - SPY
+  - AAPL
+  - MSFT
+  - GOOGL
+  - AMZN
+  - TSLA
+  - NVDA
+  - META
+  - NFLX
+  - AMD
+
+universe_source: 'sp500'  # 'sp500', 'nasdaq100', 'custom'
+
+# Market Scanner Configuration
+scan_thresholds:
+  min_adv_dollars: 10000000  # $10M minimum average daily volume
+  min_price: 5.0  # $5 minimum price
+  max_atr_pct: 0.05  # 5% maximum ATR percentage
+  min_atr_pct: 0.01  # 1% minimum ATR percentage
+  momentum_20d_threshold: 0.02  # 2% minimum 20-day momentum
+  momentum_120d_threshold: 0.05  # 5% minimum 120-day momentum
+  donchian_period: 55
+  volume_zscore_threshold: 0.5  # Minimum volume z-score
+  max_symbols: 50  # Maximum symbols to return
+
+# Risk Management Configuration
+vol_target: 0.15  # 15% annual volatility target
+per_position_cap: 0.25  # 25% maximum per position
+portfolio_dd_kill_switch: 0.15  # 15% maximum portfolio drawdown
+max_daily_loss: 0.02  # 2% maximum daily loss
+max_drawdown_stop: 0.15  # 15% maximum drawdown before stopping
+
+# Market Calendar Configuration
+market_calendar: 'NYSE'  # 'NYSE', 'NASDAQ', 'custom'
+
+# Schedule Configuration
+schedule:
+  signals_enabled: true
+  scanner_enabled: true
+  execution_enabled: true
+  manager_enabled: true
+
+# Ensemble Strategy Configuration
+ensemble:
+  combination_method: 'rolling_ic'  # 'rolling_ic', 'sharpe', 'ridge', 'voting'
+  confidence_threshold: 0.3  # Minimum confidence for signal execution
+  max_position_size: 1.0  # Maximum position size
+  weight_window: 60  # Rolling window for weight calculation
+  min_obs: 30  # Minimum observations for weight calculation
+  use_regime_switching: false  # Enable regime switching
+  regime_method: 'volatility'  # 'volatility', 'adx'
+
+# Feature Management Configuration
+features:
+  promote_threshold: 0.1  # IC Sharpe threshold for promotion
+  demote_threshold: -0.05  # IC Sharpe threshold for demotion
+  min_usage: 10  # Minimum usage count for evaluation
+  sandbox_min_obs: 100  # Minimum observations for sandbox testing
+
+# Options Trading Configuration
+options:
+  enabled: false  # Enable options trading
+  strategies:
+    covered_call:
+      enabled: true
+      target_delta: 0.3
+      min_premium: 0.5
+      dte: 30
+    cash_secured_put:
+      enabled: true
+      target_delta: -0.3
+      min_premium: 0.5
+      dte: 30
+    vertical_spread:
+      enabled: true
+      width: 5.0
+      target_delta: 0.3
+      dte: 30
+    iron_condor:
+      enabled: false
+      width: 5.0
+      target_delta: 0.2
+      dte: 30
+
+# IBKR Configuration
+ibkr:
+  enabled: false  # Enable IBKR integration
+  paper_trading: true  # Use paper trading account
+  host: '127.0.0.1'
+  port: 7497  # 7497 for paper, 7496 for live
+  client_id: 1
+  timeout: 20
+  max_retries: 3
+
+# Data Configuration
+data:
+  provider: 'yfinance'  # 'yfinance', 'ibkr', 'custom'
+  cache_days: 252  # Days of data to cache
+  update_frequency: 30  # Minutes between updates
+
+# Logging Configuration
+logging:
+  level: 'INFO'  # 'DEBUG', 'INFO', 'WARNING', 'ERROR'
+  file_rotation: true
+  max_file_size: '10MB'
+  backup_count: 5
+
+# Storage Configuration
+storage:
+  base_path: 'storage'
+  signals_path: 'storage/target_weights.json'
+  watchlist_path: 'storage/watchlist.json'
+  feature_registry_path: 'storage/feature_registry.json'
+  logs_path: 'logs'
+
+# Performance Monitoring Configuration
+monitoring:
+  enabled: true
+  metrics:
+    - 'sharpe_ratio'
+    - 'max_drawdown'
+    - 'total_return'
+    - 'volatility'
+    - 'turnover'
+  alerts:
+    drawdown_threshold: 0.10  # 10% drawdown alert
+    daily_loss_threshold: 0.02  # 2% daily loss alert
+    signal_confidence_threshold: 0.2  # Low confidence alert
+
+# Advanced Configuration
+advanced:
+  parallel_processing: false  # Enable parallel processing
+  max_workers: 4  # Maximum number of worker processes
+  memory_limit: '2GB'  # Memory limit for processing
+  cache_enabled: true  # Enable data caching
+  cache_ttl: 3600  # Cache TTL in seconds

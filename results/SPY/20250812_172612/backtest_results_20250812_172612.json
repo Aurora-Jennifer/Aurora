@@ -1,0 +1,1010 @@
+[
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 35,
+      "std_dev_threshold": 2.25
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0375727289760579,
+    "sharpe": 0.5308887256226149,
+    "max_dd": -0.09662896574272739,
+    "trades": 140,
+    "final_equity": 1.4772910684874705,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 35,
+      "std_dev_threshold": 2.5
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.033772707366041654,
+    "sharpe": 0.5706485866564034,
+    "max_dd": -0.06283975853637835,
+    "trades": 74,
+    "final_equity": 1.4210455502154158,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 30,
+      "std_dev_threshold": 2.5
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.03092144191510271,
+    "sharpe": 0.524020129103391,
+    "max_dd": -0.08280709329866742,
+    "trades": 78,
+    "final_equity": 1.3801241646983187,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 40,
+      "std_dev_threshold": 2.25
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.02846209185173998,
+    "sharpe": 0.4132925630953736,
+    "max_dd": -0.0966289657427275,
+    "trades": 132,
+    "final_equity": 1.3456879242002062,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 20,
+      "std_dev_threshold": 2.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.028301445575682926,
+    "sharpe": 0.4140135715122274,
+    "max_dd": -0.12119760696640647,
+    "trades": 286,
+    "final_equity": 1.3434658352521143,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 30,
+      "std_dev_threshold": 2.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.02665052263476486,
+    "sharpe": 0.5063620361041911,
+    "max_dd": -0.08280709329866742,
+    "trades": 50,
+    "final_equity": 1.3208217144662422,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 40,
+      "std_dev_threshold": 2.5
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.025603232408794696,
+    "sharpe": 0.40177268983127484,
+    "max_dd": -0.09662896574272761,
+    "trades": 82,
+    "final_equity": 1.306636781799976,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 50,
+      "std_dev_threshold": 2.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.02457266599685215,
+    "sharpe": 0.40759846127461846,
+    "max_dd": -0.0966289657427275,
+    "trades": 48,
+    "final_equity": 1.2928131592986745,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 25,
+      "std_dev_threshold": 2.5
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.024245022307086472,
+    "sharpe": 0.42695275782997866,
+    "max_dd": -0.08449506696380105,
+    "trades": 86,
+    "final_equity": 1.288446097745295,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 45,
+      "std_dev_threshold": 3.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.024148578312541025,
+    "sharpe": 0.5428596885837276,
+    "max_dd": -0.05387339148418513,
+    "trades": 28,
+    "final_equity": 1.2871631725695274,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 50,
+      "std_dev_threshold": 2.5
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.023807207431150834,
+    "sharpe": 0.339500298958209,
+    "max_dd": -0.11289136427202795,
+    "trades": 56,
+    "final_equity": 1.2826314483676449,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 30,
+      "std_dev_threshold": 2.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.023529060525115053,
+    "sharpe": 0.32622950508243853,
+    "max_dd": -0.10846230010938729,
+    "trades": 260,
+    "final_equity": 1.278949713739635,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 45,
+      "std_dev_threshold": 2.5
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.02331455195002463,
+    "sharpe": 0.3653030854855945,
+    "max_dd": -0.0966289657427275,
+    "trades": 72,
+    "final_equity": 1.2761168763418067,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 40,
+      "std_dev_threshold": 2.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.022876314860958757,
+    "sharpe": 0.4936111645602999,
+    "max_dd": -0.05434645478844313,
+    "trades": 44,
+    "final_equity": 1.2703470945090554,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 45,
+      "std_dev_threshold": 2.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.02248156162560111,
+    "sharpe": 0.37727318672747717,
+    "max_dd": -0.0966289657427275,
+    "trades": 40,
+    "final_equity": 1.2651700494119211,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 20,
+      "std_dev_threshold": 2.25
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.022307082411281653,
+    "sharpe": 0.37144497750301503,
+    "max_dd": -0.08280709329866753,
+    "trades": 152,
+    "final_equity": 1.2628879120206713,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 30,
+      "std_dev_threshold": 2.25
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.021582158282957176,
+    "sharpe": 0.32458906980231533,
+    "max_dd": -0.09662896574272761,
+    "trades": 144,
+    "final_equity": 1.2534459761100172,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 15,
+      "std_dev_threshold": 2.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.019961306474394647,
+    "sharpe": 0.30873754416835497,
+    "max_dd": -0.11342247408352879,
+    "trades": 288,
+    "final_equity": 1.2325656480807359,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 25,
+      "std_dev_threshold": 2.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.019494427402836134,
+    "sharpe": 0.27785456824860655,
+    "max_dd": -0.09662896574272761,
+    "trades": 270,
+    "final_equity": 1.2266098712932694,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 25,
+      "std_dev_threshold": 2.25
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.01734102944824656,
+    "sharpe": 0.2850177109178685,
+    "max_dd": -0.11197216136796695,
+    "trades": 138,
+    "final_equity": 1.1994757272509267,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 35,
+      "std_dev_threshold": 2.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.016645175935617207,
+    "sharpe": 0.3643108684248507,
+    "max_dd": -0.06186286788207551,
+    "trades": 46,
+    "final_equity": 1.1908244547833988,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 25,
+      "std_dev_threshold": 1.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.016310901385317766,
+    "sharpe": 0.2145704612376945,
+    "max_dd": -0.15558644906068742,
+    "trades": 404,
+    "final_equity": 1.1866886749453238,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 40,
+      "std_dev_threshold": 3.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.016173577690681507,
+    "sharpe": 0.39399520228976237,
+    "max_dd": -0.05387339148418513,
+    "trades": 26,
+    "final_equity": 1.184993423013181,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 50,
+      "std_dev_threshold": 3.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.014894395444380093,
+    "sharpe": 0.2946616047869562,
+    "max_dd": -0.0966289657427275,
+    "trades": 28,
+    "final_equity": 1.1693070301972088,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 35,
+      "std_dev_threshold": 3.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.013127059334082425,
+    "sharpe": 0.3506838628825173,
+    "max_dd": -0.05387339148418513,
+    "trades": 24,
+    "final_equity": 1.1479437930895982,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 10,
+      "std_dev_threshold": 2.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.005394801683646033,
+    "sharpe": 0.1251302245460976,
+    "max_dd": -0.13465738430163365,
+    "trades": 244,
+    "final_equity": 1.058571309411149,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 15,
+      "std_dev_threshold": 1.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.002187950132586547,
+    "sharpe": 0.06744295273104747,
+    "max_dd": -0.23814294340069686,
+    "trades": 468,
+    "final_equity": 1.0233912196127175,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 25,
+      "std_dev_threshold": 3.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0016684016541417268,
+    "sharpe": 0.07923207009067988,
+    "max_dd": -0.08234826743238355,
+    "trades": 22,
+    "final_equity": 1.0177923535131292,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 25,
+      "std_dev_threshold": 2.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.00126762668510505,
+    "sharpe": 0.06083375338194585,
+    "max_dd": -0.08280709329866742,
+    "trades": 44,
+    "final_equity": 1.013492404738902,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 45,
+      "std_dev_threshold": 2.25
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0005002663294024767,
+    "sharpe": 0.052357375040614634,
+    "max_dd": -0.24686562680366653,
+    "trades": 116,
+    "final_equity": 1.0053051997446956,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 20,
+      "std_dev_threshold": 1.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.000395576709746992,
+    "sharpe": 0.0486249025382666,
+    "max_dd": -0.193183695676294,
+    "trades": 428,
+    "final_equity": 1.0041928885766205,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 10,
+      "std_dev_threshold": 2.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0,
+    "sharpe": 0.0,
+    "max_dd": 0.0,
+    "trades": 0,
+    "final_equity": 1.0,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 10,
+      "std_dev_threshold": 3.0
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.0,
+    "sharpe": 0.0,
+    "max_dd": 0.0,
+    "trades": 0,
+    "final_equity": 1.0,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 10,
+      "std_dev_threshold": 2.25
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.002094492008878679,
+    "sharpe": -0.029620125515166552,
+    "max_dd": -0.10371895988583169,
+    "trades": 98,
+    "final_equity": 0.9780625701237072,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 20,
+      "std_dev_threshold": 3.0
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.002925629378884742,
+    "sharpe": -0.13146686984589306,
+    "max_dd": -0.08280709329866731,
+    "trades": 22,
+    "final_equity": 0.9694788055012769,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 20,
+      "std_dev_threshold": 1.5
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.003224245141401405,
+    "sharpe": 0.023720393379410502,
+    "max_dd": -0.20949988921834573,
+    "trades": 588,
+    "final_equity": 0.9664114776187642,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 20,
+      "std_dev_threshold": 2.75
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.0038423218363884404,
+    "sharpe": -0.09984682395152751,
+    "max_dd": -0.08234826743238355,
+    "trades": 40,
+    "final_equity": 0.9600906038392142,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 15,
+      "std_dev_threshold": 2.5
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.004113114181336308,
+    "sharpe": -0.1173912785967285,
+    "max_dd": -0.0867069335975239,
+    "trades": 78,
+    "final_equity": 0.9573331088316613,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 15,
+      "std_dev_threshold": 2.25
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.004348355443036134,
+    "sharpe": -0.061080823113710214,
+    "max_dd": -0.1376118746013386,
+    "trades": 156,
+    "final_equity": 0.9549434556780224,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 30,
+      "std_dev_threshold": 3.0
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.004580415189439968,
+    "sharpe": -0.1869585835970992,
+    "max_dd": -0.08234826743238355,
+    "trades": 20,
+    "final_equity": 0.9525914146761517,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 10,
+      "std_dev_threshold": 2.5
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.004791531460170084,
+    "sharpe": -0.2370804266272549,
+    "max_dd": -0.062314773052340344,
+    "trades": 20,
+    "final_equity": 0.9504562043320093,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 15,
+      "std_dev_threshold": 3.0
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.0050476119788823715,
+    "sharpe": -0.2508851766049631,
+    "max_dd": -0.07188536285213354,
+    "trades": 20,
+    "final_equity": 0.9478720466503824,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 30,
+      "std_dev_threshold": 1.75
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.00603597188311944,
+    "sharpe": -0.002993062717533434,
+    "max_dd": -0.2468656268036663,
+    "trades": 378,
+    "final_equity": 0.9379578678781236,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 35,
+      "std_dev_threshold": 1.5
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.0060759421010448955,
+    "sharpe": 0.008660915413884335,
+    "max_dd": -0.302091242192578,
+    "trades": 470,
+    "final_equity": 0.9375589117530698,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 40,
+      "std_dev_threshold": 2.0
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.006087123218538881,
+    "sharpe": -0.00922821114822544,
+    "max_dd": -0.2592905256830129,
+    "trades": 222,
+    "final_equity": 0.9374473367830916,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 20,
+      "std_dev_threshold": 2.5
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.00644499434170831,
+    "sharpe": -0.1637457483696551,
+    "max_dd": -0.08280709329866742,
+    "trades": 74,
+    "final_equity": 0.9338825302101131,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 50,
+      "std_dev_threshold": 2.25
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.006489587421287357,
+    "sharpe": -0.021254948621592967,
+    "max_dd": -0.24686562680366664,
+    "trades": 106,
+    "final_equity": 0.9334391931406848,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 15,
+      "std_dev_threshold": 2.75
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.007091647329040884,
+    "sharpe": -0.24010569071093235,
+    "max_dd": -0.08326568975201787,
+    "trades": 36,
+    "final_equity": 0.9274722385685682,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 50,
+      "std_dev_threshold": 1.75
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.007832471451601708,
+    "sharpe": -0.01864374697275332,
+    "max_dd": -0.3497065057843646,
+    "trades": 310,
+    "final_equity": 0.9201774116068681,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 35,
+      "std_dev_threshold": 2.0
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.008271457404815497,
+    "sharpe": -0.031516196228134695,
+    "max_dd": -0.24686562680366653,
+    "trades": 228,
+    "final_equity": 0.915879310589059,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 45,
+      "std_dev_threshold": 2.0
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.009138956734576098,
+    "sharpe": -0.041382490471279815,
+    "max_dd": -0.2955572404438601,
+    "trades": 206,
+    "final_equity": 0.9074390595354,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 50,
+      "std_dev_threshold": 2.0
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.010204355480452953,
+    "sharpe": -0.052265371393141864,
+    "max_dd": -0.3091238993663684,
+    "trades": 194,
+    "final_equity": 0.8971697555632889,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 45,
+      "std_dev_threshold": 1.75
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.011240775616807697,
+    "sharpe": -0.05065270393056793,
+    "max_dd": -0.342471920544988,
+    "trades": 344,
+    "final_equity": 0.8872808671349567,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 50,
+      "std_dev_threshold": 1.5
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.011780703869875508,
+    "sharpe": -0.037515820926416435,
+    "max_dd": -0.3838301567755059,
+    "trades": 366,
+    "final_equity": 0.8821683988800595,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 15,
+      "std_dev_threshold": 1.5
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.01258174406641499,
+    "sharpe": -0.07668513704366212,
+    "max_dd": -0.243539924064202,
+    "trades": 638,
+    "final_equity": 0.8746326471299829,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 10,
+      "std_dev_threshold": 1.5
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.012993129894273148,
+    "sharpe": -0.08795256876953128,
+    "max_dd": -0.2703788999672234,
+    "trades": 712,
+    "final_equity": 0.8707852502432435,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 10,
+      "std_dev_threshold": 1.75
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.013236656375739675,
+    "sharpe": -0.15162142385966662,
+    "max_dd": -0.22121981887568942,
+    "trades": 468,
+    "final_equity": 0.868514948880608,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 45,
+      "std_dev_threshold": 1.5
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.018143975246477373,
+    "sharpe": -0.09134728343487092,
+    "max_dd": -0.367696644826248,
+    "trades": 404,
+    "final_equity": 0.8238931115124838,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 40,
+      "std_dev_threshold": 1.5
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.018707531443835634,
+    "sharpe": -0.09937623345179042,
+    "max_dd": -0.351511778189844,
+    "trades": 416,
+    "final_equity": 0.8189039647297341,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 30,
+      "std_dev_threshold": 1.5
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.02023600390157554,
+    "sharpe": -0.11556959609470166,
+    "max_dd": -0.3002763490892988,
+    "trades": 497,
+    "final_equity": 0.8055098491392263,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 40,
+      "std_dev_threshold": 1.75
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.021227377149766857,
+    "sharpe": -0.14497164970534487,
+    "max_dd": -0.30673357082554564,
+    "trades": 342,
+    "final_equity": 0.7969287604638983,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 35,
+      "std_dev_threshold": 1.75
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.024126429062530375,
+    "sharpe": -0.16777955122302587,
+    "max_dd": -0.29753529546048396,
+    "trades": 336,
+    "final_equity": 0.7723080486989535,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  {
+    "ticker": "SPY",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 25,
+      "std_dev_threshold": 1.5
+    },
+    "fee_bps": 5.0,
+    "cagr": -0.031460703646823074,
+    "sharpe": -0.2117491583698146,
+    "max_dd": -0.3626731030777035,
+    "trades": 534,
+    "final_equity": 0.7130652570507943,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  }
+]

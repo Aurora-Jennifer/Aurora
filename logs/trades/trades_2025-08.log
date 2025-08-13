@@ -1,0 +1,22 @@
+2025-08-12 19:10:25 - trades - INFO - TRADE: {
+  "timestamp": "2025-08-12T19:10:25.099512",
+  "symbol": "SPY",
+  "action": "SELL",
+  "size": 21.783441389811212,
+  "price": 642.6900024414062,
+  "value": 13999.999999999998,
+  "regime": "chop",
+  "confidence": 0.5,
+  "signal_strength": 0.8502518041325294
+}
+2025-08-13 00:20:56 - trades - INFO - TRADE: {
+  "timestamp": "2025-08-13T00:20:56.584767",
+  "symbol": "SPY",
+  "action": "SELL",
+  "size": 46.67880297816689,
+  "price": 642.6900024414062,
+  "value": 30000.000000000004,
+  "regime": "trend",
+  "confidence": 0.3,
+  "signal_strength": 0.9344422754725447
+}

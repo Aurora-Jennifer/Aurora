@@ -1,0 +1,13 @@
+{
+  "webhook_url": "YOUR_DISCORD_WEBHOOK_URL_HERE",
+  "bot_name": "Trading Bot",
+  "bot_avatar": "https://cdn.discordapp.com/emojis/\ud83d\udcc8.png",
+  "enabled": true,
+  "notifications": {
+    "startup": true,
+    "trades": true,
+    "daily_summary": true,
+    "errors": true,
+    "cron_execution": true
+  }
+}

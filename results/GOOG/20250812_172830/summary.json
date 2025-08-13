@@ -1,0 +1,27 @@
+{
+  "timestamp": "20250812_172830",
+  "ticker": "GOOG",
+  "strategy": "mean_reversion",
+  "best_result": {
+    "ticker": "GOOG",
+    "strategy_name": "mean_reversion",
+    "strategy_params": {
+      "lookback_period": 20,
+      "std_dev_threshold": 1.75
+    },
+    "fee_bps": 5.0,
+    "cagr": 0.06614838580760485,
+    "sharpe": 0.5318453747978374,
+    "max_dd": -0.24375950364650867,
+    "trades": 413,
+    "final_equity": 1.969214904718841,
+    "start_date": "2015-01-01",
+    "end_date": "2025-08-12"
+  },
+  "total_results": 63,
+  "date_range": "GOOG optimization",
+  "metadata": {
+    "created_at": "2025-08-12T17:28:30.453621",
+    "description": "Best parameters for GOOG mean_reversion optimization"
+  }
+}

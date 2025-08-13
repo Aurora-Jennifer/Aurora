@@ -1,0 +1,16 @@
+{
+  "symbols": ["SPY", "AAPL", "NVDA"],
+  "initial_equity": 10000.0,
+  "signal_dir": "signals",
+  "dashboard_dir": "dashboard",
+  "use_ibkr": false,
+  "risk_params": {
+    "max_weight_per_symbol": 0.25,
+    "max_drawdown": 0.15,
+    "max_daily_loss": 0.02
+  },
+  "execution_params": {
+    "max_slippage_bps": 10,
+    "paper_trading": true
+  }
+}

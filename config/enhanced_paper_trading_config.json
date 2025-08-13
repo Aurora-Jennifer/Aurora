@@ -1,0 +1,68 @@
+{
+  "symbols": ["SPY", "AAPL", "NVDA", "GOOGL", "MSFT", "TSLA", "AMZN", "META", "NFLX", "GOOG", "BTC-USD", "ETH-USD", "XRP-USD", "DOGE-USD", "SOL-USD", "ADA-USD", "DOT-USD", "LINK-USD", "BCH-USD", "LTC-USD"],
+  "initial_capital": 100000,
+  "use_ibkr": true,
+  "ibkr_config": {
+    "paper_trading": true,
+    "host": "127.0.0.1",
+    "port": 7497,
+    "client_id": 12399,
+    "timeout": 20,
+    "max_retries": 3
+  },
+  "data_config": {
+    "use_cache": true,
+    "fallback_to_yfinance": true,
+    "cache_dir": "data/ibkr",
+    "default_duration": "1 Y",
+    "default_bar_size": "1 day"
+  },
+  "risk_params": {
+    "max_weight_per_symbol": 0.25,
+    "max_drawdown": 0.15,
+    "max_daily_loss": 0.02,
+    "position_sizing": {
+      "trend": 1.5,
+      "chop": 0.7,
+      "volatile": 0.5
+    }
+  },
+  "execution_params": {
+    "max_slippage_bps": 10,
+    "paper_trading": true,
+    "order_types": ["MKT", "LMT", "STP"],
+    "default_tif": "DAY"
+  },
+  "strategy_params": {
+    "regime_aware_ensemble": {
+      "combination_method": "rolling_ic",
+      "confidence_threshold": 0.3,
+      "use_regime_switching": true,
+      "regime_lookback": 252,
+      "trend_lookback_multiplier": 1.2,
+      "chop_lookback_multiplier": 0.8,
+      "volatile_lookback_multiplier": 0.6,
+      "trend_following_weight": 0.6,
+      "mean_reversion_weight": 0.4,
+      "rolling_window": 60,
+      "min_periods": 30
+    }
+  },
+  "logging": {
+    "level": "INFO",
+    "file_rotation": true,
+    "max_file_size": "10MB",
+    "backup_count": 5
+  },
+  "notifications": {
+    "discord_enabled": false,
+    "webhook_url": "",
+    "bot_name": "Trading Bot"
+  },
+  "performance_tracking": {
+    "save_results": true,
+    "results_dir": "results",
+    "daily_summaries": true,
+    "trade_logging": true
+  }
+}

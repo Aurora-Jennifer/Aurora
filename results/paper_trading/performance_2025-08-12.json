@@ -1,0 +1,19 @@
+{
+  "date": "2025-08-12",
+  "portfolio_value": 76780.90192320975,
+  "cash": 76780.90192320975,
+  "positions": {
+    "SPY": -10.783997778320355,
+    "AAPL": -44.01796074653215,
+    "NVDA": 54.92694789684167
+  },
+  "pnl_by_strategy": {
+    "ensemble_basic": 11653.85704005285,
+    "ensemble_regime": 11653.85704005285,
+    "ensemble_conservative": 11653.85704005285,
+    "sma_crossover": 11653.85704005285,
+    "momentum": 11653.85704005285,
+    "mean_reversion": 11653.85704005285
+  },
+  "total_trades": 8
+}

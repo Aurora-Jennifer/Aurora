@@ -1,0 +1,1115 @@
+2025-08-12 18:53:34,799 - core.regime_detector - INFO - Initialized RegimeDetector with 60 day lookback
+2025-08-12 18:53:34,805 - core.regime_detector - INFO - Detected regime: chop (confidence: 0.82)
+2025-08-12 18:53:34,806 - core.feature_reweighter - INFO - Initialized FeatureReweighter with 30 day window
+2025-08-12 18:53:34,837 - enhanced_paper_trading - INFO - Loaded config from config/enhanced_paper_trading_config.json
+2025-08-12 18:53:34,837 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 18:53:34,837 - core.feature_reweighter - INFO - Initialized FeatureReweighter with 60 day window
+2025-08-12 18:53:34,837 - core.feature_reweighter - INFO - Initialized AdaptiveFeatureEngine
+2025-08-12 18:53:34,837 - enhanced_paper_trading - ERROR - Failed to initialize strategy regime_ensemble: Can't instantiate abstract class RegimeAwareEnsembleStrategy without an implementation for abstract methods 'get_default_params', 'get_param_ranges'
+2025-08-12 18:53:34,837 - features.feature_engine - INFO - Initialized FeatureEngine
+2025-08-12 18:53:34,837 - strategies.ensemble_strategy - INFO - Initialized EnsembleStrategy with 5 trend features
+2025-08-12 18:53:34,837 - enhanced_paper_trading - INFO - Initialized strategy: ensemble
+2025-08-12 18:53:34,837 - enhanced_paper_trading - INFO - Initialized strategy: sma
+2025-08-12 18:53:34,838 - enhanced_paper_trading - INFO - Initialized strategy: momentum
+2025-08-12 18:53:34,838 - enhanced_paper_trading - INFO - Initialized EnhancedPaperTradingSystem with $100,000 capital
+2025-08-12 18:53:34,838 - enhanced_paper_trading - INFO - Running daily trading for 2024-01-15
+2025-08-12 18:53:35,581 - core.regime_detector - INFO - Detected regime: chop (confidence: 0.60)
+2025-08-12 18:53:35,581 - enhanced_paper_trading - INFO - Detected regime: chop (confidence: 0.60)
+2025-08-12 18:53:35,610 - strategies.ensemble_strategy - INFO - Generating ensemble signals...
+2025-08-12 18:53:35,610 - features.feature_engine - INFO - Generating all features...
+2025-08-12 18:53:35,636 - features.feature_engine - INFO - Generated 55 features
+2025-08-12 18:53:35,636 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 18:53:35,637 - features.ensemble - INFO - Added feature 'SMA_Crossover_20_180' with 206 observations
+2025-08-12 18:53:35,637 - features.ensemble - INFO - Added feature 'EMA_Crossover_20_180' with 206 observations
+2025-08-12 18:53:35,637 - features.ensemble - INFO - Added feature 'MACD_Crossover' with 206 observations
+2025-08-12 18:53:35,637 - features.ensemble - INFO - Added feature 'RSI_Momentum' with 206 observations
+2025-08-12 18:53:35,637 - features.ensemble - INFO - Added feature 'Donchian_Breakout_20' with 206 observations
+2025-08-12 18:53:35,637 - features.ensemble - INFO - Added feature 'RSI_2_Extreme' with 206 observations
+2025-08-12 18:53:35,638 - features.ensemble - INFO - Added feature 'RSI_3_Extreme' with 206 observations
+2025-08-12 18:53:35,638 - features.ensemble - INFO - Added feature 'ZScore_20' with 206 observations
+2025-08-12 18:53:35,638 - features.ensemble - INFO - Added feature 'BB_Touch_Upper' with 206 observations
+2025-08-12 18:53:35,638 - features.ensemble - INFO - Added feature 'BB_Touch_Lower' with 206 observations
+2025-08-12 18:53:35,638 - features.ensemble - INFO - Added feature 'ATR_Pct' with 206 observations
+2025-08-12 18:53:35,638 - features.ensemble - INFO - Added feature 'Realized_Vol_20' with 206 observations
+2025-08-12 18:53:35,638 - features.ensemble - INFO - Added feature 'ADX_Trend' with 206 observations
+2025-08-12 18:53:35,639 - features.ensemble - INFO - Added feature 'Vol_High' with 206 observations
+2025-08-12 18:53:35,639 - features.ensemble - INFO - Added feature 'Vol_Low' with 206 observations
+2025-08-12 18:53:35,639 - features.ensemble - WARNING - Feature OBV_Slope contains non-finite values, filling with 0
+2025-08-12 18:53:35,639 - features.ensemble - INFO - Added feature 'OBV_Slope' with 206 observations
+2025-08-12 18:53:35,639 - features.ensemble - INFO - Added feature 'Volume_ZScore' with 206 observations
+2025-08-12 18:53:35,639 - features.ensemble - INFO - Added feature 'MFI_Overbought' with 206 observations
+2025-08-12 18:53:35,640 - features.ensemble - INFO - Added feature 'MFI_Oversold' with 206 observations
+2025-08-12 18:53:35,648 - features.ensemble - INFO - Computed weights using rolling_ic: {'SMA_Crossover_20_180': np.float64(0.10293980804568359), 'EMA_Crossover_20_180': np.float64(-0.1423370922926694), 'MACD_Crossover': np.float64(-0.0715920514809999), 'RSI_Momentum': np.float64(-0.02786797361521635), 'Donchian_Breakout_20': np.float64(0.031287106070345856), 'RSI_2_Extreme': np.float64(0.004071212797466303), 'RSI_3_Extreme': np.float64(0.005897767094118522), 'ZScore_20': np.float64(-0.01887854448684532), 'BB_Touch_Upper': np.float64(-0.007965940218693913), 'BB_Touch_Lower': np.float64(-0.007187571786823163), 'ATR_Pct': np.float64(0.05294220620499196), 'Realized_Vol_20': np.float64(0.09042157113307636), 'ADX_Trend': np.float64(0.037795046397575846), 'Vol_High': np.float64(0.07523787476760346), 'Vol_Low': np.float64(-0.0064610882213092915), 'OBV_Slope': np.float64(0.03253983137728385), 'Volume_ZScore': np.float64(0.09728353480582028), 'MFI_Overbought': np.float64(0.14260002516629675), 'MFI_Oversold': np.float64(0.04469375403717972)}
+2025-08-12 18:53:35,655 - features.ensemble - INFO - Combined 19 features into signal with mean confidence 0.393
+2025-08-12 18:53:35,656 - strategies.ensemble_strategy - INFO - Applied confidence filter: 56 signals filtered out
+2025-08-12 18:53:35,657 - strategies.ensemble_strategy - INFO - Generated ensemble signals with mean absolute value: 0.613
+2025-08-12 18:53:35,765 - yfinance - ERROR - $SPY: possibly delisted; no price data found  (1d 2024-01-15 -> 2024-01-16)
+2025-08-12 18:53:35,795 - strategies.ensemble_strategy - INFO - Generating ensemble signals...
+2025-08-12 18:53:35,795 - features.feature_engine - INFO - Generating all features...
+2025-08-12 18:53:35,819 - features.feature_engine - INFO - Generated 55 features
+2025-08-12 18:53:35,820 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 18:53:35,820 - features.ensemble - INFO - Added feature 'SMA_Crossover_20_180' with 206 observations
+2025-08-12 18:53:35,820 - features.ensemble - INFO - Added feature 'EMA_Crossover_20_180' with 206 observations
+2025-08-12 18:53:35,820 - features.ensemble - INFO - Added feature 'MACD_Crossover' with 206 observations
+2025-08-12 18:53:35,821 - features.ensemble - INFO - Added feature 'RSI_Momentum' with 206 observations
+2025-08-12 18:53:35,821 - features.ensemble - INFO - Added feature 'Donchian_Breakout_20' with 206 observations
+2025-08-12 18:53:35,821 - features.ensemble - INFO - Added feature 'RSI_2_Extreme' with 206 observations
+2025-08-12 18:53:35,821 - features.ensemble - INFO - Added feature 'RSI_3_Extreme' with 206 observations
+2025-08-12 18:53:35,821 - features.ensemble - INFO - Added feature 'ZScore_20' with 206 observations
+2025-08-12 18:53:35,821 - features.ensemble - INFO - Added feature 'BB_Touch_Upper' with 206 observations
+2025-08-12 18:53:35,822 - features.ensemble - INFO - Added feature 'BB_Touch_Lower' with 206 observations
+2025-08-12 18:53:35,822 - features.ensemble - INFO - Added feature 'ATR_Pct' with 206 observations
+2025-08-12 18:53:35,822 - features.ensemble - INFO - Added feature 'Realized_Vol_20' with 206 observations
+2025-08-12 18:53:35,822 - features.ensemble - INFO - Added feature 'ADX_Trend' with 206 observations
+2025-08-12 18:53:35,822 - features.ensemble - INFO - Added feature 'Vol_High' with 206 observations
+2025-08-12 18:53:35,822 - features.ensemble - INFO - Added feature 'Vol_Low' with 206 observations
+2025-08-12 18:53:35,822 - features.ensemble - WARNING - Feature OBV_Slope contains non-finite values, filling with 0
+2025-08-12 18:53:35,823 - features.ensemble - INFO - Added feature 'OBV_Slope' with 206 observations
+2025-08-12 18:53:35,823 - features.ensemble - INFO - Added feature 'Volume_ZScore' with 206 observations
+2025-08-12 18:53:35,823 - features.ensemble - INFO - Added feature 'MFI_Overbought' with 206 observations
+2025-08-12 18:53:35,823 - features.ensemble - INFO - Added feature 'MFI_Oversold' with 206 observations
+2025-08-12 18:53:35,829 - features.ensemble - INFO - Computed weights using rolling_ic: {'SMA_Crossover_20_180': np.float64(0.0807853369470288), 'EMA_Crossover_20_180': np.float64(-0.31578038350554594), 'MACD_Crossover': np.float64(-0.039538842425911866), 'RSI_Momentum': np.float64(-0.024309978102164766), 'Donchian_Breakout_20': np.float64(0.03250474710627846), 'RSI_2_Extreme': np.float64(-0.02854825046539669), 'RSI_3_Extreme': np.float64(-0.012077258336499431), 'ZScore_20': np.float64(-0.03539558684647979), 'BB_Touch_Upper': np.float64(0.03772085331746045), 'BB_Touch_Lower': np.float64(-0.012536568933311497), 'ATR_Pct': np.float64(0.05485819044132972), 'Realized_Vol_20': np.float64(0.043769015990218756), 'ADX_Trend': np.float64(-0.06036128743184842), 'Vol_High': np.float64(0.10408675102561149), 'Vol_Low': np.float64(-0.011233648226212242), 'OBV_Slope': np.float64(-0.003453376704946096), 'Volume_ZScore': np.float64(0.08980693827220718), 'MFI_Overbought': np.float64(-0.010605151963400491), 'MFI_Oversold': np.float64(0.0026278339581478215)}
+2025-08-12 18:53:35,834 - features.ensemble - INFO - Combined 19 features into signal with mean confidence 0.539
+2025-08-12 18:53:35,835 - strategies.ensemble_strategy - INFO - Applied confidence filter: 16 signals filtered out
+2025-08-12 18:53:35,835 - strategies.ensemble_strategy - INFO - Generated ensemble signals with mean absolute value: 0.893
+2025-08-12 18:53:35,947 - yfinance - ERROR - $QQQ: possibly delisted; no price data found  (1d 2024-01-15 -> 2024-01-16)
+2025-08-12 18:53:35,976 - strategies.ensemble_strategy - INFO - Generating ensemble signals...
+2025-08-12 18:53:35,976 - features.feature_engine - INFO - Generating all features...
+2025-08-12 18:53:35,999 - features.feature_engine - INFO - Generated 55 features
+2025-08-12 18:53:36,000 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 18:53:36,000 - features.ensemble - INFO - Added feature 'SMA_Crossover_20_180' with 206 observations
+2025-08-12 18:53:36,000 - features.ensemble - INFO - Added feature 'EMA_Crossover_20_180' with 206 observations
+2025-08-12 18:53:36,000 - features.ensemble - INFO - Added feature 'MACD_Crossover' with 206 observations
+2025-08-12 18:53:36,000 - features.ensemble - INFO - Added feature 'RSI_Momentum' with 206 observations
+2025-08-12 18:53:36,001 - features.ensemble - INFO - Added feature 'Donchian_Breakout_20' with 206 observations
+2025-08-12 18:53:36,001 - features.ensemble - INFO - Added feature 'RSI_2_Extreme' with 206 observations
+2025-08-12 18:53:36,001 - features.ensemble - INFO - Added feature 'RSI_3_Extreme' with 206 observations
+2025-08-12 18:53:36,001 - features.ensemble - INFO - Added feature 'ZScore_20' with 206 observations
+2025-08-12 18:53:36,001 - features.ensemble - INFO - Added feature 'BB_Touch_Upper' with 206 observations
+2025-08-12 18:53:36,001 - features.ensemble - INFO - Added feature 'BB_Touch_Lower' with 206 observations
+2025-08-12 18:53:36,001 - features.ensemble - INFO - Added feature 'ATR_Pct' with 206 observations
+2025-08-12 18:53:36,002 - features.ensemble - INFO - Added feature 'Realized_Vol_20' with 206 observations
+2025-08-12 18:53:36,002 - features.ensemble - INFO - Added feature 'ADX_Trend' with 206 observations
+2025-08-12 18:53:36,002 - features.ensemble - INFO - Added feature 'Vol_High' with 206 observations
+2025-08-12 18:53:36,002 - features.ensemble - INFO - Added feature 'Vol_Low' with 206 observations
+2025-08-12 18:53:36,002 - features.ensemble - WARNING - Feature OBV_Slope contains non-finite values, filling with 0
+2025-08-12 18:53:36,002 - features.ensemble - INFO - Added feature 'OBV_Slope' with 206 observations
+2025-08-12 18:53:36,003 - features.ensemble - INFO - Added feature 'Volume_ZScore' with 206 observations
+2025-08-12 18:53:36,003 - features.ensemble - INFO - Added feature 'MFI_Overbought' with 206 observations
+2025-08-12 18:53:36,003 - features.ensemble - INFO - Added feature 'MFI_Oversold' with 206 observations
+2025-08-12 18:53:36,009 - features.ensemble - INFO - Computed weights using rolling_ic: {'SMA_Crossover_20_180': np.float64(0.09309811452952302), 'EMA_Crossover_20_180': np.float64(-0.027263479312441396), 'MACD_Crossover': np.float64(-0.07337489399653936), 'RSI_Momentum': np.float64(-0.015606277145677264), 'Donchian_Breakout_20': np.float64(-0.0017962580869267184), 'RSI_2_Extreme': np.float64(0.02825401794179223), 'RSI_3_Extreme': np.float64(0.008213245584468473), 'ZScore_20': np.float64(-0.008166213143339384), 'BB_Touch_Upper': np.float64(0.021741719876719454), 'BB_Touch_Lower': np.float64(-0.0745183768691066), 'ATR_Pct': np.float64(0.03437965166201743), 'Realized_Vol_20': np.float64(0.013324283230986417), 'ADX_Trend': np.float64(0.08152070347114704), 'Vol_High': np.float64(0.21002906523235101), 'Vol_Low': np.float64(0.17405580418069125), 'OBV_Slope': np.float64(0.016007434012267893), 'Volume_ZScore': np.float64(-0.014541861566488082), 'MFI_Overbought': np.float64(0.0), 'MFI_Oversold': np.float64(0.10410860015751693)}
+2025-08-12 18:53:36,014 - features.ensemble - INFO - Combined 19 features into signal with mean confidence 0.350
+2025-08-12 18:53:36,015 - strategies.ensemble_strategy - INFO - Applied confidence filter: 71 signals filtered out
+2025-08-12 18:53:36,015 - strategies.ensemble_strategy - INFO - Generated ensemble signals with mean absolute value: 0.531
+2025-08-12 18:53:36,107 - yfinance - ERROR - $IWM: possibly delisted; no price data found  (1d 2024-01-15 -> 2024-01-16)
+2025-08-12 18:53:36,107 - enhanced_paper_trading - INFO - Daily Summary - 2024-01-15:
+2025-08-12 18:53:36,107 - enhanced_paper_trading - INFO -   Regime: chop (confidence: 0.60)
+2025-08-12 18:53:36,107 - enhanced_paper_trading - INFO -   Capital: $100,000.00
+2025-08-12 18:53:36,107 - enhanced_paper_trading - INFO -   Total Return: 0.00%
+2025-08-12 18:53:36,107 - enhanced_paper_trading - INFO -   Sharpe Ratio: 0.00
+2025-08-12 18:53:36,107 - enhanced_paper_trading - INFO -   Max Drawdown: 0.00%
+2025-08-12 18:53:36,107 - enhanced_paper_trading - INFO -   Positions: 0
+2025-08-12 18:53:36,108 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 18:53:36,112 - core.regime_detector - INFO - Detected regime: trend (confidence: 0.56)
+2025-08-12 18:53:36,112 - core.feature_reweighter - INFO - Initialized FeatureReweighter with 60 day window
+2025-08-12 18:53:36,121 - core.feature_reweighter - INFO - Initialized AdaptiveFeatureEngine
+2025-08-12 18:53:59,543 - core.regime_detector - INFO - Initialized RegimeDetector with 60 day lookback
+2025-08-12 18:53:59,548 - core.regime_detector - INFO - Detected regime: chop (confidence: 0.82)
+2025-08-12 18:53:59,549 - core.feature_reweighter - INFO - Initialized FeatureReweighter with 30 day window
+2025-08-12 18:53:59,577 - core.regime_detector - INFO - Initialized RegimeDetector with 60 day lookback
+2025-08-12 18:53:59,577 - enhanced_paper_trading - INFO - Loaded config from config/enhanced_paper_trading_config.json
+2025-08-12 18:53:59,577 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 18:53:59,577 - core.feature_reweighter - INFO - Initialized FeatureReweighter with 60 day window
+2025-08-12 18:53:59,577 - core.feature_reweighter - INFO - Initialized AdaptiveFeatureEngine
+2025-08-12 18:53:59,577 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 18:53:59,577 - enhanced_paper_trading - ERROR - Failed to initialize strategy regime_ensemble: SignalCombiner.__init__() got an unexpected keyword argument 'method'
+2025-08-12 18:53:59,577 - features.feature_engine - INFO - Initialized FeatureEngine
+2025-08-12 18:53:59,577 - strategies.ensemble_strategy - INFO - Initialized EnsembleStrategy with 5 trend features
+2025-08-12 18:53:59,578 - enhanced_paper_trading - INFO - Initialized strategy: ensemble
+2025-08-12 18:53:59,578 - enhanced_paper_trading - INFO - Initialized strategy: sma
+2025-08-12 18:53:59,578 - enhanced_paper_trading - INFO - Initialized strategy: momentum
+2025-08-12 18:53:59,578 - enhanced_paper_trading - INFO - Initialized EnhancedPaperTradingSystem with $100,000 capital
+2025-08-12 18:53:59,578 - enhanced_paper_trading - INFO - Running daily trading for 2024-01-15
+2025-08-12 18:54:00,233 - core.regime_detector - INFO - Detected regime: chop (confidence: 0.60)
+2025-08-12 18:54:00,233 - enhanced_paper_trading - INFO - Detected regime: chop (confidence: 0.60)
+2025-08-12 18:54:00,261 - strategies.ensemble_strategy - INFO - Generating ensemble signals...
+2025-08-12 18:54:00,261 - features.feature_engine - INFO - Generating all features...
+2025-08-12 18:54:00,285 - features.feature_engine - INFO - Generated 55 features
+2025-08-12 18:54:00,286 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 18:54:00,286 - features.ensemble - INFO - Added feature 'SMA_Crossover_20_180' with 206 observations
+2025-08-12 18:54:00,286 - features.ensemble - INFO - Added feature 'EMA_Crossover_20_180' with 206 observations
+2025-08-12 18:54:00,286 - features.ensemble - INFO - Added feature 'MACD_Crossover' with 206 observations
+2025-08-12 18:54:00,286 - features.ensemble - INFO - Added feature 'RSI_Momentum' with 206 observations
+2025-08-12 18:54:00,286 - features.ensemble - INFO - Added feature 'Donchian_Breakout_20' with 206 observations
+2025-08-12 18:54:00,287 - features.ensemble - INFO - Added feature 'RSI_2_Extreme' with 206 observations
+2025-08-12 18:54:00,287 - features.ensemble - INFO - Added feature 'RSI_3_Extreme' with 206 observations
+2025-08-12 18:54:00,287 - features.ensemble - INFO - Added feature 'ZScore_20' with 206 observations
+2025-08-12 18:54:00,287 - features.ensemble - INFO - Added feature 'BB_Touch_Upper' with 206 observations
+2025-08-12 18:54:00,287 - features.ensemble - INFO - Added feature 'BB_Touch_Lower' with 206 observations
+2025-08-12 18:54:00,287 - features.ensemble - INFO - Added feature 'ATR_Pct' with 206 observations
+2025-08-12 18:54:00,287 - features.ensemble - INFO - Added feature 'Realized_Vol_20' with 206 observations
+2025-08-12 18:54:00,287 - features.ensemble - INFO - Added feature 'ADX_Trend' with 206 observations
+2025-08-12 18:54:00,288 - features.ensemble - INFO - Added feature 'Vol_High' with 206 observations
+2025-08-12 18:54:00,288 - features.ensemble - INFO - Added feature 'Vol_Low' with 206 observations
+2025-08-12 18:54:00,288 - features.ensemble - WARNING - Feature OBV_Slope contains non-finite values, filling with 0
+2025-08-12 18:54:00,288 - features.ensemble - INFO - Added feature 'OBV_Slope' with 206 observations
+2025-08-12 18:54:00,288 - features.ensemble - INFO - Added feature 'Volume_ZScore' with 206 observations
+2025-08-12 18:54:00,288 - features.ensemble - INFO - Added feature 'MFI_Overbought' with 206 observations
+2025-08-12 18:54:00,288 - features.ensemble - INFO - Added feature 'MFI_Oversold' with 206 observations
+2025-08-12 18:54:00,295 - features.ensemble - INFO - Computed weights using rolling_ic: {'SMA_Crossover_20_180': np.float64(0.10281981836286913), 'EMA_Crossover_20_180': np.float64(-0.14217086208275082), 'MACD_Crossover': np.float64(-0.07150753636360938), 'RSI_Momentum': np.float64(-0.02783572341238975), 'Donchian_Breakout_20': np.float64(0.03124829635735912), 'RSI_2_Extreme': np.float64(0.004066453419086283), 'RSI_3_Extreme': np.float64(0.005889914017019156), 'ZScore_20': np.float64(-0.018856449705127107), 'BB_Touch_Upper': np.float64(-0.007956144754935604), 'BB_Touch_Lower': np.float64(-0.007179260141181222), 'ATR_Pct': np.float64(0.05288003098931626), 'Realized_Vol_20': np.float64(0.09031690003702295), 'ADX_Trend': np.float64(0.03891665486121456), 'Vol_High': np.float64(0.075149196714452), 'Vol_Low': np.float64(-0.006456374348732103), 'OBV_Slope': np.float64(0.032502139315713774), 'Volume_ZScore': np.float64(0.09716874846529168), 'MFI_Overbought': np.float64(0.14243816707837162), 'MFI_Oversold': np.float64(0.04464132957355742)}
+2025-08-12 18:54:00,300 - features.ensemble - INFO - Combined 19 features into signal with mean confidence 0.389
+2025-08-12 18:54:00,300 - strategies.ensemble_strategy - INFO - Applied confidence filter: 57 signals filtered out
+2025-08-12 18:54:00,301 - strategies.ensemble_strategy - INFO - Generated ensemble signals with mean absolute value: 0.611
+2025-08-12 18:54:00,402 - yfinance - ERROR - $SPY: possibly delisted; no price data found  (1d 2024-01-15 -> 2024-01-16)
+2025-08-12 18:54:00,431 - strategies.ensemble_strategy - INFO - Generating ensemble signals...
+2025-08-12 18:54:00,432 - features.feature_engine - INFO - Generating all features...
+2025-08-12 18:54:00,454 - features.feature_engine - INFO - Generated 55 features
+2025-08-12 18:54:00,455 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 18:54:00,455 - features.ensemble - INFO - Added feature 'SMA_Crossover_20_180' with 206 observations
+2025-08-12 18:54:00,455 - features.ensemble - INFO - Added feature 'EMA_Crossover_20_180' with 206 observations
+2025-08-12 18:54:00,455 - features.ensemble - INFO - Added feature 'MACD_Crossover' with 206 observations
+2025-08-12 18:54:00,455 - features.ensemble - INFO - Added feature 'RSI_Momentum' with 206 observations
+2025-08-12 18:54:00,455 - features.ensemble - INFO - Added feature 'Donchian_Breakout_20' with 206 observations
+2025-08-12 18:54:00,456 - features.ensemble - INFO - Added feature 'RSI_2_Extreme' with 206 observations
+2025-08-12 18:54:00,456 - features.ensemble - INFO - Added feature 'RSI_3_Extreme' with 206 observations
+2025-08-12 18:54:00,456 - features.ensemble - INFO - Added feature 'ZScore_20' with 206 observations
+2025-08-12 18:54:00,456 - features.ensemble - INFO - Added feature 'BB_Touch_Upper' with 206 observations
+2025-08-12 18:54:00,456 - features.ensemble - INFO - Added feature 'BB_Touch_Lower' with 206 observations
+2025-08-12 18:54:00,456 - features.ensemble - INFO - Added feature 'ATR_Pct' with 206 observations
+2025-08-12 18:54:00,456 - features.ensemble - INFO - Added feature 'Realized_Vol_20' with 206 observations
+2025-08-12 18:54:00,456 - features.ensemble - INFO - Added feature 'ADX_Trend' with 206 observations
+2025-08-12 18:54:00,457 - features.ensemble - INFO - Added feature 'Vol_High' with 206 observations
+2025-08-12 18:54:00,457 - features.ensemble - INFO - Added feature 'Vol_Low' with 206 observations
+2025-08-12 18:54:00,457 - features.ensemble - WARNING - Feature OBV_Slope contains non-finite values, filling with 0
+2025-08-12 18:54:00,457 - features.ensemble - INFO - Added feature 'OBV_Slope' with 206 observations
+2025-08-12 18:54:00,457 - features.ensemble - INFO - Added feature 'Volume_ZScore' with 206 observations
+2025-08-12 18:54:00,457 - features.ensemble - INFO - Added feature 'MFI_Overbought' with 206 observations
+2025-08-12 18:54:00,457 - features.ensemble - INFO - Added feature 'MFI_Oversold' with 206 observations
+2025-08-12 18:54:00,464 - features.ensemble - INFO - Computed weights using rolling_ic: {'SMA_Crossover_20_180': np.float64(0.08078415363373707), 'EMA_Crossover_20_180': np.float64(-0.31578033174442804), 'MACD_Crossover': np.float64(-0.03953893282769666), 'RSI_Momentum': np.float64(-0.024309864618186978), 'Donchian_Breakout_20': np.float64(0.03250360104505457), 'RSI_2_Extreme': np.float64(-0.028547807388864605), 'RSI_3_Extreme': np.float64(-0.012076717434663736), 'ZScore_20': np.float64(-0.035394636052716116), 'BB_Touch_Upper': np.float64(0.03772170982263847), 'BB_Touch_Lower': np.float64(-0.012535713065534495), 'ATR_Pct': np.float64(0.05485623416960163), 'Realized_Vol_20': np.float64(0.043767003050771185), 'ADX_Trend': np.float64(-0.0603607497738359), 'Vol_High': np.float64(0.10408650133197361), 'Vol_Low': np.float64(-0.011232829066236233), 'OBV_Slope': np.float64(-0.003451967836697333), 'Volume_ZScore': np.float64(0.08980668200712308), 'MFI_Overbought': np.float64(-0.010603867407823653), 'MFI_Oversold': np.float64(0.0026406977224167523)}
+2025-08-12 18:54:00,468 - features.ensemble - INFO - Combined 19 features into signal with mean confidence 0.539
+2025-08-12 18:54:00,469 - strategies.ensemble_strategy - INFO - Applied confidence filter: 16 signals filtered out
+2025-08-12 18:54:00,470 - strategies.ensemble_strategy - INFO - Generated ensemble signals with mean absolute value: 0.893
+2025-08-12 18:54:00,558 - yfinance - ERROR - $QQQ: possibly delisted; no price data found  (1d 2024-01-15 -> 2024-01-16)
+2025-08-12 18:54:00,587 - strategies.ensemble_strategy - INFO - Generating ensemble signals...
+2025-08-12 18:54:00,587 - features.feature_engine - INFO - Generating all features...
+2025-08-12 18:54:00,609 - features.feature_engine - INFO - Generated 55 features
+2025-08-12 18:54:00,610 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 18:54:00,610 - features.ensemble - INFO - Added feature 'SMA_Crossover_20_180' with 206 observations
+2025-08-12 18:54:00,610 - features.ensemble - INFO - Added feature 'EMA_Crossover_20_180' with 206 observations
+2025-08-12 18:54:00,610 - features.ensemble - INFO - Added feature 'MACD_Crossover' with 206 observations
+2025-08-12 18:54:00,610 - features.ensemble - INFO - Added feature 'RSI_Momentum' with 206 observations
+2025-08-12 18:54:00,610 - features.ensemble - INFO - Added feature 'Donchian_Breakout_20' with 206 observations
+2025-08-12 18:54:00,611 - features.ensemble - INFO - Added feature 'RSI_2_Extreme' with 206 observations
+2025-08-12 18:54:00,611 - features.ensemble - INFO - Added feature 'RSI_3_Extreme' with 206 observations
+2025-08-12 18:54:00,611 - features.ensemble - INFO - Added feature 'ZScore_20' with 206 observations
+2025-08-12 18:54:00,611 - features.ensemble - INFO - Added feature 'BB_Touch_Upper' with 206 observations
+2025-08-12 18:54:00,611 - features.ensemble - INFO - Added feature 'BB_Touch_Lower' with 206 observations
+2025-08-12 18:54:00,611 - features.ensemble - INFO - Added feature 'ATR_Pct' with 206 observations
+2025-08-12 18:54:00,611 - features.ensemble - INFO - Added feature 'Realized_Vol_20' with 206 observations
+2025-08-12 18:54:00,611 - features.ensemble - INFO - Added feature 'ADX_Trend' with 206 observations
+2025-08-12 18:54:00,612 - features.ensemble - INFO - Added feature 'Vol_High' with 206 observations
+2025-08-12 18:54:00,612 - features.ensemble - INFO - Added feature 'Vol_Low' with 206 observations
+2025-08-12 18:54:00,612 - features.ensemble - WARNING - Feature OBV_Slope contains non-finite values, filling with 0
+2025-08-12 18:54:00,612 - features.ensemble - INFO - Added feature 'OBV_Slope' with 206 observations
+2025-08-12 18:54:00,612 - features.ensemble - INFO - Added feature 'Volume_ZScore' with 206 observations
+2025-08-12 18:54:00,612 - features.ensemble - INFO - Added feature 'MFI_Overbought' with 206 observations
+2025-08-12 18:54:00,612 - features.ensemble - INFO - Added feature 'MFI_Oversold' with 206 observations
+2025-08-12 18:54:00,619 - features.ensemble - INFO - Computed weights using rolling_ic: {'SMA_Crossover_20_180': np.float64(0.09309837796025262), 'EMA_Crossover_20_180': np.float64(-0.027263959836951637), 'MACD_Crossover': np.float64(-0.07337517052398099), 'RSI_Momentum': np.float64(-0.015606359234892356), 'Donchian_Breakout_20': np.float64(-0.0017962059644718764), 'RSI_2_Extreme': np.float64(0.028253929575977624), 'RSI_3_Extreme': np.float64(0.008213571346359196), 'ZScore_20': np.float64(-0.008166268514617278), 'BB_Touch_Upper': np.float64(0.021741256368510712), 'BB_Touch_Lower': np.float64(-0.07451723461273073), 'ATR_Pct': np.float64(0.034379619532262234), 'Realized_Vol_20': np.float64(0.013323822563685188), 'ADX_Trend': np.float64(0.08152077854341504), 'Vol_High': np.float64(0.21003140080182414), 'Vol_Low': np.float64(0.17405429451387863), 'OBV_Slope': np.float64(0.016006837140984193), 'Volume_ZScore': np.float64(-0.014541948302895355), 'MFI_Overbought': np.float64(0.0), 'MFI_Oversold': np.float64(0.10410896466231016)}
+2025-08-12 18:54:00,624 - features.ensemble - INFO - Combined 19 features into signal with mean confidence 0.350
+2025-08-12 18:54:00,624 - strategies.ensemble_strategy - INFO - Applied confidence filter: 71 signals filtered out
+2025-08-12 18:54:00,625 - strategies.ensemble_strategy - INFO - Generated ensemble signals with mean absolute value: 0.531
+2025-08-12 18:54:00,715 - yfinance - ERROR - $IWM: possibly delisted; no price data found  (1d 2024-01-15 -> 2024-01-16)
+2025-08-12 18:54:00,715 - enhanced_paper_trading - INFO - Daily Summary - 2024-01-15:
+2025-08-12 18:54:00,715 - enhanced_paper_trading - INFO -   Regime: chop (confidence: 0.60)
+2025-08-12 18:54:00,715 - enhanced_paper_trading - INFO -   Capital: $100,000.00
+2025-08-12 18:54:00,715 - enhanced_paper_trading - INFO -   Total Return: 0.00%
+2025-08-12 18:54:00,715 - enhanced_paper_trading - INFO -   Sharpe Ratio: 0.00
+2025-08-12 18:54:00,715 - enhanced_paper_trading - INFO -   Max Drawdown: 0.00%
+2025-08-12 18:54:00,715 - enhanced_paper_trading - INFO -   Positions: 0
+2025-08-12 18:54:00,716 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 18:54:00,720 - core.regime_detector - INFO - Detected regime: trend (confidence: 0.56)
+2025-08-12 18:54:00,720 - core.feature_reweighter - INFO - Initialized FeatureReweighter with 60 day window
+2025-08-12 18:54:00,729 - core.feature_reweighter - INFO - Initialized AdaptiveFeatureEngine
+2025-08-12 18:54:00,729 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 18:54:52,286 - core.regime_detector - INFO - Initialized RegimeDetector with 60 day lookback
+2025-08-12 18:54:52,291 - core.regime_detector - INFO - Detected regime: chop (confidence: 0.82)
+2025-08-12 18:54:52,291 - core.feature_reweighter - INFO - Initialized FeatureReweighter with 30 day window
+2025-08-12 18:54:52,318 - core.regime_detector - INFO - Initialized RegimeDetector with 60 day lookback
+2025-08-12 18:54:52,318 - strategies.regime_aware_ensemble - INFO - Initialized RegimeAwareEnsembleStrategy with rolling_ic combination
+2025-08-12 18:54:52,322 - core.regime_detector - INFO - Detected regime: trend (confidence: 0.56)
+2025-08-12 18:54:52,374 - features.ensemble - INFO - Initialized SignalCombiner with 366 price observations
+2025-08-12 18:54:52,374 - features.ensemble - INFO - Added feature 'ma_crossover' with 366 observations
+2025-08-12 18:54:52,374 - features.ensemble - INFO - Added feature 'momentum_5' with 366 observations
+2025-08-12 18:54:52,375 - features.ensemble - INFO - Added feature 'momentum_10' with 366 observations
+2025-08-12 18:54:52,375 - features.ensemble - INFO - Added feature 'trend_strength' with 366 observations
+2025-08-12 18:54:52,375 - features.ensemble - INFO - Added feature 'trend_consistency' with 366 observations
+2025-08-12 18:54:52,377 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_crossover': np.float64(-0.22312673693440738), 'momentum_5': np.float64(-0.2816850548885172), 'momentum_10': np.float64(-0.23043819705905266), 'trend_strength': np.float64(-0.17629978322560563), 'trend_consistency': np.float64(-0.08845022789241731)}
+2025-08-12 18:54:52,377 - enhanced_paper_trading - INFO - Loaded config from config/enhanced_paper_trading_config.json
+2025-08-12 18:54:52,377 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 18:54:52,377 - core.feature_reweighter - INFO - Initialized FeatureReweighter with 60 day window
+2025-08-12 18:54:52,377 - core.feature_reweighter - INFO - Initialized AdaptiveFeatureEngine
+2025-08-12 18:54:52,377 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 18:54:52,377 - strategies.regime_aware_ensemble - INFO - Initialized RegimeAwareEnsembleStrategy with rolling_ic combination
+2025-08-12 18:54:52,377 - enhanced_paper_trading - INFO - Initialized strategy: regime_ensemble
+2025-08-12 18:54:52,377 - features.feature_engine - INFO - Initialized FeatureEngine
+2025-08-12 18:54:52,377 - strategies.ensemble_strategy - INFO - Initialized EnsembleStrategy with 5 trend features
+2025-08-12 18:54:52,377 - enhanced_paper_trading - INFO - Initialized strategy: ensemble
+2025-08-12 18:54:52,377 - enhanced_paper_trading - INFO - Initialized strategy: sma
+2025-08-12 18:54:52,377 - enhanced_paper_trading - INFO - Initialized strategy: momentum
+2025-08-12 18:54:52,377 - enhanced_paper_trading - INFO - Initialized EnhancedPaperTradingSystem with $100,000 capital
+2025-08-12 18:54:52,377 - enhanced_paper_trading - INFO - Running daily trading for 2024-01-15
+2025-08-12 18:54:52,858 - core.regime_detector - INFO - Detected regime: chop (confidence: 0.60)
+2025-08-12 18:54:52,858 - enhanced_paper_trading - INFO - Detected regime: chop (confidence: 0.60)
+2025-08-12 18:54:52,885 - core.regime_detector - WARNING - Insufficient data for regime detection: 206 < 252
+2025-08-12 18:54:52,903 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 18:54:52,903 - features.ensemble - INFO - Added feature 'ma_crossover' with 206 observations
+2025-08-12 18:54:52,903 - features.ensemble - INFO - Added feature 'momentum_5' with 206 observations
+2025-08-12 18:54:52,903 - features.ensemble - INFO - Added feature 'momentum_10' with 206 observations
+2025-08-12 18:54:52,903 - features.ensemble - INFO - Added feature 'trend_strength' with 206 observations
+2025-08-12 18:54:52,904 - features.ensemble - INFO - Added feature 'trend_consistency' with 206 observations
+2025-08-12 18:54:52,905 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_crossover': np.float64(-0.3908766093330532), 'momentum_5': np.float64(-0.002547030024786585), 'momentum_10': np.float64(0.15420073234774748), 'trend_strength': np.float64(-0.45237562829441264), 'trend_consistency': np.float64(0.0)}
+2025-08-12 18:54:52,905 - enhanced_paper_trading - ERROR - Error generating signals for regime_ensemble: 'SignalCombiner' object has no attribute 'combine_signals'
+2025-08-12 18:54:52,905 - strategies.ensemble_strategy - INFO - Generating ensemble signals...
+2025-08-12 18:54:52,905 - features.feature_engine - INFO - Generating all features...
+2025-08-12 18:54:52,928 - features.feature_engine - INFO - Generated 55 features
+2025-08-12 18:54:52,928 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 18:54:52,929 - features.ensemble - INFO - Added feature 'SMA_Crossover_20_180' with 206 observations
+2025-08-12 18:54:52,929 - features.ensemble - INFO - Added feature 'EMA_Crossover_20_180' with 206 observations
+2025-08-12 18:54:52,929 - features.ensemble - INFO - Added feature 'MACD_Crossover' with 206 observations
+2025-08-12 18:54:52,929 - features.ensemble - INFO - Added feature 'RSI_Momentum' with 206 observations
+2025-08-12 18:54:52,929 - features.ensemble - INFO - Added feature 'Donchian_Breakout_20' with 206 observations
+2025-08-12 18:54:52,929 - features.ensemble - INFO - Added feature 'RSI_2_Extreme' with 206 observations
+2025-08-12 18:54:52,929 - features.ensemble - INFO - Added feature 'RSI_3_Extreme' with 206 observations
+2025-08-12 18:54:52,929 - features.ensemble - INFO - Added feature 'ZScore_20' with 206 observations
+2025-08-12 18:54:52,930 - features.ensemble - INFO - Added feature 'BB_Touch_Upper' with 206 observations
+2025-08-12 18:54:52,930 - features.ensemble - INFO - Added feature 'BB_Touch_Lower' with 206 observations
+2025-08-12 18:54:52,930 - features.ensemble - INFO - Added feature 'ATR_Pct' with 206 observations
+2025-08-12 18:54:52,930 - features.ensemble - INFO - Added feature 'Realized_Vol_20' with 206 observations
+2025-08-12 18:54:52,930 - features.ensemble - INFO - Added feature 'ADX_Trend' with 206 observations
+2025-08-12 18:54:52,930 - features.ensemble - INFO - Added feature 'Vol_High' with 206 observations
+2025-08-12 18:54:52,930 - features.ensemble - INFO - Added feature 'Vol_Low' with 206 observations
+2025-08-12 18:54:52,930 - features.ensemble - WARNING - Feature OBV_Slope contains non-finite values, filling with 0
+2025-08-12 18:54:52,931 - features.ensemble - INFO - Added feature 'OBV_Slope' with 206 observations
+2025-08-12 18:54:52,931 - features.ensemble - INFO - Added feature 'Volume_ZScore' with 206 observations
+2025-08-12 18:54:52,931 - features.ensemble - INFO - Added feature 'MFI_Overbought' with 206 observations
+2025-08-12 18:54:52,931 - features.ensemble - INFO - Added feature 'MFI_Oversold' with 206 observations
+2025-08-12 18:54:52,937 - features.ensemble - INFO - Computed weights using rolling_ic: {'SMA_Crossover_20_180': np.float64(0.1029392093668046), 'EMA_Crossover_20_180': np.float64(-0.14233575322109657), 'MACD_Crossover': np.float64(-0.07159067146634993), 'RSI_Momentum': np.float64(-0.02786867221883921), 'Donchian_Breakout_20': np.float64(0.031285121735097766), 'RSI_2_Extreme': np.float64(0.004070727452116749), 'RSI_3_Extreme': np.float64(0.00589571397148647), 'ZScore_20': np.float64(-0.018878045855846966), 'BB_Touch_Upper': np.float64(-0.00796610609854797), 'BB_Touch_Lower': np.float64(-0.007186681720715834), 'ATR_Pct': np.float64(0.052941173995411796), 'Realized_Vol_20': np.float64(0.09042102845170967), 'ADX_Trend': np.float64(0.03779454540929232), 'Vol_High': np.float64(0.07523670564196723), 'Vol_Low': np.float64(-0.006460991402291413), 'OBV_Slope': np.float64(0.032540021749494025), 'Volume_ZScore': np.float64(0.09728309905350419), 'MFI_Overbought': np.float64(0.1426125300743023), 'MFI_Oversold': np.float64(0.04469320111512486)}
+2025-08-12 18:54:52,942 - features.ensemble - INFO - Combined 19 features into signal with mean confidence 0.393
+2025-08-12 18:54:52,942 - strategies.ensemble_strategy - INFO - Applied confidence filter: 56 signals filtered out
+2025-08-12 18:54:52,943 - strategies.ensemble_strategy - INFO - Generated ensemble signals with mean absolute value: 0.613
+2025-08-12 18:54:53,047 - yfinance - ERROR - $SPY: possibly delisted; no price data found  (1d 2024-01-15 -> 2024-01-16)
+2025-08-12 18:54:53,076 - core.regime_detector - WARNING - Insufficient data for regime detection: 206 < 252
+2025-08-12 18:54:53,093 - features.ensemble - INFO - Added feature 'ma_crossover' with 206 observations
+2025-08-12 18:54:53,093 - features.ensemble - INFO - Added feature 'momentum_5' with 206 observations
+2025-08-12 18:54:53,094 - features.ensemble - INFO - Added feature 'momentum_10' with 206 observations
+2025-08-12 18:54:53,094 - features.ensemble - INFO - Added feature 'trend_strength' with 206 observations
+2025-08-12 18:54:53,094 - features.ensemble - INFO - Added feature 'trend_consistency' with 206 observations
+2025-08-12 18:54:53,096 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_crossover': 0.2, 'momentum_5': 0.2, 'momentum_10': 0.2, 'trend_strength': 0.2, 'trend_consistency': 0.2}
+2025-08-12 18:54:53,096 - enhanced_paper_trading - ERROR - Error generating signals for regime_ensemble: 'SignalCombiner' object has no attribute 'combine_signals'
+2025-08-12 18:54:53,096 - strategies.ensemble_strategy - INFO - Generating ensemble signals...
+2025-08-12 18:54:53,096 - features.feature_engine - INFO - Generating all features...
+2025-08-12 18:54:53,119 - features.feature_engine - INFO - Generated 55 features
+2025-08-12 18:54:53,119 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 18:54:53,119 - features.ensemble - INFO - Added feature 'SMA_Crossover_20_180' with 206 observations
+2025-08-12 18:54:53,119 - features.ensemble - INFO - Added feature 'EMA_Crossover_20_180' with 206 observations
+2025-08-12 18:54:53,119 - features.ensemble - INFO - Added feature 'MACD_Crossover' with 206 observations
+2025-08-12 18:54:53,119 - features.ensemble - INFO - Added feature 'RSI_Momentum' with 206 observations
+2025-08-12 18:54:53,120 - features.ensemble - INFO - Added feature 'Donchian_Breakout_20' with 206 observations
+2025-08-12 18:54:53,120 - features.ensemble - INFO - Added feature 'RSI_2_Extreme' with 206 observations
+2025-08-12 18:54:53,120 - features.ensemble - INFO - Added feature 'RSI_3_Extreme' with 206 observations
+2025-08-12 18:54:53,120 - features.ensemble - INFO - Added feature 'ZScore_20' with 206 observations
+2025-08-12 18:54:53,120 - features.ensemble - INFO - Added feature 'BB_Touch_Upper' with 206 observations
+2025-08-12 18:54:53,120 - features.ensemble - INFO - Added feature 'BB_Touch_Lower' with 206 observations
+2025-08-12 18:54:53,120 - features.ensemble - INFO - Added feature 'ATR_Pct' with 206 observations
+2025-08-12 18:54:53,120 - features.ensemble - INFO - Added feature 'Realized_Vol_20' with 206 observations
+2025-08-12 18:54:53,120 - features.ensemble - INFO - Added feature 'ADX_Trend' with 206 observations
+2025-08-12 18:54:53,121 - features.ensemble - INFO - Added feature 'Vol_High' with 206 observations
+2025-08-12 18:54:53,121 - features.ensemble - INFO - Added feature 'Vol_Low' with 206 observations
+2025-08-12 18:54:53,121 - features.ensemble - WARNING - Feature OBV_Slope contains non-finite values, filling with 0
+2025-08-12 18:54:53,121 - features.ensemble - INFO - Added feature 'OBV_Slope' with 206 observations
+2025-08-12 18:54:53,121 - features.ensemble - INFO - Added feature 'Volume_ZScore' with 206 observations
+2025-08-12 18:54:53,121 - features.ensemble - INFO - Added feature 'MFI_Overbought' with 206 observations
+2025-08-12 18:54:53,121 - features.ensemble - INFO - Added feature 'MFI_Oversold' with 206 observations
+2025-08-12 18:54:53,127 - features.ensemble - INFO - Computed weights using rolling_ic: {'SMA_Crossover_20_180': np.float64(0.08078470747253358), 'EMA_Crossover_20_180': np.float64(-0.3157786334711347), 'MACD_Crossover': np.float64(-0.03953868185069824), 'RSI_Momentum': np.float64(-0.024309838986398234), 'Donchian_Breakout_20': np.float64(0.032504419493680985), 'RSI_2_Extreme': np.float64(-0.028546388267597603), 'RSI_3_Extreme': np.float64(-0.012076951054735822), 'ZScore_20': np.float64(-0.03539469208065363), 'BB_Touch_Upper': np.float64(0.037721257924380684), 'BB_Touch_Lower': np.float64(-0.012536084682437776), 'ATR_Pct': np.float64(0.054857242022991075), 'Realized_Vol_20': np.float64(0.043768345884755484), 'ADX_Trend': np.float64(-0.060360689959775046), 'Vol_High': np.float64(0.10408708401556341), 'Vol_Low': np.float64(-0.011235071225166758), 'OBV_Slope': np.float64(-0.003453124675935647), 'Volume_ZScore': np.float64(0.08980656138511865), 'MFI_Overbought': np.float64(-0.010605904602772482), 'MFI_Oversold': np.float64(0.0026343209436702052)}
+2025-08-12 18:54:53,133 - features.ensemble - INFO - Combined 19 features into signal with mean confidence 0.539
+2025-08-12 18:54:53,133 - strategies.ensemble_strategy - INFO - Applied confidence filter: 16 signals filtered out
+2025-08-12 18:54:53,134 - strategies.ensemble_strategy - INFO - Generated ensemble signals with mean absolute value: 0.893
+2025-08-12 18:54:53,233 - yfinance - ERROR - $QQQ: possibly delisted; no price data found  (1d 2024-01-15 -> 2024-01-16)
+2025-08-12 18:54:53,262 - core.regime_detector - WARNING - Insufficient data for regime detection: 206 < 252
+2025-08-12 18:54:53,279 - features.ensemble - INFO - Added feature 'ma_crossover' with 206 observations
+2025-08-12 18:54:53,279 - features.ensemble - INFO - Added feature 'momentum_5' with 206 observations
+2025-08-12 18:54:53,280 - features.ensemble - INFO - Added feature 'momentum_10' with 206 observations
+2025-08-12 18:54:53,280 - features.ensemble - INFO - Added feature 'trend_strength' with 206 observations
+2025-08-12 18:54:53,280 - features.ensemble - INFO - Added feature 'trend_consistency' with 206 observations
+2025-08-12 18:54:53,282 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_crossover': 0.2, 'momentum_5': 0.2, 'momentum_10': 0.2, 'trend_strength': 0.2, 'trend_consistency': 0.2}
+2025-08-12 18:54:53,282 - enhanced_paper_trading - ERROR - Error generating signals for regime_ensemble: 'SignalCombiner' object has no attribute 'combine_signals'
+2025-08-12 18:54:53,282 - strategies.ensemble_strategy - INFO - Generating ensemble signals...
+2025-08-12 18:54:53,282 - features.feature_engine - INFO - Generating all features...
+2025-08-12 18:54:53,304 - features.feature_engine - INFO - Generated 55 features
+2025-08-12 18:54:53,305 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 18:54:53,305 - features.ensemble - INFO - Added feature 'SMA_Crossover_20_180' with 206 observations
+2025-08-12 18:54:53,305 - features.ensemble - INFO - Added feature 'EMA_Crossover_20_180' with 206 observations
+2025-08-12 18:54:53,305 - features.ensemble - INFO - Added feature 'MACD_Crossover' with 206 observations
+2025-08-12 18:54:53,305 - features.ensemble - INFO - Added feature 'RSI_Momentum' with 206 observations
+2025-08-12 18:54:53,305 - features.ensemble - INFO - Added feature 'Donchian_Breakout_20' with 206 observations
+2025-08-12 18:54:53,305 - features.ensemble - INFO - Added feature 'RSI_2_Extreme' with 206 observations
+2025-08-12 18:54:53,305 - features.ensemble - INFO - Added feature 'RSI_3_Extreme' with 206 observations
+2025-08-12 18:54:53,306 - features.ensemble - INFO - Added feature 'ZScore_20' with 206 observations
+2025-08-12 18:54:53,306 - features.ensemble - INFO - Added feature 'BB_Touch_Upper' with 206 observations
+2025-08-12 18:54:53,306 - features.ensemble - INFO - Added feature 'BB_Touch_Lower' with 206 observations
+2025-08-12 18:54:53,306 - features.ensemble - INFO - Added feature 'ATR_Pct' with 206 observations
+2025-08-12 18:54:53,306 - features.ensemble - INFO - Added feature 'Realized_Vol_20' with 206 observations
+2025-08-12 18:54:53,306 - features.ensemble - INFO - Added feature 'ADX_Trend' with 206 observations
+2025-08-12 18:54:53,306 - features.ensemble - INFO - Added feature 'Vol_High' with 206 observations
+2025-08-12 18:54:53,306 - features.ensemble - INFO - Added feature 'Vol_Low' with 206 observations
+2025-08-12 18:54:53,306 - features.ensemble - WARNING - Feature OBV_Slope contains non-finite values, filling with 0
+2025-08-12 18:54:53,307 - features.ensemble - INFO - Added feature 'OBV_Slope' with 206 observations
+2025-08-12 18:54:53,307 - features.ensemble - INFO - Added feature 'Volume_ZScore' with 206 observations
+2025-08-12 18:54:53,307 - features.ensemble - INFO - Added feature 'MFI_Overbought' with 206 observations
+2025-08-12 18:54:53,307 - features.ensemble - INFO - Added feature 'MFI_Oversold' with 206 observations
+2025-08-12 18:54:53,313 - features.ensemble - INFO - Computed weights using rolling_ic: {'SMA_Crossover_20_180': np.float64(0.09309829245236775), 'EMA_Crossover_20_180': np.float64(-0.02726361430309096), 'MACD_Crossover': np.float64(-0.07337441534152456), 'RSI_Momentum': np.float64(-0.015606606749941871), 'Donchian_Breakout_20': np.float64(-0.0017955594021284893), 'RSI_2_Extreme': np.float64(0.028254063865468124), 'RSI_3_Extreme': np.float64(0.008213480193798153), 'ZScore_20': np.float64(-0.00816650740020699), 'BB_Touch_Upper': np.float64(0.021741528357620214), 'BB_Touch_Lower': np.float64(-0.07451773440899333), 'ATR_Pct': np.float64(0.034379619677035046), 'Realized_Vol_20': np.float64(0.013324340038655891), 'ADX_Trend': np.float64(0.0815205712709127), 'Vol_High': np.float64(0.2100306863489185), 'Vol_Low': np.float64(0.17405512516660607), 'OBV_Slope': np.float64(0.016007247583043362), 'Volume_ZScore': np.float64(-0.014542035629738471), 'MFI_Overbought': np.float64(0.0), 'MFI_Oversold': np.float64(0.10410857180994948)}
+2025-08-12 18:54:53,318 - features.ensemble - INFO - Combined 19 features into signal with mean confidence 0.350
+2025-08-12 18:54:53,318 - strategies.ensemble_strategy - INFO - Applied confidence filter: 71 signals filtered out
+2025-08-12 18:54:53,319 - strategies.ensemble_strategy - INFO - Generated ensemble signals with mean absolute value: 0.531
+2025-08-12 18:54:53,401 - yfinance - ERROR - $IWM: possibly delisted; no price data found  (1d 2024-01-15 -> 2024-01-16)
+2025-08-12 18:54:53,401 - enhanced_paper_trading - INFO - Daily Summary - 2024-01-15:
+2025-08-12 18:54:53,401 - enhanced_paper_trading - INFO -   Regime: chop (confidence: 0.60)
+2025-08-12 18:54:53,401 - enhanced_paper_trading - INFO -   Capital: $100,000.00
+2025-08-12 18:54:53,401 - enhanced_paper_trading - INFO -   Total Return: 0.00%
+2025-08-12 18:54:53,401 - enhanced_paper_trading - INFO -   Sharpe Ratio: 0.00
+2025-08-12 18:54:53,401 - enhanced_paper_trading - INFO -   Max Drawdown: 0.00%
+2025-08-12 18:54:53,401 - enhanced_paper_trading - INFO -   Positions: 0
+2025-08-12 18:54:53,402 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 18:54:53,407 - core.regime_detector - INFO - Detected regime: trend (confidence: 0.56)
+2025-08-12 18:54:53,407 - core.feature_reweighter - INFO - Initialized FeatureReweighter with 60 day window
+2025-08-12 18:54:53,416 - core.feature_reweighter - INFO - Initialized AdaptiveFeatureEngine
+2025-08-12 18:54:53,417 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 18:54:53,417 - strategies.regime_aware_ensemble - INFO - Initialized RegimeAwareEnsembleStrategy with rolling_ic combination
+2025-08-12 18:54:53,421 - core.regime_detector - INFO - Detected regime: trend (confidence: 0.56)
+2025-08-12 18:54:53,471 - features.ensemble - INFO - Initialized SignalCombiner with 366 price observations
+2025-08-12 18:54:53,472 - features.ensemble - INFO - Added feature 'ma_crossover' with 366 observations
+2025-08-12 18:54:53,472 - features.ensemble - INFO - Added feature 'momentum_5' with 366 observations
+2025-08-12 18:54:53,472 - features.ensemble - INFO - Added feature 'momentum_10' with 366 observations
+2025-08-12 18:54:53,472 - features.ensemble - INFO - Added feature 'trend_strength' with 366 observations
+2025-08-12 18:54:53,472 - features.ensemble - INFO - Added feature 'trend_consistency' with 366 observations
+2025-08-12 18:54:53,474 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_crossover': np.float64(-0.22312673693440738), 'momentum_5': np.float64(-0.2816850548885172), 'momentum_10': np.float64(-0.23043819705905266), 'trend_strength': np.float64(-0.17629978322560563), 'trend_consistency': np.float64(-0.08845022789241731)}
+2025-08-12 18:55:33,638 - core.regime_detector - INFO - Initialized RegimeDetector with 60 day lookback
+2025-08-12 18:55:33,643 - core.regime_detector - INFO - Detected regime: chop (confidence: 0.82)
+2025-08-12 18:55:33,644 - core.feature_reweighter - INFO - Initialized FeatureReweighter with 30 day window
+2025-08-12 18:55:33,670 - core.regime_detector - INFO - Initialized RegimeDetector with 60 day lookback
+2025-08-12 18:55:33,670 - strategies.regime_aware_ensemble - INFO - Initialized RegimeAwareEnsembleStrategy with rolling_ic combination
+2025-08-12 18:55:33,674 - core.regime_detector - INFO - Detected regime: trend (confidence: 0.56)
+2025-08-12 18:55:33,727 - features.ensemble - INFO - Initialized SignalCombiner with 366 price observations
+2025-08-12 18:55:33,728 - features.ensemble - INFO - Added feature 'ma_crossover' with 366 observations
+2025-08-12 18:55:33,728 - features.ensemble - INFO - Added feature 'momentum_5' with 366 observations
+2025-08-12 18:55:33,728 - features.ensemble - INFO - Added feature 'momentum_10' with 366 observations
+2025-08-12 18:55:33,728 - features.ensemble - INFO - Added feature 'trend_strength' with 366 observations
+2025-08-12 18:55:33,728 - features.ensemble - INFO - Added feature 'trend_consistency' with 366 observations
+2025-08-12 18:55:33,730 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_crossover': np.float64(-0.22312673693440738), 'momentum_5': np.float64(-0.2816850548885172), 'momentum_10': np.float64(-0.23043819705905266), 'trend_strength': np.float64(-0.17629978322560563), 'trend_consistency': np.float64(-0.08845022789241731)}
+2025-08-12 18:55:33,733 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.638
+2025-08-12 18:55:33,734 - features.ensemble - INFO - Initialized SignalCombiner with 366 price observations
+2025-08-12 18:55:33,734 - features.ensemble - INFO - Added feature 'ma_distance' with 366 observations
+2025-08-12 18:55:33,734 - features.ensemble - INFO - Added feature 'rsi' with 366 observations
+2025-08-12 18:55:33,734 - features.ensemble - INFO - Added feature 'bb_position' with 366 observations
+2025-08-12 18:55:33,734 - features.ensemble - INFO - Added feature 'zscore' with 366 observations
+2025-08-12 18:55:33,735 - features.ensemble - INFO - Added feature 'mean_reversion_strength' with 366 observations
+2025-08-12 18:55:33,736 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_distance': np.float64(-0.34334488451276685), 'rsi': np.float64(-0.19639036578524524), 'bb_position': np.float64(-0.21620195365314238), 'zscore': np.float64(-0.24406279604884548), 'mean_reversion_strength': np.float64(0.0)}
+2025-08-12 18:55:33,739 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.583
+2025-08-12 18:55:33,739 - features.ensemble - INFO - Initialized SignalCombiner with 366 price observations
+2025-08-12 18:55:33,739 - features.ensemble - INFO - Added feature 'donchian_position' with 366 observations
+2025-08-12 18:55:33,740 - features.ensemble - INFO - Added feature 'breakout_strength' with 366 observations
+2025-08-12 18:55:33,740 - features.ensemble - INFO - Added feature 'resistance_break' with 366 observations
+2025-08-12 18:55:33,740 - features.ensemble - INFO - Added feature 'support_break' with 366 observations
+2025-08-12 18:55:33,741 - features.ensemble - INFO - Computed weights using rolling_ic: {'donchian_position': np.float64(-0.28891280280133463), 'breakout_strength': np.float64(-0.20054487714913596), 'resistance_break': np.float64(-0.20054487714913596), 'support_break': np.float64(-0.3099974429003933)}
+2025-08-12 18:55:33,744 - features.ensemble - INFO - Combined 4 features into signal with mean confidence 0.750
+2025-08-12 18:55:33,745 - strategies.regime_aware_ensemble - INFO - Generated regime-aware signals for trend regime (confidence: 0.56)
+2025-08-12 18:55:33,746 - enhanced_paper_trading - INFO - Loaded config from config/enhanced_paper_trading_config.json
+2025-08-12 18:55:33,746 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 18:55:33,746 - core.feature_reweighter - INFO - Initialized FeatureReweighter with 60 day window
+2025-08-12 18:55:33,746 - core.feature_reweighter - INFO - Initialized AdaptiveFeatureEngine
+2025-08-12 18:55:33,746 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 18:55:33,746 - strategies.regime_aware_ensemble - INFO - Initialized RegimeAwareEnsembleStrategy with rolling_ic combination
+2025-08-12 18:55:33,746 - enhanced_paper_trading - INFO - Initialized strategy: regime_ensemble
+2025-08-12 18:55:33,746 - features.feature_engine - INFO - Initialized FeatureEngine
+2025-08-12 18:55:33,746 - strategies.ensemble_strategy - INFO - Initialized EnsembleStrategy with 5 trend features
+2025-08-12 18:55:33,746 - enhanced_paper_trading - INFO - Initialized strategy: ensemble
+2025-08-12 18:55:33,746 - enhanced_paper_trading - INFO - Initialized strategy: sma
+2025-08-12 18:55:33,746 - enhanced_paper_trading - INFO - Initialized strategy: momentum
+2025-08-12 18:55:33,746 - enhanced_paper_trading - INFO - Initialized EnhancedPaperTradingSystem with $100,000 capital
+2025-08-12 18:55:33,746 - enhanced_paper_trading - INFO - Running daily trading for 2024-01-15
+2025-08-12 18:55:35,780 - core.regime_detector - INFO - Detected regime: chop (confidence: 0.60)
+2025-08-12 18:55:35,780 - enhanced_paper_trading - INFO - Detected regime: chop (confidence: 0.60)
+2025-08-12 18:55:35,808 - core.regime_detector - WARNING - Insufficient data for regime detection: 206 < 252
+2025-08-12 18:55:35,827 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 18:55:35,827 - features.ensemble - INFO - Added feature 'ma_crossover' with 206 observations
+2025-08-12 18:55:35,827 - features.ensemble - INFO - Added feature 'momentum_5' with 206 observations
+2025-08-12 18:55:35,827 - features.ensemble - INFO - Added feature 'momentum_10' with 206 observations
+2025-08-12 18:55:35,827 - features.ensemble - INFO - Added feature 'trend_strength' with 206 observations
+2025-08-12 18:55:35,828 - features.ensemble - INFO - Added feature 'trend_consistency' with 206 observations
+2025-08-12 18:55:35,829 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_crossover': np.float64(-0.3908776337168323), 'momentum_5': np.float64(-0.002550540828511004), 'momentum_10': np.float64(0.15419373528605604), 'trend_strength': np.float64(-0.4523780901686006), 'trend_consistency': np.float64(0.0)}
+2025-08-12 18:55:35,832 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.370
+2025-08-12 18:55:35,833 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 18:55:35,833 - features.ensemble - INFO - Added feature 'ma_distance' with 206 observations
+2025-08-12 18:55:35,833 - features.ensemble - INFO - Added feature 'rsi' with 206 observations
+2025-08-12 18:55:35,833 - features.ensemble - INFO - Added feature 'bb_position' with 206 observations
+2025-08-12 18:55:35,833 - features.ensemble - INFO - Added feature 'zscore' with 206 observations
+2025-08-12 18:55:35,834 - features.ensemble - INFO - Added feature 'mean_reversion_strength' with 206 observations
+2025-08-12 18:55:35,835 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_distance': np.float64(-0.13061612803032072), 'rsi': np.float64(-0.5402020541770248), 'bb_position': np.float64(-0.026059910049000195), 'zscore': np.float64(-0.04430165801969529), 'mean_reversion_strength': np.float64(-0.25882024972395895)}
+2025-08-12 18:55:35,838 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.593
+2025-08-12 18:55:35,838 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 18:55:35,838 - features.ensemble - INFO - Added feature 'donchian_position' with 206 observations
+2025-08-12 18:55:35,838 - features.ensemble - INFO - Added feature 'breakout_strength' with 206 observations
+2025-08-12 18:55:35,839 - features.ensemble - INFO - Added feature 'resistance_break' with 206 observations
+2025-08-12 18:55:35,839 - features.ensemble - INFO - Added feature 'support_break' with 206 observations
+2025-08-12 18:55:35,840 - features.ensemble - INFO - Computed weights using rolling_ic: {'donchian_position': np.float64(-0.09927446688776163), 'breakout_strength': np.float64(-0.44960520573715124), 'resistance_break': np.float64(-0.44960520573715124), 'support_break': np.float64(-0.0015151216379358763)}
+2025-08-12 18:55:35,843 - features.ensemble - INFO - Combined 4 features into signal with mean confidence 0.586
+2025-08-12 18:55:35,844 - strategies.regime_aware_ensemble - INFO - Generated regime-aware signals for chop regime (confidence: 0.50)
+2025-08-12 18:55:35,844 - strategies.ensemble_strategy - INFO - Generating ensemble signals...
+2025-08-12 18:55:35,844 - features.feature_engine - INFO - Generating all features...
+2025-08-12 18:55:35,868 - features.feature_engine - INFO - Generated 55 features
+2025-08-12 18:55:35,868 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 18:55:35,868 - features.ensemble - INFO - Added feature 'SMA_Crossover_20_180' with 206 observations
+2025-08-12 18:55:35,869 - features.ensemble - INFO - Added feature 'EMA_Crossover_20_180' with 206 observations
+2025-08-12 18:55:35,869 - features.ensemble - INFO - Added feature 'MACD_Crossover' with 206 observations
+2025-08-12 18:55:35,869 - features.ensemble - INFO - Added feature 'RSI_Momentum' with 206 observations
+2025-08-12 18:55:35,869 - features.ensemble - INFO - Added feature 'Donchian_Breakout_20' with 206 observations
+2025-08-12 18:55:35,869 - features.ensemble - INFO - Added feature 'RSI_2_Extreme' with 206 observations
+2025-08-12 18:55:35,869 - features.ensemble - INFO - Added feature 'RSI_3_Extreme' with 206 observations
+2025-08-12 18:55:35,869 - features.ensemble - INFO - Added feature 'ZScore_20' with 206 observations
+2025-08-12 18:55:35,870 - features.ensemble - INFO - Added feature 'BB_Touch_Upper' with 206 observations
+2025-08-12 18:55:35,870 - features.ensemble - INFO - Added feature 'BB_Touch_Lower' with 206 observations
+2025-08-12 18:55:35,870 - features.ensemble - INFO - Added feature 'ATR_Pct' with 206 observations
+2025-08-12 18:55:35,870 - features.ensemble - INFO - Added feature 'Realized_Vol_20' with 206 observations
+2025-08-12 18:55:35,870 - features.ensemble - INFO - Added feature 'ADX_Trend' with 206 observations
+2025-08-12 18:55:35,870 - features.ensemble - INFO - Added feature 'Vol_High' with 206 observations
+2025-08-12 18:55:35,870 - features.ensemble - INFO - Added feature 'Vol_Low' with 206 observations
+2025-08-12 18:55:35,871 - features.ensemble - WARNING - Feature OBV_Slope contains non-finite values, filling with 0
+2025-08-12 18:55:35,871 - features.ensemble - INFO - Added feature 'OBV_Slope' with 206 observations
+2025-08-12 18:55:35,871 - features.ensemble - INFO - Added feature 'Volume_ZScore' with 206 observations
+2025-08-12 18:55:35,871 - features.ensemble - INFO - Added feature 'MFI_Overbought' with 206 observations
+2025-08-12 18:55:35,871 - features.ensemble - INFO - Added feature 'MFI_Oversold' with 206 observations
+2025-08-12 18:55:35,878 - features.ensemble - INFO - Computed weights using rolling_ic: {'SMA_Crossover_20_180': np.float64(0.10282012120674373), 'EMA_Crossover_20_180': np.float64(-0.14217133855080283), 'MACD_Crossover': np.float64(-0.07150807221553002), 'RSI_Momentum': np.float64(-0.02783529754690275), 'Donchian_Breakout_20': np.float64(0.031248316202899615), 'RSI_2_Extreme': np.float64(0.004065140631536497), 'RSI_3_Extreme': np.float64(0.005890650359073903), 'ZScore_20': np.float64(-0.018856797642838416), 'BB_Touch_Upper': np.float64(-0.007956512210664098), 'BB_Touch_Lower': np.float64(-0.007178716707163925), 'ATR_Pct': np.float64(0.052880327747202444), 'Realized_Vol_20': np.float64(0.09031707383285525), 'ADX_Trend': np.float64(0.03891643064914184), 'Vol_High': np.float64(0.07515007599122084), 'Vol_Low': np.float64(-0.006453967446946586), 'OBV_Slope': np.float64(0.0325013495363698), 'Volume_ZScore': np.float64(0.09717061131141652), 'MFI_Overbought': np.float64(0.14243836983119743), 'MFI_Oversold': np.float64(0.04464083037949359)}
+2025-08-12 18:55:35,884 - features.ensemble - INFO - Combined 19 features into signal with mean confidence 0.389
+2025-08-12 18:55:35,885 - strategies.ensemble_strategy - INFO - Applied confidence filter: 57 signals filtered out
+2025-08-12 18:55:35,885 - strategies.ensemble_strategy - INFO - Generated ensemble signals with mean absolute value: 0.611
+2025-08-12 18:55:36,250 - yfinance - ERROR - $SPY: possibly delisted; no price data found  (1d 2024-01-15 -> 2024-01-16)
+2025-08-12 18:55:36,279 - core.regime_detector - WARNING - Insufficient data for regime detection: 206 < 252
+2025-08-12 18:55:36,297 - features.ensemble - INFO - Added feature 'ma_crossover' with 206 observations
+2025-08-12 18:55:36,297 - features.ensemble - INFO - Added feature 'momentum_5' with 206 observations
+2025-08-12 18:55:36,298 - features.ensemble - INFO - Added feature 'momentum_10' with 206 observations
+2025-08-12 18:55:36,298 - features.ensemble - INFO - Added feature 'trend_strength' with 206 observations
+2025-08-12 18:55:36,298 - features.ensemble - INFO - Added feature 'trend_consistency' with 206 observations
+2025-08-12 18:55:36,300 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_crossover': 0.2, 'momentum_5': 0.2, 'momentum_10': 0.2, 'trend_strength': 0.2, 'trend_consistency': 0.2}
+2025-08-12 18:55:36,302 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.500
+2025-08-12 18:55:36,303 - features.ensemble - INFO - Added feature 'ma_distance' with 206 observations
+2025-08-12 18:55:36,303 - features.ensemble - INFO - Added feature 'rsi' with 206 observations
+2025-08-12 18:55:36,303 - features.ensemble - INFO - Added feature 'bb_position' with 206 observations
+2025-08-12 18:55:36,303 - features.ensemble - INFO - Added feature 'zscore' with 206 observations
+2025-08-12 18:55:36,303 - features.ensemble - INFO - Added feature 'mean_reversion_strength' with 206 observations
+2025-08-12 18:55:36,305 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_distance': 0.2, 'rsi': 0.2, 'bb_position': 0.2, 'zscore': 0.2, 'mean_reversion_strength': 0.2}
+2025-08-12 18:55:36,307 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.500
+2025-08-12 18:55:36,308 - features.ensemble - INFO - Added feature 'donchian_position' with 206 observations
+2025-08-12 18:55:36,308 - features.ensemble - INFO - Added feature 'breakout_strength' with 206 observations
+2025-08-12 18:55:36,308 - features.ensemble - INFO - Added feature 'resistance_break' with 206 observations
+2025-08-12 18:55:36,308 - features.ensemble - INFO - Added feature 'support_break' with 206 observations
+2025-08-12 18:55:36,310 - features.ensemble - INFO - Computed weights using rolling_ic: {'donchian_position': 0.25, 'breakout_strength': 0.25, 'resistance_break': 0.25, 'support_break': 0.25}
+2025-08-12 18:55:36,312 - features.ensemble - INFO - Combined 4 features into signal with mean confidence 0.500
+2025-08-12 18:55:36,314 - strategies.regime_aware_ensemble - INFO - Generated regime-aware signals for chop regime (confidence: 0.50)
+2025-08-12 18:55:36,314 - strategies.ensemble_strategy - INFO - Generating ensemble signals...
+2025-08-12 18:55:36,314 - features.feature_engine - INFO - Generating all features...
+2025-08-12 18:55:36,337 - features.feature_engine - INFO - Generated 55 features
+2025-08-12 18:55:36,337 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 18:55:36,338 - features.ensemble - INFO - Added feature 'SMA_Crossover_20_180' with 206 observations
+2025-08-12 18:55:36,338 - features.ensemble - INFO - Added feature 'EMA_Crossover_20_180' with 206 observations
+2025-08-12 18:55:36,338 - features.ensemble - INFO - Added feature 'MACD_Crossover' with 206 observations
+2025-08-12 18:55:36,338 - features.ensemble - INFO - Added feature 'RSI_Momentum' with 206 observations
+2025-08-12 18:55:36,338 - features.ensemble - INFO - Added feature 'Donchian_Breakout_20' with 206 observations
+2025-08-12 18:55:36,338 - features.ensemble - INFO - Added feature 'RSI_2_Extreme' with 206 observations
+2025-08-12 18:55:36,338 - features.ensemble - INFO - Added feature 'RSI_3_Extreme' with 206 observations
+2025-08-12 18:55:36,339 - features.ensemble - INFO - Added feature 'ZScore_20' with 206 observations
+2025-08-12 18:55:36,339 - features.ensemble - INFO - Added feature 'BB_Touch_Upper' with 206 observations
+2025-08-12 18:55:36,339 - features.ensemble - INFO - Added feature 'BB_Touch_Lower' with 206 observations
+2025-08-12 18:55:36,339 - features.ensemble - INFO - Added feature 'ATR_Pct' with 206 observations
+2025-08-12 18:55:36,339 - features.ensemble - INFO - Added feature 'Realized_Vol_20' with 206 observations
+2025-08-12 18:55:36,339 - features.ensemble - INFO - Added feature 'ADX_Trend' with 206 observations
+2025-08-12 18:55:36,339 - features.ensemble - INFO - Added feature 'Vol_High' with 206 observations
+2025-08-12 18:55:36,340 - features.ensemble - INFO - Added feature 'Vol_Low' with 206 observations
+2025-08-12 18:55:36,340 - features.ensemble - WARNING - Feature OBV_Slope contains non-finite values, filling with 0
+2025-08-12 18:55:36,340 - features.ensemble - INFO - Added feature 'OBV_Slope' with 206 observations
+2025-08-12 18:55:36,340 - features.ensemble - INFO - Added feature 'Volume_ZScore' with 206 observations
+2025-08-12 18:55:36,340 - features.ensemble - INFO - Added feature 'MFI_Overbought' with 206 observations
+2025-08-12 18:55:36,340 - features.ensemble - INFO - Added feature 'MFI_Oversold' with 206 observations
+2025-08-12 18:55:36,347 - features.ensemble - INFO - Computed weights using rolling_ic: {'SMA_Crossover_20_180': np.float64(0.08078537992195106), 'EMA_Crossover_20_180': np.float64(-0.3157824922874445), 'MACD_Crossover': np.float64(-0.03953928208026424), 'RSI_Momentum': np.float64(-0.024310209662979983), 'Donchian_Breakout_20': np.float64(0.0325048918769732), 'RSI_2_Extreme': np.float64(-0.028547429536071804), 'RSI_3_Extreme': np.float64(-0.012076805602535292), 'ZScore_20': np.float64(-0.03539500746158261), 'BB_Touch_Upper': np.float64(0.037721953743396416), 'BB_Touch_Lower': np.float64(-0.012536340524183304), 'ATR_Pct': np.float64(0.054858054696282965), 'Realized_Vol_20': np.float64(0.04376849298063872), 'ADX_Trend': np.float64(-0.060361061721065506), 'Vol_High': np.float64(0.10408633094642834), 'Vol_Low': np.float64(-0.011234345772940526), 'OBV_Slope': np.float64(-0.0034512407634522753), 'Volume_ZScore': np.float64(0.08980738059963268), 'MFI_Overbought': np.float64(-0.01060543304288437), 'MFI_Oversold': np.float64(0.0026278667792922978)}
+2025-08-12 18:55:36,351 - features.ensemble - INFO - Combined 19 features into signal with mean confidence 0.539
+2025-08-12 18:55:36,352 - strategies.ensemble_strategy - INFO - Applied confidence filter: 16 signals filtered out
+2025-08-12 18:55:36,353 - strategies.ensemble_strategy - INFO - Generated ensemble signals with mean absolute value: 0.893
+2025-08-12 18:55:36,649 - yfinance - ERROR - $QQQ: possibly delisted; no price data found  (1d 2024-01-15 -> 2024-01-16)
+2025-08-12 18:55:36,679 - core.regime_detector - WARNING - Insufficient data for regime detection: 206 < 252
+2025-08-12 18:55:36,697 - features.ensemble - INFO - Added feature 'ma_crossover' with 206 observations
+2025-08-12 18:55:36,697 - features.ensemble - INFO - Added feature 'momentum_5' with 206 observations
+2025-08-12 18:55:36,697 - features.ensemble - INFO - Added feature 'momentum_10' with 206 observations
+2025-08-12 18:55:36,698 - features.ensemble - INFO - Added feature 'trend_strength' with 206 observations
+2025-08-12 18:55:36,698 - features.ensemble - INFO - Added feature 'trend_consistency' with 206 observations
+2025-08-12 18:55:36,700 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_crossover': 0.2, 'momentum_5': 0.2, 'momentum_10': 0.2, 'trend_strength': 0.2, 'trend_consistency': 0.2}
+2025-08-12 18:55:36,702 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.500
+2025-08-12 18:55:36,703 - features.ensemble - INFO - Added feature 'ma_distance' with 206 observations
+2025-08-12 18:55:36,703 - features.ensemble - INFO - Added feature 'rsi' with 206 observations
+2025-08-12 18:55:36,703 - features.ensemble - INFO - Added feature 'bb_position' with 206 observations
+2025-08-12 18:55:36,703 - features.ensemble - INFO - Added feature 'zscore' with 206 observations
+2025-08-12 18:55:36,703 - features.ensemble - INFO - Added feature 'mean_reversion_strength' with 206 observations
+2025-08-12 18:55:36,705 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_distance': 0.2, 'rsi': 0.2, 'bb_position': 0.2, 'zscore': 0.2, 'mean_reversion_strength': 0.2}
+2025-08-12 18:55:36,707 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.500
+2025-08-12 18:55:36,708 - features.ensemble - INFO - Added feature 'donchian_position' with 206 observations
+2025-08-12 18:55:36,708 - features.ensemble - INFO - Added feature 'breakout_strength' with 206 observations
+2025-08-12 18:55:36,708 - features.ensemble - INFO - Added feature 'resistance_break' with 206 observations
+2025-08-12 18:55:36,708 - features.ensemble - INFO - Added feature 'support_break' with 206 observations
+2025-08-12 18:55:36,710 - features.ensemble - INFO - Computed weights using rolling_ic: {'donchian_position': 0.25, 'breakout_strength': 0.25, 'resistance_break': 0.25, 'support_break': 0.25}
+2025-08-12 18:55:36,712 - features.ensemble - INFO - Combined 4 features into signal with mean confidence 0.500
+2025-08-12 18:55:36,714 - strategies.regime_aware_ensemble - INFO - Generated regime-aware signals for chop regime (confidence: 0.50)
+2025-08-12 18:55:36,714 - strategies.ensemble_strategy - INFO - Generating ensemble signals...
+2025-08-12 18:55:36,714 - features.feature_engine - INFO - Generating all features...
+2025-08-12 18:55:36,737 - features.feature_engine - INFO - Generated 55 features
+2025-08-12 18:55:36,737 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 18:55:36,738 - features.ensemble - INFO - Added feature 'SMA_Crossover_20_180' with 206 observations
+2025-08-12 18:55:36,738 - features.ensemble - INFO - Added feature 'EMA_Crossover_20_180' with 206 observations
+2025-08-12 18:55:36,738 - features.ensemble - INFO - Added feature 'MACD_Crossover' with 206 observations
+2025-08-12 18:55:36,738 - features.ensemble - INFO - Added feature 'RSI_Momentum' with 206 observations
+2025-08-12 18:55:36,738 - features.ensemble - INFO - Added feature 'Donchian_Breakout_20' with 206 observations
+2025-08-12 18:55:36,738 - features.ensemble - INFO - Added feature 'RSI_2_Extreme' with 206 observations
+2025-08-12 18:55:36,738 - features.ensemble - INFO - Added feature 'RSI_3_Extreme' with 206 observations
+2025-08-12 18:55:36,738 - features.ensemble - INFO - Added feature 'ZScore_20' with 206 observations
+2025-08-12 18:55:36,739 - features.ensemble - INFO - Added feature 'BB_Touch_Upper' with 206 observations
+2025-08-12 18:55:36,739 - features.ensemble - INFO - Added feature 'BB_Touch_Lower' with 206 observations
+2025-08-12 18:55:36,739 - features.ensemble - INFO - Added feature 'ATR_Pct' with 206 observations
+2025-08-12 18:55:36,739 - features.ensemble - INFO - Added feature 'Realized_Vol_20' with 206 observations
+2025-08-12 18:55:36,739 - features.ensemble - INFO - Added feature 'ADX_Trend' with 206 observations
+2025-08-12 18:55:36,739 - features.ensemble - INFO - Added feature 'Vol_High' with 206 observations
+2025-08-12 18:55:36,739 - features.ensemble - INFO - Added feature 'Vol_Low' with 206 observations
+2025-08-12 18:55:36,739 - features.ensemble - WARNING - Feature OBV_Slope contains non-finite values, filling with 0
+2025-08-12 18:55:36,740 - features.ensemble - INFO - Added feature 'OBV_Slope' with 206 observations
+2025-08-12 18:55:36,740 - features.ensemble - INFO - Added feature 'Volume_ZScore' with 206 observations
+2025-08-12 18:55:36,740 - features.ensemble - INFO - Added feature 'MFI_Overbought' with 206 observations
+2025-08-12 18:55:36,740 - features.ensemble - INFO - Added feature 'MFI_Oversold' with 206 observations
+2025-08-12 18:55:36,746 - features.ensemble - INFO - Computed weights using rolling_ic: {'SMA_Crossover_20_180': np.float64(0.09309819703507632), 'EMA_Crossover_20_180': np.float64(-0.02726391361220074), 'MACD_Crossover': np.float64(-0.07337511941381016), 'RSI_Momentum': np.float64(-0.015606875488076844), 'Donchian_Breakout_20': np.float64(-0.0017959560600845743), 'RSI_2_Extreme': np.float64(0.028254148488254593), 'RSI_3_Extreme': np.float64(0.00821372263686898), 'ZScore_20': np.float64(-0.008166426651565549), 'BB_Touch_Upper': np.float64(0.021741827283919664), 'BB_Touch_Lower': np.float64(-0.07451725194895018), 'ATR_Pct': np.float64(0.034379435233214184), 'Realized_Vol_20': np.float64(0.01332372268525618), 'ADX_Trend': np.float64(0.08152054062923476), 'Vol_High': np.float64(0.2100310548523624), 'Vol_Low': np.float64(0.17405506781295565), 'OBV_Slope': np.float64(0.016007655287067525), 'Volume_ZScore': np.float64(-0.014540881793788514), 'MFI_Overbought': np.float64(0.0), 'MFI_Oversold': np.float64(0.1041082030873132)}
+2025-08-12 18:55:36,751 - features.ensemble - INFO - Combined 19 features into signal with mean confidence 0.350
+2025-08-12 18:55:36,752 - strategies.ensemble_strategy - INFO - Applied confidence filter: 71 signals filtered out
+2025-08-12 18:55:36,752 - strategies.ensemble_strategy - INFO - Generated ensemble signals with mean absolute value: 0.531
+2025-08-12 18:55:37,058 - yfinance - ERROR - $IWM: possibly delisted; no price data found  (1d 2024-01-15 -> 2024-01-16)
+2025-08-12 18:55:37,058 - enhanced_paper_trading - INFO - Daily Summary - 2024-01-15:
+2025-08-12 18:55:37,058 - enhanced_paper_trading - INFO -   Regime: chop (confidence: 0.60)
+2025-08-12 18:55:37,058 - enhanced_paper_trading - INFO -   Capital: $100,000.00
+2025-08-12 18:55:37,058 - enhanced_paper_trading - INFO -   Total Return: 0.00%
+2025-08-12 18:55:37,058 - enhanced_paper_trading - INFO -   Sharpe Ratio: 0.00
+2025-08-12 18:55:37,058 - enhanced_paper_trading - INFO -   Max Drawdown: 0.00%
+2025-08-12 18:55:37,058 - enhanced_paper_trading - INFO -   Positions: 0
+2025-08-12 18:55:37,059 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 18:55:37,064 - core.regime_detector - INFO - Detected regime: trend (confidence: 0.56)
+2025-08-12 18:55:37,064 - core.feature_reweighter - INFO - Initialized FeatureReweighter with 60 day window
+2025-08-12 18:55:37,073 - core.feature_reweighter - INFO - Initialized AdaptiveFeatureEngine
+2025-08-12 18:55:37,073 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 18:55:37,073 - strategies.regime_aware_ensemble - INFO - Initialized RegimeAwareEnsembleStrategy with rolling_ic combination
+2025-08-12 18:55:37,077 - core.regime_detector - INFO - Detected regime: trend (confidence: 0.56)
+2025-08-12 18:55:37,129 - features.ensemble - INFO - Initialized SignalCombiner with 366 price observations
+2025-08-12 18:55:37,129 - features.ensemble - INFO - Added feature 'ma_crossover' with 366 observations
+2025-08-12 18:55:37,129 - features.ensemble - INFO - Added feature 'momentum_5' with 366 observations
+2025-08-12 18:55:37,129 - features.ensemble - INFO - Added feature 'momentum_10' with 366 observations
+2025-08-12 18:55:37,129 - features.ensemble - INFO - Added feature 'trend_strength' with 366 observations
+2025-08-12 18:55:37,130 - features.ensemble - INFO - Added feature 'trend_consistency' with 366 observations
+2025-08-12 18:55:37,132 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_crossover': np.float64(-0.22312673693440738), 'momentum_5': np.float64(-0.2816850548885172), 'momentum_10': np.float64(-0.23043819705905266), 'trend_strength': np.float64(-0.17629978322560563), 'trend_consistency': np.float64(-0.08845022789241731)}
+2025-08-12 18:55:37,134 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.638
+2025-08-12 18:55:37,135 - features.ensemble - INFO - Initialized SignalCombiner with 366 price observations
+2025-08-12 18:55:37,135 - features.ensemble - INFO - Added feature 'ma_distance' with 366 observations
+2025-08-12 18:55:37,135 - features.ensemble - INFO - Added feature 'rsi' with 366 observations
+2025-08-12 18:55:37,135 - features.ensemble - INFO - Added feature 'bb_position' with 366 observations
+2025-08-12 18:55:37,136 - features.ensemble - INFO - Added feature 'zscore' with 366 observations
+2025-08-12 18:55:37,136 - features.ensemble - INFO - Added feature 'mean_reversion_strength' with 366 observations
+2025-08-12 18:55:37,137 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_distance': np.float64(-0.34334488451276685), 'rsi': np.float64(-0.19639036578524524), 'bb_position': np.float64(-0.21620195365314238), 'zscore': np.float64(-0.24406279604884548), 'mean_reversion_strength': np.float64(0.0)}
+2025-08-12 18:55:37,140 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.583
+2025-08-12 18:55:37,140 - features.ensemble - INFO - Initialized SignalCombiner with 366 price observations
+2025-08-12 18:55:37,141 - features.ensemble - INFO - Added feature 'donchian_position' with 366 observations
+2025-08-12 18:55:37,141 - features.ensemble - INFO - Added feature 'breakout_strength' with 366 observations
+2025-08-12 18:55:37,141 - features.ensemble - INFO - Added feature 'resistance_break' with 366 observations
+2025-08-12 18:55:37,141 - features.ensemble - INFO - Added feature 'support_break' with 366 observations
+2025-08-12 18:55:37,143 - features.ensemble - INFO - Computed weights using rolling_ic: {'donchian_position': np.float64(-0.28891280280133463), 'breakout_strength': np.float64(-0.20054487714913596), 'resistance_break': np.float64(-0.20054487714913596), 'support_break': np.float64(-0.3099974429003933)}
+2025-08-12 18:55:37,145 - features.ensemble - INFO - Combined 4 features into signal with mean confidence 0.750
+2025-08-12 18:55:37,147 - strategies.regime_aware_ensemble - INFO - Generated regime-aware signals for trend regime (confidence: 0.56)
+2025-08-12 19:02:15,887 - core.regime_detector - INFO - Initialized RegimeDetector with 60 day lookback
+2025-08-12 19:02:15,892 - core.regime_detector - INFO - Detected regime: chop (confidence: 0.82)
+2025-08-12 19:02:15,893 - core.feature_reweighter - INFO - Initialized FeatureReweighter with 30 day window
+2025-08-12 19:02:15,920 - core.regime_detector - INFO - Initialized RegimeDetector with 60 day lookback
+2025-08-12 19:02:15,920 - strategies.regime_aware_ensemble - INFO - Initialized RegimeAwareEnsembleStrategy with rolling_ic combination
+2025-08-12 19:02:15,924 - core.regime_detector - INFO - Detected regime: trend (confidence: 0.56)
+2025-08-12 19:02:15,978 - features.ensemble - INFO - Initialized SignalCombiner with 366 price observations
+2025-08-12 19:02:15,978 - features.ensemble - INFO - Added feature 'ma_crossover' with 366 observations
+2025-08-12 19:02:15,978 - features.ensemble - INFO - Added feature 'momentum_5' with 366 observations
+2025-08-12 19:02:15,978 - features.ensemble - INFO - Added feature 'momentum_10' with 366 observations
+2025-08-12 19:02:15,979 - features.ensemble - INFO - Added feature 'trend_strength' with 366 observations
+2025-08-12 19:02:15,979 - features.ensemble - INFO - Added feature 'trend_consistency' with 366 observations
+2025-08-12 19:02:15,981 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_crossover': np.float64(-0.22312673693440738), 'momentum_5': np.float64(-0.2816850548885172), 'momentum_10': np.float64(-0.23043819705905266), 'trend_strength': np.float64(-0.17629978322560563), 'trend_consistency': np.float64(-0.08845022789241731)}
+2025-08-12 19:02:15,983 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.638
+2025-08-12 19:02:15,984 - features.ensemble - INFO - Initialized SignalCombiner with 366 price observations
+2025-08-12 19:02:15,984 - features.ensemble - INFO - Added feature 'ma_distance' with 366 observations
+2025-08-12 19:02:15,984 - features.ensemble - INFO - Added feature 'rsi' with 366 observations
+2025-08-12 19:02:15,985 - features.ensemble - INFO - Added feature 'bb_position' with 366 observations
+2025-08-12 19:02:15,985 - features.ensemble - INFO - Added feature 'zscore' with 366 observations
+2025-08-12 19:02:15,985 - features.ensemble - INFO - Added feature 'mean_reversion_strength' with 366 observations
+2025-08-12 19:02:15,987 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_distance': np.float64(-0.34334488451276685), 'rsi': np.float64(-0.19639036578524524), 'bb_position': np.float64(-0.21620195365314238), 'zscore': np.float64(-0.24406279604884548), 'mean_reversion_strength': np.float64(0.0)}
+2025-08-12 19:02:15,989 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.583
+2025-08-12 19:02:15,989 - features.ensemble - INFO - Initialized SignalCombiner with 366 price observations
+2025-08-12 19:02:15,990 - features.ensemble - INFO - Added feature 'donchian_position' with 366 observations
+2025-08-12 19:02:15,990 - features.ensemble - INFO - Added feature 'breakout_strength' with 366 observations
+2025-08-12 19:02:15,990 - features.ensemble - INFO - Added feature 'resistance_break' with 366 observations
+2025-08-12 19:02:15,990 - features.ensemble - INFO - Added feature 'support_break' with 366 observations
+2025-08-12 19:02:15,992 - features.ensemble - INFO - Computed weights using rolling_ic: {'donchian_position': np.float64(-0.28891280280133463), 'breakout_strength': np.float64(-0.20054487714913596), 'resistance_break': np.float64(-0.20054487714913596), 'support_break': np.float64(-0.3099974429003933)}
+2025-08-12 19:02:15,994 - features.ensemble - INFO - Combined 4 features into signal with mean confidence 0.750
+2025-08-12 19:02:15,995 - strategies.regime_aware_ensemble - INFO - Generated regime-aware signals for trend regime (confidence: 0.56)
+2025-08-12 19:02:15,996 - enhanced_paper_trading - INFO - Loaded config from config/enhanced_paper_trading_config.json
+2025-08-12 19:02:15,996 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 19:02:15,996 - core.feature_reweighter - INFO - Initialized FeatureReweighter with 60 day window
+2025-08-12 19:02:15,996 - core.feature_reweighter - INFO - Initialized AdaptiveFeatureEngine
+2025-08-12 19:02:15,996 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 19:02:15,996 - strategies.regime_aware_ensemble - INFO - Initialized RegimeAwareEnsembleStrategy with rolling_ic combination
+2025-08-12 19:02:15,996 - enhanced_paper_trading - INFO - Initialized strategy: regime_ensemble
+2025-08-12 19:02:15,996 - features.feature_engine - INFO - Initialized FeatureEngine
+2025-08-12 19:02:15,996 - strategies.ensemble_strategy - INFO - Initialized EnsembleStrategy with 5 trend features
+2025-08-12 19:02:15,996 - enhanced_paper_trading - INFO - Initialized strategy: ensemble
+2025-08-12 19:02:15,996 - enhanced_paper_trading - INFO - Initialized strategy: sma
+2025-08-12 19:02:15,996 - enhanced_paper_trading - INFO - Initialized strategy: momentum
+2025-08-12 19:02:15,996 - enhanced_paper_trading - INFO - Initialized EnhancedPaperTradingSystem with $100,000 capital
+2025-08-12 19:02:15,996 - enhanced_paper_trading - INFO - Running daily trading for 2024-01-15
+2025-08-12 19:02:16,545 - core.regime_detector - INFO - Detected regime: chop (confidence: 0.60)
+2025-08-12 19:02:16,545 - enhanced_paper_trading - INFO - Detected regime: chop (confidence: 0.60)
+2025-08-12 19:02:16,575 - core.regime_detector - WARNING - Insufficient data for regime detection: 206 < 252
+2025-08-12 19:02:16,594 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 19:02:16,594 - features.ensemble - INFO - Added feature 'ma_crossover' with 206 observations
+2025-08-12 19:02:16,595 - features.ensemble - INFO - Added feature 'momentum_5' with 206 observations
+2025-08-12 19:02:16,595 - features.ensemble - INFO - Added feature 'momentum_10' with 206 observations
+2025-08-12 19:02:16,595 - features.ensemble - INFO - Added feature 'trend_strength' with 206 observations
+2025-08-12 19:02:16,595 - features.ensemble - INFO - Added feature 'trend_consistency' with 206 observations
+2025-08-12 19:02:16,597 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_crossover': np.float64(-0.3908795093682756), 'momentum_5': np.float64(-0.0025445978994017918), 'momentum_10': np.float64(0.15419592201386959), 'trend_strength': np.float64(-0.45237997071845293), 'trend_consistency': np.float64(0.0)}
+2025-08-12 19:02:16,600 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.370
+2025-08-12 19:02:16,600 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 19:02:16,601 - features.ensemble - INFO - Added feature 'ma_distance' with 206 observations
+2025-08-12 19:02:16,601 - features.ensemble - INFO - Added feature 'rsi' with 206 observations
+2025-08-12 19:02:16,601 - features.ensemble - INFO - Added feature 'bb_position' with 206 observations
+2025-08-12 19:02:16,601 - features.ensemble - INFO - Added feature 'zscore' with 206 observations
+2025-08-12 19:02:16,601 - features.ensemble - INFO - Added feature 'mean_reversion_strength' with 206 observations
+2025-08-12 19:02:16,603 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_distance': np.float64(-0.13061527705083298), 'rsi': np.float64(-0.5402048823996365), 'bb_position': np.float64(-0.02605870835880362), 'zscore': np.float64(-0.04430070125808297), 'mean_reversion_strength': np.float64(-0.25882043093264384)}
+2025-08-12 19:02:16,605 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.593
+2025-08-12 19:02:16,606 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 19:02:16,606 - features.ensemble - INFO - Added feature 'donchian_position' with 206 observations
+2025-08-12 19:02:16,606 - features.ensemble - INFO - Added feature 'breakout_strength' with 206 observations
+2025-08-12 19:02:16,606 - features.ensemble - INFO - Added feature 'resistance_break' with 206 observations
+2025-08-12 19:02:16,606 - features.ensemble - INFO - Added feature 'support_break' with 206 observations
+2025-08-12 19:02:16,608 - features.ensemble - INFO - Computed weights using rolling_ic: {'donchian_position': np.float64(-0.09927113239215667), 'breakout_strength': np.float64(-0.4496077291199975), 'resistance_break': np.float64(-0.4496077291199975), 'support_break': np.float64(-0.0015134093678482962)}
+2025-08-12 19:02:16,610 - features.ensemble - INFO - Combined 4 features into signal with mean confidence 0.586
+2025-08-12 19:02:16,612 - strategies.regime_aware_ensemble - INFO - Generated regime-aware signals for chop regime (confidence: 0.50)
+2025-08-12 19:02:16,612 - strategies.ensemble_strategy - INFO - Generating ensemble signals...
+2025-08-12 19:02:16,612 - features.feature_engine - INFO - Generating all features...
+2025-08-12 19:02:16,637 - features.feature_engine - INFO - Generated 55 features
+2025-08-12 19:02:16,638 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 19:02:16,638 - features.ensemble - INFO - Added feature 'SMA_Crossover_20_180' with 206 observations
+2025-08-12 19:02:16,638 - features.ensemble - INFO - Added feature 'EMA_Crossover_20_180' with 206 observations
+2025-08-12 19:02:16,638 - features.ensemble - INFO - Added feature 'MACD_Crossover' with 206 observations
+2025-08-12 19:02:16,638 - features.ensemble - INFO - Added feature 'RSI_Momentum' with 206 observations
+2025-08-12 19:02:16,638 - features.ensemble - INFO - Added feature 'Donchian_Breakout_20' with 206 observations
+2025-08-12 19:02:16,639 - features.ensemble - INFO - Added feature 'RSI_2_Extreme' with 206 observations
+2025-08-12 19:02:16,639 - features.ensemble - INFO - Added feature 'RSI_3_Extreme' with 206 observations
+2025-08-12 19:02:16,639 - features.ensemble - INFO - Added feature 'ZScore_20' with 206 observations
+2025-08-12 19:02:16,639 - features.ensemble - INFO - Added feature 'BB_Touch_Upper' with 206 observations
+2025-08-12 19:02:16,639 - features.ensemble - INFO - Added feature 'BB_Touch_Lower' with 206 observations
+2025-08-12 19:02:16,639 - features.ensemble - INFO - Added feature 'ATR_Pct' with 206 observations
+2025-08-12 19:02:16,639 - features.ensemble - INFO - Added feature 'Realized_Vol_20' with 206 observations
+2025-08-12 19:02:16,639 - features.ensemble - INFO - Added feature 'ADX_Trend' with 206 observations
+2025-08-12 19:02:16,639 - features.ensemble - INFO - Added feature 'Vol_High' with 206 observations
+2025-08-12 19:02:16,640 - features.ensemble - INFO - Added feature 'Vol_Low' with 206 observations
+2025-08-12 19:02:16,640 - features.ensemble - WARNING - Feature OBV_Slope contains non-finite values, filling with 0
+2025-08-12 19:02:16,640 - features.ensemble - INFO - Added feature 'OBV_Slope' with 206 observations
+2025-08-12 19:02:16,640 - features.ensemble - INFO - Added feature 'Volume_ZScore' with 206 observations
+2025-08-12 19:02:16,640 - features.ensemble - INFO - Added feature 'MFI_Overbought' with 206 observations
+2025-08-12 19:02:16,640 - features.ensemble - INFO - Added feature 'MFI_Oversold' with 206 observations
+2025-08-12 19:02:16,647 - features.ensemble - INFO - Computed weights using rolling_ic: {'SMA_Crossover_20_180': np.float64(0.10281898753149393), 'EMA_Crossover_20_180': np.float64(-0.1421708238617591), 'MACD_Crossover': np.float64(-0.07150733800786817), 'RSI_Momentum': np.float64(-0.027835724937805933), 'Donchian_Breakout_20': np.float64(0.031248581504008454), 'RSI_2_Extreme': np.float64(0.0040673124385118015), 'RSI_3_Extreme': np.float64(0.00589099728237405), 'ZScore_20': np.float64(-0.018856426411693803), 'BB_Touch_Upper': np.float64(-0.007956233189943655), 'BB_Touch_Lower': np.float64(-0.007179673691042696), 'ATR_Pct': np.float64(0.052880695498351726), 'Realized_Vol_20': np.float64(0.0903166340100871), 'ADX_Trend': np.float64(0.0389162204234764), 'Vol_High': np.float64(0.07515005319717141), 'Vol_Low': np.float64(-0.006453545254934771), 'OBV_Slope': np.float64(0.03250209263152475), 'Volume_ZScore': np.float64(0.09716952771373966), 'MFI_Overbought': np.float64(0.1424380471730889), 'MFI_Oversold': np.float64(0.04464108524112374)}
+2025-08-12 19:02:16,653 - features.ensemble - INFO - Combined 19 features into signal with mean confidence 0.389
+2025-08-12 19:02:16,654 - strategies.ensemble_strategy - INFO - Applied confidence filter: 57 signals filtered out
+2025-08-12 19:02:16,655 - strategies.ensemble_strategy - INFO - Generated ensemble signals with mean absolute value: 0.611
+2025-08-12 19:02:16,746 - yfinance - ERROR - $SPY: possibly delisted; no price data found  (1d 2024-01-15 -> 2024-01-16)
+2025-08-12 19:02:16,777 - core.regime_detector - WARNING - Insufficient data for regime detection: 206 < 252
+2025-08-12 19:02:16,796 - features.ensemble - INFO - Added feature 'ma_crossover' with 206 observations
+2025-08-12 19:02:16,796 - features.ensemble - INFO - Added feature 'momentum_5' with 206 observations
+2025-08-12 19:02:16,796 - features.ensemble - INFO - Added feature 'momentum_10' with 206 observations
+2025-08-12 19:02:16,796 - features.ensemble - INFO - Added feature 'trend_strength' with 206 observations
+2025-08-12 19:02:16,797 - features.ensemble - INFO - Added feature 'trend_consistency' with 206 observations
+2025-08-12 19:02:16,798 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_crossover': 0.2, 'momentum_5': 0.2, 'momentum_10': 0.2, 'trend_strength': 0.2, 'trend_consistency': 0.2}
+2025-08-12 19:02:16,801 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.500
+2025-08-12 19:02:16,801 - features.ensemble - INFO - Added feature 'ma_distance' with 206 observations
+2025-08-12 19:02:16,802 - features.ensemble - INFO - Added feature 'rsi' with 206 observations
+2025-08-12 19:02:16,802 - features.ensemble - INFO - Added feature 'bb_position' with 206 observations
+2025-08-12 19:02:16,802 - features.ensemble - INFO - Added feature 'zscore' with 206 observations
+2025-08-12 19:02:16,802 - features.ensemble - INFO - Added feature 'mean_reversion_strength' with 206 observations
+2025-08-12 19:02:16,804 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_distance': 0.2, 'rsi': 0.2, 'bb_position': 0.2, 'zscore': 0.2, 'mean_reversion_strength': 0.2}
+2025-08-12 19:02:16,806 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.500
+2025-08-12 19:02:16,807 - features.ensemble - INFO - Added feature 'donchian_position' with 206 observations
+2025-08-12 19:02:16,807 - features.ensemble - INFO - Added feature 'breakout_strength' with 206 observations
+2025-08-12 19:02:16,807 - features.ensemble - INFO - Added feature 'resistance_break' with 206 observations
+2025-08-12 19:02:16,807 - features.ensemble - INFO - Added feature 'support_break' with 206 observations
+2025-08-12 19:02:16,809 - features.ensemble - INFO - Computed weights using rolling_ic: {'donchian_position': 0.25, 'breakout_strength': 0.25, 'resistance_break': 0.25, 'support_break': 0.25}
+2025-08-12 19:02:16,811 - features.ensemble - INFO - Combined 4 features into signal with mean confidence 0.500
+2025-08-12 19:02:16,813 - strategies.regime_aware_ensemble - INFO - Generated regime-aware signals for chop regime (confidence: 0.50)
+2025-08-12 19:02:16,813 - strategies.ensemble_strategy - INFO - Generating ensemble signals...
+2025-08-12 19:02:16,813 - features.feature_engine - INFO - Generating all features...
+2025-08-12 19:02:16,838 - features.feature_engine - INFO - Generated 55 features
+2025-08-12 19:02:16,838 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 19:02:16,838 - features.ensemble - INFO - Added feature 'SMA_Crossover_20_180' with 206 observations
+2025-08-12 19:02:16,838 - features.ensemble - INFO - Added feature 'EMA_Crossover_20_180' with 206 observations
+2025-08-12 19:02:16,838 - features.ensemble - INFO - Added feature 'MACD_Crossover' with 206 observations
+2025-08-12 19:02:16,838 - features.ensemble - INFO - Added feature 'RSI_Momentum' with 206 observations
+2025-08-12 19:02:16,839 - features.ensemble - INFO - Added feature 'Donchian_Breakout_20' with 206 observations
+2025-08-12 19:02:16,839 - features.ensemble - INFO - Added feature 'RSI_2_Extreme' with 206 observations
+2025-08-12 19:02:16,839 - features.ensemble - INFO - Added feature 'RSI_3_Extreme' with 206 observations
+2025-08-12 19:02:16,839 - features.ensemble - INFO - Added feature 'ZScore_20' with 206 observations
+2025-08-12 19:02:16,839 - features.ensemble - INFO - Added feature 'BB_Touch_Upper' with 206 observations
+2025-08-12 19:02:16,839 - features.ensemble - INFO - Added feature 'BB_Touch_Lower' with 206 observations
+2025-08-12 19:02:16,839 - features.ensemble - INFO - Added feature 'ATR_Pct' with 206 observations
+2025-08-12 19:02:16,839 - features.ensemble - INFO - Added feature 'Realized_Vol_20' with 206 observations
+2025-08-12 19:02:16,839 - features.ensemble - INFO - Added feature 'ADX_Trend' with 206 observations
+2025-08-12 19:02:16,840 - features.ensemble - INFO - Added feature 'Vol_High' with 206 observations
+2025-08-12 19:02:16,840 - features.ensemble - INFO - Added feature 'Vol_Low' with 206 observations
+2025-08-12 19:02:16,840 - features.ensemble - WARNING - Feature OBV_Slope contains non-finite values, filling with 0
+2025-08-12 19:02:16,840 - features.ensemble - INFO - Added feature 'OBV_Slope' with 206 observations
+2025-08-12 19:02:16,840 - features.ensemble - INFO - Added feature 'Volume_ZScore' with 206 observations
+2025-08-12 19:02:16,840 - features.ensemble - INFO - Added feature 'MFI_Overbought' with 206 observations
+2025-08-12 19:02:16,840 - features.ensemble - INFO - Added feature 'MFI_Oversold' with 206 observations
+2025-08-12 19:02:16,847 - features.ensemble - INFO - Computed weights using rolling_ic: {'SMA_Crossover_20_180': np.float64(0.0807852419326488), 'EMA_Crossover_20_180': np.float64(-0.3157793890396357), 'MACD_Crossover': np.float64(-0.03953897465537665), 'RSI_Momentum': np.float64(-0.024309848921790434), 'Donchian_Breakout_20': np.float64(0.03250412303696216), 'RSI_2_Extreme': np.float64(-0.02854790707289877), 'RSI_3_Extreme': np.float64(-0.012076775257348973), 'ZScore_20': np.float64(-0.035395218792779994), 'BB_Touch_Upper': np.float64(0.0377209798324666), 'BB_Touch_Lower': np.float64(-0.012535629847228872), 'ATR_Pct': np.float64(0.0548572106816179), 'Realized_Vol_20': np.float64(0.04376764745114434), 'ADX_Trend': np.float64(-0.06036085989735976), 'Vol_High': np.float64(0.10408603430066934), 'Vol_Low': np.float64(-0.011235080080041716), 'OBV_Slope': np.float64(-0.0034527641379654738), 'Volume_ZScore': np.float64(0.0898064592740472), 'MFI_Overbought': np.float64(-0.010605514446172382), 'MFI_Oversold': np.float64(0.002634341341844907)}
+2025-08-12 19:02:16,852 - features.ensemble - INFO - Combined 19 features into signal with mean confidence 0.539
+2025-08-12 19:02:16,853 - strategies.ensemble_strategy - INFO - Applied confidence filter: 16 signals filtered out
+2025-08-12 19:02:16,853 - strategies.ensemble_strategy - INFO - Generated ensemble signals with mean absolute value: 0.893
+2025-08-12 19:02:16,929 - yfinance - ERROR - $QQQ: possibly delisted; no price data found  (1d 2024-01-15 -> 2024-01-16)
+2025-08-12 19:02:16,961 - core.regime_detector - WARNING - Insufficient data for regime detection: 206 < 252
+2025-08-12 19:02:16,979 - features.ensemble - INFO - Added feature 'ma_crossover' with 206 observations
+2025-08-12 19:02:16,979 - features.ensemble - INFO - Added feature 'momentum_5' with 206 observations
+2025-08-12 19:02:16,979 - features.ensemble - INFO - Added feature 'momentum_10' with 206 observations
+2025-08-12 19:02:16,980 - features.ensemble - INFO - Added feature 'trend_strength' with 206 observations
+2025-08-12 19:02:16,980 - features.ensemble - INFO - Added feature 'trend_consistency' with 206 observations
+2025-08-12 19:02:16,981 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_crossover': 0.2, 'momentum_5': 0.2, 'momentum_10': 0.2, 'trend_strength': 0.2, 'trend_consistency': 0.2}
+2025-08-12 19:02:16,984 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.500
+2025-08-12 19:02:16,985 - features.ensemble - INFO - Added feature 'ma_distance' with 206 observations
+2025-08-12 19:02:16,985 - features.ensemble - INFO - Added feature 'rsi' with 206 observations
+2025-08-12 19:02:16,985 - features.ensemble - INFO - Added feature 'bb_position' with 206 observations
+2025-08-12 19:02:16,985 - features.ensemble - INFO - Added feature 'zscore' with 206 observations
+2025-08-12 19:02:16,985 - features.ensemble - INFO - Added feature 'mean_reversion_strength' with 206 observations
+2025-08-12 19:02:16,987 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_distance': 0.2, 'rsi': 0.2, 'bb_position': 0.2, 'zscore': 0.2, 'mean_reversion_strength': 0.2}
+2025-08-12 19:02:16,989 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.500
+2025-08-12 19:02:16,990 - features.ensemble - INFO - Added feature 'donchian_position' with 206 observations
+2025-08-12 19:02:16,990 - features.ensemble - INFO - Added feature 'breakout_strength' with 206 observations
+2025-08-12 19:02:16,990 - features.ensemble - INFO - Added feature 'resistance_break' with 206 observations
+2025-08-12 19:02:16,990 - features.ensemble - INFO - Added feature 'support_break' with 206 observations
+2025-08-12 19:02:16,992 - features.ensemble - INFO - Computed weights using rolling_ic: {'donchian_position': 0.25, 'breakout_strength': 0.25, 'resistance_break': 0.25, 'support_break': 0.25}
+2025-08-12 19:02:16,994 - features.ensemble - INFO - Combined 4 features into signal with mean confidence 0.500
+2025-08-12 19:02:16,996 - strategies.regime_aware_ensemble - INFO - Generated regime-aware signals for chop regime (confidence: 0.50)
+2025-08-12 19:02:16,996 - strategies.ensemble_strategy - INFO - Generating ensemble signals...
+2025-08-12 19:02:16,996 - features.feature_engine - INFO - Generating all features...
+2025-08-12 19:02:17,020 - features.feature_engine - INFO - Generated 55 features
+2025-08-12 19:02:17,020 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 19:02:17,021 - features.ensemble - INFO - Added feature 'SMA_Crossover_20_180' with 206 observations
+2025-08-12 19:02:17,021 - features.ensemble - INFO - Added feature 'EMA_Crossover_20_180' with 206 observations
+2025-08-12 19:02:17,021 - features.ensemble - INFO - Added feature 'MACD_Crossover' with 206 observations
+2025-08-12 19:02:17,021 - features.ensemble - INFO - Added feature 'RSI_Momentum' with 206 observations
+2025-08-12 19:02:17,021 - features.ensemble - INFO - Added feature 'Donchian_Breakout_20' with 206 observations
+2025-08-12 19:02:17,021 - features.ensemble - INFO - Added feature 'RSI_2_Extreme' with 206 observations
+2025-08-12 19:02:17,021 - features.ensemble - INFO - Added feature 'RSI_3_Extreme' with 206 observations
+2025-08-12 19:02:17,021 - features.ensemble - INFO - Added feature 'ZScore_20' with 206 observations
+2025-08-12 19:02:17,021 - features.ensemble - INFO - Added feature 'BB_Touch_Upper' with 206 observations
+2025-08-12 19:02:17,022 - features.ensemble - INFO - Added feature 'BB_Touch_Lower' with 206 observations
+2025-08-12 19:02:17,022 - features.ensemble - INFO - Added feature 'ATR_Pct' with 206 observations
+2025-08-12 19:02:17,022 - features.ensemble - INFO - Added feature 'Realized_Vol_20' with 206 observations
+2025-08-12 19:02:17,022 - features.ensemble - INFO - Added feature 'ADX_Trend' with 206 observations
+2025-08-12 19:02:17,022 - features.ensemble - INFO - Added feature 'Vol_High' with 206 observations
+2025-08-12 19:02:17,022 - features.ensemble - INFO - Added feature 'Vol_Low' with 206 observations
+2025-08-12 19:02:17,022 - features.ensemble - WARNING - Feature OBV_Slope contains non-finite values, filling with 0
+2025-08-12 19:02:17,022 - features.ensemble - INFO - Added feature 'OBV_Slope' with 206 observations
+2025-08-12 19:02:17,023 - features.ensemble - INFO - Added feature 'Volume_ZScore' with 206 observations
+2025-08-12 19:02:17,023 - features.ensemble - INFO - Added feature 'MFI_Overbought' with 206 observations
+2025-08-12 19:02:17,023 - features.ensemble - INFO - Added feature 'MFI_Oversold' with 206 observations
+2025-08-12 19:02:17,029 - features.ensemble - INFO - Computed weights using rolling_ic: {'SMA_Crossover_20_180': np.float64(0.09309825208933535), 'EMA_Crossover_20_180': np.float64(-0.02726388265634377), 'MACD_Crossover': np.float64(-0.07337463014437146), 'RSI_Momentum': np.float64(-0.015606257314333268), 'Donchian_Breakout_20': np.float64(-0.001795751462530538), 'RSI_2_Extreme': np.float64(0.02825409951284288), 'RSI_3_Extreme': np.float64(0.008213484493830015), 'ZScore_20': np.float64(-0.008165624563300791), 'BB_Touch_Upper': np.float64(0.02174217562166445), 'BB_Touch_Lower': np.float64(-0.07451807664781554), 'ATR_Pct': np.float64(0.034379040165651735), 'Realized_Vol_20': np.float64(0.013323972241600038), 'ADX_Trend': np.float64(0.08152094231582493), 'Vol_High': np.float64(0.2100289645025724), 'Vol_Low': np.float64(0.17405758069423344), 'OBV_Slope': np.float64(0.016007584760948323), 'Volume_ZScore': np.float64(-0.014541420397767792), 'MFI_Overbought': np.float64(0.0), 'MFI_Oversold': np.float64(0.10410826041503311)}
+2025-08-12 19:02:17,035 - features.ensemble - INFO - Combined 19 features into signal with mean confidence 0.350
+2025-08-12 19:02:17,036 - strategies.ensemble_strategy - INFO - Applied confidence filter: 71 signals filtered out
+2025-08-12 19:02:17,037 - strategies.ensemble_strategy - INFO - Generated ensemble signals with mean absolute value: 0.531
+2025-08-12 19:02:17,135 - yfinance - ERROR - $IWM: possibly delisted; no price data found  (1d 2024-01-15 -> 2024-01-16)
+2025-08-12 19:02:17,135 - enhanced_paper_trading - INFO - Daily Summary - 2024-01-15:
+2025-08-12 19:02:17,135 - enhanced_paper_trading - INFO -   Regime: chop (confidence: 0.60)
+2025-08-12 19:02:17,135 - enhanced_paper_trading - INFO -   Capital: $100,000.00
+2025-08-12 19:02:17,135 - enhanced_paper_trading - INFO -   Total Return: 0.00%
+2025-08-12 19:02:17,135 - enhanced_paper_trading - INFO -   Sharpe Ratio: 0.00
+2025-08-12 19:02:17,135 - enhanced_paper_trading - INFO -   Max Drawdown: 0.00%
+2025-08-12 19:02:17,135 - enhanced_paper_trading - INFO -   Positions: 0
+2025-08-12 19:02:17,136 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 19:02:17,140 - core.regime_detector - INFO - Detected regime: trend (confidence: 0.56)
+2025-08-12 19:02:17,140 - core.feature_reweighter - INFO - Initialized FeatureReweighter with 60 day window
+2025-08-12 19:02:17,149 - core.feature_reweighter - INFO - Initialized AdaptiveFeatureEngine
+2025-08-12 19:02:17,150 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 19:02:17,150 - strategies.regime_aware_ensemble - INFO - Initialized RegimeAwareEnsembleStrategy with rolling_ic combination
+2025-08-12 19:02:17,153 - core.regime_detector - INFO - Detected regime: trend (confidence: 0.56)
+2025-08-12 19:02:17,207 - features.ensemble - INFO - Initialized SignalCombiner with 366 price observations
+2025-08-12 19:02:17,207 - features.ensemble - INFO - Added feature 'ma_crossover' with 366 observations
+2025-08-12 19:02:17,207 - features.ensemble - INFO - Added feature 'momentum_5' with 366 observations
+2025-08-12 19:02:17,208 - features.ensemble - INFO - Added feature 'momentum_10' with 366 observations
+2025-08-12 19:02:17,208 - features.ensemble - INFO - Added feature 'trend_strength' with 366 observations
+2025-08-12 19:02:17,208 - features.ensemble - INFO - Added feature 'trend_consistency' with 366 observations
+2025-08-12 19:02:17,210 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_crossover': np.float64(-0.22312673693440738), 'momentum_5': np.float64(-0.2816850548885172), 'momentum_10': np.float64(-0.23043819705905266), 'trend_strength': np.float64(-0.17629978322560563), 'trend_consistency': np.float64(-0.08845022789241731)}
+2025-08-12 19:02:17,212 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.638
+2025-08-12 19:02:17,213 - features.ensemble - INFO - Initialized SignalCombiner with 366 price observations
+2025-08-12 19:02:17,213 - features.ensemble - INFO - Added feature 'ma_distance' with 366 observations
+2025-08-12 19:02:17,213 - features.ensemble - INFO - Added feature 'rsi' with 366 observations
+2025-08-12 19:02:17,213 - features.ensemble - INFO - Added feature 'bb_position' with 366 observations
+2025-08-12 19:02:17,214 - features.ensemble - INFO - Added feature 'zscore' with 366 observations
+2025-08-12 19:02:17,214 - features.ensemble - INFO - Added feature 'mean_reversion_strength' with 366 observations
+2025-08-12 19:02:17,216 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_distance': np.float64(-0.34334488451276685), 'rsi': np.float64(-0.19639036578524524), 'bb_position': np.float64(-0.21620195365314238), 'zscore': np.float64(-0.24406279604884548), 'mean_reversion_strength': np.float64(0.0)}
+2025-08-12 19:02:17,218 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.583
+2025-08-12 19:02:17,219 - features.ensemble - INFO - Initialized SignalCombiner with 366 price observations
+2025-08-12 19:02:17,219 - features.ensemble - INFO - Added feature 'donchian_position' with 366 observations
+2025-08-12 19:02:17,219 - features.ensemble - INFO - Added feature 'breakout_strength' with 366 observations
+2025-08-12 19:02:17,220 - features.ensemble - INFO - Added feature 'resistance_break' with 366 observations
+2025-08-12 19:02:17,220 - features.ensemble - INFO - Added feature 'support_break' with 366 observations
+2025-08-12 19:02:17,221 - features.ensemble - INFO - Computed weights using rolling_ic: {'donchian_position': np.float64(-0.28891280280133463), 'breakout_strength': np.float64(-0.20054487714913596), 'resistance_break': np.float64(-0.20054487714913596), 'support_break': np.float64(-0.3099974429003933)}
+2025-08-12 19:02:17,224 - features.ensemble - INFO - Combined 4 features into signal with mean confidence 0.750
+2025-08-12 19:02:17,225 - strategies.regime_aware_ensemble - INFO - Generated regime-aware signals for trend regime (confidence: 0.56)
+2025-08-12 19:05:26,351 - core.regime_detector - INFO - Initialized RegimeDetector with 60 day lookback
+2025-08-12 19:05:26,355 - core.regime_detector - INFO - Detected regime: chop (confidence: 0.82)
+2025-08-12 19:05:26,355 - core.feature_reweighter - INFO - Initialized FeatureReweighter with 30 day window
+2025-08-12 19:05:26,381 - core.regime_detector - INFO - Initialized RegimeDetector with 60 day lookback
+2025-08-12 19:05:26,381 - strategies.regime_aware_ensemble - INFO - Initialized RegimeAwareEnsembleStrategy with rolling_ic combination
+2025-08-12 19:05:26,385 - core.regime_detector - INFO - Detected regime: trend (confidence: 0.56)
+2025-08-12 19:05:26,437 - features.ensemble - INFO - Initialized SignalCombiner with 366 price observations
+2025-08-12 19:05:26,437 - features.ensemble - INFO - Added feature 'ma_crossover' with 366 observations
+2025-08-12 19:05:26,437 - features.ensemble - INFO - Added feature 'momentum_5' with 366 observations
+2025-08-12 19:05:26,437 - features.ensemble - INFO - Added feature 'momentum_10' with 366 observations
+2025-08-12 19:05:26,438 - features.ensemble - INFO - Added feature 'trend_strength' with 366 observations
+2025-08-12 19:05:26,438 - features.ensemble - INFO - Added feature 'trend_consistency' with 366 observations
+2025-08-12 19:05:26,440 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_crossover': np.float64(-0.22312673693440738), 'momentum_5': np.float64(-0.2816850548885172), 'momentum_10': np.float64(-0.23043819705905266), 'trend_strength': np.float64(-0.17629978322560563), 'trend_consistency': np.float64(-0.08845022789241731)}
+2025-08-12 19:05:26,443 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.638
+2025-08-12 19:05:26,443 - features.ensemble - INFO - Initialized SignalCombiner with 366 price observations
+2025-08-12 19:05:26,443 - features.ensemble - INFO - Added feature 'ma_distance' with 366 observations
+2025-08-12 19:05:26,444 - features.ensemble - INFO - Added feature 'rsi' with 366 observations
+2025-08-12 19:05:26,444 - features.ensemble - INFO - Added feature 'bb_position' with 366 observations
+2025-08-12 19:05:26,444 - features.ensemble - INFO - Added feature 'zscore' with 366 observations
+2025-08-12 19:05:26,444 - features.ensemble - INFO - Added feature 'mean_reversion_strength' with 366 observations
+2025-08-12 19:05:26,447 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_distance': np.float64(-0.34334488451276685), 'rsi': np.float64(-0.19639036578524524), 'bb_position': np.float64(-0.21620195365314238), 'zscore': np.float64(-0.24406279604884548), 'mean_reversion_strength': np.float64(0.0)}
+2025-08-12 19:05:26,449 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.583
+2025-08-12 19:05:26,450 - features.ensemble - INFO - Initialized SignalCombiner with 366 price observations
+2025-08-12 19:05:26,450 - features.ensemble - INFO - Added feature 'donchian_position' with 366 observations
+2025-08-12 19:05:26,450 - features.ensemble - INFO - Added feature 'breakout_strength' with 366 observations
+2025-08-12 19:05:26,450 - features.ensemble - INFO - Added feature 'resistance_break' with 366 observations
+2025-08-12 19:05:26,450 - features.ensemble - INFO - Added feature 'support_break' with 366 observations
+2025-08-12 19:05:26,452 - features.ensemble - INFO - Computed weights using rolling_ic: {'donchian_position': np.float64(-0.28891280280133463), 'breakout_strength': np.float64(-0.20054487714913596), 'resistance_break': np.float64(-0.20054487714913596), 'support_break': np.float64(-0.3099974429003933)}
+2025-08-12 19:05:26,454 - features.ensemble - INFO - Combined 4 features into signal with mean confidence 0.750
+2025-08-12 19:05:26,455 - strategies.regime_aware_ensemble - INFO - Generated regime-aware signals for trend regime (confidence: 0.56)
+2025-08-12 19:05:26,456 - enhanced_paper_trading - INFO - Loaded config from config/enhanced_paper_trading_config.json
+2025-08-12 19:05:26,456 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 19:05:26,456 - core.feature_reweighter - INFO - Initialized FeatureReweighter with 60 day window
+2025-08-12 19:05:26,456 - core.feature_reweighter - INFO - Initialized AdaptiveFeatureEngine
+2025-08-12 19:05:26,456 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 19:05:26,456 - strategies.regime_aware_ensemble - INFO - Initialized RegimeAwareEnsembleStrategy with rolling_ic combination
+2025-08-12 19:05:26,456 - enhanced_paper_trading - INFO - Initialized strategy: regime_ensemble
+2025-08-12 19:05:26,456 - features.feature_engine - INFO - Initialized FeatureEngine
+2025-08-12 19:05:26,456 - strategies.ensemble_strategy - INFO - Initialized EnsembleStrategy with 5 trend features
+2025-08-12 19:05:26,456 - enhanced_paper_trading - INFO - Initialized strategy: ensemble
+2025-08-12 19:05:26,456 - enhanced_paper_trading - INFO - Initialized strategy: sma
+2025-08-12 19:05:26,456 - enhanced_paper_trading - INFO - Initialized strategy: momentum
+2025-08-12 19:05:26,456 - enhanced_paper_trading - INFO - Initialized EnhancedPaperTradingSystem with $100,000 capital
+2025-08-12 19:05:26,456 - enhanced_paper_trading - INFO - Running daily trading for 2024-01-15
+2025-08-12 19:05:27,018 - core.regime_detector - INFO - Detected regime: chop (confidence: 0.60)
+2025-08-12 19:05:27,018 - enhanced_paper_trading - INFO - Detected regime: chop (confidence: 0.60)
+2025-08-12 19:05:27,046 - core.regime_detector - WARNING - Insufficient data for regime detection: 206 < 252
+2025-08-12 19:05:27,064 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 19:05:27,064 - features.ensemble - INFO - Added feature 'ma_crossover' with 206 observations
+2025-08-12 19:05:27,065 - features.ensemble - INFO - Added feature 'momentum_5' with 206 observations
+2025-08-12 19:05:27,065 - features.ensemble - INFO - Added feature 'momentum_10' with 206 observations
+2025-08-12 19:05:27,065 - features.ensemble - INFO - Added feature 'trend_strength' with 206 observations
+2025-08-12 19:05:27,065 - features.ensemble - INFO - Added feature 'trend_consistency' with 206 observations
+2025-08-12 19:05:27,067 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_crossover': np.float64(-0.3908806726621414), 'momentum_5': np.float64(-0.0025476673645283216), 'momentum_10': np.float64(0.15419284113806414), 'trend_strength': np.float64(-0.45237881883526626), 'trend_consistency': np.float64(0.0)}
+2025-08-12 19:05:27,069 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.370
+2025-08-12 19:05:27,070 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 19:05:27,070 - features.ensemble - INFO - Added feature 'ma_distance' with 206 observations
+2025-08-12 19:05:27,070 - features.ensemble - INFO - Added feature 'rsi' with 206 observations
+2025-08-12 19:05:27,070 - features.ensemble - INFO - Added feature 'bb_position' with 206 observations
+2025-08-12 19:05:27,070 - features.ensemble - INFO - Added feature 'zscore' with 206 observations
+2025-08-12 19:05:27,071 - features.ensemble - INFO - Added feature 'mean_reversion_strength' with 206 observations
+2025-08-12 19:05:27,072 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_distance': np.float64(-0.13061501127946784), 'rsi': np.float64(-0.5402058392208048), 'bb_position': np.float64(-0.026058039862213625), 'zscore': np.float64(-0.04430027182270254), 'mean_reversion_strength': np.float64(-0.2588208378148111)}
+2025-08-12 19:05:27,075 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.593
+2025-08-12 19:05:27,075 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 19:05:27,075 - features.ensemble - INFO - Added feature 'donchian_position' with 206 observations
+2025-08-12 19:05:27,076 - features.ensemble - INFO - Added feature 'breakout_strength' with 206 observations
+2025-08-12 19:05:27,076 - features.ensemble - INFO - Added feature 'resistance_break' with 206 observations
+2025-08-12 19:05:27,076 - features.ensemble - INFO - Added feature 'support_break' with 206 observations
+2025-08-12 19:05:27,077 - features.ensemble - INFO - Computed weights using rolling_ic: {'donchian_position': np.float64(-0.09927273551538844), 'breakout_strength': np.float64(-0.44960730317083214), 'resistance_break': np.float64(-0.44960730317083214), 'support_break': np.float64(-0.001512658142947099)}
+2025-08-12 19:05:27,080 - features.ensemble - INFO - Combined 4 features into signal with mean confidence 0.586
+2025-08-12 19:05:27,081 - strategies.regime_aware_ensemble - INFO - Generated regime-aware signals for chop regime (confidence: 0.50)
+2025-08-12 19:05:27,082 - strategies.ensemble_strategy - INFO - Generating ensemble signals...
+2025-08-12 19:05:27,082 - features.feature_engine - INFO - Generating all features...
+2025-08-12 19:05:27,105 - features.feature_engine - INFO - Generated 55 features
+2025-08-12 19:05:27,105 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 19:05:27,105 - features.ensemble - INFO - Added feature 'SMA_Crossover_20_180' with 206 observations
+2025-08-12 19:05:27,105 - features.ensemble - INFO - Added feature 'EMA_Crossover_20_180' with 206 observations
+2025-08-12 19:05:27,106 - features.ensemble - INFO - Added feature 'MACD_Crossover' with 206 observations
+2025-08-12 19:05:27,106 - features.ensemble - INFO - Added feature 'RSI_Momentum' with 206 observations
+2025-08-12 19:05:27,106 - features.ensemble - INFO - Added feature 'Donchian_Breakout_20' with 206 observations
+2025-08-12 19:05:27,106 - features.ensemble - INFO - Added feature 'RSI_2_Extreme' with 206 observations
+2025-08-12 19:05:27,106 - features.ensemble - INFO - Added feature 'RSI_3_Extreme' with 206 observations
+2025-08-12 19:05:27,106 - features.ensemble - INFO - Added feature 'ZScore_20' with 206 observations
+2025-08-12 19:05:27,106 - features.ensemble - INFO - Added feature 'BB_Touch_Upper' with 206 observations
+2025-08-12 19:05:27,106 - features.ensemble - INFO - Added feature 'BB_Touch_Lower' with 206 observations
+2025-08-12 19:05:27,107 - features.ensemble - INFO - Added feature 'ATR_Pct' with 206 observations
+2025-08-12 19:05:27,107 - features.ensemble - INFO - Added feature 'Realized_Vol_20' with 206 observations
+2025-08-12 19:05:27,107 - features.ensemble - INFO - Added feature 'ADX_Trend' with 206 observations
+2025-08-12 19:05:27,107 - features.ensemble - INFO - Added feature 'Vol_High' with 206 observations
+2025-08-12 19:05:27,107 - features.ensemble - INFO - Added feature 'Vol_Low' with 206 observations
+2025-08-12 19:05:27,107 - features.ensemble - WARNING - Feature OBV_Slope contains non-finite values, filling with 0
+2025-08-12 19:05:27,107 - features.ensemble - INFO - Added feature 'OBV_Slope' with 206 observations
+2025-08-12 19:05:27,108 - features.ensemble - INFO - Added feature 'Volume_ZScore' with 206 observations
+2025-08-12 19:05:27,108 - features.ensemble - INFO - Added feature 'MFI_Overbought' with 206 observations
+2025-08-12 19:05:27,108 - features.ensemble - INFO - Added feature 'MFI_Oversold' with 206 observations
+2025-08-12 19:05:27,114 - features.ensemble - INFO - Computed weights using rolling_ic: {'SMA_Crossover_20_180': np.float64(0.10294170967394642), 'EMA_Crossover_20_180': np.float64(-0.14233795943717953), 'MACD_Crossover': np.float64(-0.07159210658032257), 'RSI_Momentum': np.float64(-0.027868525606528156), 'Donchian_Breakout_20': np.float64(0.03128742223691784), 'RSI_2_Extreme': np.float64(0.004071659137345635), 'RSI_3_Extreme': np.float64(0.005897466944872641), 'ZScore_20': np.float64(-0.018878557564259504), 'BB_Touch_Upper': np.float64(-0.007965512303454837), 'BB_Touch_Lower': np.float64(-0.007187516437980932), 'ATR_Pct': np.float64(0.05294257608830213), 'Realized_Vol_20': np.float64(0.09042150368019411), 'ADX_Trend': np.float64(0.03779532543597262), 'Vol_High': np.float64(0.07523758644656645), 'Vol_Low': np.float64(-0.006460877084399273), 'OBV_Slope': np.float64(0.03254004624398722), 'Volume_ZScore': np.float64(0.09728321864576517), 'MFI_Overbought': np.float64(0.14259615432349224), 'MFI_Oversold': np.float64(0.044694276128512817)}
+2025-08-12 19:05:27,119 - features.ensemble - INFO - Combined 19 features into signal with mean confidence 0.393
+2025-08-12 19:05:27,120 - strategies.ensemble_strategy - INFO - Applied confidence filter: 56 signals filtered out
+2025-08-12 19:05:27,120 - strategies.ensemble_strategy - INFO - Generated ensemble signals with mean absolute value: 0.613
+2025-08-12 19:05:27,252 - yfinance - ERROR - $SPY: possibly delisted; no price data found  (1d 2024-01-15 -> 2024-01-16)
+2025-08-12 19:05:27,283 - core.regime_detector - WARNING - Insufficient data for regime detection: 206 < 252
+2025-08-12 19:05:27,301 - features.ensemble - INFO - Added feature 'ma_crossover' with 206 observations
+2025-08-12 19:05:27,301 - features.ensemble - INFO - Added feature 'momentum_5' with 206 observations
+2025-08-12 19:05:27,301 - features.ensemble - INFO - Added feature 'momentum_10' with 206 observations
+2025-08-12 19:05:27,301 - features.ensemble - INFO - Added feature 'trend_strength' with 206 observations
+2025-08-12 19:05:27,302 - features.ensemble - INFO - Added feature 'trend_consistency' with 206 observations
+2025-08-12 19:05:27,303 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_crossover': 0.2, 'momentum_5': 0.2, 'momentum_10': 0.2, 'trend_strength': 0.2, 'trend_consistency': 0.2}
+2025-08-12 19:05:27,305 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.500
+2025-08-12 19:05:27,306 - features.ensemble - INFO - Added feature 'ma_distance' with 206 observations
+2025-08-12 19:05:27,306 - features.ensemble - INFO - Added feature 'rsi' with 206 observations
+2025-08-12 19:05:27,306 - features.ensemble - INFO - Added feature 'bb_position' with 206 observations
+2025-08-12 19:05:27,306 - features.ensemble - INFO - Added feature 'zscore' with 206 observations
+2025-08-12 19:05:27,306 - features.ensemble - INFO - Added feature 'mean_reversion_strength' with 206 observations
+2025-08-12 19:05:27,308 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_distance': 0.2, 'rsi': 0.2, 'bb_position': 0.2, 'zscore': 0.2, 'mean_reversion_strength': 0.2}
+2025-08-12 19:05:27,311 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.500
+2025-08-12 19:05:27,311 - features.ensemble - INFO - Added feature 'donchian_position' with 206 observations
+2025-08-12 19:05:27,311 - features.ensemble - INFO - Added feature 'breakout_strength' with 206 observations
+2025-08-12 19:05:27,312 - features.ensemble - INFO - Added feature 'resistance_break' with 206 observations
+2025-08-12 19:05:27,312 - features.ensemble - INFO - Added feature 'support_break' with 206 observations
+2025-08-12 19:05:27,314 - features.ensemble - INFO - Computed weights using rolling_ic: {'donchian_position': 0.25, 'breakout_strength': 0.25, 'resistance_break': 0.25, 'support_break': 0.25}
+2025-08-12 19:05:27,316 - features.ensemble - INFO - Combined 4 features into signal with mean confidence 0.500
+2025-08-12 19:05:27,318 - strategies.regime_aware_ensemble - INFO - Generated regime-aware signals for chop regime (confidence: 0.50)
+2025-08-12 19:05:27,318 - strategies.ensemble_strategy - INFO - Generating ensemble signals...
+2025-08-12 19:05:27,318 - features.feature_engine - INFO - Generating all features...
+2025-08-12 19:05:27,341 - features.feature_engine - INFO - Generated 55 features
+2025-08-12 19:05:27,341 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 19:05:27,341 - features.ensemble - INFO - Added feature 'SMA_Crossover_20_180' with 206 observations
+2025-08-12 19:05:27,341 - features.ensemble - INFO - Added feature 'EMA_Crossover_20_180' with 206 observations
+2025-08-12 19:05:27,341 - features.ensemble - INFO - Added feature 'MACD_Crossover' with 206 observations
+2025-08-12 19:05:27,342 - features.ensemble - INFO - Added feature 'RSI_Momentum' with 206 observations
+2025-08-12 19:05:27,342 - features.ensemble - INFO - Added feature 'Donchian_Breakout_20' with 206 observations
+2025-08-12 19:05:27,342 - features.ensemble - INFO - Added feature 'RSI_2_Extreme' with 206 observations
+2025-08-12 19:05:27,342 - features.ensemble - INFO - Added feature 'RSI_3_Extreme' with 206 observations
+2025-08-12 19:05:27,342 - features.ensemble - INFO - Added feature 'ZScore_20' with 206 observations
+2025-08-12 19:05:27,342 - features.ensemble - INFO - Added feature 'BB_Touch_Upper' with 206 observations
+2025-08-12 19:05:27,342 - features.ensemble - INFO - Added feature 'BB_Touch_Lower' with 206 observations
+2025-08-12 19:05:27,342 - features.ensemble - INFO - Added feature 'ATR_Pct' with 206 observations
+2025-08-12 19:05:27,343 - features.ensemble - INFO - Added feature 'Realized_Vol_20' with 206 observations
+2025-08-12 19:05:27,343 - features.ensemble - INFO - Added feature 'ADX_Trend' with 206 observations
+2025-08-12 19:05:27,343 - features.ensemble - INFO - Added feature 'Vol_High' with 206 observations
+2025-08-12 19:05:27,343 - features.ensemble - INFO - Added feature 'Vol_Low' with 206 observations
+2025-08-12 19:05:27,343 - features.ensemble - WARNING - Feature OBV_Slope contains non-finite values, filling with 0
+2025-08-12 19:05:27,343 - features.ensemble - INFO - Added feature 'OBV_Slope' with 206 observations
+2025-08-12 19:05:27,343 - features.ensemble - INFO - Added feature 'Volume_ZScore' with 206 observations
+2025-08-12 19:05:27,344 - features.ensemble - INFO - Added feature 'MFI_Overbought' with 206 observations
+2025-08-12 19:05:27,344 - features.ensemble - INFO - Added feature 'MFI_Oversold' with 206 observations
+2025-08-12 19:05:27,350 - features.ensemble - INFO - Computed weights using rolling_ic: {'SMA_Crossover_20_180': np.float64(0.08078476209731904), 'EMA_Crossover_20_180': np.float64(-0.3157790293326569), 'MACD_Crossover': np.float64(-0.039539246596362154), 'RSI_Momentum': np.float64(-0.02430985883936543), 'Donchian_Breakout_20': np.float64(0.032503755242261), 'RSI_2_Extreme': np.float64(-0.028547967737281504), 'RSI_3_Extreme': np.float64(-0.012077139609035068), 'ZScore_20': np.float64(-0.03539493743983633), 'BB_Touch_Upper': np.float64(0.03772019771928292), 'BB_Touch_Lower': np.float64(-0.012536133151907002), 'ATR_Pct': np.float64(0.05485786104794741), 'Realized_Vol_20': np.float64(0.0437686004011669), 'ADX_Trend': np.float64(-0.06036072876137481), 'Vol_High': np.float64(0.10408627642437328), 'Vol_Low': np.float64(-0.011234232803509077), 'OBV_Slope': np.float64(-0.003452968553945208), 'Volume_ZScore': np.float64(0.08980640848002726), 'MFI_Overbought': np.float64(-0.010605575734506623), 'MFI_Oversold': np.float64(0.0026343200278421556)}
+2025-08-12 19:05:27,355 - features.ensemble - INFO - Combined 19 features into signal with mean confidence 0.539
+2025-08-12 19:05:27,356 - strategies.ensemble_strategy - INFO - Applied confidence filter: 16 signals filtered out
+2025-08-12 19:05:27,356 - strategies.ensemble_strategy - INFO - Generated ensemble signals with mean absolute value: 0.893
+2025-08-12 19:05:27,463 - yfinance - ERROR - $QQQ: possibly delisted; no price data found  (1d 2024-01-15 -> 2024-01-16)
+2025-08-12 19:05:27,493 - core.regime_detector - WARNING - Insufficient data for regime detection: 206 < 252
+2025-08-12 19:05:27,512 - features.ensemble - INFO - Added feature 'ma_crossover' with 206 observations
+2025-08-12 19:05:27,512 - features.ensemble - INFO - Added feature 'momentum_5' with 206 observations
+2025-08-12 19:05:27,512 - features.ensemble - INFO - Added feature 'momentum_10' with 206 observations
+2025-08-12 19:05:27,512 - features.ensemble - INFO - Added feature 'trend_strength' with 206 observations
+2025-08-12 19:05:27,513 - features.ensemble - INFO - Added feature 'trend_consistency' with 206 observations
+2025-08-12 19:05:27,514 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_crossover': 0.2, 'momentum_5': 0.2, 'momentum_10': 0.2, 'trend_strength': 0.2, 'trend_consistency': 0.2}
+2025-08-12 19:05:27,517 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.500
+2025-08-12 19:05:27,518 - features.ensemble - INFO - Added feature 'ma_distance' with 206 observations
+2025-08-12 19:05:27,518 - features.ensemble - INFO - Added feature 'rsi' with 206 observations
+2025-08-12 19:05:27,518 - features.ensemble - INFO - Added feature 'bb_position' with 206 observations
+2025-08-12 19:05:27,518 - features.ensemble - INFO - Added feature 'zscore' with 206 observations
+2025-08-12 19:05:27,519 - features.ensemble - INFO - Added feature 'mean_reversion_strength' with 206 observations
+2025-08-12 19:05:27,520 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_distance': 0.2, 'rsi': 0.2, 'bb_position': 0.2, 'zscore': 0.2, 'mean_reversion_strength': 0.2}
+2025-08-12 19:05:27,523 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.500
+2025-08-12 19:05:27,523 - features.ensemble - INFO - Added feature 'donchian_position' with 206 observations
+2025-08-12 19:05:27,523 - features.ensemble - INFO - Added feature 'breakout_strength' with 206 observations
+2025-08-12 19:05:27,523 - features.ensemble - INFO - Added feature 'resistance_break' with 206 observations
+2025-08-12 19:05:27,524 - features.ensemble - INFO - Added feature 'support_break' with 206 observations
+2025-08-12 19:05:27,525 - features.ensemble - INFO - Computed weights using rolling_ic: {'donchian_position': 0.25, 'breakout_strength': 0.25, 'resistance_break': 0.25, 'support_break': 0.25}
+2025-08-12 19:05:27,528 - features.ensemble - INFO - Combined 4 features into signal with mean confidence 0.500
+2025-08-12 19:05:27,530 - strategies.regime_aware_ensemble - INFO - Generated regime-aware signals for chop regime (confidence: 0.50)
+2025-08-12 19:05:27,530 - strategies.ensemble_strategy - INFO - Generating ensemble signals...
+2025-08-12 19:05:27,530 - features.feature_engine - INFO - Generating all features...
+2025-08-12 19:05:27,555 - features.feature_engine - INFO - Generated 55 features
+2025-08-12 19:05:27,556 - features.ensemble - INFO - Initialized SignalCombiner with 206 price observations
+2025-08-12 19:05:27,556 - features.ensemble - INFO - Added feature 'SMA_Crossover_20_180' with 206 observations
+2025-08-12 19:05:27,556 - features.ensemble - INFO - Added feature 'EMA_Crossover_20_180' with 206 observations
+2025-08-12 19:05:27,556 - features.ensemble - INFO - Added feature 'MACD_Crossover' with 206 observations
+2025-08-12 19:05:27,556 - features.ensemble - INFO - Added feature 'RSI_Momentum' with 206 observations
+2025-08-12 19:05:27,556 - features.ensemble - INFO - Added feature 'Donchian_Breakout_20' with 206 observations
+2025-08-12 19:05:27,557 - features.ensemble - INFO - Added feature 'RSI_2_Extreme' with 206 observations
+2025-08-12 19:05:27,557 - features.ensemble - INFO - Added feature 'RSI_3_Extreme' with 206 observations
+2025-08-12 19:05:27,557 - features.ensemble - INFO - Added feature 'ZScore_20' with 206 observations
+2025-08-12 19:05:27,557 - features.ensemble - INFO - Added feature 'BB_Touch_Upper' with 206 observations
+2025-08-12 19:05:27,557 - features.ensemble - INFO - Added feature 'BB_Touch_Lower' with 206 observations
+2025-08-12 19:05:27,557 - features.ensemble - INFO - Added feature 'ATR_Pct' with 206 observations
+2025-08-12 19:05:27,557 - features.ensemble - INFO - Added feature 'Realized_Vol_20' with 206 observations
+2025-08-12 19:05:27,558 - features.ensemble - INFO - Added feature 'ADX_Trend' with 206 observations
+2025-08-12 19:05:27,558 - features.ensemble - INFO - Added feature 'Vol_High' with 206 observations
+2025-08-12 19:05:27,558 - features.ensemble - INFO - Added feature 'Vol_Low' with 206 observations
+2025-08-12 19:05:27,558 - features.ensemble - WARNING - Feature OBV_Slope contains non-finite values, filling with 0
+2025-08-12 19:05:27,559 - features.ensemble - INFO - Added feature 'OBV_Slope' with 206 observations
+2025-08-12 19:05:27,559 - features.ensemble - INFO - Added feature 'Volume_ZScore' with 206 observations
+2025-08-12 19:05:27,559 - features.ensemble - INFO - Added feature 'MFI_Overbought' with 206 observations
+2025-08-12 19:05:27,559 - features.ensemble - INFO - Added feature 'MFI_Oversold' with 206 observations
+2025-08-12 19:05:27,566 - features.ensemble - INFO - Computed weights using rolling_ic: {'SMA_Crossover_20_180': np.float64(0.09309789697420427), 'EMA_Crossover_20_180': np.float64(-0.02726393166220815), 'MACD_Crossover': np.float64(-0.07337473286159646), 'RSI_Momentum': np.float64(-0.015606749317309813), 'Donchian_Breakout_20': np.float64(-0.0017960063474949757), 'RSI_2_Extreme': np.float64(0.028253855330607786), 'RSI_3_Extreme': np.float64(0.008213519392268708), 'ZScore_20': np.float64(-0.00816633082789436), 'BB_Touch_Upper': np.float64(0.021741877457782954), 'BB_Touch_Lower': np.float64(-0.07451757914843866), 'ATR_Pct': np.float64(0.03437886950937788), 'Realized_Vol_20': np.float64(0.013323246312534181), 'ADX_Trend': np.float64(0.08152084860310327), 'Vol_High': np.float64(0.21003125441441978), 'Vol_Low': np.float64(0.1740549465454254), 'OBV_Slope': np.float64(0.01600836106663974), 'Volume_ZScore': np.float64(-0.014541810125909662), 'MFI_Overbought': np.float64(0.0), 'MFI_Oversold': np.float64(0.10410818410278408)}
+2025-08-12 19:05:27,570 - features.ensemble - INFO - Combined 19 features into signal with mean confidence 0.350
+2025-08-12 19:05:27,571 - strategies.ensemble_strategy - INFO - Applied confidence filter: 71 signals filtered out
+2025-08-12 19:05:27,571 - strategies.ensemble_strategy - INFO - Generated ensemble signals with mean absolute value: 0.531
+2025-08-12 19:05:27,652 - yfinance - ERROR - $IWM: possibly delisted; no price data found  (1d 2024-01-15 -> 2024-01-16)
+2025-08-12 19:05:27,652 - enhanced_paper_trading - INFO - Daily Summary - 2024-01-15:
+2025-08-12 19:05:27,652 - enhanced_paper_trading - INFO -   Regime: chop (confidence: 0.60)
+2025-08-12 19:05:27,652 - enhanced_paper_trading - INFO -   Capital: $100,000.00
+2025-08-12 19:05:27,652 - enhanced_paper_trading - INFO -   Total Return: 0.00%
+2025-08-12 19:05:27,652 - enhanced_paper_trading - INFO -   Sharpe Ratio: 0.00
+2025-08-12 19:05:27,652 - enhanced_paper_trading - INFO -   Max Drawdown: 0.00%
+2025-08-12 19:05:27,652 - enhanced_paper_trading - INFO -   Positions: 0
+2025-08-12 19:05:27,653 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 19:05:27,657 - core.regime_detector - INFO - Detected regime: trend (confidence: 0.56)
+2025-08-12 19:05:27,658 - core.feature_reweighter - INFO - Initialized FeatureReweighter with 60 day window
+2025-08-12 19:05:27,668 - core.feature_reweighter - INFO - Initialized AdaptiveFeatureEngine
+2025-08-12 19:05:27,668 - core.regime_detector - INFO - Initialized RegimeDetector with 252 day lookback
+2025-08-12 19:05:27,668 - strategies.regime_aware_ensemble - INFO - Initialized RegimeAwareEnsembleStrategy with rolling_ic combination
+2025-08-12 19:05:27,672 - core.regime_detector - INFO - Detected regime: trend (confidence: 0.56)
+2025-08-12 19:05:27,725 - features.ensemble - INFO - Initialized SignalCombiner with 366 price observations
+2025-08-12 19:05:27,726 - features.ensemble - INFO - Added feature 'ma_crossover' with 366 observations
+2025-08-12 19:05:27,726 - features.ensemble - INFO - Added feature 'momentum_5' with 366 observations
+2025-08-12 19:05:27,726 - features.ensemble - INFO - Added feature 'momentum_10' with 366 observations
+2025-08-12 19:05:27,726 - features.ensemble - INFO - Added feature 'trend_strength' with 366 observations
+2025-08-12 19:05:27,727 - features.ensemble - INFO - Added feature 'trend_consistency' with 366 observations
+2025-08-12 19:05:27,729 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_crossover': np.float64(-0.22312673693440738), 'momentum_5': np.float64(-0.2816850548885172), 'momentum_10': np.float64(-0.23043819705905266), 'trend_strength': np.float64(-0.17629978322560563), 'trend_consistency': np.float64(-0.08845022789241731)}
+2025-08-12 19:05:27,732 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.638
+2025-08-12 19:05:27,732 - features.ensemble - INFO - Initialized SignalCombiner with 366 price observations
+2025-08-12 19:05:27,732 - features.ensemble - INFO - Added feature 'ma_distance' with 366 observations
+2025-08-12 19:05:27,732 - features.ensemble - INFO - Added feature 'rsi' with 366 observations
+2025-08-12 19:05:27,733 - features.ensemble - INFO - Added feature 'bb_position' with 366 observations
+2025-08-12 19:05:27,733 - features.ensemble - INFO - Added feature 'zscore' with 366 observations
+2025-08-12 19:05:27,733 - features.ensemble - INFO - Added feature 'mean_reversion_strength' with 366 observations
+2025-08-12 19:05:27,735 - features.ensemble - INFO - Computed weights using rolling_ic: {'ma_distance': np.float64(-0.34334488451276685), 'rsi': np.float64(-0.19639036578524524), 'bb_position': np.float64(-0.21620195365314238), 'zscore': np.float64(-0.24406279604884548), 'mean_reversion_strength': np.float64(0.0)}
+2025-08-12 19:05:27,737 - features.ensemble - INFO - Combined 5 features into signal with mean confidence 0.583
+2025-08-12 19:05:27,737 - features.ensemble - INFO - Initialized SignalCombiner with 366 price observations
+2025-08-12 19:05:27,738 - features.ensemble - INFO - Added feature 'donchian_position' with 366 observations
+2025-08-12 19:05:27,738 - features.ensemble - INFO - Added feature 'breakout_strength' with 366 observations
+2025-08-12 19:05:27,738 - features.ensemble - INFO - Added feature 'resistance_break' with 366 observations
+2025-08-12 19:05:27,738 - features.ensemble - INFO - Added feature 'support_break' with 366 observations
+2025-08-12 19:05:27,740 - features.ensemble - INFO - Computed weights using rolling_ic: {'donchian_position': np.float64(-0.28891280280133463), 'breakout_strength': np.float64(-0.20054487714913596), 'resistance_break': np.float64(-0.20054487714913596), 'support_break': np.float64(-0.3099974429003933)}
+2025-08-12 19:05:27,742 - features.ensemble - INFO - Combined 4 features into signal with mean confidence 0.750
+2025-08-12 19:05:27,744 - strategies.regime_aware_ensemble - INFO - Generated regime-aware signals for trend regime (confidence: 0.56)

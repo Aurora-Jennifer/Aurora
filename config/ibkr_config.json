@@ -1,0 +1,24 @@
+{
+  "connection": {
+    "host": "127.0.0.1",
+    "port": 7497,
+    "client_id": 1,
+    "timeout": 20
+  },
+  "trading": {
+    "paper_trading": true,
+    "default_tif": "DAY",
+    "max_slippage_bps": 10,
+    "order_retry_attempts": 3
+  },
+  "risk": {
+    "max_position_size": 0.25,
+    "max_daily_trades": 50,
+    "emergency_stop_loss": 0.05
+  },
+  "monitoring": {
+    "connection_check_interval": 5,
+    "position_update_interval": 10,
+    "order_status_check_interval": 2
+  }
+}
