@@ -1,16 +1,8 @@
 import pickle
 from pathlib import Path
-import numpy as np
-
-
-class DummyModel:
-    def __init__(self, w):
-        self.w = np.array(w, dtype="float64")
-
-    def predict(self, X):
-        X = np.asarray(X, dtype="float64")
-        # simple linear projection on last row
-        return X[-1].dot(self.w) * np.ones(1)
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from ml.models.dummy_model import DummyModel
 
 
 if __name__ == "__main__":

@@ -7,5 +7,11 @@ registry:
       trained_on: "synthetic"
       preprocess: "zscore"
       feature_order: ["ret_1d", "ret_5d", "vol_10d"]
+      expected_features:
+        names: ["ret_1d", "ret_5d", "vol_10d"]
+        order_matters: true
+        allow_missing: false
+        zscore: true
+        max_abs_z: 8.0
 
 

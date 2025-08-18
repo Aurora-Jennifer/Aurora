@@ -52,6 +52,12 @@ def main() -> int:
     if total_ms > MAX_TOTAL_MS:
         print(f"[PROMOTE FAIL] runtime budget exceeded: {total_ms:.0f}ms > {MAX_TOTAL_MS}ms")
         return 1
+    # Model provenance (if present, must be complete)
+    if "model" in data:
+        for k in ("id", "kind", "artifact_sha256"):
+            if not data["model"].get(k):
+                print(f"[PROMOTE FAIL] missing model.{k}")
+                return 1
     print("[PROMOTE OK]")
     return 0
 

@@ -55,12 +55,18 @@ def infer_weights(
 ) -> Dict[str, float] | dict:
     if len(feat_df) < min_bars:
         return {"status": "HOLD", "reason": "insufficient_history"}
+    # Feature alignment; require columns to exist
+    for col in feature_order:
+        if col not in feat_df.columns:
+            return {"status": "FAIL", "reason": "feature_mismatch"}
     X = feat_df[feature_order].to_numpy(dtype="float64")
     scores = model.predict(X[-1:].copy())
     arr = np.asarray(scores, dtype="float64").reshape(-1)
     if not np.isfinite(arr).all():
         return {"status": "HOLD", "reason": "nan_in_scores"}
     w = _map_scores_to_weights(arr, map_name, max_abs)
+    if not np.isfinite(w).all():
+        return {"status": "HOLD", "reason": "nan_in_scores"}
     return {i: float(w[i]) for i in range(len(w))}
 
 

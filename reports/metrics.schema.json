@@ -45,7 +45,17 @@
       }
     },
     "violation_code": {"type": "string"},
-    "reason": {"type": "string"}
+    "reason": {"type": "string"},
+    "model": {
+      "type": "object",
+      "required": ["id", "kind", "artifact_sha256"],
+      "properties": {
+        "id": {"type": "string"},
+        "kind": {"type": "string"},
+        "artifact_sha256": {"type": "string"},
+        "inference_ms": {"type": "number", "minimum": 0}
+      }
+    }
   }
 }
 
