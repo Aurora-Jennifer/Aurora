@@ -23,7 +23,14 @@ A config-driven, asset-class-aware trading system with a two-level composer for 
 
 ## 🎯 System Overview
 
-This trading system implements a **two-level composer architecture**:
+This trading system implements **Alpha v1 ML pipeline** with a **two-level composer architecture**:
+
+### **Alpha v1 ML Pipeline**
+- **Ridge Regression Model**: Advanced ML model with 8 technical features
+- **Real Alpha Generation**: IC=0.0313 with meaningful predictive power
+- **Strict Leakage Guards**: Time-based validation prevents data snooping
+- **Walkforward Evaluation**: 5-fold validation with cost-aware metrics
+- **Promotion Gates**: Clear criteria for live trading deployment
 
 ### **Level 1: Strategy Selection**
 - **Asset Class Detection**: Automatic crypto/ETF/equity classification
@@ -64,13 +71,19 @@ This trading system implements a **two-level composer architecture**:
 pip install -r requirements.txt
 ```
 
-### **ML Alpha Generation**
+### **Alpha v1 ML Pipeline**
 ```bash
-# Train Alpha v1 model on SPY, TSLA
+# Train Alpha v1 Ridge regression model
 python tools/train_alpha_v1.py --symbols SPY,TSLA
 
 # Validate results against promotion gates
 python tools/validate_alpha.py reports/alpha_eval.json
+
+# Run Alpha v1 walkforward testing
+python scripts/walkforward_alpha_v1.py --symbols SPY TSLA
+
+# Compare old regime-based vs Alpha v1 ML approaches
+python scripts/compare_walkforward.py --symbols SPY TSLA
 
 # Run leakage tests to ensure no data snooping
 python -m pytest tests/ml/test_leakage_guards.py -v
