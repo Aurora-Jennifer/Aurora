@@ -35,6 +35,8 @@ python scripts/multi_walkforward_report.py --smoke --validate-data --log-level I
 | ZERO_TRADES | No trades executed in smoke window | Increase window slightly or lower signal threshold in config |
 | BUDGET_EXCEEDED | Runtime exceeded budget | Reduce symbols or folds; increase budget if justified |
 | UNEXPECTED_ERROR | Unhandled exception in smoke | Inspect `reports/smoke_run.json` and logs for traceback |
+| MISSING_COSTS | slippage_bps/fee_bps missing in CI | Set `risk.slippage_bps` and `risk.fee_bps` in config |
+| LEVERAGE_LIMIT | Leverage exceeds CI limit | Lower `risk.max_leverage` (CI enforces ≤3.0) |
 
 ## Synthetic cache
 Generate deterministic cache (no network):

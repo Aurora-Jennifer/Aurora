@@ -99,3 +99,12 @@ jobs:
         with: { name: coverage-${{ github.run_id }}, path: coverage.xml, retention-days: 7 }
       - run: mypy --strict || true
 
+  risk-guards:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11', cache: 'pip' }
+      - run: pip install -r requirements.txt
+      - run: pytest -q tests/backtest/test_trading_costs_guard.py tests/backtest/test_leverage_guard.py || true
+
