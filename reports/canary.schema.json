@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["profile", "symbols", "model_enabled", "model_fallbacks"],
+  "properties": {
+    "profile": {"type": "string"},
+    "symbols": {"type": "array", "items": {"type": "string"}},
+    "model_enabled": {"type": "boolean"},
+    "model_fallbacks": {"type": "integer", "minimum": 0},
+    "anomalies": {"type": "array"},
+    "model": {
+      "type": "object",
+      "required": ["id", "artifact_sha256"],
+      "properties": {
+        "id": {"type": "string"},
+        "artifact_sha256": {"type": "string"}
+      }
+    }
+  }
+}
+
+

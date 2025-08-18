@@ -1,0 +1,95 @@
+{
+  "model_id": "linear_v1",
+  "symbols": [
+    "SPY",
+    "TSLA"
+  ],
+  "fold_summaries": [
+    {
+      "fold": 1,
+      "train_start": "2020-03-13",
+      "train_end": "2020-09-10",
+      "test_start": "2020-09-11",
+      "test_end": "2022-05-02",
+      "ic_spearman": 0.017031878767932742,
+      "hit_rate": 0.5236363636363637,
+      "turnover": 0.0025944607349052736,
+      "return_with_costs": 0.48609933982854725,
+      "n_predictions": 825
+    },
+    {
+      "fold": 2,
+      "train_start": "2020-03-13",
+      "train_end": "2022-05-02",
+      "test_start": "2022-05-02",
+      "test_end": "2023-12-20",
+      "ic_spearman": 0.044643119888767756,
+      "hit_rate": 0.5066666666666667,
+      "turnover": 0.0026048314177520787,
+      "return_with_costs": -0.22306695928875075,
+      "n_predictions": 825
+    },
+    {
+      "fold": 3,
+      "train_start": "2020-03-13",
+      "train_end": "2023-12-20",
+      "test_start": "2023-12-21",
+      "test_end": "2025-08-15",
+      "ic_spearman": 0.03229395912627771,
+      "hit_rate": 0.5187878787878788,
+      "turnover": 0.0026883292817529414,
+      "return_with_costs": 0.48493960971383765,
+      "n_predictions": 825
+    }
+  ],
+  "overall_metrics": {
+    "mean_ic": 0.0313229859276594,
+    "mean_hit_rate": 0.5163636363636364,
+    "mean_turnover": 0.002629207144803431,
+    "mean_return_with_costs": 0.2493239967512114,
+    "std_ic": 0.0112931321540291,
+    "std_hit_rate": 0.00713677645763866,
+    "min_ic": 0.017031878767932742,
+    "max_ic": 0.044643119888767756,
+    "min_hit_rate": 0.5066666666666667,
+    "max_hit_rate": 0.5236363636363637
+  },
+  "metadata": {
+    "evaluation_date": "2025-08-18T17:33:18.856259+00:00",
+    "model_path": "artifacts/models/linear_v1.pkl",
+    "feature_config": {
+      "features": {
+        "ret_1d": "1-day return (close-to-close)",
+        "ret_5d": "5-day return (close-to-close)",
+        "ret_20d": "20-day return (close-to-close)",
+        "sma_20_minus_50": "20-day SMA minus 50-day SMA (normalized)",
+        "vol_10d": "10-day rolling volatility (std of returns)",
+        "vol_20d": "20-day rolling volatility (std of returns)",
+        "rsi_14": "14-day RSI (0-100 scale)",
+        "volu_z_20d": "20-day z-scored volume (normalized)"
+      },
+      "labels": {
+        "ret_fwd_1d": "Next-day close-to-close return (target)"
+      },
+      "params": {
+        "min_history_bars": 60,
+        "lookback_days": 50,
+        "label_shift": 1
+      },
+      "universe": {
+        "symbols": [
+          "SPY",
+          "TSLA",
+          "AAPL",
+          "MSFT",
+          "GOOGL"
+        ],
+        "min_volume": 1000000,
+        "min_price": 10.0
+      }
+    },
+    "training_samples": 252,
+    "test_samples": 2475,
+    "n_folds": 3
+  }
+}

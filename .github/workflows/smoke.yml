@@ -110,6 +110,47 @@ jobs:
       - run: pip install -r requirements.txt
       - run: pytest -q tests/backtest/test_trading_costs_guard.py tests/backtest/test_leverage_guard.py || true
 
+  canary-smoke:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11', cache: 'pip' }
+      - run: pip install -r requirements.txt
+      - run: make canary-smoke
+      - run: python tools/validate_canary.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: canary-smoke-artifacts
+          path: |
+            logs/canary/*.jsonl
+            reports/canary_run.meta.json
+          retention-days: 7
+
+  canary-nightly:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    schedule:
+      - cron: "0 3 * * *"  # 3 AM UTC daily
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11', cache: 'pip' }
+      - run: pip install -r requirements.txt
+      - run: python scripts/canary_runner.py --symbols SPY,TSLA --poll-sec 0.05 --profile live_canary --shadow --steps 2 --ntfy
+      - run: python tools/validate_canary.py
+      - run: python tools/rollup_canary.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: canary-nightly-${{ github.run_id }}
+          path: |
+            logs/canary/*.jsonl
+            reports/canary_run.meta.json
+            reports/canary_daily_*.json
+            docs/analysis/canary_daily_*.md
+          retention-days: 7
+
   pr-summary:
     needs: smoke
     if: ${{ github.event_name == 'pull_request' }}

@@ -1121,6 +1121,12 @@ def run_backtest(df: pd.DataFrame, cfg: Dict, *, sanity_profile: str = "walkforw
             return {"status": "FAIL", "violation_code": "LEVERAGE_LIMIT", "reason": "max_leverage not set in risk config"}
         if max_lev > 3.0:
             return {"status": "FAIL", "violation_code": "LEVERAGE_LIMIT", "reason": f"max_leverage too high: {max_lev}"}
+        max_gross = risk_cfg.get("max_gross_exposure", 1.0)
+        max_pos = risk_cfg.get("max_position_pct", 1.0)
+        if max_gross > 2.0:
+            return {"status": "FAIL", "violation_code": "GROSS_EXPOSURE_LIMIT", "reason": f"max_gross_exposure too high: {max_gross}"}
+        if max_pos > 1.0:
+            return {"status": "FAIL", "violation_code": "POSITION_LIMIT", "reason": f"max_position_pct too high: {max_pos}"}
 
     # Minimal OK payload with placeholder metrics for tests
     n = len(df) if isinstance(df, pd.DataFrame) else 0

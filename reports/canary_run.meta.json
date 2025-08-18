@@ -1,0 +1,15 @@
+{
+  "run_id": "2025-08-18T171631Z",
+  "profile": "live_canary",
+  "symbols": [
+    "SPY",
+    "TSLA"
+  ],
+  "model_enabled": true,
+  "model": {
+    "id": "dummy_v1",
+    "artifact_sha256": "7301788925fbd6f4ce6fe2ba61c87a248d20755ad7aee420d168249b59f5f24d"
+  },
+  "model_fallbacks": 0,
+  "anomalies": []
+}

@@ -33,4 +33,23 @@ registry:
         bin_edges: [0.0013689812051765008, 0.0020463140201827166, 0.0027236468351889325, 0.0034009796501951487, 0.004078312465201364, 0.00475564528020758, 0.005432978095213797, 0.006110310910220012, 0.006787643725226228, 0.007464976540232445, 0.00814230935523866]
         ref_probs:  [0.011428571428571429, 0.045714285714285714, 0.12285714285714286, 0.14285714285714285, 0.24, 0.17142857142857143, 0.15428571428571428, 0.06, 0.025714285714285714, 0.025714285714285714]
 
+  linear_v1:
+    kind: "pickle"
+    path: "artifacts/models/linear_v1.pkl"
+    metadata:
+      version: "1.0.0"
+      trained_on: "SPY,TSLA"
+      preprocess: "zscore"
+      feature_order: ["ret_1d", "ret_5d", "ret_20d", "sma_20_minus_50", "vol_10d", "vol_20d", "rsi_14", "volu_z_20d"]
+      expected_features:
+        names: ["ret_1d", "ret_5d", "ret_20d", "sma_20_minus_50", "vol_10d", "vol_20d", "rsi_14", "volu_z_20d"]
+        order_matters: true
+        allow_missing: false
+        zscore: true
+        max_abs_z: 8.0
+    psi_warn: 0.10
+    psi_fail: 0.25
+    max_missing_pct: 0.01
+    training_stats: {}
+
 

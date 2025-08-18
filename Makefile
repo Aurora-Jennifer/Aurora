@@ -1,3 +1,56 @@
+canary:
+	python scripts/canary_runner.py --symbols SPY,TSLA --poll-sec 5 --profile live_canary --shadow
+
+canary-smoke:
+	pytest -q tests/live/test_canary_runner_tmp_isolated.py
+
+.PHONY: canary-rollup
+canary-rollup:
+	python tools/rollup_canary.py
+
+daily:
+	python scripts/paper_runner.py --symbols SPY,TSLA --poll-sec 5 --profile paper_strict --ntfy --steps 60 || true
+	touch kill.flag || true
+	python tools/rollup_posttrade.py
+	python tools/rollup_canary.py || true
+
+# Shadow with real quotes (for daily testing)
+daily-shadow:
+	python scripts/canary_runner.py --symbols SPY,TSLA --poll-sec 5 --profile live_canary --quotes ibkr --shadow --steps 120 || true
+	touch kill.flag || true
+	python tools/rollup_canary.py || true
+
+# Live canary commands
+live:
+	python scripts/canary_runner.py --symbols SPY,TSLA --poll-sec 5 --profile live_canary --quotes ibkr --steps 180
+
+live-shadow:
+	python scripts/canary_runner.py --symbols SPY,TSLA --poll-sec 5 --profile live_canary --quotes ibkr --shadow --steps 150
+
+live-eod:
+	python tools/rollup_live.py
+	python tools/reconcile_orders.py
+
+# Daily maintenance (braindead-simple)
+maintenance:
+	python tools/daily_maintenance.py --symbols SPY,TSLA --minutes 15 --quotes ibkr --ntfy
+
+# Pure shadow-only shorthand
+daily-shadow:
+	python scripts/canary_runner.py --symbols SPY,TSLA --poll-sec 5 --profile live_canary --quotes ibkr --shadow --steps 180
+	python tools/rollup_canary.py
+
+live-rollup:
+	python tools/rollup_live.py
+
+reconcile:
+	python tools/reconcile_orders.py
+
+reconcile-dry-run:
+	python tools/reconcile_orders.py --dry-run
+
+flatten-dry-run:
+	python scripts/flatten_positions.py --dry-run
 # Makefile for Trading System with DataSanity Enforcement
 
 .PHONY: help install test sanity falsify bench-sanity clean coverage lint lint-changed format promote wf smoke type datasanity golden bless_golden quality configcheck lock audit

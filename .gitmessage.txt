@@ -1,0 +1,30 @@
+feat(datasanity): CI hardening & smoke enforcement (v1)
+
+Why:
+- Deterministic, debuggable CI path
+- Prevent dirty merges; surface root-cause via violation codes
+
+What:
+- Enforce walkforward_ci profile (fail-fast) in CI
+- Add short-fold & sanity gates to walkforward/backtest
+- Smoke: deterministic cache, JSON {ok, violation_code}, non-zero on violations
+- Add smoke_run.schema.json and promote gate validation
+- Deterministic unit tests (smoke contract + bad-data cases)
+- README badge + smoke runbook updates
+
+Tests:
+- pytest -q tests/walkforward/test_smoke_contract.py
+- make smoke
+- python tools/validate_metrics.py --input reports/smoke_run.json --schema reports/smoke_run.schema.json
+
+CI:
+- Smoke required; Lint/Full Tests non-blocking
+- Artifacts: docs/analysis/walkforward_smoke_*.md, reports/smoke_run.json
+
+Risk:
+- Validator contract surface extended (backward-compatible)
+- Enforce mode may fail initially (clear violation_code + artifact)
+
+Notes:
+- Branch protection requires Smoke
+- Offline cache: python tools/gen_smoke_cache.py

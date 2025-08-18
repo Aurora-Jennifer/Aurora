@@ -1,0 +1,78 @@
+{
+  "model": "alpha_v1_ridge",
+  "symbols": [
+    "SPY",
+    "TSLA"
+  ],
+  "n_folds": 4,
+  "train_len": 100,
+  "test_len": 30,
+  "stride": 15,
+  "warmup": 20,
+  "fold_results": [
+    {
+      "fold_id": 0,
+      "n_bars": 30,
+      "n_trades": 12,
+      "win_rate": 0.75,
+      "median_hold_bars": 2,
+      "sharpe_nw": 6.136385253808969,
+      "sortino": 3.8212639727327056,
+      "max_dd": -0.8492003192031936,
+      "turnover": 0.8620689511299133,
+      "psr": 1.0,
+      "regime": "alpha_v1_ml",
+      "model_type": "ridge_regression"
+    },
+    {
+      "fold_id": 1,
+      "n_bars": 30,
+      "n_trades": 12,
+      "win_rate": 0.5833333333333334,
+      "median_hold_bars": 1,
+      "sharpe_nw": 3.2560731811515637,
+      "sortino": 2.5379251783209216,
+      "max_dd": -0.8884719088441767,
+      "turnover": 0.8275862336158752,
+      "psr": 1.0,
+      "regime": "alpha_v1_ml",
+      "model_type": "ridge_regression"
+    },
+    {
+      "fold_id": 2,
+      "n_bars": 30,
+      "n_trades": 13,
+      "win_rate": 0.46153846153846156,
+      "median_hold_bars": 1,
+      "sharpe_nw": -0.9647408853393403,
+      "sortino": -0.7601004718402502,
+      "max_dd": -3.08990132532519,
+      "turnover": 0.8965517282485962,
+      "psr": 0.00025218691450407116,
+      "regime": "alpha_v1_ml",
+      "model_type": "ridge_regression"
+    },
+    {
+      "fold_id": 3,
+      "n_bars": 30,
+      "n_trades": 12,
+      "win_rate": 0.4166666666666667,
+      "median_hold_bars": 1,
+      "sharpe_nw": -0.442559007065329,
+      "sortino": -0.3628057648423896,
+      "max_dd": -7.5104105745493115,
+      "turnover": 0.931034505367279,
+      "psr": 0.06262938169617632,
+      "regime": "alpha_v1_ml",
+      "model_type": "ridge_regression"
+    }
+  ],
+  "aggregate_metrics": {
+    "avg_sharpe": 1.9962896356389659,
+    "avg_win_rate": 0.5528846153846154,
+    "avg_turnover": 0.879310354590416,
+    "total_trades": 49,
+    "overall_sharpe": -0.08343960382039557,
+    "overall_max_dd": -1.5508588380095845
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "run_id": "2025-08-18T160740Z",
+  "profile": "risk_balanced",
+  "symbols": [
+    "SPY",
+    "TSLA"
+  ],
+  "start": "2025-08-18T160740Z",
+  "model_id": "dummy_v1",
+  "model_kind": "pickle",
+  "artifact_sha256": "7301788925fbd6f4ce6fe2ba61c87a248d20755ad7aee420d168249b59f5f24d",
+  "feature_order": [
+    "ret_1d",
+    "ret_5d",
+    "vol_10d"
+  ],
+  "model_enabled": true,
+  "model_fallbacks": 0,
+  "stop": "2025-08-18T160741Z"
+}

@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Alpha Evaluation Schema",
+  "type": "object",
+  "required": ["model_id", "symbols", "fold_summaries", "overall_metrics", "metadata"],
+  "properties": {
+    "model_id": {
+      "type": "string",
+      "description": "Model identifier"
+    },
+    "symbols": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "List of symbols evaluated"
+    },
+    "fold_summaries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fold", "train_start", "train_end", "test_start", "test_end", "ic_spearman", "hit_rate", "turnover", "return_with_costs"],
+        "properties": {
+          "fold": {"type": "integer"},
+          "train_start": {"type": "string", "format": "date"},
+          "train_end": {"type": "string", "format": "date"},
+          "test_start": {"type": "string", "format": "date"},
+          "test_end": {"type": "string", "format": "date"},
+          "ic_spearman": {"type": "number"},
+          "hit_rate": {"type": "number"},
+          "turnover": {"type": "number"},
+          "return_with_costs": {"type": "number"},
+          "n_predictions": {"type": "integer"}
+        }
+      }
+    },
+    "overall_metrics": {
+      "type": "object",
+      "required": ["mean_ic", "mean_hit_rate", "mean_turnover", "mean_return_with_costs", "std_ic", "std_hit_rate"],
+      "properties": {
+        "mean_ic": {"type": "number"},
+        "mean_hit_rate": {"type": "number"},
+        "mean_turnover": {"type": "number"},
+        "mean_return_with_costs": {"type": "number"},
+        "std_ic": {"type": "number"},
+        "std_hit_rate": {"type": "number"},
+        "min_ic": {"type": "number"},
+        "max_ic": {"type": "number"},
+        "min_hit_rate": {"type": "number"},
+        "max_hit_rate": {"type": "number"}
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["evaluation_date", "model_path", "feature_config"],
+      "properties": {
+        "evaluation_date": {"type": "string", "format": "date-time"},
+        "model_path": {"type": "string"},
+        "feature_config": {"type": "object"},
+        "training_samples": {"type": "integer"},
+        "test_samples": {"type": "integer"},
+        "n_folds": {"type": "integer"}
+      }
+    }
+  }
+}

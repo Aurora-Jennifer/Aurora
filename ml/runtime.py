@@ -70,3 +70,23 @@ def infer_weights(
     return {i: float(w[i]) for i in range(len(w))}
 
 
+def detect_weight_spikes(previous: Dict[str, float] | None, current: Dict[str, float], max_delta: float) -> list[str]:
+    if not previous:
+        return []
+    spikes: list[str] = []
+    for symbol, weight in current.items():
+        prev = float(previous.get(symbol, 0.0))
+        if abs(weight - prev) > max_delta:
+            spikes.append(symbol)
+    return spikes
+
+
+def compute_turnover(previous: Dict[str, float] | None, current: Dict[str, float]) -> float:
+    if not previous:
+        return float(sum(abs(float(w)) for w in current.values()))
+    all_symbols = set(previous.keys()) | set(current.keys())
+    t = 0.0
+    for s in all_symbols:
+        t += abs(float(current.get(s, 0.0)) - float(previous.get(s, 0.0)))
+    return float(t)
+

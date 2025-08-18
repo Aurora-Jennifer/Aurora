@@ -1,0 +1,11 @@
+{
+  "trades": 1,
+  "symbols": [
+    "SPY"
+  ],
+  "slippage_bps_median": 0.6010578618362862,
+  "slippage_bps_p95": 0.6010578618362862,
+  "turnover_notional": 4991.5,
+  "start": "2025-08-18T14:31:22+00:00",
+  "end": "2025-08-18T14:31:22+00:00"
+}

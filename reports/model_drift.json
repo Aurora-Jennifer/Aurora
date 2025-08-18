@@ -1,0 +1,34 @@
+{
+  "model": {
+    "id": "dummy_v1",
+    "artifact_sha256": ""
+  },
+  "stats": {
+    "ret_1d": {
+      "mean": 0.00031868271159416357,
+      "std": 0.004714389258451792,
+      "missing_pct": 0.0
+    },
+    "ret_5d": {
+      "mean": 0.001460365950352059,
+      "std": 0.010534632555707416,
+      "missing_pct": 0.0
+    },
+    "vol_10d": {
+      "mean": 0.004639344829687008,
+      "std": 0.0012613991456207254,
+      "missing_pct": 0.0
+    }
+  },
+  "psi": {
+    "ret_1d": 0.0,
+    "ret_5d": 0.0,
+    "vol_10d": 0.0
+  },
+  "psi_global": 0.0,
+  "thresholds": {
+    "psi_warn": 0.1,
+    "psi_fail": 0.25,
+    "max_missing_pct": 0.01
+  }
+}

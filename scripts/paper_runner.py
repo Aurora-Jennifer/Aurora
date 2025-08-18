@@ -8,10 +8,12 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from brokers.paper import PaperBroker
 from utils.ops_runtime import kill_switch, notify_ntfy
 import yaml
+import numpy as np
 import pandas as pd
 from ml.model_interface import ModelSpec
 from ml.registry import load_model
-from ml.runtime import set_seeds, build_features, infer_weights
+from ml.runtime import set_seeds, build_features, infer_weights, detect_weight_spikes, compute_turnover
+import shutil, subprocess
 
 try:
     from tools.provenance import write_provenance
@@ -49,6 +51,22 @@ def main(argv: list[str] | None = None):
     write_provenance("reports/paper_provenance.json", ["config/base.yaml"])
 
     # Optional model runtime (feature-flagged)
+    STATE = Path("reports/runner_state.json")
+
+    def _load_prev_weights() -> dict:
+        try:
+            if STATE.exists():
+                return json.loads(STATE.read_text()).get("prev_weights", {})
+        except Exception:
+            pass
+        return {}
+
+    def _save_prev_weights(prev_weights: dict) -> None:
+        try:
+            STATE.parent.mkdir(parents=True, exist_ok=True)
+            STATE.write_text(json.dumps({"prev_weights": prev_weights}, indent=2))
+        except Exception:
+            pass
     try:
         cfg = yaml.safe_load(Path("config/base.yaml").read_text())
         models_cfg = (cfg or {}).get("models", {}) or {}
@@ -63,7 +81,9 @@ def main(argv: list[str] | None = None):
             feat_order = (spec.metadata or {}).get("feature_order", feats_list)
             min_bars = int(models_cfg.get("min_history_bars", 120))
             # Load cached CI data if present; fallback to synthetic drift
-            weights_by_symbol = {}
+            weights_by_symbol: dict[str, float] = {}
+            prev_weights: dict[str, float] | None = _load_prev_weights()
+            model_fallbacks = 0
             for sym in meta["symbols"]:
                 cache_pq = Path("data/smoke_cache") / f"{sym}.parquet"
                 if cache_pq.exists():
@@ -73,7 +93,9 @@ def main(argv: list[str] | None = None):
                 else:
                     # synthetic small series
                     idx = pd.date_range("2020-01-01", periods=180, tz="UTC")
-                    close = pd.Series(100.0, index=idx).cumprod() * 0 + 100.0
+                    # deterministic slight trend
+                    close = pd.Series(100.0, index=idx)
+                    close = close * (1.0 + 0.0005) ** np.arange(len(idx))
                     df = pd.DataFrame({"Close": close.values}, index=idx)
                 if "Close" not in df.columns and df.shape[1] > 0:
                     # pick first as close-like
@@ -84,13 +106,30 @@ def main(argv: list[str] | None = None):
                 if isinstance(w, dict) and "status" not in w:
                     # use first weight
                     weights_by_symbol[sym] = float(next(iter(w.values())))
+                else:
+                    model_fallbacks += 1
+            # Tripwires (only evaluate if we have a previous snapshot)
+            MAX_DW = 0.25
+            spikes = detect_weight_spikes(prev_weights, weights_by_symbol, MAX_DW)
+            if spikes:
+                meta["model_tripwire"] = {"reason": "weight_spike", "spikes": spikes}
+                model_fallbacks += 1
+            TURNOVER_CAP = 1.0
+            if prev_weights:
+                turnover = compute_turnover(prev_weights, weights_by_symbol)
+                if turnover > TURNOVER_CAP:
+                    meta["model_tripwire_turnover"] = {"turnover": turnover}
+                    model_fallbacks += 1
             meta.update({
                 "model_id": m_id,
                 "model_kind": spec.kind,
                 "artifact_sha256": art_sha,
                 "feature_order": feat_order,
+                "model_enabled": True,
+                "model_fallbacks": model_fallbacks,
             })
             # weights_by_symbol is ready for router integration (future step)
+            prev_weights = weights_by_symbol.copy()
     except Exception:
         # Non-fatal: log via meta note and continue fallback
         meta["model_runtime"] = "fallback"
@@ -102,8 +141,32 @@ def main(argv: list[str] | None = None):
 
     meta["stop"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H%M%SZ")
     (Path("reports") / "paper_run.meta.json").write_text(json.dumps(meta, indent=2))
+    # Persist prev weights across restarts
+    try:
+        _save_prev_weights(locals().get("prev_weights") or {})
+    except Exception:
+        pass
+    # End-of-run notification with summary if anomalies occurred
     if args.ntfy:
-        notify_ntfy("Aurora: paper done", {"run_id": run_id})
+        fallbacks = int(meta.get("model_fallbacks", 0))
+        abnormal = fallbacks > 0 or ("model_tripwire" in meta or "model_tripwire_turnover" in meta)
+        title = "Aurora: paper OK" if not abnormal else "Aurora: paper WARN"
+        body = {
+            "run_id": run_id,
+            "fallbacks": fallbacks,
+            "tripwire": meta.get("model_tripwire"),
+            "turnover": meta.get("model_tripwire_turnover"),
+        }
+        notify_ntfy(title, body)
+        # Auto-issue on anomalies if configured
+        if abnormal:
+            repo = os.getenv("GITHUB_REPOSITORY", "")
+            token = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN") or ""
+            if shutil.which("python") and (repo and token):
+                try:
+                    subprocess.run(["python", "tools/gh_issue.py", repo, token], check=False)
+                except Exception:
+                    pass
 
 
 if __name__ == "__main__":

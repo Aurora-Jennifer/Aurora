@@ -1,0 +1,12 @@
+ibkr:
+  host: 127.0.0.1
+  port: 7497          # 7497 paper, 7496 live
+  client_id: 34659781
+  account: "fammyy214"
+  route: "SMART"
+  currency: "USD"
+  allow_fractional: false
+  px_tick: 0.01
+  qty_min: 1.0
+  snap_ms: 150        # Quote snapshot delay
+  pacing_ms: 100      # Minimum time between API calls

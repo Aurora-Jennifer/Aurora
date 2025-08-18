@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-08-18T17:03:57.445711+00:00",
+  "broker": "IBKRBroker",
+  "order_reconciliation": {
+    "missing_local": [],
+    "missing_venue": [],
+    "status_mismatches": [],
+    "local_count": 0,
+    "venue_count": 0
+  },
+  "position_reconciliation": {
+    "qty_diffs": {},
+    "local_positions": {},
+    "venue_positions": {}
+  },
+  "has_differences": false
+}

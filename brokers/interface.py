@@ -1,22 +1,107 @@
 from __future__ import annotations
 from typing import Protocol, Dict, Any
+from datetime import datetime, timezone
 
 
 class Broker(Protocol):
-    def submit(self, order: Dict[str, Any]) -> Dict[str, Any]:
+    """Protocol for live trading broker adapters."""
+    
+    def submit_order(self, symbol: str, side: str, qty: float, order_type: str = "market") -> Dict[str, Any]:
+        """Submit an order to the broker.
+        
+        Args:
+            symbol: Trading symbol (e.g., "SPY")
+            side: "BUY" or "SELL"
+            qty: Quantity to trade
+            order_type: "market", "limit", etc.
+            
+        Returns:
+            Dict with order_id, status, timestamp, etc.
+        """
+        ...
+    
+    def cancel_order(self, order_id: str) -> Dict[str, Any]:
+        """Cancel an existing order.
+        
+        Args:
+            order_id: Order ID to cancel
+            
+        Returns:
+            Dict with status, timestamp, etc.
+        """
+        ...
+    
+    def get_positions(self) -> Dict[str, float]:
+        """Get current positions by symbol.
+        
+        Returns:
+            Dict mapping symbol to position size (positive = long, negative = short)
+        """
+        ...
+    
+    def get_cash(self) -> float:
+        """Get available cash balance.
+        
+        Returns:
+            Available cash amount
+        """
+        ...
+    
+    def get_fills(self, since: datetime | None = None) -> list[Dict[str, Any]]:
+        """Get recent fills.
+        
+        Args:
+            since: Get fills since this timestamp (UTC)
+            
+        Returns:
+            List of fill dicts with symbol, side, qty, price, timestamp, etc.
+        """
+        ...
+    
+    def now(self) -> datetime:
+        """Get current broker time (UTC).
+        
+        Returns:
+            Current timestamp from broker
+        """
         ...
 
-    def cancel(self, order_id: str) -> bool:
-        ...
 
-    def positions(self) -> Dict[str, float]:
-        ...
-
-    def cash(self) -> float:
-        ...
-
-    def now(self):
-        ...
+def get_broker(venue: str = "example") -> Broker:
+    """Factory function to get broker instance.
+    
+    Args:
+        venue: Broker venue ("example", "ibkr", etc.)
+        
+    Returns:
+        Broker instance implementing the Broker protocol
+    """
+    if venue == "example":
+        from .example_venue import ExampleVenueBroker
+        return ExampleVenueBroker()
+    elif venue == "ibkr":
+        from .ibkr import IBKRBroker, IBKRConfig
+        import yaml
+        from pathlib import Path
+        
+        # Load IBKR config from overlay
+        ibkr_cfg = yaml.safe_load(Path("config/brokers/ibkr.yaml").read_text())
+        
+        # Create config
+        config = IBKRConfig(
+            host=ibkr_cfg.get("ibkr", {}).get("host", "127.0.0.1"),
+            port=ibkr_cfg.get("ibkr", {}).get("port", 7497),
+            client_id=ibkr_cfg.get("ibkr", {}).get("client_id", 123),
+            account=ibkr_cfg.get("ibkr", {}).get("account"),
+            route=ibkr_cfg.get("ibkr", {}).get("route", "SMART"),
+            currency=ibkr_cfg.get("ibkr", {}).get("currency", "USD"),
+            allow_fractional=ibkr_cfg.get("ibkr", {}).get("allow_fractional", False),
+            px_tick=ibkr_cfg.get("ibkr", {}).get("px_tick", 0.01),
+            qty_min=ibkr_cfg.get("ibkr", {}).get("qty_min", 1.0)
+        )
+        return IBKRBroker(config)
+    else:
+        raise ValueError(f"Unknown broker venue: {venue}")
 
 
 def normalize_order(symbol: str, side: str, qty: float, px: float | None = None) -> Dict[str, Any]:

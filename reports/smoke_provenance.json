@@ -1,0 +1,10 @@
+{
+  "config_hashes": {
+    "config/base.yaml": "df23080ec06abf26c9827896e213a261d4d6873afdd989c14d2e55edb64f4cd5"
+  },
+  "cache_hashes": {
+    "data/smoke_cache/TSLA.parquet": "d971ec386934afd9bbb71ba0be4d122bce4fd48b1847777cf8bcd2017aaec100",
+    "data/smoke_cache/BTC-USD.parquet": "d971ec386934afd9bbb71ba0be4d122bce4fd48b1847777cf8bcd2017aaec100",
+    "data/smoke_cache/SPY.parquet": "d971ec386934afd9bbb71ba0be4d122bce4fd48b1847777cf8bcd2017aaec100"
+  }
+}

@@ -64,6 +64,18 @@ This trading system implements a **two-level composer architecture**:
 pip install -r requirements.txt
 ```
 
+### **ML Alpha Generation**
+```bash
+# Train Alpha v1 model on SPY, TSLA
+python tools/train_alpha_v1.py --symbols SPY,TSLA
+
+# Validate results against promotion gates
+python tools/validate_alpha.py reports/alpha_eval.json
+
+# Run leakage tests to ensure no data snooping
+python -m pytest tests/ml/test_leakage_guards.py -v
+```
+
 ### **Basic Backtest**
 ```bash
 # Conservative approach
@@ -196,7 +208,47 @@ python cli/backtest.py \
   --symbols SPY
 ```
 
+## 🎯 Core Features
+
+### **ML Alpha Generation**
+- **Alpha v1 Pipeline**: Complete ML workflow with Ridge regression
+- **Leakage Guards**: Strict time-based validation prevents data snooping
+- **Walkforward Evaluation**: 5-fold validation with cost-aware metrics
+- **Promotion Gates**: Clear criteria for live trading deployment
+- **Feature Engineering**: 8 technical features with proper label shifting
+
+### **Multi-Asset Support**
+- **Equity**: SPY, QQQ, AAPL, MSFT, NVDA, GOOGL, TSLA, AMZN
+- **Crypto**: BTC-USD, ETH-USD
+- **ETFs**: Sector ETFs, International ETFs
+- **Custom**: Add any yfinance symbol
+
 ## 🔄 How It Works
+
+### **ML Alpha Pipeline**
+```
+Market Data → Feature Engineering → Model Training → Walkforward Evaluation → Promotion Gates → Live Trading
+```
+
+1. **Feature Engineering**:
+   - 8 technical features (momentum, volatility, RSI, volume)
+   - Strict leakage guards (label shifted forward by 1 day)
+   - Parquet storage for efficiency
+
+2. **Model Training**:
+   - Ridge regression with cross-validation
+   - Time-based train/test split (no leakage)
+   - Deterministic training with fixed random seed
+
+3. **Evaluation**:
+   - 5-fold walkforward validation
+   - Cost-aware metrics (slippage + fees)
+   - IC, Hit Rate, Turnover, Net Return
+
+4. **Promotion Gates**:
+   - IC ≥ 0.02 (information coefficient)
+   - Hit Rate ≥ 0.52 (directional accuracy)
+   - Turnover ≤ 2.0 (not excessive trading)
 
 ### **Two-Level Composer System**
 
