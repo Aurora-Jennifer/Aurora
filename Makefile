@@ -1,6 +1,6 @@
 # Makefile for Trading System with DataSanity Enforcement
 
-.PHONY: help install test sanity falsify bench-sanity clean coverage lint lint-changed format promote wf
+.PHONY: help install test sanity falsify bench-sanity clean coverage lint lint-changed format promote wf smoke type
 
 # Default target
 help:
@@ -63,6 +63,14 @@ wf:
 # Promotion gate
 promote:
 	python tools/promotion_gate.py --fail-on-quarantine --report
+
+# Smoke preset (fast CI-friendly walkforward)
+smoke:
+	python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO
+
+# Type checking (non-blocking for now)
+type:
+	mypy --strict || true
 
 # Clean up generated files
 clean:

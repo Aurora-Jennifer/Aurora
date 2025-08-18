@@ -19,6 +19,7 @@ from typing import Dict, List, Tuple
 
 import numpy as np
 import pandas as pd
+import json
 
 import os
 import sys
@@ -363,6 +364,21 @@ def main():
             avg_sharpe = float(np.mean([v.get("avg_sharpe", 0.0) for v in overall.values()])) if overall else 0.0
             avg_maxdd = float(np.mean([v.get("avg_maxdd", 0.0) for v in overall.values()])) if overall else 0.0
             print(f"SMOKE OK | folds={eff_folds} | symbols={','.join(ordered)} | sharpe={avg_sharpe:.3f} maxdd={avg_maxdd:.3f}")
+            # Emit machine-readable metrics for CI
+            rep_dir = Path("reports")
+            rep_dir.mkdir(parents=True, exist_ok=True)
+            run_meta = {
+                "timestamp": dt.datetime.now(dt.UTC).strftime("%Y%m%dT%H%M%SZ"),
+                "folds": eff_folds,
+                "symbols": ordered,
+                "trades": int(summary.get("total_trades", 0)),
+                "duration_s": float(f"{duration:.3f}"),
+                "sharpe": float(avg_sharpe),
+                "max_drawdown": float(avg_maxdd),
+                "seed": 1337,
+                "auto_adjust": False,
+            }
+            (rep_dir / "smoke_run.json").write_text(json.dumps(run_meta, indent=2))
 
     print(f"Report written: {out_file}")
 
