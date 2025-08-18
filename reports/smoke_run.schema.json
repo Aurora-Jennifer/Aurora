@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["timestamp", "ok"],
+  "properties": {
+    "timestamp": {"type": "string"},
+    "ok": {"type": "boolean"},
+    "violation_code": {"type": ["string", "null"]},
+    "folds": {"type": "integer", "minimum": 0},
+    "symbols": {"type": "array", "items": {"type": "string"}},
+    "trades": {"type": "integer", "minimum": 0},
+    "duration_s": {"type": "number", "minimum": 0},
+    "sharpe": {"type": "number"},
+    "max_drawdown": {"type": "number"}
+  }
+}

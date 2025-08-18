@@ -26,7 +26,7 @@ jobs:
       - name: Smoke run
         run: make smoke
       - name: Promote gate
-        run: python tools/validate_metrics.py --input reports/smoke_run.json --schema reports/metrics.schema.json
+        run: python tools/validate_metrics.py --input reports/smoke_run.json --schema reports/smoke_run.schema.json
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
