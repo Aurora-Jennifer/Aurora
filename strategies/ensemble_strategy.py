@@ -379,8 +379,14 @@ class EnsembleStrategy(BaseStrategy):
 if __name__ == "__main__":
     import yfinance as yf
 
+    from core.data_sanity import get_data_sanity_wrapper
+
     # Fetch sample data
-    data = yf.download("SPY", start="2020-01-01", end="2025-01-01")
+    raw_data = yf.download("SPY", start="2020-01-01", end="2025-01-01")
+
+    # Validate and repair data using DataSanity
+    data_sanity = get_data_sanity_wrapper()
+    data = data_sanity.validate_dataframe(raw_data, "SPY")
 
     # Create ensemble strategy
     params = EnsembleStrategyParams(

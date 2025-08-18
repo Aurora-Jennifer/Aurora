@@ -1,0 +1,538 @@
+{
+  "symbols": [
+    "SPY",
+    "QQQ"
+  ],
+  "initial_capital": 100000,
+  "use_ibkr": false,
+  "strategy": "regime_aware_ensemble",
+  "strategy_params": {
+    "regime_aware_ensemble": {
+      "confidence_threshold": 0.3,
+      "regime_lookback": 252,
+      "trend_following_weight": 0.6,
+      "mean_reversion_weight": 0.4
+    }
+  },
+  "risk_params": {
+    "max_position_size_pct": 10.0,
+    "max_daily_loss_pct": 2.0
+  },
+  "execution_params": {
+    "slippage_bps": 2,
+    "commission_bps": 5
+  },
+  "notifications": {
+    "discord_enabled": false
+  },
+  "performance_tracking": {
+    "save_results": true
+  },
+  "signal_templates": {
+    "AAPL_simple": {
+      "symbol": "AAPL",
+      "analysis_date": "2025-08-13T16:25:35.722622",
+      "data_period": {
+        "start_date": "2022-11-17",
+        "end_date": "2025-08-12",
+        "total_days": 684
+      },
+      "performance_metrics": {
+        "total_return": 0.017391435628928642,
+        "annualized_return": 0.006381870497031539,
+        "volatility": 0.1561783371664359,
+        "sharpe_ratio": 0.040862712542716575,
+        "max_drawdown": -0.18221557083289303,
+        "win_rate": 0.4810810810810811,
+        "total_trades": 185
+      },
+      "signal_template": {
+        "type": "mean_reversion",
+        "confidence": 0.3,
+        "market_regime": {
+          "volatility_level": "low",
+          "trend_strength": "weak",
+          "rsi_regime": "neutral"
+        },
+        "signal_parameters": {
+          "rsi_oversold_threshold": 30.0,
+          "rsi_overbought_threshold": 70.0,
+          "sma_crossover_threshold": 1.0,
+          "volume_threshold": 1.5,
+          "bb_threshold": 0.2
+        },
+        "regime_weights": {
+          "trend_following_weight": 0.5,
+          "mean_reversion_weight": 0.5
+        },
+        "position_sizing": {
+          "max_position_size_pct": 5.0,
+          "base_position_size": 1000.0,
+          "volatility_adjustment": true
+        },
+        "risk_management": {
+          "stop_loss_pct": 2.0,
+          "take_profit_pct": 0.20431356271358286,
+          "max_daily_loss_pct": 2.0
+        }
+      },
+      "indicators_summary": {
+        "sma_20_mean": 192.57387462988828,
+        "sma_20_std": 29.06681373323246,
+        "sma_20_current": 213.2878616333008,
+        "sma_50_mean": 193.56268625526727,
+        "sma_50_std": 27.53643416160954,
+        "sma_50_current": 207.56340393066407,
+        "sma_200_mean": 196.23397425150134,
+        "sma_200_std": 20.912552082903208,
+        "sma_200_current": 220.46641311645507,
+        "price_to_sma20_mean": 1.0061985433546954,
+        "price_to_sma20_std": 0.039169671450001504,
+        "price_to_sma20_current": 1.0767138464321728,
+        "price_to_sma50_mean": 1.0182106929921926,
+        "price_to_sma50_std": 0.05867288653284491,
+        "price_to_sma50_current": 1.1064088830090602,
+        "sma20_to_sma50_mean": 1.0106590314020734,
+        "sma20_to_sma50_std": 0.03480061125486533,
+        "sma20_to_sma50_current": 1.0275793207965935,
+        "volatility_20_mean": 0.015119247817299664,
+        "volatility_20_std": 0.007227105780335782,
+        "volatility_20_current": 0.018160005871911196,
+        "volatility_50_mean": 0.015554797512619522,
+        "volatility_50_std": 0.006162749035063789,
+        "volatility_50_current": 0.014371396370181375,
+        "rsi_mean": 53.84334846892562,
+        "rsi_std": 18.05265603233387,
+        "rsi_current": 67.68273035652095,
+        "macd_mean": 0.6875218229520742,
+        "macd_std": 3.1492283440361573,
+        "macd_current": 4.27747990287105,
+        "macd_signal_mean": 0.6741335644950502,
+        "macd_signal_std": 2.9284764296068246,
+        "macd_signal_current": 2.184203130438602,
+        "macd_histogram_mean": 0.013388258457023978,
+        "macd_histogram_std": 1.0323238041796745,
+        "macd_histogram_current": 2.0932767724324486,
+        "bb_upper_mean": 203.21118728085065,
+        "bb_upper_std": 31.176115151355777,
+        "bb_upper_current": 229.0811164655628,
+        "bb_lower_mean": 181.93656197892597,
+        "bb_lower_std": 27.8009493350173,
+        "bb_lower_current": 197.4946068010388,
+        "bb_position_mean": 0.5669726327053235,
+        "bb_position_std": 0.324688231534044,
+        "bb_position_current": 1.018010139042381,
+        "volume_sma_mean": 58630725.616541356,
+        "volume_sma_std": 10279258.608602768,
+        "volume_sma_current": 62238455.0,
+        "volume_ratio_mean": 1.0061192863033404,
+        "volume_ratio_std": 0.39334883766584194,
+        "volume_ratio_current": 0.8937593325541259
+      }
+    },
+    "SPY_simple": {
+      "symbol": "SPY",
+      "analysis_date": "2025-08-13T16:25:35.463490",
+      "data_period": {
+        "start_date": "2022-11-17",
+        "end_date": "2025-08-12",
+        "total_days": 684
+      },
+      "performance_metrics": {
+        "total_return": 0.15368758479731914,
+        "annualized_return": 0.05416379986046893,
+        "volatility": 0.09877173536861626,
+        "sharpe_ratio": 0.5483734760590118,
+        "max_drawdown": -0.07111918323052883,
+        "win_rate": 0.5290322580645161,
+        "total_trades": 155
+      },
+      "signal_template": {
+        "type": "regime_aware_ensemble",
+        "confidence": 0.2741867380295059,
+        "market_regime": {
+          "volatility_level": "low",
+          "trend_strength": "strong",
+          "rsi_regime": "neutral"
+        },
+        "signal_parameters": {
+          "rsi_oversold_threshold": 30.0,
+          "rsi_overbought_threshold": 70.0,
+          "sma_crossover_threshold": 1.0,
+          "volume_threshold": 1.5,
+          "bb_threshold": 0.2
+        },
+        "regime_weights": {
+          "trend_following_weight": 0.7,
+          "mean_reversion_weight": 0.3
+        },
+        "position_sizing": {
+          "max_position_size_pct": 5.483734760590117,
+          "base_position_size": 1000.0,
+          "volatility_adjustment": true
+        },
+        "risk_management": {
+          "stop_loss_pct": 2.0,
+          "take_profit_pct": 2.7418673802950586,
+          "max_daily_loss_pct": 2.0
+        }
+      },
+      "indicators_summary": {
+        "sma_20_mean": 495.59816341314104,
+        "sma_20_std": 77.29603835436097,
+        "sma_20_current": 632.1809967041015,
+        "sma_50_mean": 495.42498538904874,
+        "sma_50_std": 73.7277996657776,
+        "sma_50_current": 617.5599951171876,
+        "sma_200_mean": 497.7278738195675,
+        "sma_200_std": 60.76382924026489,
+        "sma_200_current": 587.5548840332032,
+        "price_to_sma20_mean": 1.007272917979191,
+        "price_to_sma20_std": 0.02167697021914294,
+        "price_to_sma20_current": 1.0166234129024658,
+        "price_to_sma50_mean": 1.0196850700479339,
+        "price_to_sma50_std": 0.03260812132918673,
+        "price_to_sma50_current": 1.0406924145393357,
+        "sma20_to_sma50_mean": 1.0118971774012597,
+        "sma20_to_sma50_std": 0.01965960265877868,
+        "sma20_to_sma50_current": 1.0236754351034987,
+        "volatility_20_mean": 0.008957346784619282,
+        "volatility_20_std": 0.004855710125425886,
+        "volatility_20_current": 0.006783392900556035,
+        "volatility_50_mean": 0.009279512917297146,
+        "volatility_50_std": 0.00419687937778838,
+        "volatility_50_current": 0.006151510936429112,
+        "rsi_mean": 58.08225309827391,
+        "rsi_std": 16.42436166555636,
+        "rsi_current": 58.61434831887027,
+        "macd_mean": 2.4815296191886773,
+        "macd_std": 4.650025908253564,
+        "macd_current": 5.442510552798581,
+        "macd_signal_mean": 2.448663086701879,
+        "macd_signal_std": 4.342301394321439,
+        "macd_signal_current": 5.717510993796046,
+        "macd_histogram_mean": 0.03286653248679848,
+        "macd_histogram_std": 1.4797088846575575,
+        "macd_histogram_current": -0.27500044099746557,
+        "bb_upper_mean": 511.2632190236314,
+        "bb_upper_std": 80.01005265620329,
+        "bb_upper_current": 642.1596957796922,
+        "bb_lower_mean": 479.93310780265057,
+        "bb_lower_std": 75.31510961411738,
+        "bb_lower_current": 622.2022976285108,
+        "bb_position_mean": 0.6272733087122438,
+        "bb_position_std": 0.3148892307169661,
+        "bb_position_current": 1.0265719337609454,
+        "volume_sma_mean": 69974718.43609023,
+        "volume_sma_std": 16980012.604111224,
+        "volume_sma_current": 72616905.0,
+        "volume_ratio_mean": 1.0050954844449032,
+        "volume_ratio_std": 0.3130173775364603,
+        "volume_ratio_current": 0.8914012515405332
+      }
+    },
+    "GOOGL_simple": {
+      "symbol": "GOOGL",
+      "analysis_date": "2025-08-13T16:25:35.935058",
+      "data_period": {
+        "start_date": "2022-11-17",
+        "end_date": "2025-08-12",
+        "total_days": 684
+      },
+      "performance_metrics": {
+        "total_return": 0.485348346694374,
+        "annualized_return": 0.15717183983917993,
+        "volatility": 0.1570819333391302,
+        "sharpe_ratio": 1.000572354173001,
+        "max_drawdown": -0.15146378037633398,
+        "win_rate": 0.5054945054945055,
+        "total_trades": 182
+      },
+      "signal_template": {
+        "type": "regime_aware_ensemble",
+        "confidence": 0.5002861770865005,
+        "market_regime": {
+          "volatility_level": "low",
+          "trend_strength": "strong",
+          "rsi_regime": "neutral"
+        },
+        "signal_parameters": {
+          "rsi_oversold_threshold": 30.0,
+          "rsi_overbought_threshold": 70.0,
+          "sma_crossover_threshold": 1.0,
+          "volume_threshold": 1.5,
+          "bb_threshold": 0.2
+        },
+        "regime_weights": {
+          "trend_following_weight": 0.7,
+          "mean_reversion_weight": 0.3
+        },
+        "position_sizing": {
+          "max_position_size_pct": 10.0,
+          "base_position_size": 1000.0,
+          "volatility_adjustment": true
+        },
+        "risk_management": {
+          "stop_loss_pct": 2.0,
+          "take_profit_pct": 5.002861770865005,
+          "max_daily_loss_pct": 2.0
+        }
+      },
+      "indicators_summary": {
+        "sma_20_mean": 146.2634177731392,
+        "sma_20_std": 29.51872009038892,
+        "sma_20_current": 193.12999877929687,
+        "sma_50_mean": 146.70833696332315,
+        "sma_50_std": 27.890910229715914,
+        "sma_50_current": 181.91816101074218,
+        "sma_200_mean": 149.70397168535058,
+        "sma_200_std": 21.245038853547857,
+        "sma_200_current": 175.92166336059572,
+        "price_to_sma20_mean": 1.0106803988252253,
+        "price_to_sma20_std": 0.043096345241769744,
+        "price_to_sma20_current": 1.0528659329111343,
+        "price_to_sma50_mean": 1.0285631997694586,
+        "price_to_sma50_std": 0.0636561543754648,
+        "price_to_sma50_current": 1.1177553423370605,
+        "sma20_to_sma50_mean": 1.016581076914525,
+        "sma20_to_sma50_std": 0.037185848023854426,
+        "sma20_to_sma50_current": 1.061631217610498,
+        "volatility_20_mean": 0.018424980828621644,
+        "volatility_20_std": 0.005578056934829991,
+        "volatility_20_current": 0.01313340460883561,
+        "volatility_50_mean": 0.018916590864283267,
+        "volatility_50_std": 0.0037434800517710354,
+        "volatility_50_current": 0.01474898055860098,
+        "rsi_mean": 54.72008790226321,
+        "rsi_std": 16.11124549936729,
+        "rsi_current": 71.3587799315566,
+        "macd_mean": 0.9339529521978092,
+        "macd_std": 2.7028703425191125,
+        "macd_current": 5.594481297392122,
+        "macd_signal_mean": 0.903752527198747,
+        "macd_signal_std": 2.522642896702972,
+        "macd_signal_current": 5.1387501397455475,
+        "macd_histogram_mean": 0.030200424999062045,
+        "macd_histogram_std": 0.8205594442030195,
+        "macd_histogram_current": 0.4557311576465741,
+        "bb_upper_mean": 155.28259577589512,
+        "bb_upper_std": 31.129804303818965,
+        "bb_upper_current": 204.16763982982675,
+        "bb_lower_mean": 137.24423977038327,
+        "bb_lower_std": 28.324585480824048,
+        "bb_lower_current": 182.09235772876698,
+        "bb_position_mean": 0.589236279186127,
+        "bb_position_std": 0.3158058513380966,
+        "bb_position_current": 0.9625081352008454,
+        "volume_sma_mean": 31495772.157894738,
+        "volume_sma_std": 6461198.832447835,
+        "volume_sma_current": 38374305.0,
+        "volume_ratio_mean": 1.009640687575212,
+        "volume_ratio_std": 0.3864936895139448,
+        "volume_ratio_current": 0.7921420335821066
+      }
+    },
+    "QQQ_simple": {
+      "symbol": "QQQ",
+      "analysis_date": "2025-08-13T16:25:35.569537",
+      "data_period": {
+        "start_date": "2022-11-17",
+        "end_date": "2025-08-12",
+        "total_days": 684
+      },
+      "performance_metrics": {
+        "total_return": 0.36898007110424214,
+        "annualized_return": 0.12285880136145955,
+        "volatility": 0.12221618070784893,
+        "sharpe_ratio": 1.0052580652568972,
+        "max_drawdown": -0.13184935913163962,
+        "win_rate": 0.5279503105590062,
+        "total_trades": 161
+      },
+      "signal_template": {
+        "type": "regime_aware_ensemble",
+        "confidence": 0.5026290326284486,
+        "market_regime": {
+          "volatility_level": "low",
+          "trend_strength": "strong",
+          "rsi_regime": "neutral"
+        },
+        "signal_parameters": {
+          "rsi_oversold_threshold": 30.0,
+          "rsi_overbought_threshold": 70.0,
+          "sma_crossover_threshold": 1.0,
+          "volume_threshold": 1.5,
+          "bb_threshold": 0.2
+        },
+        "regime_weights": {
+          "trend_following_weight": 0.7,
+          "mean_reversion_weight": 0.3
+        },
+        "position_sizing": {
+          "max_position_size_pct": 10.0,
+          "base_position_size": 1000.0,
+          "volatility_adjustment": true
+        },
+        "risk_management": {
+          "stop_loss_pct": 2.0,
+          "take_profit_pct": 5.026290326284486,
+          "max_daily_loss_pct": 2.0
+        }
+      },
+      "indicators_summary": {
+        "sma_20_mean": 421.084542144546,
+        "sma_20_std": 80.63506701010795,
+        "sma_20_current": 565.5824981689453,
+        "sma_50_mean": 421.46907065468133,
+        "sma_50_std": 75.62291916302689,
+        "sma_50_current": 550.2041198730469,
+        "sma_200_mean": 426.14297333896286,
+        "sma_200_std": 58.65388834322006,
+        "sma_200_current": 512.4787939453125,
+        "price_to_sma20_mean": 1.0102781335272843,
+        "price_to_sma20_std": 0.029558622896474505,
+        "price_to_sma20_current": 1.025579804309471,
+        "price_to_sma50_mean": 1.0281765148419106,
+        "price_to_sma50_std": 0.04389116568190019,
+        "price_to_sma50_current": 1.0542450825828211,
+        "sma20_to_sma50_mean": 1.0170015671280368,
+        "sma20_to_sma50_std": 0.0264342636451263,
+        "sma20_to_sma50_current": 1.0279503146931122,
+        "volatility_20_mean": 0.012075843184017795,
+        "volatility_20_std": 0.0052874974961529065,
+        "volatility_20_current": 0.008288543218151529,
+        "volatility_50_mean": 0.012426515576822833,
+        "volatility_50_std": 0.004447813632460098,
+        "volatility_50_current": 0.007525786177429637,
+        "rsi_mean": 57.76502888023195,
+        "rsi_std": 16.19531002141733,
+        "rsi_current": 64.16114397876223,
+        "macd_mean": 2.8467399846967907,
+        "macd_std": 5.2889405780121015,
+        "macd_current": 6.7428588895548955,
+        "macd_signal_mean": 2.809102035903616,
+        "macd_signal_std": 4.937128654084032,
+        "macd_signal_current": 6.45416022702533,
+        "macd_histogram_mean": 0.03763794879317501,
+        "macd_histogram_std": 1.6888627860601335,
+        "macd_histogram_current": 0.28869866252956555,
+        "bb_upper_mean": 438.860052186091,
+        "bb_upper_std": 83.44033479887949,
+        "bb_upper_current": 577.4461263947129,
+        "bb_lower_mean": 403.30903210300085,
+        "bb_lower_std": 78.69070890695129,
+        "bb_lower_current": 553.7188699431778,
+        "bb_position_mean": 0.6303841816701673,
+        "bb_position_std": 0.30966587645841426,
+        "bb_position_current": 1.1097413602611177,
+        "volume_sma_mean": 44904928.85714286,
+        "volume_sma_std": 10078581.53021126,
+        "volume_sma_current": 44337780.0,
+        "volume_ratio_mean": 1.003791616930591,
+        "volume_ratio_std": 0.2921632591188351,
+        "volume_ratio_current": 0.9505054154718617
+      }
+    },
+    "MSFT_simple": {
+      "symbol": "MSFT",
+      "analysis_date": "2025-08-13T16:25:35.849688",
+      "data_period": {
+        "start_date": "2022-11-17",
+        "end_date": "2025-08-12",
+        "total_days": 684
+      },
+      "performance_metrics": {
+        "total_return": 0.28274918203707444,
+        "annualized_return": 0.09622582602379026,
+        "volatility": 0.12006829764341696,
+        "sharpe_ratio": 0.8014257544449002,
+        "max_drawdown": -0.13442495417645486,
+        "win_rate": 0.5165562913907285,
+        "total_trades": 151
+      },
+      "signal_template": {
+        "type": "regime_aware_ensemble",
+        "confidence": 0.4007128772224501,
+        "market_regime": {
+          "volatility_level": "low",
+          "trend_strength": "strong",
+          "rsi_regime": "overbought"
+        },
+        "signal_parameters": {
+          "rsi_oversold_threshold": 30.0,
+          "rsi_overbought_threshold": 70.0,
+          "sma_crossover_threshold": 1.0,
+          "volume_threshold": 1.5,
+          "bb_threshold": 0.2
+        },
+        "regime_weights": {
+          "trend_following_weight": 0.7,
+          "mean_reversion_weight": 0.3
+        },
+        "position_sizing": {
+          "max_position_size_pct": 8.014257544449002,
+          "base_position_size": 1000.0,
+          "volatility_adjustment": true
+        },
+        "risk_management": {
+          "stop_loss_pct": 2.0,
+          "take_profit_pct": 4.007128772224501,
+          "max_daily_loss_pct": 2.0
+        }
+      },
+      "indicators_summary": {
+        "sma_20_mean": 374.47840417618147,
+        "sma_20_std": 68.46582671556307,
+        "sma_20_current": 517.5650009155273,
+        "sma_50_mean": 374.69814710578015,
+        "sma_50_std": 62.579266797400656,
+        "sma_50_current": 498.3152001953125,
+        "sma_200_mean": 381.8377784002245,
+        "sma_200_std": 44.94760018787122,
+        "sma_200_current": 435.61157516479494,
+        "price_to_sma20_mean": 1.0111227830679412,
+        "price_to_sma20_std": 0.035072625826283475,
+        "price_to_sma20_current": 1.0225575324803564,
+        "price_to_sma50_mean": 1.0307958670517041,
+        "price_to_sma50_std": 0.05527938243385886,
+        "price_to_sma50_current": 1.0620586930259033,
+        "sma20_to_sma50_mean": 1.0179792641218046,
+        "sma20_to_sma50_std": 0.032878893405097975,
+        "sma20_to_sma50_current": 1.0386297682925785,
+        "volatility_20_mean": 0.01449438066381007,
+        "volatility_20_std": 0.004747749095865846,
+        "volatility_20_current": 0.01285519437064088,
+        "volatility_50_mean": 0.014784253332791968,
+        "volatility_50_std": 0.003558290827740019,
+        "volatility_50_current": 0.009666809565878036,
+        "rsi_mean": 55.990458219555556,
+        "rsi_std": 16.60990774735296,
+        "rsi_current": 65.64048141902933,
+        "macd_mean": 2.727818865229997,
+        "macd_std": 5.75363972133952,
+        "macd_current": 8.547104735506764,
+        "macd_signal_mean": 2.674192812545217,
+        "macd_signal_std": 5.408744446788126,
+        "macd_signal_current": 9.287758461267513,
+        "macd_histogram_mean": 0.05362605268478015,
+        "macd_histogram_std": 1.7044511026157931,
+        "macd_histogram_current": -0.7406537257607493,
+        "bb_upper_mean": 392.70029604545016,
+        "bb_upper_std": 70.5220006462725,
+        "bb_upper_current": 536.332346261518,
+        "bb_lower_mean": 356.2565123069127,
+        "bb_lower_std": 67.37035895058578,
+        "bb_lower_current": 498.79765556953674,
+        "bb_position_mean": 0.5971487171406411,
+        "bb_position_std": 0.31973821531078456,
+        "bb_position_current": 0.8110453051193481,
+        "volume_sma_mean": 23872962.66917293,
+        "volume_sma_std": 4693012.590119318,
+        "volume_sma_current": 20376610.0,
+        "volume_ratio_mean": 1.001509334384233,
+        "volume_ratio_std": 0.3634179355223965,
+        "volume_ratio_current": 0.9160993904285355
+      }
+    }
+  }
+}

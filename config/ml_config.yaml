@@ -1,0 +1,179 @@
+# Machine Learning Configuration
+# Profit-based learning system configuration
+
+ml_profit_learner:
+  # Learning parameters
+  min_trades_for_learning: 10
+  learning_rate: 0.01
+  exploration_rate: 0.1
+  model_update_frequency: 10
+
+  # Model parameters
+  model_type: "ridge"  # ridge, linear, random_forest, xgboost
+  regularization_alpha: 1.0
+  feature_scaling: true
+
+  # Feature engineering
+  technical_indicators:
+    - rsi
+    - sma_ratio
+    - momentum
+    - volatility
+    - volume_ratio
+    - price_position
+    - z_score
+
+  # Market regime features
+  regime_features:
+    - regime_type
+    - regime_confidence
+    - trend_strength
+    - volatility_level
+
+  # Trade features
+  trade_features:
+    - position_size
+    - entry_price
+    - hold_duration
+    - strategy_confidence
+
+  # Prediction thresholds
+  min_confidence_threshold: 0.3
+  min_profit_threshold: 0.001  # 0.1% minimum expected profit
+  max_risk_threshold: 0.05     # 5% maximum expected loss
+
+  # Model persistence
+  save_models: true
+  model_backup_frequency: 100  # Save every 100 trades
+  max_model_age_days: 30       # Retrain models older than 30 days
+
+# Strategy selection with ML
+ml_strategy_selection:
+  enabled: true
+  epsilon: 0.1  # Exploration rate for bandit
+  confidence_threshold: 0.5
+  min_performance_threshold: 0.0
+
+  # Reward function
+  reward_function: "profit_pct"  # profit_pct, sharpe_ratio, risk_adjusted_return
+
+  # Context features
+  context_features:
+    - regime
+    - volatility_bin
+    - trend_strength
+    - liquidity
+    - time_of_day
+    - market_correlation
+
+  # Performance tracking
+  performance_window_days: 252
+  min_trades_for_evaluation: 10
+  performance_decay_factor: 0.95  # Exponential decay for old performance
+
+# Feature engineering
+feature_engineering:
+  # Technical indicators
+  technical_indicators:
+    rsi_period: 14
+    sma_periods: [20, 50, 200]
+    momentum_periods: [5, 10, 20]
+    volatility_period: 20
+    volume_period: 20
+
+  # Market microstructure
+  microstructure_features:
+    bid_ask_spread: true
+    volume_profile: true
+    price_impact: true
+    order_flow: false  # Requires real-time data
+
+  # Alternative data (if available)
+  alternative_data:
+    sentiment_analysis: false
+    news_impact: false
+    options_flow: false
+    institutional_flow: false
+
+# Model ensemble
+model_ensemble:
+  enabled: true
+  ensemble_method: "weighted_average"  # weighted_average, voting, stacking
+  base_models:
+    - ridge_regression
+    - random_forest
+    - gradient_boosting
+
+  # Model weights (if using weighted average)
+  model_weights:
+    ridge_regression: 0.4
+    random_forest: 0.3
+    gradient_boosting: 0.3
+
+  # Ensemble validation
+  cross_validation_folds: 5
+  validation_metric: "rmse"  # rmse, mae, r2
+
+# Online learning
+online_learning:
+  enabled: true
+  update_frequency: "every_trade"  # every_trade, every_n_trades, daily
+  n_trades_for_update: 5
+
+  # Forgetting factor (for adapting to changing markets)
+  forgetting_factor: 0.99  # 0.99 = slow forgetting, 0.9 = fast forgetting
+
+  # Model drift detection
+  drift_detection:
+    enabled: true
+    drift_threshold: 0.1
+    detection_window: 50
+
+  # Model retraining
+  auto_retrain: true
+  retrain_threshold: 0.05  # Retrain if performance degrades by 5%
+  retrain_frequency_days: 7
+
+# Risk management integration
+risk_integration:
+  # Position sizing based on ML predictions
+  ml_position_sizing: true
+  max_position_size: 0.1  # 10% max position
+  min_position_size: 0.01  # 1% min position
+
+  # Risk-adjusted predictions
+  risk_adjustment: true
+  risk_free_rate: 0.02  # 2% risk-free rate
+  max_drawdown_threshold: 0.15  # 15% max drawdown
+
+  # Dynamic stop-loss based on ML
+  dynamic_stop_loss: true
+  stop_loss_multiplier: 2.0  # 2x the predicted loss
+  take_profit_multiplier: 1.5  # 1.5x the predicted profit
+
+# Monitoring and logging
+monitoring:
+  # Performance tracking
+  track_predictions: true
+  track_actual_outcomes: true
+  prediction_accuracy_threshold: 0.6
+
+  # Model performance metrics
+  metrics:
+    - mse
+    - mae
+    - r2
+    - directional_accuracy
+    - profit_correlation
+
+  # Alerts
+  alerts:
+    model_drift: true
+    low_accuracy: true
+    high_loss: true
+    model_failure: true
+
+  # Logging
+  log_level: "INFO"
+  log_predictions: true
+  log_trade_outcomes: true

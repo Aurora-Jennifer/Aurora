@@ -1,9 +1,8 @@
 {
-  "config_file": "config/enhanced_paper_trading_config.json",
-  "start_date": "2023-08-01",
-  "end_date": "2025-08-12",
-  "symbols": ["SPY", "QQQ"],
+  "config_file": "config/smoke_test_config.json",
+  "start_date": "2024-01-02",
+  "end_date": "2024-03-29",
+  "symbols": "SPY,QQQ",
   "carry_positions_from_warmup": false,
-  "fast_mode": false,
-  "strategy_params_override": {}
+  "fast_mode": true
 }

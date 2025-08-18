@@ -1,2 +1,0 @@
-ticker,strategy_name,strategy_params,fee_bps,cagr,sharpe,max_dd,trades,final_equity,start_date,end_date
-SPY,SMACrossover,"{'fast_period': 10, 'slow_period': 50}",5.0,0.0784685071865725,0.7469901122294531,-0.15112095406356219,67,2.223730624884466,2015-01-01,2025-08-12

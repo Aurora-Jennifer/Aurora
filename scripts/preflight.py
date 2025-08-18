@@ -9,7 +9,7 @@ import pandas as pd
 
 # Add project root to sys.path when running from scripts/
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from backtest import BacktestEngine
+from core.engine.backtest import BacktestEngine
 
 CFG_PATH = "config/enhanced_paper_trading_config.json"
 
@@ -21,7 +21,7 @@ assert not cfg.get(
 eng = BacktestEngine(CFG_PATH)
 eng.run_backtest("2024-01-02", "2024-01-09", ["SPY"])
 s = eng.get_last_summary()
-needed = ["Final Equity", "Total PnL", "Sharpe Ratio", "Max Drawdown"]
+needed = ["total_return_pct", "sharpe_ratio", "max_drawdown_pct", "total_trades"]
 missing = [k for k in needed if k not in s]
 if missing:
     print("Missing metrics:", missing)

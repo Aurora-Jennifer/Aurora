@@ -17,6 +17,15 @@ from core.engine.paper import PaperTradingEngine
 from core.portfolio import PortfolioState
 from core.trade_logger import TradeBook
 
+# ML imports
+try:
+    from core.ml.profit_learner import ProfitLearner, TradeOutcome
+
+    ML_AVAILABLE = True
+except ImportError:
+    ML_AVAILABLE = False
+    print("Warning: ML profit learner not available")
+
 
 class BacktestEngine:
     """Comprehensive backtest engine for trading strategies."""
@@ -39,6 +48,10 @@ class BacktestEngine:
         self.portfolio = PortfolioState(cash=self.initial_capital)
         self.trade_book = TradeBook()
 
+        # ML trade tracking for accurate P&L
+        self.ml_trade_positions = {}  # Track open positions for ML
+        self.ml_trade_history = []  # Track completed trades for ML
+
         # Data storage
         self.daily_returns = []
         self.equity_curve = []
@@ -48,9 +61,37 @@ class BacktestEngine:
         self.logger = logging.getLogger(__name__)
 
         # Constants
-        self.MIN_HISTORY = (
-            252  # Minimum trading days for warmup (matches regime detector)
+        self.MIN_HISTORY = 252  # Minimum history for regime detection
+
+        # ML system
+        self.ml_enabled = ML_AVAILABLE and self.trading_system.config.get(
+            "ml_enabled", False
         )
+        print(
+            f"🔍 ML Debug: ML_AVAILABLE={ML_AVAILABLE}, ml_enabled_config={self.trading_system.config.get('ml_enabled', False)}"
+        )
+        self.logger.info(
+            f"ML_AVAILABLE: {ML_AVAILABLE}, ml_enabled config: {self.trading_system.config.get('ml_enabled', False)}"
+        )
+        if self.ml_enabled:
+            try:
+                import yaml
+
+                with open("config/ml_config.yaml") as f:
+                    ml_config = yaml.safe_load(f)
+                self.profit_learner = ProfitLearner(
+                    ml_config.get("ml_profit_learner", {})
+                )
+                print("✅ ML profit learner initialized")
+                self.logger.info("ML profit learner initialized")
+            except Exception as e:
+                print(f"❌ Failed to initialize ML system: {e}")
+                self.logger.warning(f"Failed to initialize ML system: {e}")
+                self.ml_enabled = False
+        else:
+            self.profit_learner = None
+            print("❌ ML system disabled")
+            self.logger.info("ML system disabled")
 
     def run_backtest(
         self, start_date: str, end_date: str, symbols: List[str] = None
@@ -75,7 +116,9 @@ class BacktestEngine:
 
         # Load data with warmup period
         print("📊 Loading data with warmup period...")
-        warmup_days = 200 if self.fast_mode else 600
+        warmup_days = (
+            300 if self.fast_mode else 600
+        )  # Ensure enough data for regime detection
         warmup_start = self.start_date - timedelta(days=warmup_days)  # Ensure lookbacks
         all_data = self._load_historical_data(warmup_start, self.end_date)
 
@@ -111,7 +154,7 @@ class BacktestEngine:
                 self._run_daily_trading(warmup_date, all_data, {})
 
             print(
-                f"🔥 Warmup complete. Portfolio value: ${self.portfolio.total_value:,.2f}"
+                f"🔥 Warmup complete. Portfolio value: ${self.portfolio.value_at({}):,.2f}"
             )
 
             # Reset trade book for actual backtest
@@ -136,14 +179,56 @@ class BacktestEngine:
             self._run_daily_trading(backtest_date, all_data, current_prices)
 
             # Record daily return
+            current_prices = self._get_prices_for_date(backtest_date, all_data)
+            portfolio_value = self.portfolio.value_at(current_prices)
             daily_return = {
                 "date": backtest_date,
-                "portfolio_value": self.portfolio.total_value,
+                "portfolio_value": portfolio_value,
                 "cash": self.portfolio.cash,
-                "positions_value": self.portfolio.total_value - self.portfolio.cash,
+                "positions_value": portfolio_value - self.portfolio.cash,
                 "return": 0.0,  # Will be calculated later
             }
             self.daily_returns.append(daily_return)
+
+        # Close any remaining ML positions at end of backtest
+        if self.ml_enabled and self.ml_trade_positions:
+            print("🔍 Closing remaining ML positions...")
+            for symbol, positions in self.ml_trade_positions.items():
+                if positions:
+                    # Get final price for the symbol
+                    final_prices = self._get_prices_for_date(
+                        backtest_dates[-1], all_data
+                    )
+                    if symbol in final_prices:
+                        final_price = final_prices[symbol]
+                        for position in positions:
+                            # Calculate P&L for remaining position
+                            entry_price = position["entry_price"]
+                            exit_price = final_price
+                            profit_loss = (exit_price - entry_price) * position[
+                                "shares"
+                            ]
+                            profit_loss_pct = (exit_price - entry_price) / entry_price
+
+                            # Record completed trade
+                            completed_trade = {
+                                "symbol": symbol,
+                                "entry_date": position["entry_date"],
+                                "exit_date": backtest_dates[-1],
+                                "entry_price": entry_price,
+                                "exit_price": exit_price,
+                                "shares": position["shares"],
+                                "profit_loss": profit_loss,
+                                "profit_loss_pct": profit_loss_pct,
+                                "hold_duration": (
+                                    backtest_dates[-1] - position["entry_date"]
+                                ).days,
+                            }
+
+                            self.ml_trade_history.append(completed_trade)
+                            print(
+                                f"🔍 Closed position: {profit_loss_pct:.2%} profit, ${profit_loss:.2f}"
+                            )
 
         # Calculate final results
         print("📊 Calculating results...")
@@ -151,6 +236,13 @@ class BacktestEngine:
 
         # Save results
         self._save_results(results)
+
+        # Save ML models and history
+        if self.ml_enabled and self.profit_learner:
+            self.profit_learner._save_models()
+            print(
+                f"💾 Saved ML models and {len(self.profit_learner.performance_history)} trade records"
+            )
 
         # Print summary
         self.print_results(results)
@@ -166,9 +258,10 @@ class BacktestEngine:
 
         # Ensure minimum history for regime detection
         if len(data_up_to_date) < self.MIN_HISTORY:
+            # Only log once per date to avoid spam
             if current_date not in self.insufficient_data_logged:
-                self.logger.warning(
-                    f"Insufficient data for {current_date}: {len(data_up_to_date)} < {self.MIN_HISTORY}"
+                self.logger.debug(
+                    f"Insufficient data for regime detection on {current_date}: {len(data_up_to_date)} < {self.MIN_HISTORY}"
                 )
                 self.insufficient_data_logged.add(current_date)
             return pd.DataFrame()
@@ -182,6 +275,11 @@ class BacktestEngine:
         symbols = self.trading_system.config.get("symbols", ["SPY"])
         all_data = []
 
+        # Get DataSanity wrapper for validation
+        from core.data_sanity import get_data_sanity_wrapper
+
+        data_sanity = get_data_sanity_wrapper()
+
         for symbol in symbols:
             try:
                 # Use yfinance for historical data
@@ -191,10 +289,15 @@ class BacktestEngine:
                 )
 
                 if not data.empty:
+                    # Validate and repair data using DataSanity
+                    clean_data = data_sanity.validate_dataframe(data, symbol)
+
                     # Add symbol column
-                    data["Symbol"] = symbol
-                    all_data.append(data)
-                    print(f"✅ Loaded {len(data)} data points for {symbol}")
+                    clean_data["Symbol"] = symbol
+                    all_data.append(clean_data)
+                    print(
+                        f"✅ Loaded and validated {len(clean_data)} data points for {symbol}"
+                    )
                 else:
                     print(f"⚠️  No data for {symbol}")
 
@@ -215,7 +318,7 @@ class BacktestEngine:
             return []
 
         # Get unique dates from the data
-        trading_dates = sorted(data.index.date.unique())
+        trading_dates = sorted(pd.Series(data.index.date).unique())
 
         # Filter to business days (simple heuristic)
         business_dates = []
@@ -230,10 +333,9 @@ class BacktestEngine:
         """Update portfolio with current prices."""
         current_prices = self._get_prices_for_date(current_date, data)
 
-        for symbol, position in self.portfolio.positions.items():
-            if symbol in current_prices:
-                position.current_price = current_prices[symbol]
-                position.market_value = position.quantity * position.current_price
+        # Update the portfolio's last_prices for mark-to-market calculations
+        for symbol, price in current_prices.items():
+            self.portfolio.last_prices[symbol] = price
 
     def _run_daily_trading(
         self, current_date: date, data: pd.DataFrame, current_prices: Dict[str, float]
@@ -242,6 +344,7 @@ class BacktestEngine:
         # Get data up to current date for regime detection
         data_up_to_date = self._get_data_up_to_date(data, current_date)
 
+        # Skip trading if we don't have enough data for regime detection
         if data_up_to_date.empty:
             return
 
@@ -256,6 +359,7 @@ class BacktestEngine:
         # Execute trades
         for symbol in self.trading_system.config.get("symbols", []):
             if symbol in signals:
+                print(f"🔍 Executing trade for {symbol}, signal: {signals[symbol]:.4f}")
                 self._execute_trades_with_portfolio(
                     symbol, signals, current_date, regime_params, current_prices
                 )
@@ -264,17 +368,11 @@ class BacktestEngine:
         """Detect regime with rate limiting for performance."""
         try:
             # Use the trading system's regime detector
-            regime = self.trading_system.regime_detector.detect_regime(data)
-            regime_name = self.trading_system.regime_detector.get_current_regime_name()
-
-            # Create regime params object
-            class RegimeParams:
-                def __init__(self, name, confidence):
-                    self.regime_name = name
-                    self.confidence_threshold = confidence
-                    self.position_sizing_multiplier = 1.0
-
-            regime_params = RegimeParams(regime_name, 0.7)
+            (
+                regime_name,
+                confidence,
+                regime_params,
+            ) = self.trading_system.regime_detector.detect_regime(data)
 
             return regime_name, regime_params
 
@@ -325,7 +423,7 @@ class BacktestEngine:
             for symbol in symbols:
                 # Generate a simple random signal for demonstration
                 # In real system, use the actual strategy
-                signal = np.random.uniform(-0.5, 0.5)
+                signal = np.random.uniform(-1.0, 1.0)  # Increased signal range
                 signals[symbol] = signal
 
         except Exception as e:
@@ -353,6 +451,243 @@ class BacktestEngine:
 
         return prices
 
+    def _get_current_market_data(self, symbol: str, current_date: date) -> pd.DataFrame:
+        """Get current market data for ML prediction."""
+        try:
+            # Get historical data up to current date for feature extraction
+            # This should be the same data used for regime detection
+            all_data = self._load_historical_data(
+                current_date - timedelta(days=300), current_date
+            )
+
+            if all_data is not None and not all_data.empty:
+                # Filter to symbol and current date
+                symbol_data = all_data[all_data["Symbol"] == symbol]
+                return symbol_data
+            else:
+                return pd.DataFrame()
+
+        except Exception as e:
+            self.logger.error(f"Error getting current market data: {e}")
+            return pd.DataFrame()
+
+    def _record_trade_for_ml(
+        self,
+        symbol: str,
+        action: str,
+        shares: int,
+        price: float,
+        current_date: date,
+        regime_params,
+    ):
+        """Record trade outcome for ML learning."""
+        try:
+            if not self.ml_enabled or not self.profit_learner:
+                return
+
+            # Get current market features
+            market_data = self._get_current_market_data(symbol, current_date)
+            if market_data.empty:
+                return
+
+            market_features = self.profit_learner.extract_market_features(market_data)
+
+            # Check if we have completed trades to record
+            if self.ml_trade_history:
+                # Record the most recent completed trade
+                latest_trade = self.ml_trade_history[-1]
+
+                trade_outcome = TradeOutcome(
+                    timestamp=datetime.combine(
+                        latest_trade["exit_date"], datetime.min.time()
+                    ),
+                    symbol=latest_trade["symbol"],
+                    strategy=self.trading_system.config.get(
+                        "strategy", "regime_aware_ensemble"
+                    ),
+                    regime=getattr(regime_params, "regime_name", "unknown")
+                    if regime_params
+                    else "unknown",
+                    entry_price=latest_trade["entry_price"],
+                    exit_price=latest_trade["exit_price"],
+                    position_size=latest_trade["shares"] * latest_trade["entry_price"],
+                    hold_duration=latest_trade["hold_duration"],
+                    profit_loss=latest_trade["profit_loss"],
+                    profit_loss_pct=latest_trade["profit_loss_pct"],
+                    market_features=market_features,
+                    trade_features={
+                        "position_size": latest_trade["shares"]
+                        * latest_trade["entry_price"],
+                        "entry_price": latest_trade["entry_price"],
+                        "exit_price": latest_trade["exit_price"],
+                        "hold_duration": latest_trade["hold_duration"],
+                        "strategy_confidence": min(
+                            abs(self._get_last_signal_strength(symbol)), 1.0
+                        ),
+                        "market_regime": self._get_regime_confidence(regime_params),
+                        "signal_strength": abs(self._get_last_signal_strength(symbol)),
+                        "market_volatility": self._get_market_volatility(
+                            symbol, current_date
+                        ),
+                    },
+                )
+
+                # Record for learning
+                self.profit_learner.record_trade_outcome(trade_outcome)
+
+                print(
+                    f"🔍 Recorded completed trade: {latest_trade['profit_loss_pct']:.2%} profit, ${latest_trade['profit_loss']:.2f}"
+                )
+                self.logger.debug(
+                    f"Recorded completed trade for ML: {latest_trade['profit_loss_pct']:.2%} profit"
+                )
+
+            else:
+                # For opening positions, record with zero P&L (will be updated when closed)
+                trade_outcome = TradeOutcome(
+                    timestamp=datetime.combine(current_date, datetime.min.time()),
+                    symbol=symbol,
+                    strategy=self.trading_system.config.get(
+                        "strategy", "regime_aware_ensemble"
+                    ),
+                    regime=getattr(regime_params, "regime_name", "unknown")
+                    if regime_params
+                    else "unknown",
+                    entry_price=price,
+                    exit_price=price,
+                    position_size=abs(shares * price),
+                    hold_duration=0,
+                    profit_loss=0.0,
+                    profit_loss_pct=0.0,
+                    market_features=market_features,
+                    trade_features={
+                        "position_size": abs(shares * price),
+                        "entry_price": price,
+                        "exit_price": price,
+                        "hold_duration": 0,
+                        "strategy_confidence": min(
+                            abs(self._get_last_signal_strength(symbol)), 1.0
+                        ),
+                        "market_regime": self._get_regime_confidence(regime_params),
+                        "signal_strength": abs(self._get_last_signal_strength(symbol)),
+                        "market_volatility": self._get_market_volatility(
+                            symbol, current_date
+                        ),
+                    },
+                )
+
+                # Record for learning
+                self.profit_learner.record_trade_outcome(trade_outcome)
+                print(f"🔍 Recorded opening position: {action} {shares} {symbol}")
+
+        except Exception as e:
+            self.logger.error(f"Error recording trade for ML: {e}")
+
+    def _get_last_signal_strength(self, symbol: str) -> float:
+        """Get the last signal strength for a symbol."""
+        try:
+            # This would track the last signal generated for the symbol
+            # For now, return a reasonable default
+            return 0.5
+        except Exception as e:
+            self.logger.warning(f"Error getting signal strength: {e}")
+            return 0.5
+
+    def _get_market_volatility(self, symbol: str, current_date: date) -> float:
+        """Get market volatility for a symbol."""
+        try:
+            # Calculate volatility from recent price data
+            # For now, return a reasonable default
+            return 0.02  # 2% volatility
+        except Exception as e:
+            self.logger.warning(f"Error getting market volatility: {e}")
+            return 0.02
+
+    def _get_regime_confidence(self, regime_params) -> float:
+        """Get confidence level for current market regime."""
+        try:
+            if regime_params and hasattr(regime_params, "confidence"):
+                return regime_params.confidence
+            return 0.5
+        except Exception as e:
+            self.logger.warning(f"Error getting regime confidence: {e}")
+            return 0.5
+
+    def _track_ml_trade(
+        self, symbol: str, action: str, shares: int, price: float, current_date: date
+    ):
+        """Track ML trades for accurate P&L calculation."""
+        try:
+            if action == "BUY":
+                # Opening a new position
+                if symbol not in self.ml_trade_positions:
+                    self.ml_trade_positions[symbol] = []
+
+                # Record the buy
+                self.ml_trade_positions[symbol].append(
+                    {
+                        "entry_date": current_date,
+                        "entry_price": price,
+                        "shares": shares,
+                        "action": "buy",
+                    }
+                )
+
+            elif action == "SELL":
+                # Closing positions
+                if (
+                    symbol in self.ml_trade_positions
+                    and self.ml_trade_positions[symbol]
+                ):
+                    # Match sells with buys (FIFO)
+                    remaining_shares_to_sell = abs(shares)
+                    positions_to_close = []
+
+                    for position in self.ml_trade_positions[symbol]:
+                        if remaining_shares_to_sell <= 0:
+                            break
+
+                        shares_to_close = min(
+                            remaining_shares_to_sell, position["shares"]
+                        )
+
+                        # Calculate P&L for this position
+                        entry_price = position["entry_price"]
+                        exit_price = price
+                        profit_loss = (exit_price - entry_price) * shares_to_close
+                        profit_loss_pct = (exit_price - entry_price) / entry_price
+
+                        # Record completed trade
+                        completed_trade = {
+                            "symbol": symbol,
+                            "entry_date": position["entry_date"],
+                            "exit_date": current_date,
+                            "entry_price": entry_price,
+                            "exit_price": exit_price,
+                            "shares": shares_to_close,
+                            "profit_loss": profit_loss,
+                            "profit_loss_pct": profit_loss_pct,
+                            "hold_duration": (
+                                current_date - position["entry_date"]
+                            ).days,
+                        }
+
+                        self.ml_trade_history.append(completed_trade)
+
+                        # Update position
+                        position["shares"] -= shares_to_close
+                        remaining_shares_to_sell -= shares_to_close
+
+                        if position["shares"] <= 0:
+                            positions_to_close.append(position)
+
+                    # Remove closed positions
+                    for pos in positions_to_close:
+                        self.ml_trade_positions[symbol].remove(pos)
+
+        except Exception as e:
+            self.logger.error(f"Error tracking ML trade: {e}")
+
     def _execute_trades_with_portfolio(
         self,
         symbol: str,
@@ -368,17 +703,82 @@ class BacktestEngine:
         signal = signals[symbol]
         current_price = current_prices[symbol]
 
+        # ML prediction and learning
+        if self.ml_enabled and self.profit_learner:
+            try:
+                # Get current market data for ML prediction
+                current_market_data = self._get_current_market_data(
+                    symbol, current_date
+                )
+
+                # Predict profit potential for current strategy
+                strategy_name = self.trading_system.config.get(
+                    "strategy", "regime_aware_ensemble"
+                )
+                prediction = self.profit_learner.predict_profit_potential(
+                    current_market_data, strategy_name, symbol
+                )
+
+                # Adjust signal based on ML prediction
+                expected_profit = prediction.get("expected_profit_pct", 0.0)
+                confidence = prediction.get("confidence", 0.1)
+
+                # Check if ML system has enough training data
+                if (
+                    len(self.profit_learner.performance_history)
+                    >= self.profit_learner.min_trades_for_learning
+                ):
+                    # ML system is trained - use strict thresholds
+                    if (
+                        expected_profit > 0.001 and confidence > 0.3
+                    ):  # 0.1% profit, 30% confidence
+                        signal *= confidence  # Scale signal by confidence
+                        self.logger.info(
+                            f"ML prediction: {expected_profit:.2%} profit, {confidence:.1%} confidence"
+                        )
+                    else:
+                        signal *= 0.1  # Reduce signal if ML is not confident
+                        self.logger.debug(
+                            f"ML low confidence: {expected_profit:.2%} profit, {confidence:.1%} confidence"
+                        )
+                else:
+                    # ML system is learning - be more permissive
+                    if (
+                        expected_profit > -0.005 and confidence > 0.1
+                    ):  # Allow small losses, lower confidence
+                        signal *= 0.5  # Scale signal moderately
+                        self.logger.debug(
+                            f"ML learning mode: {expected_profit:.2%} profit, {confidence:.1%} confidence"
+                        )
+                    else:
+                        signal *= 0.2  # Reduce signal but don't eliminate
+                        self.logger.debug(
+                            f"ML learning mode - low confidence: {expected_profit:.2%} profit, {confidence:.1%} confidence"
+                        )
+
+            except Exception as e:
+                self.logger.warning(f"ML prediction failed: {e}")
+
         # Skip if signal is too small
-        if abs(signal) < 0.1:
+        if abs(signal) < 0.0001:  # Extremely low threshold to generate more trades
+            print(f"🔍 Signal too small for {symbol}: {signal:.4f} < 0.0001")
             return
 
         # Calculate position size
+        portfolio_value = self.portfolio.value_at(current_prices)
         position_value = (
-            abs(signal) * self.portfolio.total_value * 0.1
-        )  # 10% max position
+            abs(signal) * portfolio_value * 0.2
+        )  # 20% max position to generate more trades
         shares = int(position_value / current_price)
 
+        print(
+            f"🔍 Position sizing: signal={signal:.4f}, portfolio_value=${portfolio_value:,.2f}, position_value=${position_value:,.2f}, shares={shares}"
+        )
+
         if shares == 0:
+            print(
+                f"🔍 No shares calculated for {symbol}: position_value=${position_value:.2f}, price=${current_price:.2f}"
+            )
             return
 
         # Determine trade direction
@@ -394,31 +794,59 @@ class BacktestEngine:
             action = "SELL"
             # Check if we have enough shares
             current_position = self.portfolio.get_position(symbol)
-            if current_position is None or current_position.quantity < shares:
-                shares = current_position.quantity if current_position else 0
+            if current_position is None or current_position.qty < shares:
+                shares = current_position.qty if current_position else 0
                 if shares == 0:
                     return
 
         # Execute trade
         if shares > 0:
-            trade = {
-                "date": current_date,
-                "symbol": symbol,
-                "action": action,
-                "shares": shares,
-                "price": current_price,
-                "value": shares * current_price,
-                "regime": regime_params.regime_name if regime_params else "unknown",
-            }
+            # Trade executed successfully
+
+            # Track ML trade for accurate P&L
+            self._track_ml_trade(symbol, action, shares, current_price, current_date)
 
             # Update portfolio
             if action == "BUY":
-                self.portfolio.buy(symbol, shares, current_price)
+                self.portfolio.execute_order(symbol, shares, current_price, fee=0.0)
             else:
-                self.portfolio.sell(symbol, shares, current_price)
+                self.portfolio.execute_order(symbol, -shares, current_price, fee=0.0)
 
             # Record trade
-            self.trade_book.record_trade(trade)
+            print(
+                f"🔍 Executing {action} trade: {shares} shares of {symbol} @ ${current_price:.2f}"
+            )
+            if action == "BUY":
+                self.trade_book.on_buy(
+                    str(current_date), symbol, shares, current_price, 0.0
+                )
+            else:
+                # For sell, we need to calculate remaining quantity
+                current_position = self.portfolio.get_position(symbol)
+                remaining_qty = (
+                    (current_position.qty - shares) if current_position else 0
+                )
+                self.trade_book.on_sell(
+                    str(current_date), symbol, shares, current_price, 0.0, remaining_qty
+                )
+
+            # Record trade outcome for ML learning
+            print(
+                f"🔍 About to record trade for ML: ml_enabled={self.ml_enabled}, profit_learner={self.profit_learner is not None}"
+            )
+            if self.ml_enabled and self.profit_learner:
+                print(f"🔍 Recording trade for ML: {action} {shares} {symbol}")
+                self.logger.info(f"Recording trade for ML: {action} {shares} {symbol}")
+                self._record_trade_for_ml(
+                    symbol, action, shares, current_price, current_date, regime_params
+                )
+            else:
+                print(
+                    f"🔍 ML not enabled or profit_learner not available. ml_enabled: {self.ml_enabled}, profit_learner: {self.profit_learner is not None}"
+                )
+                self.logger.debug(
+                    f"ML not enabled or profit_learner not available. ml_enabled: {self.ml_enabled}, profit_learner: {self.profit_learner is not None}"
+                )
 
     def _slice_ledger_to_backtest(self) -> pd.DataFrame:
         """Slice trade ledger to backtest period."""
@@ -458,28 +886,40 @@ class BacktestEngine:
 
         # Basic trade metrics
         total_trades = len(trades)
-        buy_trades = len(trades_df[trades_df["action"] == "BUY"])
-        sell_trades = len(trades_df[trades_df["action"] == "SELL"])
+        close_trades = len(trades_df[trades_df["action"] == "CLOSE"])
+        open_trades = len(trades_df[trades_df["action"] == "OPEN"])
 
-        # Volume metrics
-        total_volume = trades_df["value"].sum()
-        avg_trade_size = trades_df["value"].mean()
+        # Volume metrics (using qty * price)
+        if (
+            not trades_df.empty
+            and "qty" in trades_df.columns
+            and "price" in trades_df.columns
+        ):
+            trades_df["value"] = trades_df["qty"] * trades_df["price"]
+            total_volume = trades_df["value"].sum()
+            avg_trade_size = trades_df["value"].mean()
+        else:
+            total_volume = 0.0
+            avg_trade_size = 0.0
 
         # Price metrics
-        avg_price = trades_df["price"].mean()
+        avg_price = trades_df["price"].mean() if "price" in trades_df.columns else 0.0
 
         return {
             "total_trades": total_trades,
-            "buy_trades": buy_trades,
-            "sell_trades": sell_trades,
+            "close_trades": close_trades,
+            "open_trades": open_trades,
             "total_volume": total_volume,
             "avg_trade_size": avg_trade_size,
             "avg_price": avg_price,
         }
 
-    def _calculate_portfolio_metrics(self, backtest_ledger: pd.DataFrame) -> Dict:
+    def _calculate_portfolio_metrics(
+        self, backtest_ledger: pd.DataFrame = None
+    ) -> Dict:
         """Calculate portfolio-level metrics."""
-        if backtest_ledger.empty:
+        # Only return empty if backtest_ledger is provided and empty
+        if backtest_ledger is not None and backtest_ledger.empty:
             return {}
 
         # Calculate daily returns
@@ -500,7 +940,12 @@ class BacktestEngine:
         returns_series = pd.Series(daily_returns)
 
         # Basic metrics
-        total_return = (self.portfolio.total_value / self.initial_capital) - 1
+        if self.daily_returns:
+            final_portfolio_value = self.daily_returns[-1]["portfolio_value"]
+        else:
+            final_portfolio_value = self.initial_capital
+
+        total_return = (final_portfolio_value / self.initial_capital) - 1
         annualized_return = (
             (1 + total_return) ** (252 / len(returns_series)) - 1
             if len(returns_series) > 0
@@ -527,7 +972,7 @@ class BacktestEngine:
             "volatility": volatility,
             "sharpe_ratio": sharpe_ratio,
             "max_drawdown": max_drawdown,
-            "final_value": self.portfolio.total_value,
+            "final_value": final_portfolio_value,
             "initial_capital": self.initial_capital,
         }
 
@@ -633,7 +1078,7 @@ Total Trades: {summary['total_trades']}
 
         # Calculate metrics
         trade_metrics = self._calculate_trade_metrics_from(trades)
-        portfolio_metrics = self._calculate_portfolio_metrics(pd.DataFrame())
+        portfolio_metrics = self._calculate_portfolio_metrics(None)
 
         # Generate results
         results = self._generate_results(trade_metrics, portfolio_metrics)

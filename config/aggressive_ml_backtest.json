@@ -1,0 +1,22 @@
+{
+  "ml_enabled": true,
+  "strategy": "regime_aware_ensemble",
+  "symbols": ["SPY"],
+  "capital": 100000,
+  "fast_mode": true,
+  "carry_positions_from_warmup": false,
+  "risk_management": {
+    "max_position_size": 0.2,
+    "max_drawdown": 0.20,
+    "stop_loss": 0.10
+  },
+  "ml_selector": {
+    "enabled": true,
+    "epsilon": 0.3
+  },
+  "trading": {
+    "min_signal_threshold": 0.01,
+    "position_sizing_multiplier": 2.0,
+    "daily_trade_limit": 5
+  }
+}

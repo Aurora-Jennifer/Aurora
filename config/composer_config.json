@@ -1,0 +1,177 @@
+{
+  "symbols": ["SPY", "TSLA", "BTC-USD"],
+  "initial_capital": 100000,
+  "use_ibkr": false,
+  "shorting_enabled": true,
+  "close_positions_at_end": true,
+  "carry_positions_from_warmup": false,
+  "fast_mode": true,
+  "mode": "backtest",
+
+  "objective": {
+    "type": "log_utility",
+    "kelly_cap_fraction": 0.25,
+    "risk_aversion_lambda": 3.0,
+    "downside_lambda": 2.0,
+    "volatility_adjustment": true,
+    "performance_lookback_days": 30
+  },
+
+  "risk_params": {
+    "max_gross_exposure_pct": 50.0,
+    "max_daily_loss_pct": 2.0,
+    "max_position_size": 0.15,
+    "max_drawdown_pct": 15.0,
+    "stop_loss_pct": 3.0,
+    "take_profit_pct": 6.0,
+    "volatility_target": 0.20,
+    "max_correlation": 0.7,
+    "position_sizing_method": "kelly_optimal"
+  },
+
+  "use_composer": true,
+  "composer_mode": "softmax_blender",
+  "eligible_strategies": ["momentum", "mean_reversion", "breakout"],
+  "regime_extractor": "basic_kpis",
+  "composer_params": {
+    "temperature": 1.0,
+    "trend_bias": 1.2,
+    "chop_bias": 1.1,
+    "min_confidence": 0.1
+  },
+
+  "optimize_metric_weights": false,
+  "metric_weight_trials": 50,
+  "metric_weight_max_dd_cap": 0.25,
+  "metric_weight_min_trades": 200,
+  "metric_weight_dd_penalty_factor": 2.0,
+  "metric_weight_trade_penalty_factor": 1.5,
+  "metric_weights": {
+    "alpha": 0.4,
+    "beta": 0.3,
+    "gamma": 0.2,
+    "delta": 0.1
+  },
+
+  "profiles": {
+    "risk_low": {
+      "risk_params": {
+        "max_gross_exposure_pct": 25.0,
+        "max_daily_loss_pct": 1.0,
+        "max_position_size": 0.05,
+        "max_drawdown_pct": 8.0,
+        "stop_loss_pct": 2.0,
+        "take_profit_pct": 4.0
+      },
+      "composer_params": {
+        "temperature": 0.8,
+        "trend_bias": 1.0,
+        "chop_bias": 1.0
+      }
+    },
+    "risk_balanced": {
+      "risk_params": {
+        "max_gross_exposure_pct": 50.0,
+        "max_daily_loss_pct": 2.0,
+        "max_position_size": 0.15,
+        "max_drawdown_pct": 15.0,
+        "stop_loss_pct": 3.0,
+        "take_profit_pct": 6.0
+      },
+      "composer_params": {
+        "temperature": 1.0,
+        "trend_bias": 1.2,
+        "chop_bias": 1.1
+      }
+    },
+    "risk_strict": {
+      "risk_params": {
+        "max_gross_exposure_pct": 75.0,
+        "max_daily_loss_pct": 3.0,
+        "max_position_size": 0.25,
+        "max_drawdown_pct": 20.0,
+        "stop_loss_pct": 4.0,
+        "take_profit_pct": 8.0
+      },
+      "composer_params": {
+        "temperature": 1.2,
+        "trend_bias": 1.5,
+        "chop_bias": 1.3
+      }
+    }
+  },
+
+  "assets": {
+    "SPY": {
+      "composer_params": {
+        "temperature": 0.9,
+        "trend_bias": 1.1
+      },
+      "eligible_strategies": ["momentum", "mean_reversion"]
+    },
+    "TSLA": {
+      "composer_params": {
+        "temperature": 1.1,
+        "trend_bias": 1.4
+      },
+      "eligible_strategies": ["momentum", "breakout"]
+    },
+    "BTC-USD": {
+      "composer_params": {
+        "temperature": 1.3,
+        "trend_bias": 1.6
+      },
+      "eligible_strategies": ["momentum", "mean_reversion", "breakout"]
+    }
+  },
+
+  "regime_extractors": {
+    "basic_kpis": {
+      "type": "basic",
+      "lookback": 20,
+      "trend_threshold": 0.3,
+      "chop_threshold": 0.7,
+      "volatility_threshold": 0.02
+    },
+    "advanced_kpis": {
+      "type": "advanced",
+      "short_lookback": 10,
+      "medium_lookback": 20,
+      "long_lookback": 50,
+      "trend_threshold": 0.3,
+      "chop_threshold": 0.7,
+      "volatility_threshold": 0.02
+    }
+  },
+
+  "composers": {
+    "softmax_blender": {
+      "type": "softmax_selector",
+      "temperature": 1.0,
+      "trend_bias": 1.2,
+      "chop_bias": 1.1,
+      "min_confidence": 0.1
+    },
+    "threshold_selector": {
+      "type": "threshold_selector",
+      "trend_threshold": 0.3,
+      "chop_threshold": 0.7,
+      "volatility_threshold": 0.02
+    }
+  },
+
+  "logging": {
+    "level": "INFO",
+    "composer_logging": true,
+    "regime_logging": true,
+    "strategy_logging": true
+  },
+
+  "validation": {
+    "validate_composer_output": true,
+    "validate_regime_features": true,
+    "validate_strategy_weights": true,
+    "min_strategy_weight": 0.01,
+    "max_strategy_weight": 0.95
+  }
+}

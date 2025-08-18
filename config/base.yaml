@@ -1,0 +1,37 @@
+engine:
+  min_history_bars: 120
+  max_na_fraction: 0.05
+  rng_seed: 42
+
+walkforward:
+  fold_length: 252
+  step_size: 63
+  allow_truncated_final_fold: false
+
+data:
+  source: yfinance
+  auto_adjust: false
+  cache: true
+  returns:
+    type: percent
+
+risk:
+  pos_size_method: vol_target
+  vol_target: 0.15
+  max_drawdown: 0.20
+  daily_loss_limit: 0.03
+
+composer:
+  use_composer: true
+  regime_extractor: basic_kpis
+  blender: softmax_blender
+  min_history_bars: 120
+  hold_on_nan: true
+  params:
+    temperature: 1.0
+    trend_bias: 1.2
+    chop_bias: 1.1
+    min_confidence: 0.10
+
+tickers:
+  - SPY

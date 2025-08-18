@@ -60,9 +60,7 @@ def daily_turnover(signal: np.ndarray) -> float:
     return float(chg.mean())
 
 
-def psr(
-    sharpe_ann: float, T: int, prior_sharpe: float = 0.0, var: float = 1.0
-) -> float:
+def psr(sharpe_ann: float, T: int, var: float = 1.0) -> float:
     # Simplified PSR proxy: prob(Sharpe > 0)
     from math import erf, sqrt
 

@@ -413,8 +413,14 @@ if __name__ == "__main__":
     # Demo: Combine 3 features on SPY
     import yfinance as yf
 
+    from core.data_sanity import get_data_sanity_wrapper
+
     # Fetch SPY data
-    spy = yf.download("SPY", start="2020-01-01", end="2025-01-01")
+    raw_spy = yf.download("SPY", start="2020-01-01", end="2025-01-01")
+
+    # Validate and repair data using DataSanity
+    data_sanity = get_data_sanity_wrapper()
+    spy = data_sanity.validate_dataframe(raw_spy, "SPY")
     price_data = spy["Close"]
 
     # Create SignalCombiner

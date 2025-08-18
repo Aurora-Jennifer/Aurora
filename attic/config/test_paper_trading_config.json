@@ -1,0 +1,34 @@
+{
+  "symbols": [
+    "SPY"
+  ],
+  "initial_capital": 100000,
+  "use_ibkr": false,
+  "strategy": "regime_aware_ensemble",
+  "strategy_params": {
+    "regime_aware_ensemble": {
+      "confidence_threshold": 0.3,
+      "regime_lookback": 252,
+      "trend_following_weight": 0.6,
+      "mean_reversion_weight": 0.4
+    }
+  },
+  "risk_params": {
+    "max_position_size_pct": 10.0,
+    "max_daily_loss_pct": 2.0
+  },
+  "execution_params": {
+    "slippage_bps": 2,
+    "commission_bps": 5
+  },
+  "notifications": {
+    "discord_enabled": false
+  },
+  "performance_tracking": {
+    "save_results": false
+  },
+  "data_params": {
+    "min_history_days": 60,
+    "warmup_days": 100
+  }
+}

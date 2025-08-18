@@ -30,7 +30,9 @@ class StrategyFactory:
         self.register_strategy("mean_reversion", MeanReversion, MeanReversionParams)
         self.register_strategy("ensemble", EnsembleStrategy, EnsembleStrategyParams)
         self.register_strategy(
-            "regime_ensemble", RegimeAwareEnsembleStrategy, RegimeAwareEnsembleParams
+            "regime_aware_ensemble",
+            RegimeAwareEnsembleStrategy,
+            RegimeAwareEnsembleParams,
         )
 
     def register_strategy(

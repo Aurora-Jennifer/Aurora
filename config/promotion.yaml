@@ -1,0 +1,7 @@
+thresholds:
+  min_sharpe: 0.9
+  max_drawdown: 0.25
+  min_cagr: 0.05
+  min_oos_win_rate: 0.52
+  min_add_corr: 0.98
+

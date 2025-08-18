@@ -5,6 +5,7 @@ Features: leakage-proof, warm-start models, numba simulation, fold-based metrics
 """
 
 import json
+import logging
 import os
 import sys
 import time
@@ -15,8 +16,22 @@ from typing import Dict, Iterator, List, Tuple
 import numpy as np
 import pandas as pd
 
+# Import centralized logging setup
+from core.utils import setup_logging
+
+# Configure logging
+logger = setup_logging("logs/walkforward.log", logging.INFO)
+
 # Add project root for imports
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
+try:
+    from core.data_sanity import DataSanityValidator
+
+    DATASANITY_AVAILABLE = True
+except ImportError:
+    DATASANITY_AVAILABLE = False
+    DataSanityValidator = None
 
 try:
     from numba import jit
@@ -55,6 +70,7 @@ def gen_walkforward(
     stride: int,
     warmup: int = 0,
     anchored: bool = False,
+    validate_boundaries: bool = True,
 ) -> Iterator[Fold]:
     """
     Generate walk-forward folds.
@@ -66,18 +82,38 @@ def gen_walkforward(
         stride: distance to advance between folds (<= test_len → overlap)
         warmup: extra bars required before first train_lo (for indicators)
         anchored: if True, train_lo=warmup always; else rolling
+        validate_boundaries: whether to validate fold boundaries
     """
     fold_id = 0
     t0 = warmup + (0 if anchored else train_len)
 
     while True:
-        train_hi = t0 - 1
-        train_lo = warmup if anchored else train_hi - train_len + 1
+        if anchored:
+            train_lo = warmup
+            train_hi = t0 - 1
+        else:
+            train_hi = t0 - 1
+            train_lo = train_hi - train_len + 1
+
         test_lo = t0
         test_hi = min(test_lo + test_len - 1, n - 1)
 
-        if test_lo >= n or train_lo < warmup:
+        if test_lo >= n or train_lo < warmup or train_hi < train_lo:
             break
+
+        # Validate boundaries if requested
+        if validate_boundaries:
+            assert (
+                train_lo <= train_hi
+            ), f"WF_BOUNDARY: train_lo ({train_lo}) must be <= train_hi ({train_hi})"
+            assert (
+                test_lo <= test_hi
+            ), f"WF_BOUNDARY: test_lo ({test_lo}) must be <= test_hi ({test_hi})"
+            assert (
+                train_hi < test_lo
+            ), f"WF_BOUNDARY: train_hi ({train_hi}) must be < test_lo ({test_lo})"
+            assert train_lo >= 0, f"WF_BOUNDARY: train_lo ({train_lo}) must be >= 0"
+            assert test_hi < n, f"WF_BOUNDARY: test_hi ({test_hi}) must be < n ({n})"
 
         yield Fold(train_lo, train_hi, test_lo, test_hi, fold_id)
         fold_id += 1
@@ -156,8 +192,8 @@ class SimpleLinearModel:
         self.bias = None
         self.alpha = alpha  # regularization parameter
 
-    def fit(self, X: np.ndarray, y: np.ndarray):
-        """Fit linear model with regularization."""
+    def fit(self, X: np.ndarray, y: np.ndarray, warm_model=None):
+        """Fit linear model with regularization and optional warm-start."""
         # Add bias term
         X_bias = np.column_stack([X, np.ones(X.shape[0])])
 
@@ -187,230 +223,16 @@ class SimpleLinearModel:
         return np.tanh(raw_predictions)
 
 
-@jit(nopython=True)
-def simulate_orders_numba(
-    signals: np.ndarray,
-    prices: np.ndarray,
-    initial_cash: float = 100000.0,
-    max_position: float = 0.05,  # Reduced from 0.1 to 0.05
-    transaction_cost: float = 0.001,
-) -> Tuple[List[Dict], np.ndarray]:
-    """
-    Numba-optimized order simulation with regime-aware sizing and risk management.
-
-    Args:
-        signals: array of position signals [-1, 1]
-        prices: array of prices
-        initial_cash: starting capital
-        max_position: maximum position size as fraction of capital
-        transaction_cost: cost per trade as fraction
-
-    Returns:
-        trades: list of trade dictionaries
-        pnl_series: array of cumulative PnL
-    """
-    n = len(signals)
-    cash = initial_cash
-    position = 0.0
-    avg_price = 0.0
-    trades = []
-    pnl_series = np.zeros(n)
-
-    # Risk management parameters
-    stop_loss_pct = 0.015  # 1.5% stop loss (tighter)
-    take_profit_pct = 0.03  # 3% take profit
-    max_daily_loss = 0.02  # 2% max daily loss
-
-    for i in range(n):
-        signal = signals[i]
-        price = prices[i]
-
-        # Check stop loss and take profit first
-        if position != 0:
-            if position > 0:  # Long position
-                current_pnl_pct = (price - avg_price) / avg_price
-                if current_pnl_pct < -stop_loss_pct:
-                    # Stop loss hit - close position
-                    trade_size = -position
-                    cost = abs(trade_size * price * transaction_cost)
-                    cash -= cost
-
-                    trade_pnl = (price - avg_price) * abs(trade_size)
-
-                    trade = {
-                        "timestamp": i,
-                        "side": -1,
-                        "size": abs(trade_size),
-                        "price": price,
-                        "cost": cost,
-                        "pnl": trade_pnl,
-                    }
-                    trades.append(trade)
-
-                    position = 0.0
-                    avg_price = 0.0
-                elif current_pnl_pct > take_profit_pct:
-                    # Take profit hit - close position
-                    trade_size = -position
-                    cost = abs(trade_size * price * transaction_cost)
-                    cash -= cost
-
-                    trade_pnl = (price - avg_price) * abs(trade_size)
-
-                    trade = {
-                        "timestamp": i,
-                        "side": -1,
-                        "size": abs(trade_size),
-                        "price": price,
-                        "cost": cost,
-                        "pnl": trade_pnl,
-                    }
-                    trades.append(trade)
-
-                    position = 0.0
-                    avg_price = 0.0
-            else:  # Short position
-                current_pnl_pct = (avg_price - price) / avg_price
-                if current_pnl_pct < -stop_loss_pct:
-                    # Stop loss hit - close position
-                    trade_size = -position
-                    cost = abs(trade_size * price * transaction_cost)
-                    cash -= cost
-
-                    trade_pnl = (avg_price - price) * abs(trade_size)
-
-                    trade = {
-                        "timestamp": i,
-                        "side": 1,
-                        "size": abs(trade_size),
-                        "price": price,
-                        "cost": cost,
-                        "pnl": trade_pnl,
-                    }
-                    trades.append(trade)
-
-                    position = 0.0
-                    avg_price = 0.0
-                elif current_pnl_pct > take_profit_pct:
-                    # Take profit hit - close position
-                    trade_size = -position
-                    cost = abs(trade_size * price * transaction_cost)
-                    cash -= cost
-
-                    trade_pnl = (avg_price - price) * abs(trade_size)
-
-                    trade = {
-                        "timestamp": i,
-                        "side": 1,
-                        "size": abs(trade_size),
-                        "price": price,
-                        "cost": cost,
-                        "pnl": trade_pnl,
-                    }
-                    trades.append(trade)
-
-                    position = 0.0
-                    avg_price = 0.0
-
-        # Check daily loss limit
-        current_value = cash + position * price
-        daily_return = (current_value - initial_cash) / initial_cash
-        if daily_return < -max_daily_loss:
-            # Close all positions due to daily loss limit
-            if position != 0:
-                trade_size = -position
-                cost = abs(trade_size * price * transaction_cost)
-                cash -= cost
-
-                if position > 0:
-                    trade_pnl = (price - avg_price) * abs(trade_size)
-                else:
-                    trade_pnl = (avg_price - price) * abs(trade_size)
-
-                trade = {
-                    "timestamp": i,
-                    "side": 1 if trade_size > 0 else -1,
-                    "size": abs(trade_size),
-                    "price": price,
-                    "cost": cost,
-                    "pnl": trade_pnl,
-                }
-                trades.append(trade)
-
-                position = 0.0
-                avg_price = 0.0
-
-        # Calculate target position (with signal threshold and regime sizing)
-        if abs(signal) < 0.2:  # Higher threshold for stronger signals
-            target_position = 0.0
-        else:
-            # Regime-aware position sizing
-            if abs(signal) > 0.6:  # Strong signal
-                position_multiplier = 1.0
-            elif abs(signal) > 0.4:  # Medium signal
-                position_multiplier = 0.6
-            else:  # Weak signal
-                position_multiplier = 0.3
-
-            target_position = signal * max_position * position_multiplier * cash / price
-
-        # Calculate trade size
-        trade_size = target_position - position
-
-        # Apply transaction costs
-        if abs(trade_size) > 1e-6:  # minimum trade size
-            cost = abs(trade_size * price * transaction_cost)
-            cash -= cost
-
-            # Calculate trade PnL if closing position
-            trade_pnl = 0.0
-            if position != 0 and trade_size * position < 0:  # Closing position
-                if position > 0:  # Long position
-                    trade_pnl = (price - avg_price) * min(abs(trade_size), position)
-                else:  # Short position
-                    trade_pnl = (avg_price - price) * min(
-                        abs(trade_size), abs(position)
-                    )
-
-            # Record trade
-            trade = {
-                "timestamp": i,
-                "side": 1 if trade_size > 0 else -1,
-                "size": abs(trade_size),
-                "price": price,
-                "cost": cost,
-                "pnl": trade_pnl,
-            }
-            trades.append(trade)
-
-            # Update position and average price
-            if position == 0:  # Opening new position
-                avg_price = price
-            elif position + trade_size == 0:  # Closing all
-                avg_price = 0.0
-            else:  # Partial close or add
-                if (position > 0 and trade_size > 0) or (
-                    position < 0 and trade_size < 0
-                ):
-                    # Adding to position - update VWAP
-                    total_value = position * avg_price + trade_size * price
-                    avg_price = total_value / (position + trade_size)
-
-            position = target_position
-
-        # Calculate PnL
-        position_value = position * price
-        total_value = cash + position_value
-        pnl_series[i] = total_value - initial_cash
-
-    return trades, pnl_series
+# Import the unified simulation function from core
+from core.sim.simulate import simulate_orders_numba
 
 
 def compute_metrics_from_pnl(
     pnl_series: np.ndarray, trades: List[Dict]
 ) -> Dict[str, float]:
     """Compute allocator-grade metrics from PnL series."""
-    if len(pnl_series) == 0:
+    # Handle empty or NaN equity curves
+    if len(pnl_series) == 0 or np.all(np.isnan(pnl_series)):
         return {
             "sharpe_nw": 0.0,
             "sortino": 0.0,
@@ -420,6 +242,25 @@ def compute_metrics_from_pnl(
             "median_hold": 0.0,
             "total_return": 0.0,
             "volatility": 0.0,
+            "reason": "no_trades",
+        }
+
+    # Handle zero trades case
+    total_trades = 0
+    if trades and len(trades) > 0:
+        total_trades = trades[0].get("count", 0) if trades else 0
+
+    if total_trades == 0:
+        return {
+            "sharpe_nw": 0.0,
+            "sortino": 0.0,
+            "max_dd": 0.0,
+            "hit_rate": 0.0,
+            "turnover": 0.0,
+            "median_hold": 0.0,
+            "total_return": 0.0,
+            "volatility": 0.0,
+            "reason": "no_trades",
         }
 
     # Calculate returns
@@ -449,22 +290,23 @@ def compute_metrics_from_pnl(
 
     # Maximum drawdown
     peak = np.maximum.accumulate(pnl_series)
-    # Avoid division by zero
-    drawdown = np.where(peak != 0, (pnl_series - peak) / peak, 0.0)
+    # Avoid division by zero - use absolute values for drawdown
+    if peak[-1] != 0:
+        drawdown = (pnl_series - peak) / abs(peak[-1])
+    else:
+        drawdown = np.zeros_like(pnl_series)
     max_dd = np.min(drawdown) if len(drawdown) > 0 else 0.0
 
     # Hit rate
     winning_trades = sum(1 for trade in trades if trade.get("pnl", 0) > 0)
     hit_rate = winning_trades / len(trades) if len(trades) > 0 else 0.0
 
-    # Turnover
-    total_volume = sum(abs(trade["size"] * trade["price"]) for trade in trades)
-    turnover = total_volume / pnl_series[0] if pnl_series[0] > 0 else 0.0
+    # Turnover (simplified - using trade count as proxy)
+    total_volume = trades[0]["count"] if trades else 0
+    turnover = total_volume / len(pnl_series) if len(pnl_series) > 0 else 0.0
 
-    # Median hold time (simplified)
-    median_hold = (
-        np.median([trade.get("hold_time", 1) for trade in trades]) if trades else 0.0
-    )
+    # Median hold time (from simulation)
+    median_hold = trades[0]["median_hold"] if trades else 0.0
 
     return {
         "sharpe_nw": sharpe_nw,
@@ -483,6 +325,8 @@ def walkforward_run(
     folds: List[Fold],
     prices: np.ndarray,
     model_seed: int = 0,
+    validate_data: bool = False,  # Changed default to False for performance
+    performance_mode: str = "RELAXED",
 ) -> List[Tuple[int, Dict, List]]:
     """
     Run walk-forward analysis with warm-start.
@@ -492,6 +336,8 @@ def walkforward_run(
         folds: list of folds
         prices: price series
         model_seed: random seed for model initialization
+        validate_data: whether to validate data with DataSanity (default: False for performance)
+        performance_mode: performance mode ("RELAXED" or "STRICT")
 
     Returns:
         results: list of (fold_id, metrics, trades) tuples
@@ -500,7 +346,35 @@ def walkforward_run(
     model = None
     np.random.seed(model_seed)
 
-    for fold in folds:
+    # Performance monitoring
+    start_time = time.time()
+    fold_times = []
+
+    # Initialize DataSanity validator if available and requested
+    validator = None
+    if validate_data and DATASANITY_AVAILABLE:
+        try:
+            validator = DataSanityValidator(profile="walkforward")
+            logger.info("DataSanity validation enabled (walkforward profile)")
+        except Exception as e:
+            logger.warning(f"Failed to initialize DataSanity validator: {e}")
+            logger.info("DataSanity validation disabled")
+            validator = None
+    else:
+        logger.info("DataSanity validation disabled for performance")
+
+    # Pre-allocate arrays for better performance
+    total_folds = len(folds)
+    logger.info(f"Processing {total_folds} folds...")
+
+    for fold_idx, fold in enumerate(folds):
+        fold_start_time = time.time()
+
+        # Progress logging for long runs
+        if total_folds > 10 and fold_idx % max(1, total_folds // 10) == 0:
+            progress = (fold_idx / total_folds) * 100
+            logger.info(f"Progress: {progress:.1f}% ({fold_idx}/{total_folds} folds)")
+
         # Create index arrays
         tr = np.arange(fold.train_lo, fold.train_hi + 1)
         te = np.arange(fold.test_lo, fold.test_hi + 1)
@@ -514,20 +388,108 @@ def walkforward_run(
         Xte = pipeline.transform(te)
         yte = pipeline.y[te]
 
+        # Validate data with DataSanity if enabled (SKIPPED by default for performance)
+        if validator is not None:
+            try:
+                # Create train data slice for validation with timezone-aware datetime index
+                # Use proper dates based on fold indices to avoid lookahead contamination
+                base_date = pd.Timestamp("2020-01-01", tz="UTC")
+                train_start = base_date + pd.Timedelta(days=fold.train_lo)
+                train_dates = pd.date_range(
+                    start=train_start, periods=len(tr), freq="D", tz="UTC"
+                )
+                train_data = pd.DataFrame(
+                    {
+                        "Open": prices[tr] * 0.99,  # Approximate OHLC from close
+                        "High": prices[tr] * 1.01,
+                        "Low": prices[tr] * 0.99,
+                        "Close": prices[tr],
+                        "Volume": np.ones(len(tr)) * 1000000,  # Default volume
+                    },
+                    index=train_dates,
+                )
+                validator.validate_and_repair(train_data, f"TRAIN_FOLD_{fold.fold_id}")
+                logger.debug(
+                    f"DataSanity validation passed for train fold {fold.fold_id}"
+                )
+
+                # Create test data slice for validation with timezone-aware datetime index
+                test_start = base_date + pd.Timedelta(days=fold.test_lo)
+                test_dates = pd.date_range(
+                    start=test_start, periods=len(te), freq="D", tz="UTC"
+                )
+                test_data = pd.DataFrame(
+                    {
+                        "Open": prices[te] * 0.99,
+                        "High": prices[te] * 1.01,
+                        "Low": prices[te] * 0.99,
+                        "Close": prices[te],
+                        "Volume": np.ones(len(te)) * 1000000,
+                    },
+                    index=test_dates,
+                )
+                validator.validate_and_repair(test_data, f"TEST_FOLD_{fold.fold_id}")
+                logger.debug(
+                    f"DataSanity validation passed for test fold {fold.fold_id}"
+                )
+            except Exception as e:
+                logger.error(
+                    f"DataSanity validation failed for fold {fold.fold_id}: {str(e)}"
+                )
+                raise Exception(
+                    f"RULE:DATASANITY_VALIDATION_FAILED - Fold {fold.fold_id}: {str(e)}"
+                )
+
         # Fit model with warm-start
         model = pipeline.fit_model(Xtr, ytr, warm_model=model)
 
         # Make predictions
         yhat = model.predict(Xte)
 
-        # Simulate orders
+        # Simulate orders using the core simulation function
         test_prices = prices[te]
-        trades, pnl_series = simulate_orders_numba(yhat, test_prices)
+        pnl_series, trades_count, wins, losses, median_hold = simulate_orders_numba(
+            yhat, test_prices
+        )
 
-        # Compute metrics
+        # Create simplified trade summary for compatibility
+        trades = [
+            {
+                "count": int(trades_count),
+                "wins": int(wins),
+                "losses": int(losses),
+                "median_hold": int(median_hold),
+            }
+        ]
+
+        # Compute metrics from PnL series
         metrics = compute_metrics_from_pnl(pnl_series, trades)
 
+        # Performance monitoring
+        fold_time = time.time() - fold_start_time
+        fold_times.append(fold_time)
+
+        # Log fold completion with performance info
+        logger.debug(
+            f"Fold {fold.fold_id} completed in {fold_time:.3f}s - Sharpe: {metrics['sharpe_nw']:.3f}"
+        )
+
         results.append((fold.fold_id, metrics, trades))
+
+    # Performance summary
+    total_time = time.time() - start_time
+    avg_fold_time = np.mean(fold_times) if fold_times else 0
+
+    logger.info(f"Walk-forward completed in {total_time:.2f}s")
+    logger.info(f"Average fold time: {avg_fold_time:.3f}s")
+    logger.info(f"Performance mode: {performance_mode}")
+
+    # Performance validation
+    if performance_mode == "STRICT":
+        if avg_fold_time > 0.6:  # 10k rows baseline
+            logger.warning(
+                f"Fold time {avg_fold_time:.3f}s exceeds STRICT threshold of 0.6s"
+            )
 
     return results
 
@@ -562,9 +524,6 @@ def build_feature_table(
 
     # Returns
     returns = np.diff(np.log(close))
-    print(f"Debug: returns shape before concatenate: {returns.shape}")
-    print(f"Debug: returns type: {type(returns)}")
-    print(f"Debug: close shape: {close.shape}")
 
     # Ensure returns is 1D
     if returns.ndim > 1:
@@ -667,15 +626,30 @@ def build_feature_table(
 
 
 def main():
-    """Example usage of the walk-forward framework."""
-    # Load data (replace with your data loading)
+    """Optimized walk-forward framework for trading system backtesting."""
+    logger.info("Starting optimized walk-forward analysis")
+
+    # Load data with error handling for longer periods
     try:
         import yfinance as yf
 
-        data = yf.download("SPY", start="2020-01-01", end="2024-12-31")
+        logger.info(f"Loading {args.symbol} data from yfinance")
+        logger.info(f"Date range: {args.start_date} to {args.end_date}")
+
+        # Add progress indicator for long data loads
+        data = yf.download(
+            args.symbol, start=args.start_date, end=args.end_date, progress=True
+        )
+        logger.info(f"Loaded {len(data)} days of data")
+
+        if len(data) < 100:
+            logger.warning(
+                f"Very little data loaded ({len(data)} days). Check date range and symbol."
+            )
+
     except ImportError:
-        print("yfinance not available, using dummy data")
-        dates = pd.date_range("2020-01-01", "2024-12-31", freq="D")
+        logger.warning("yfinance not available, using dummy data")
+        dates = pd.date_range(args.start_date, args.end_date, freq="D")
         data = pd.DataFrame(
             {
                 "Open": np.random.randn(len(dates)).cumsum() + 100,
@@ -686,42 +660,60 @@ def main():
             },
             index=dates,
         )
+    except Exception as e:
+        logger.error(f"Error loading data: {e}")
+        return
 
-    # Build feature table
-    print("Building feature table...")
-    X, y, prices = build_feature_table(data)
+    # Build feature table with progress indication
+    logger.info("Building feature table...")
+    X, y, prices = build_feature_table(data, warmup_days=60)
 
-    print(f"Feature matrix shape: {X.shape}")
-    print(
-        f"Target distribution: {np.bincount((y + 1).astype(int))}"
-    )  # Shift to non-negative
-    print(f"Price range: {prices.min():.2f} - {prices.max():.2f}")
+    logger.info(f"Feature matrix shape: {X.shape}")
+    logger.info(f"Target distribution: {np.bincount((y + 1).astype(int))}")
+    logger.info(f"Price range: {prices.min():.2f} - {prices.max():.2f}")
 
     # Create pipeline
     pipeline = LeakageProofPipeline(X, y)
 
-    # Generate folds
-    print("Generating folds...")
+    # Generate folds with optimized parameters for longer periods
+    logger.info("Generating folds...")
     folds = list(
         gen_walkforward(
             n=len(X),
-            train_len=252,  # 1 year training
-            test_len=63,  # 3 months testing
-            stride=21,  # 1 month stride (overlapping)
+            train_len=args.train_len,
+            test_len=args.test_len,
+            stride=args.stride,
             warmup=0,
             anchored=False,  # rolling window
         )
     )
 
-    print(f"Generated {len(folds)} folds")
+    logger.info(f"Generated {len(folds)} folds")
 
-    # Run walk-forward
-    print("Running walk-forward analysis...")
+    # Warn if too many folds for performance
+    if len(folds) > 50:
+        logger.warning(
+            f"Large number of folds ({len(folds)}). Consider increasing stride or reducing date range for better performance."
+        )
+
+    # Run walk-forward with performance monitoring
+    logger.info("Running walk-forward analysis...")
     start_time = time.time()
-    results = walkforward_run(pipeline, folds, prices)
+
+    # Get performance mode from environment
+    perf_mode = os.getenv("SANITY_PERF_MODE", "RELAXED")
+    logger.info(f"Performance mode: {perf_mode}")
+
+    results = walkforward_run(
+        pipeline,
+        folds,
+        prices,
+        performance_mode=perf_mode,
+        validate_data=args.validate_data,
+    )
     end_time = time.time()
 
-    print(f"Completed in {end_time - start_time:.2f} seconds")
+    logger.info(f"Completed in {end_time - start_time:.2f} seconds")
 
     # Aggregate results
     all_metrics = [metrics for _, metrics, _ in results]
@@ -740,25 +732,25 @@ def main():
             if trade.get("pnl", 0) != 0:  # Only closed trades
                 all_trade_pnls.append(trade["pnl"])
 
-    print("\nAggregate Results:")
-    print(f"Mean Sharpe: {np.mean(sharpe_scores):.3f}")
-    print(f"Mean Max DD: {np.mean(max_dds):.3f}")
-    print(f"Mean Hit Rate: {np.mean(hit_rates):.3f}")
-    print(f"Mean Total Return: {np.mean(total_returns):.3f}")
-    print(
+    logger.info("\nAggregate Results:")
+    logger.info(f"Mean Sharpe: {np.mean(sharpe_scores):.3f}")
+    logger.info(f"Mean Max DD: {np.mean(max_dds):.3f}")
+    logger.info(f"Mean Hit Rate: {np.mean(hit_rates):.3f}")
+    logger.info(f"Mean Total Return: {np.mean(total_returns):.3f}")
+    logger.info(
         f"Folds with positive Sharpe: {sum(1 for s in sharpe_scores if s > 0)}/{len(sharpe_scores)}"
     )
 
     if all_trade_pnls:
-        print("Trade Analysis:")
-        print(f"  Total closed trades: {len(all_trade_pnls)}")
-        print(f"  Winning trades: {sum(1 for pnl in all_trade_pnls if pnl > 0)}")
-        print(f"  Average trade PnL: {np.mean(all_trade_pnls):.2f}")
-        print(f"  Best trade: {max(all_trade_pnls):.2f}")
-        print(f"  Worst trade: {min(all_trade_pnls):.2f}")
+        logger.info("Trade Analysis:")
+        logger.info(f"  Total closed trades: {len(all_trade_pnls)}")
+        logger.info(f"  Winning trades: {sum(1 for pnl in all_trade_pnls if pnl > 0)}")
+        logger.info(f"  Average trade PnL: {np.mean(all_trade_pnls):.2f}")
+        logger.info(f"  Best trade: {max(all_trade_pnls):.2f}")
+        logger.info(f"  Worst trade: {min(all_trade_pnls):.2f}")
 
     # Save results
-    output_dir = Path("results/walkforward")
+    output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     with open(output_dir / "results.json", "w") as f:
@@ -790,8 +782,92 @@ def main():
             indent=2,
         )
 
-    print(f"Results saved to {output_dir}")
+    logger.info(f"Results saved to {output_dir}")
 
 
 if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Walk-forward framework for trading system backtesting"
+    )
+    parser.add_argument("--symbol", help="Trading symbol to analyze (overrides config)")
+    parser.add_argument(
+        "--start-date", default="2020-01-01", help="Start date for analysis"
+    )
+    parser.add_argument(
+        "--end-date", default="2024-12-31", help="End date for analysis"
+    )
+    parser.add_argument(
+        "--config", default="config/base.json", help="Base configuration file path"
+    )
+    parser.add_argument(
+        "--profile",
+        choices=["risk_low", "risk_balanced", "risk_strict"],
+        help="Risk profile to apply",
+    )
+    parser.add_argument("--asset", help="Asset symbol for asset-specific configuration")
+    parser.add_argument(
+        "--train-len", type=int, help="Training window length (days, overrides config)"
+    )
+    parser.add_argument(
+        "--test-len", type=int, help="Test window length (days, overrides config)"
+    )
+    parser.add_argument(
+        "--stride", type=int, help="Stride between folds (days, overrides config)"
+    )
+    parser.add_argument(
+        "--perf-mode",
+        choices=["RELAXED", "STRICT"],
+        default="RELAXED",
+        help="Performance validation mode",
+    )
+    parser.add_argument(
+        "--validate-data", action="store_true", help="Enable DataSanity validation"
+    )
+    parser.add_argument("--output-dir", help="Output directory (overrides config)")
+
+    args = parser.parse_args()
+
+    # Build CLI overrides
+    cli_overrides = {}
+    if args.symbol:
+        cli_overrides["symbols"] = [args.symbol]
+    if args.train_len:
+        cli_overrides["walkforward"] = cli_overrides.get("walkforward", {})
+        cli_overrides["walkforward"]["train_len"] = args.train_len
+    if args.test_len:
+        cli_overrides["walkforward"] = cli_overrides.get("walkforward", {})
+        cli_overrides["walkforward"]["test_len"] = args.test_len
+    if args.stride:
+        cli_overrides["walkforward"] = cli_overrides.get("walkforward", {})
+        cli_overrides["walkforward"]["stride"] = args.stride
+    if args.output_dir:
+        cli_overrides["data"] = cli_overrides.get("data", {})
+        cli_overrides["data"]["output_dir"] = args.output_dir
+
+    # Load configuration
+    from core.config_loader import load_config
+
+    config = load_config(
+        profile=args.profile,
+        asset=args.asset,
+        cli_overrides=cli_overrides,
+        base_config_path=args.config,
+    )
+
+    # Set environment variables
+    os.environ["SANITY_PERF_MODE"] = args.perf_mode
+
+    # Use config values
+    symbol = args.symbol or config["symbols"][0]
+    wf_params = config["walkforward"]
+
+    logger.info(f"Starting walk-forward analysis for {symbol}")
+    logger.info(f"Configuration: {args.profile or 'base'} profile")
+    logger.info(f"Date range: {args.start_date} to {args.end_date}")
+    logger.info(
+        f"Train/Test/Stride: {wf_params['train_len']}/{wf_params['test_len']}/{wf_params['stride']}"
+    )
+
     main()

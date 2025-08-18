@@ -1,0 +1,53 @@
+{
+  "symbols": ["SPY", "BTC-USD", "TSLA"],
+  "initial_capital": 100000,
+  "use_ibkr": false,
+  "shorting_enabled": true,
+  "close_positions_at_end": true,
+  "carry_positions_from_warmup": false,
+  "fast_mode": true,
+  "mode": "backtest",
+  "objective": {
+    "type": "log_utility",
+    "kelly_cap_fraction": 0.35,
+    "risk_aversion_lambda": 1.5,
+    "downside_lambda": 1.0,
+    "volatility_adjustment": true,
+    "performance_lookback_days": 15
+  },
+  "risk_params": {
+    "max_gross_exposure_pct": 75.0,
+    "max_daily_loss_pct": 3.0,
+    "max_position_size": 0.25,
+    "max_drawdown_pct": 20.0,
+    "stop_loss_pct": 4.0,
+    "take_profit_pct": 8.0,
+    "volatility_target": 0.30,
+    "max_correlation": 0.8,
+    "position_sizing_method": "kelly_optimal",
+    "kelly_fraction": 0.35,
+    "dynamic_position_sizing": true
+  },
+  "execution_params": {
+    "slippage_bps": 3,
+    "per_share_fee": 0.005,
+    "borrow_rate_annual": 0.06,
+    "min_notional": 100,
+    "max_spread_pct": 0.7
+  },
+  "strategy_params": {
+    "regime_aware_ensemble": {
+      "combination_method": "rolling_ic",
+      "confidence_threshold": 0.2,
+      "use_regime_switching": true,
+      "regime_lookback": 252,
+      "trend_lookback_multiplier": 1.0,
+      "chop_lookback_multiplier": 0.6,
+      "volatile_lookback_multiplier": 0.4,
+      "trend_following_weight": 0.5,
+      "mean_reversion_weight": 0.5,
+      "rolling_window": 30,
+      "min_periods": 15
+    }
+  }
+}

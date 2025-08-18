@@ -1,0 +1,10 @@
+{
+  "title": "Trading System Overview",
+  "panels": [
+    {"type": "graph", "title": "Daily Return", "targets": [{"expr": "trader_daily_ret"}]},
+    {"type": "graph", "title": "Rolling Sharpe", "targets": [{"expr": "trader_sharpe_rolling"}]},
+    {"type": "graph", "title": "Max Drawdown", "targets": [{"expr": "trader_mdd"}]},
+    {"type": "graph", "title": "Gross Exposure", "targets": [{"expr": "trader_gross_exposure"}]},
+    {"type": "graph", "title": "Net Leverage", "targets": [{"expr": "trader_net_leverage"}]}
+  ]
+}

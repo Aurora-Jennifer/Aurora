@@ -459,20 +459,15 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
 
         self.rolling_performance = {
             "rolling_mean": rolling_perf.iloc[-1] if not rolling_perf.empty else 0.0,
-            "rolling_std": (
-                signal_returns.rolling(self.params.rolling_window).std().iloc[-1]
-                if not signal_returns.empty
-                else 0.0
-            ),
-            "rolling_sharpe": (
-                rolling_perf.iloc[-1]
-                / (
-                    signal_returns.rolling(self.params.rolling_window).std().iloc[-1]
-                    + 1e-6
-                )
-                if not signal_returns.empty
-                else 0.0
-            ),
+            "rolling_std": signal_returns.rolling(self.params.rolling_window)
+            .std()
+            .iloc[-1]
+            if not signal_returns.empty
+            else 0.0,
+            "rolling_sharpe": rolling_perf.iloc[-1]
+            / (signal_returns.rolling(self.params.rolling_window).std().iloc[-1] + 1e-6)
+            if not signal_returns.empty
+            else 0.0,
         }
 
     # Helper methods for technical indicators

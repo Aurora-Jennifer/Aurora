@@ -24,6 +24,7 @@ class RegimeParams:
     take_profit_multiplier: float
     feature_lookback_adjustment: float
     ensemble_weights: Dict[str, float]
+    trend_strength: float = 0.0
 
 
 class RegimeDetector:
@@ -100,10 +101,26 @@ class RegimeDetector:
             Tuple of (regime_name, confidence, regime_params)
         """
         if len(data) < self.lookback_period:
-            logger.warning(
-                f"Insufficient data for regime detection: {len(data)} < {self.lookback_period}"
-            )
-            return "chop", 0.5, self.regime_params["chop"]
+            # More informative logging with data length, but rate limited
+            available_days = len(data)
+            required_days = self.lookback_period
+
+            # Use a simple rate limiting approach - only log every 50th occurrence
+            if not hasattr(self, "_insufficient_data_count"):
+                self._insufficient_data_count = 0
+
+            self._insufficient_data_count += 1
+
+            if self._insufficient_data_count <= 5:  # Only log first 5 occurrences
+                logger.warning(
+                    f"Insufficient data for regime detection: {available_days} < {required_days} "
+                    f"(need {required_days - available_days} more days)"
+                )
+            elif self._insufficient_data_count == 6:
+                logger.warning("... (suppressing further regime detection warnings)")
+
+            # Return default regime with low confidence
+            return "chop", 0.3, self.regime_params["chop"]
 
         # Calculate regime indicators
         indicators = self._calculate_regime_indicators(data)
@@ -114,9 +131,40 @@ class RegimeDetector:
         # Get regime-specific parameters
         regime_params = self.regime_params[regime_name]
 
-        logger.info(f"Detected regime: {regime_name} (confidence: {confidence:.2f})")
+        # Calculate trend strength for the current data
+        close = data["Close"]
+        trend_strength = (
+            self._calculate_trend_strength(close).iloc[-1] if len(close) > 0 else 0.0
+        )
 
-        return regime_name, confidence, regime_params
+        # Create updated regime params with trend strength
+        updated_regime_params = RegimeParams(
+            regime_name=regime_params.regime_name,
+            confidence_threshold=regime_params.confidence_threshold,
+            position_sizing_multiplier=regime_params.position_sizing_multiplier,
+            stop_loss_multiplier=regime_params.stop_loss_multiplier,
+            take_profit_multiplier=regime_params.take_profit_multiplier,
+            feature_lookback_adjustment=regime_params.feature_lookback_adjustment,
+            ensemble_weights=regime_params.ensemble_weights,
+            trend_strength=trend_strength,
+        )
+
+        return regime_name, confidence, updated_regime_params
+
+    def _calculate_trend_strength(self, close: pd.Series) -> pd.Series:
+        """Calculate trend strength indicator."""
+        # Linear regression slope over different periods
+        periods = [10, 20, 50]
+        trend_strength = pd.Series(0.0, index=close.index)
+
+        for period in periods:
+            if len(close) >= period:
+                slope = close.rolling(period).apply(
+                    lambda x: np.polyfit(range(len(x)), x, 1)[0] if len(x) > 1 else 0
+                )
+                trend_strength += slope
+
+        return trend_strength / len(periods)
 
     def _calculate_regime_indicators(self, data: pd.DataFrame) -> Dict[str, float]:
         """Calculate regime detection indicators."""
@@ -137,7 +185,6 @@ class RegimeDetector:
 
         # 3. Price momentum (trend vs mean reversion)
         short_ma = close.rolling(20).mean()
-        long_ma = close.rolling(60).mean()
         momentum = (close.iloc[-1] - short_ma.iloc[-1]) / short_ma.iloc[-1]
 
         # 4. Range expansion/contraction

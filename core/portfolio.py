@@ -344,6 +344,10 @@ class PortfolioState:
                         log_trade=log_trade,
                     )
 
+    def get_position(self, symbol: str) -> Optional[Position]:
+        """Get position for a specific symbol."""
+        return self.positions.get(symbol)
+
     def get_open_positions_count(self) -> int:
         """Get count of open positions."""
         return len([pos for pos in self.positions.values() if abs(pos.qty) > 1e-6])

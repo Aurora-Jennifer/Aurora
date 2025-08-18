@@ -1,0 +1,566 @@
+{
+  "total_runs": 120,
+  "total_features": 18,
+  "avg_importance_stability": Infinity,
+  "avg_rank_stability": 0.5236514907703904,
+  "top_alpha_features": [
+    [
+      "regime_confidence",
+      {
+        "importance_mean": 0.04469089931391362,
+        "importance_std": 0.014830234213698822,
+        "importance_cv": 0.33184013840333987,
+        "rank_mean": 1.1107226107226107,
+        "rank_std": 0.8370653242356598,
+        "rank_stability": 0.5443464567140888,
+        "alpha_mean": 1579.9094742649959,
+        "alpha_std": 27679.91061231102,
+        "performance_correlation": -0.21141155474878554,
+        "appearance_count": 858,
+        "total_runs": 120
+      }
+    ],
+    [
+      "entry_price",
+      {
+        "importance_mean": 0.016262267879179445,
+        "importance_std": 0.0035937436308524453,
+        "importance_cv": 0.22098662114977882,
+        "rank_mean": 2.2587412587412588,
+        "rank_std": 0.8792695072978239,
+        "rank_stability": 0.5321216547795139,
+        "alpha_mean": 583.241612334831,
+        "alpha_std": 10187.307931210142,
+        "performance_correlation": -0.15792976649192822,
+        "appearance_count": 858,
+        "total_runs": 120
+      }
+    ],
+    [
+      "trend_strength",
+      {
+        "importance_mean": 0.012287372389842111,
+        "importance_std": 0.002055685190537491,
+        "importance_cv": 0.16730063396116424,
+        "rank_mean": 3.4347319347319347,
+        "rank_std": 1.1487119204781187,
+        "rank_stability": 0.4653951004178754,
+        "alpha_mean": 440.07795130962677,
+        "alpha_std": 7257.931562484478,
+        "performance_correlation": 0.22375792946690126,
+        "appearance_count": 858,
+        "total_runs": 120
+      }
+    ],
+    [
+      "volume_profile",
+      {
+        "importance_mean": 0.00982981074904536,
+        "importance_std": 0.013960980648931412,
+        "importance_cv": 1.4202695255640865,
+        "rank_mean": 6.470862470862471,
+        "rank_std": 3.3829436205751575,
+        "rank_stability": 0.22815716709328188,
+        "alpha_mean": 291.7726347139376,
+        "alpha_std": 6899.06131524921,
+        "performance_correlation": -0.20841379872234,
+        "appearance_count": 858,
+        "total_runs": 120
+      }
+    ],
+    [
+      "market_volatility",
+      {
+        "importance_mean": 0.006727379139874408,
+        "importance_std": 0.0036941336762684406,
+        "importance_cv": 0.5491192928866806,
+        "rank_mean": 5.567599067599067,
+        "rank_std": 2.458661553067282,
+        "rank_stability": 0.2891291861480807,
+        "alpha_mean": 284.3109468461915,
+        "alpha_std": 4756.05806796495,
+        "performance_correlation": -0.2707261489045522,
+        "appearance_count": 858,
+        "total_runs": 120
+      }
+    ],
+    [
+      "exit_price",
+      {
+        "importance_mean": 0.006916419230030207,
+        "importance_std": 0.004464865534748473,
+        "importance_cv": 0.6455458216532911,
+        "rank_mean": 5.834498834498834,
+        "rank_std": 2.2634271560321424,
+        "rank_stability": 0.30642632796371533,
+        "alpha_mean": 213.31586616283843,
+        "alpha_std": 3146.8596436726475,
+        "performance_correlation": -0.3402595032854938,
+        "appearance_count": 858,
+        "total_runs": 120
+      }
+    ],
+    [
+      "strategy_confidence",
+      {
+        "importance_mean": 0.00408720240260326,
+        "importance_std": 0.0009435277472962884,
+        "importance_cv": 0.2308492837779034,
+        "rank_mean": 6.665501165501166,
+        "rank_std": 1.0633377112172109,
+        "rank_stability": 0.48465163727855126,
+        "alpha_mean": 144.862007509524,
+        "alpha_std": 2196.898127328999,
+        "performance_correlation": -0.09568778944645416,
+        "appearance_count": 858,
+        "total_runs": 120
+      }
+    ],
+    [
+      "signal_strength",
+      {
+        "importance_mean": 0.0030877190118450077,
+        "importance_std": 0.0008668706794106723,
+        "importance_cv": 0.28074791653165687,
+        "rank_mean": 7.933566433566433,
+        "rank_std": 1.671091736689194,
+        "rank_stability": 0.37437875542211646,
+        "alpha_mean": 108.69422094756244,
+        "alpha_std": 1684.1005810447,
+        "performance_correlation": 0.15359050474740646,
+        "appearance_count": 858,
+        "total_runs": 120
+      }
+    ],
+    [
+      "hold_duration",
+      {
+        "importance_mean": 0.0021874270564661087,
+        "importance_std": 0.0008992702429538538,
+        "importance_cv": 0.41110867687934116,
+        "rank_mean": 9.36946386946387,
+        "rank_std": 1.5375046663484047,
+        "rank_stability": 0.39408794524072727,
+        "alpha_mean": 71.08317411252742,
+        "alpha_std": 1039.1440998408714,
+        "performance_correlation": 0.16046765445219052,
+        "appearance_count": 858,
+        "total_runs": 120
+      }
+    ],
+    [
+      "mean_reversion",
+      {
+        "importance_mean": 0.0017172778732308914,
+        "importance_std": 0.0017947996642561576,
+        "importance_cv": 1.0451422523015548,
+        "rank_mean": 9.966200466200466,
+        "rank_std": 2.228493694508511,
+        "rank_stability": 0.30974197090765415,
+        "alpha_mean": 55.75014878509063,
+        "alpha_std": 1135.0530281711522,
+        "performance_correlation": -0.21274960409000157,
+        "appearance_count": 858,
+        "total_runs": 120
+      }
+    ]
+  ],
+  "most_stable_features": [
+    [
+      "z_score",
+      {
+        "importance_mean": 0.0,
+        "importance_std": 0.0,
+        "importance_cv": Infinity,
+        "rank_mean": 13.976689976689977,
+        "rank_std": 0.15097427483308656,
+        "rank_stability": 0.8688291492396901,
+        "alpha_mean": 0.0,
+        "alpha_std": 0.0,
+        "performance_correlation": NaN,
+        "appearance_count": 858,
+        "total_runs": 120
+      }
+    ],
+    [
+      "rsi",
+      {
+        "importance_mean": 0.0,
+        "importance_std": 0.0,
+        "importance_cv": Infinity,
+        "rank_mean": 14.976689976689977,
+        "rank_std": 0.15097427483308656,
+        "rank_stability": 0.8688291492396901,
+        "alpha_mean": 0.0,
+        "alpha_std": 0.0,
+        "performance_correlation": NaN,
+        "appearance_count": 858,
+        "total_runs": 120
+      }
+    ],
+    [
+      "price_position",
+      {
+        "importance_mean": 0.0,
+        "importance_std": 0.0,
+        "importance_cv": Infinity,
+        "rank_mean": 15.976689976689977,
+        "rank_std": 0.15097427483308656,
+        "rank_stability": 0.8688291492396901,
+        "alpha_mean": 0.0,
+        "alpha_std": 0.0,
+        "performance_correlation": NaN,
+        "appearance_count": 858,
+        "total_runs": 120
+      }
+    ],
+    [
+      "sma_ratio",
+      {
+        "importance_mean": 0.0,
+        "importance_std": 0.0,
+        "importance_cv": Infinity,
+        "rank_mean": 16.976689976689975,
+        "rank_std": 0.15097427483308656,
+        "rank_stability": 0.8688291492396901,
+        "alpha_mean": 0.0,
+        "alpha_std": 0.0,
+        "performance_correlation": NaN,
+        "appearance_count": 858,
+        "total_runs": 120
+      }
+    ],
+    [
+      "returns_5d",
+      {
+        "importance_mean": 0.0,
+        "importance_std": 0.0,
+        "importance_cv": Infinity,
+        "rank_mean": 17.976689976689975,
+        "rank_std": 0.15097427483308656,
+        "rank_stability": 0.8688291492396901,
+        "alpha_mean": 0.0,
+        "alpha_std": 0.0,
+        "performance_correlation": NaN,
+        "appearance_count": 858,
+        "total_runs": 120
+      }
+    ],
+    [
+      "regime_confidence",
+      {
+        "importance_mean": 0.04469089931391362,
+        "importance_std": 0.014830234213698822,
+        "importance_cv": 0.33184013840333987,
+        "rank_mean": 1.1107226107226107,
+        "rank_std": 0.8370653242356598,
+        "rank_stability": 0.5443464567140888,
+        "alpha_mean": 1579.9094742649959,
+        "alpha_std": 27679.91061231102,
+        "performance_correlation": -0.21141155474878554,
+        "appearance_count": 858,
+        "total_runs": 120
+      }
+    ],
+    [
+      "entry_price",
+      {
+        "importance_mean": 0.016262267879179445,
+        "importance_std": 0.0035937436308524453,
+        "importance_cv": 0.22098662114977882,
+        "rank_mean": 2.2587412587412588,
+        "rank_std": 0.8792695072978239,
+        "rank_stability": 0.5321216547795139,
+        "alpha_mean": 583.241612334831,
+        "alpha_std": 10187.307931210142,
+        "performance_correlation": -0.15792976649192822,
+        "appearance_count": 858,
+        "total_runs": 120
+      }
+    ],
+    [
+      "momentum",
+      {
+        "importance_mean": 0.0006640243856472597,
+        "importance_std": 0.0005527533959476521,
+        "importance_cv": 0.8324293623777899,
+        "rank_mean": 11.826340326340326,
+        "rank_std": 1.0231422009620126,
+        "rank_stability": 0.49428062917401255,
+        "alpha_mean": 23.00911138694657,
+        "alpha_std": 410.3618742507256,
+        "performance_correlation": -0.06985189138403147,
+        "appearance_count": 858,
+        "total_runs": 120
+      }
+    ],
+    [
+      "strategy_confidence",
+      {
+        "importance_mean": 0.00408720240260326,
+        "importance_std": 0.0009435277472962884,
+        "importance_cv": 0.2308492837779034,
+        "rank_mean": 6.665501165501166,
+        "rank_std": 1.0633377112172109,
+        "rank_stability": 0.48465163727855126,
+        "alpha_mean": 144.862007509524,
+        "alpha_std": 2196.898127328999,
+        "performance_correlation": -0.09568778944645416,
+        "appearance_count": 858,
+        "total_runs": 120
+      }
+    ],
+    [
+      "trend_strength",
+      {
+        "importance_mean": 0.012287372389842111,
+        "importance_std": 0.002055685190537491,
+        "importance_cv": 0.16730063396116424,
+        "rank_mean": 3.4347319347319347,
+        "rank_std": 1.1487119204781187,
+        "rank_stability": 0.4653951004178754,
+        "alpha_mean": 440.07795130962677,
+        "alpha_std": 7257.931562484478,
+        "performance_correlation": 0.22375792946690126,
+        "appearance_count": 858,
+        "total_runs": 120
+      }
+    ]
+  ],
+  "feature_stats": {
+    "z_score": {
+      "importance_mean": 0.0,
+      "importance_std": 0.0,
+      "importance_cv": Infinity,
+      "rank_mean": 13.976689976689977,
+      "rank_std": 0.15097427483308656,
+      "rank_stability": 0.8688291492396901,
+      "alpha_mean": 0.0,
+      "alpha_std": 0.0,
+      "performance_correlation": NaN,
+      "appearance_count": 858,
+      "total_runs": 120
+    },
+    "rsi": {
+      "importance_mean": 0.0,
+      "importance_std": 0.0,
+      "importance_cv": Infinity,
+      "rank_mean": 14.976689976689977,
+      "rank_std": 0.15097427483308656,
+      "rank_stability": 0.8688291492396901,
+      "alpha_mean": 0.0,
+      "alpha_std": 0.0,
+      "performance_correlation": NaN,
+      "appearance_count": 858,
+      "total_runs": 120
+    },
+    "price_position": {
+      "importance_mean": 0.0,
+      "importance_std": 0.0,
+      "importance_cv": Infinity,
+      "rank_mean": 15.976689976689977,
+      "rank_std": 0.15097427483308656,
+      "rank_stability": 0.8688291492396901,
+      "alpha_mean": 0.0,
+      "alpha_std": 0.0,
+      "performance_correlation": NaN,
+      "appearance_count": 858,
+      "total_runs": 120
+    },
+    "sma_ratio": {
+      "importance_mean": 0.0,
+      "importance_std": 0.0,
+      "importance_cv": Infinity,
+      "rank_mean": 16.976689976689975,
+      "rank_std": 0.15097427483308656,
+      "rank_stability": 0.8688291492396901,
+      "alpha_mean": 0.0,
+      "alpha_std": 0.0,
+      "performance_correlation": NaN,
+      "appearance_count": 858,
+      "total_runs": 120
+    },
+    "returns_5d": {
+      "importance_mean": 0.0,
+      "importance_std": 0.0,
+      "importance_cv": Infinity,
+      "rank_mean": 17.976689976689975,
+      "rank_std": 0.15097427483308656,
+      "rank_stability": 0.8688291492396901,
+      "alpha_mean": 0.0,
+      "alpha_std": 0.0,
+      "performance_correlation": NaN,
+      "appearance_count": 858,
+      "total_runs": 120
+    },
+    "volatility": {
+      "importance_mean": 0.0008173124175229722,
+      "importance_std": 0.0012289065965781442,
+      "importance_cv": 1.503594672282834,
+      "rank_mean": 11.522144522144522,
+      "rank_std": 1.699090035161094,
+      "rank_stability": 0.3704952361621814,
+      "alpha_mean": 10.420906896183146,
+      "alpha_std": 209.4622978891144,
+      "performance_correlation": -0.13073614771464134,
+      "appearance_count": 858,
+      "total_runs": 120
+    },
+    "momentum": {
+      "importance_mean": 0.0006640243856472597,
+      "importance_std": 0.0005527533959476521,
+      "importance_cv": 0.8324293623777899,
+      "rank_mean": 11.826340326340326,
+      "rank_std": 1.0231422009620126,
+      "rank_stability": 0.49428062917401255,
+      "alpha_mean": 23.00911138694657,
+      "alpha_std": 410.3618742507256,
+      "performance_correlation": -0.06985189138403147,
+      "appearance_count": 858,
+      "total_runs": 120
+    },
+    "mean_reversion": {
+      "importance_mean": 0.0017172778732308914,
+      "importance_std": 0.0017947996642561576,
+      "importance_cv": 1.0451422523015548,
+      "rank_mean": 9.966200466200466,
+      "rank_std": 2.228493694508511,
+      "rank_stability": 0.30974197090765415,
+      "alpha_mean": 55.75014878509063,
+      "alpha_std": 1135.0530281711522,
+      "performance_correlation": -0.21274960409000157,
+      "appearance_count": 858,
+      "total_runs": 120
+    },
+    "volume_profile": {
+      "importance_mean": 0.00982981074904536,
+      "importance_std": 0.013960980648931412,
+      "importance_cv": 1.4202695255640865,
+      "rank_mean": 6.470862470862471,
+      "rank_std": 3.3829436205751575,
+      "rank_stability": 0.22815716709328188,
+      "alpha_mean": 291.7726347139376,
+      "alpha_std": 6899.06131524921,
+      "performance_correlation": -0.20841379872234,
+      "appearance_count": 858,
+      "total_runs": 120
+    },
+    "trend_strength": {
+      "importance_mean": 0.012287372389842111,
+      "importance_std": 0.002055685190537491,
+      "importance_cv": 0.16730063396116424,
+      "rank_mean": 3.4347319347319347,
+      "rank_std": 1.1487119204781187,
+      "rank_stability": 0.4653951004178754,
+      "alpha_mean": 440.07795130962677,
+      "alpha_std": 7257.931562484478,
+      "performance_correlation": 0.22375792946690126,
+      "appearance_count": 858,
+      "total_runs": 120
+    },
+    "regime_confidence": {
+      "importance_mean": 0.04469089931391362,
+      "importance_std": 0.014830234213698822,
+      "importance_cv": 0.33184013840333987,
+      "rank_mean": 1.1107226107226107,
+      "rank_std": 0.8370653242356598,
+      "rank_stability": 0.5443464567140888,
+      "alpha_mean": 1579.9094742649959,
+      "alpha_std": 27679.91061231102,
+      "performance_correlation": -0.21141155474878554,
+      "appearance_count": 858,
+      "total_runs": 120
+    },
+    "signal_strength": {
+      "importance_mean": 0.0030877190118450077,
+      "importance_std": 0.0008668706794106723,
+      "importance_cv": 0.28074791653165687,
+      "rank_mean": 7.933566433566433,
+      "rank_std": 1.671091736689194,
+      "rank_stability": 0.37437875542211646,
+      "alpha_mean": 108.69422094756244,
+      "alpha_std": 1684.1005810447,
+      "performance_correlation": 0.15359050474740646,
+      "appearance_count": 858,
+      "total_runs": 120
+    },
+    "market_volatility": {
+      "importance_mean": 0.006727379139874408,
+      "importance_std": 0.0036941336762684406,
+      "importance_cv": 0.5491192928866806,
+      "rank_mean": 5.567599067599067,
+      "rank_std": 2.458661553067282,
+      "rank_stability": 0.2891291861480807,
+      "alpha_mean": 284.3109468461915,
+      "alpha_std": 4756.05806796495,
+      "performance_correlation": -0.2707261489045522,
+      "appearance_count": 858,
+      "total_runs": 120
+    },
+    "position_size": {
+      "importance_mean": 0.002265810028966044,
+      "importance_std": 0.0019487400986289327,
+      "importance_cv": 0.8600633211594533,
+      "rank_mean": 9.156177156177156,
+      "rank_std": 2.4677788852911338,
+      "rank_stability": 0.28836902036677753,
+      "alpha_mean": 51.92922956225018,
+      "alpha_std": 966.3438147084739,
+      "performance_correlation": 0.08704354868186605,
+      "appearance_count": 858,
+      "total_runs": 120
+    },
+    "entry_price": {
+      "importance_mean": 0.016262267879179445,
+      "importance_std": 0.0035937436308524453,
+      "importance_cv": 0.22098662114977882,
+      "rank_mean": 2.2587412587412588,
+      "rank_std": 0.8792695072978239,
+      "rank_stability": 0.5321216547795139,
+      "alpha_mean": 583.241612334831,
+      "alpha_std": 10187.307931210142,
+      "performance_correlation": -0.15792976649192822,
+      "appearance_count": 858,
+      "total_runs": 120
+    },
+    "exit_price": {
+      "importance_mean": 0.006916419230030207,
+      "importance_std": 0.004464865534748473,
+      "importance_cv": 0.6455458216532911,
+      "rank_mean": 5.834498834498834,
+      "rank_std": 2.2634271560321424,
+      "rank_stability": 0.30642632796371533,
+      "alpha_mean": 213.31586616283843,
+      "alpha_std": 3146.8596436726475,
+      "performance_correlation": -0.3402595032854938,
+      "appearance_count": 858,
+      "total_runs": 120
+    },
+    "hold_duration": {
+      "importance_mean": 0.0021874270564661087,
+      "importance_std": 0.0008992702429538538,
+      "importance_cv": 0.41110867687934116,
+      "rank_mean": 9.36946386946387,
+      "rank_std": 1.5375046663484047,
+      "rank_stability": 0.39408794524072727,
+      "alpha_mean": 71.08317411252742,
+      "alpha_std": 1039.1440998408714,
+      "performance_correlation": 0.16046765445219052,
+      "appearance_count": 858,
+      "total_runs": 120
+    },
+    "strategy_confidence": {
+      "importance_mean": 0.00408720240260326,
+      "importance_std": 0.0009435277472962884,
+      "importance_cv": 0.2308492837779034,
+      "rank_mean": 6.665501165501166,
+      "rank_std": 1.0633377112172109,
+      "rank_stability": 0.48465163727855126,
+      "alpha_mean": 144.862007509524,
+      "alpha_std": 2196.898127328999,
+      "performance_correlation": -0.09568778944645416,
+      "appearance_count": 858,
+      "total_runs": 120
+    }
+  }
+}

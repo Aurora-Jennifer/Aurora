@@ -1,0 +1,18 @@
+# Config Directory - Archived Test Configuration Files
+
+## Files Moved
+- `test_backtest_config.json` - Only used by test_core_functionality.py (archived)
+- `test_paper_trading_config.json` - Only used by test_core_functionality.py (archived)
+- `test_live_paper_trading_config.json` - Only used by scripts/test_live_paper_trading.py
+- `test_performance_config.json` - Only used by test_core_functionality.py (archived)
+
+## Analysis
+- These config files were only referenced by test files that have been archived
+- No active scripts or main application code references these configs
+- Active configuration files remain in the main `config/` directory
+
+## Recovery
+If any of these configs are needed:
+1. Move back to `config/` directory
+2. Update any script references to use the correct path
+3. Ensure the config format is compatible with current system

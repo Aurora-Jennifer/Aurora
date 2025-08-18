@@ -55,7 +55,7 @@ class Pipeline:
             "trend_weight": 0.6,
             "mean_reversion_weight": 0.4,
             "volatility_threshold": 0.5,
-            "signal_threshold": 0.2,
+            "signal_threshold": 0.01,  # Lower threshold to allow more trades
         }
         return self.model
 
@@ -66,7 +66,6 @@ class Pipeline:
 
         # Extract features (assuming standard order: ret1, ma20, vol20, zscore20)
         returns = Xte[:, 0]  # ret1
-        ma20 = Xte[:, 1]  # ma20
         vol20 = Xte[:, 2]  # vol20
         zscore = Xte[:, 3]  # zscore20
 

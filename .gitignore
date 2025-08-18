@@ -1,0 +1,116 @@
+# Cache directories
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.cursor/
+
+# Generated files
+trading_system.egg-info/
+results/
+logs/
+trading.log
+state/selector.pkl
+
+# Temporary files
+*.tmp
+*.temp
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment files
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Data files (can be regenerated)
+data/ibkr/*.pkl
+data/ibkr/*.csv
+data/ibkr/*.json
+
+# Model files (can be regenerated)
+state/*.pkl
+state/*.joblib
+state/*.h5
+
+# Log files
+*.log
+logs/
+results/
+
+# Test artifacts
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Documentation builds
+docs/_build/
+site/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# Temporary files
+*.bak
+*.orig
+*.rej
+*.tmp
+*.temp

@@ -4588,3 +4588,169 @@
   ],
   "config_file": "config/consistency_test_config.json"
 }
+2025-08-13 15:00:36 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T15:00:36.347398",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_aware_ensemble"
+  ],
+  "symbols": [
+    "SPY",
+    "QQQ"
+  ],
+  "config_file": "config/baseline.json"
+}
+2025-08-13 15:00:53 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T15:00:53.032116",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_aware_ensemble"
+  ],
+  "symbols": "SPY,QQQ",
+  "config_file": "config/baseline.json"
+}
+2025-08-13 15:01:11 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T15:01:11.263048",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_aware_ensemble"
+  ],
+  "symbols": "SPY,QQQ",
+  "config_file": "config/baseline.json"
+}
+2025-08-13 15:01:30 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T15:01:30.779777",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_aware_ensemble"
+  ],
+  "symbols": "SPY,QQQ",
+  "config_file": "config/baseline.json"
+}
+2025-08-13 15:02:19 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T15:02:19.253815",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_aware_ensemble"
+  ],
+  "symbols": "SPY,QQQ",
+  "config_file": "config/baseline.json"
+}
+2025-08-13 15:03:47 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T15:03:47.507749",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_aware_ensemble"
+  ],
+  "symbols": "SPY,QQQ",
+  "config_file": "config/baseline.json"
+}
+2025-08-13 15:04:19 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T15:04:19.325008",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_aware_ensemble"
+  ],
+  "symbols": "SPY,QQQ",
+  "config_file": "config/baseline.json"
+}
+2025-08-13 15:04:44 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T15:04:44.664027",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_aware_ensemble"
+  ],
+  "symbols": "SPY,QQQ",
+  "config_file": "config/baseline.json"
+}
+2025-08-13 15:05:05 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T15:05:05.154413",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_aware_ensemble"
+  ],
+  "symbols": "SPY,QQQ",
+  "config_file": "config/baseline.json"
+}
+2025-08-13 15:05:27 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T15:05:27.895239",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_aware_ensemble"
+  ],
+  "symbols": "SPY,QQQ",
+  "config_file": "config/baseline.json"
+}
+2025-08-13 15:05:48 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T15:05:48.996015",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_aware_ensemble"
+  ],
+  "symbols": "SPY,QQQ",
+  "config_file": "config/baseline.json"
+}
+2025-08-13 15:06:17 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T15:06:17.034570",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_aware_ensemble"
+  ],
+  "symbols": "SPY,QQQ",
+  "config_file": "config/baseline.json"
+}
+2025-08-13 15:11:14 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T15:11:14.518172",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_aware_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "test_config.json"
+}
+2025-08-13 15:11:30 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T15:11:30.410643",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_aware_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "test_config.json"
+}
+2025-08-13 15:11:49 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T15:11:49.267662",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_aware_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "test_config.json"
+}
+2025-08-13 15:12:02 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T15:12:02.409228",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_aware_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "test_config.json"
+}
+2025-08-13 15:12:50 - system - INFO - STARTUP: {
+  "timestamp": "2025-08-13T15:12:50.848341",
+  "initial_capital": 100000,
+  "strategies": [
+    "regime_aware_ensemble"
+  ],
+  "symbols": [
+    "SPY"
+  ],
+  "config_file": "test_config.json"
+}

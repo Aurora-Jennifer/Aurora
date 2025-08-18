@@ -1,12 +1,18 @@
 """
-Performance Metrics Calculation
-Computes accurate performance metrics including win rate and profit factor.
+Performance and Objective-Driven Risk Management
+Handles dynamic position sizing and objective-based risk budgeting.
 """
 
-import math
-from typing import Dict, List, Union
+import logging
+from typing import Dict, List, Tuple, Union
 
+import numpy as np
+import pandas as pd
+
+from .objectives import build_objective
 from .trade_logger import TradeRecord
+
+logger = logging.getLogger(__name__)
 
 
 def calculate_trade_metrics(
@@ -101,37 +107,20 @@ def calculate_portfolio_metrics(equity_curve: List[Dict]) -> Dict[str, float]:
             "calmar_ratio": 0.0,
         }
 
-    # Total return
-    initial_equity = equity_curve[0]["equity"]
-    final_equity = equity_curve[-1]["equity"]
-    total_return = (
-        (final_equity - initial_equity) / initial_equity if initial_equity > 0 else 0.0
-    )
+    returns_series = pd.Series(returns)
 
-    # Annualized return (assuming 252 trading days)
-    days = len(equity_curve)
-    annualized_return = (1 + total_return) ** (252 / days) - 1 if days > 0 else 0.0
-
-    # Volatility (annualized)
-    mean_return = sum(returns) / len(returns)
-    variance = sum((r - mean_return) ** 2 for r in returns) / len(returns)
-    volatility = math.sqrt(variance * 252) if variance > 0 else 0.0
-
-    # Sharpe ratio (assuming 0% risk-free rate)
+    # Calculate metrics
+    total_return = (equity_curve[-1]["equity"] / equity_curve[0]["equity"]) - 1
+    annualized_return = (1 + total_return) ** (252 / len(returns)) - 1
+    volatility = returns_series.std() * np.sqrt(252)
     sharpe_ratio = annualized_return / volatility if volatility > 0 else 0.0
 
-    # Maximum drawdown
-    peak = initial_equity
-    max_drawdown = 0.0
+    # Calculate max drawdown
+    cumulative_returns = (1 + returns_series).cumprod()
+    running_max = cumulative_returns.expanding().max()
+    drawdown = (cumulative_returns - running_max) / running_max
+    max_drawdown = abs(drawdown.min())
 
-    for point in equity_curve:
-        equity = point["equity"]
-        if equity > peak:
-            peak = equity
-        drawdown = (peak - equity) / peak if peak > 0 else 0.0
-        max_drawdown = max(max_drawdown, drawdown)
-
-    # Calmar ratio
     calmar_ratio = annualized_return / max_drawdown if max_drawdown > 0 else 0.0
 
     return {
@@ -144,118 +133,239 @@ def calculate_portfolio_metrics(equity_curve: List[Dict]) -> Dict[str, float]:
     }
 
 
-def validate_daily_returns(
-    equity_curve: List[Dict], max_outlier_threshold: float = 0.5
-) -> List[Dict]:
-    """
-    Validate and cap outlier daily returns.
+class GrowthTargetCalculator:
+    """Objective-driven position sizing and risk budgeting manager."""
 
-    Args:
-        equity_curve: List of daily equity values
-        max_outlier_threshold: Maximum allowed daily return (50% default)
+    def __init__(self, config: Dict):
+        """
+        Initialize objective-driven risk manager.
 
-    Returns:
-        List of validated equity curve points
-    """
-    if len(equity_curve) < 2:
-        return equity_curve
+        Args:
+            config: Configuration with growth target parameters
+        """
+        self.config = config
+        self.risk_config = config.get("risk_params", {})
+        self.objective = build_objective(config)
 
-    validated_curve = [equity_curve[0]]  # First point is always valid
+        # Objective/position sizing parameters
+        self.volatility_adjustment = bool(
+            config.get("objective", {}).get("volatility_adjustment", True)
+        )
+        self.performance_lookback = int(
+            config.get("objective", {}).get("performance_lookback_days", 30)
+        )
 
-    for i in range(1, len(equity_curve)):
-        prev_point = validated_curve[-1]
-        curr_point = equity_curve[i]
+        # Risk parameters
+        self.max_position_size = self.risk_config.get("max_position_size", 0.15)
+        self.volatility_target = self.risk_config.get("volatility_target", 0.20)
+        self.kelly_fraction = self.risk_config.get("kelly_fraction", 0.25)
+        self.position_sizing_method = self.risk_config.get(
+            "position_sizing_method", "kelly_optimal"
+        )
 
-        prev_equity = prev_point["equity"]
-        curr_equity = curr_point["equity"]
+        # Performance tracking
+        self.daily_returns = []
+        self.performance_history = []
 
-        if prev_equity > 0:
-            daily_return = (curr_equity - prev_equity) / prev_equity
+        logger.info("Initialized Objective-driven risk manager")
 
-            # Cap outlier returns
-            if abs(daily_return) > max_outlier_threshold:
-                # Adjust current equity to cap the return
-                if daily_return > max_outlier_threshold:
-                    curr_equity = prev_equity * (1 + max_outlier_threshold)
-                else:
-                    curr_equity = prev_equity * (1 - max_outlier_threshold)
+    def calculate_dynamic_position_size(
+        self,
+        signal_strength: float,
+        current_capital: float,
+        symbol_volatility: float = None,
+        portfolio_volatility: float = None,
+    ) -> float:
+        """
+        Calculate dynamic position size using objective-derived risk budget and guardrails.
 
-                # Update the point
-                adjusted_point = curr_point.copy()
-                adjusted_point["equity"] = curr_equity
-                adjusted_point["outlier_capped"] = True
-                validated_curve.append(adjusted_point)
-            else:
-                validated_curve.append(curr_point)
-        else:
-            validated_curve.append(curr_point)
+        Args:
+            signal_strength: Signal strength (0-1)
+            current_capital: Current portfolio capital
+            symbol_volatility: Symbol-specific volatility
+            portfolio_volatility: Portfolio volatility
 
-    return validated_curve
+        Returns:
+            Position size as fraction of capital
+        """
+        try:
+            # Build series of recent returns for objective
+            returns_series = (
+                pd.Series(self.daily_returns)
+                if len(self.daily_returns) > 0
+                else pd.Series(dtype=float)
+            )
+            equity_series = pd.Series(dtype=float)
+            risk_metrics = {"portfolio_vol": portfolio_volatility or 0.0}
 
+            # Derive risk budget (0..~1.5) and position multiplier (0.5..1.5)
+            risk_budget, pos_mult = self.objective.derive_risk_budget(
+                returns_series, equity_series, risk_metrics
+            )
 
-def generate_performance_report(
-    trade_metrics: Dict,
-    portfolio_metrics: Dict,
-    equity_curve: List[Dict],
-    backtest_period: Dict,
-) -> str:
-    """
-    Generate a formatted performance report.
+            # Estimate edge/variance proxy from signal and volatility
+            edge = max(0.0, float(signal_strength) - 0.5)  # centered signal ∈ [0,0.5]
+            variance = max(
+                1e-6, (symbol_volatility or portfolio_volatility or 0.02) ** 2
+            )
 
-    Args:
-        trade_metrics: Trade-level metrics
-        portfolio_metrics: Portfolio-level metrics
-        equity_curve: Daily equity curve
-        backtest_period: Backtest period information
+            # Kelly-style base fraction scaled by cap and risk budget
+            kelly_base = edge / variance
+            base_position_size = (
+                self.kelly_fraction * kelly_base * risk_budget * pos_mult
+            )
 
-    Returns:
-        Formatted performance report string
-    """
-    # Calculate equity curve values
-    initial_equity = equity_curve[0]["equity"] if equity_curve else 0.0
-    final_equity = equity_curve[-1]["equity"] if equity_curve else 0.0
-    peak_equity = (
-        max(point["equity"] for point in equity_curve) if equity_curve else 0.0
-    )
+            # Volatility adjustment relative to target
+            if self.volatility_adjustment and portfolio_volatility:
+                vol_adjustment = min(
+                    1.0, self.volatility_target / max(1e-6, portfolio_volatility)
+                )
+                base_position_size *= vol_adjustment
 
-    report = f"""
-📊 PERFORMANCE REPORT
-{'=' * 60}
+            # Clamp to guardrails
+            final_position_size = float(
+                np.clip(base_position_size, 0.0, self.max_position_size)
+            )
 
-📅 BACKTEST PERIOD
-  Start Date: {backtest_period.get('start_date', 'N/A')}
-  End Date: {backtest_period.get('end_date', 'N/A')}
-  Trading Days: {backtest_period.get('trading_days', 0)}
+            logger.debug(
+                "Objective sizing -> signal=%.3f, risk_budget=%.3f, pos_mult=%.3f, edge=%.4f, var=%.6f, size=%.3f",
+                signal_strength,
+                risk_budget,
+                pos_mult,
+                edge,
+                variance,
+                final_position_size,
+            )
 
-💰 PORTFOLIO METRICS
-  Total Return: {portfolio_metrics.get('total_return', 0):.2%}
-  Annualized Return: {portfolio_metrics.get('annualized_return', 0):.2%}
-  Volatility: {portfolio_metrics.get('volatility', 0):.2%}
-  Sharpe Ratio: {portfolio_metrics.get('sharpe_ratio', 0):.2f}
-  Max Drawdown: {portfolio_metrics.get('max_drawdown', 0):.2%}
-  Calmar Ratio: {portfolio_metrics.get('calmar_ratio', 0):.2f}
+            return final_position_size
 
-📈 TRADING METRICS
-  Total Trades: {trade_metrics.get('total_trades', 0)}
-  Win Rate: {trade_metrics.get('win_rate', 0):.2%}
-  Profit Factor: {trade_metrics.get('profit_factor', 'N/A')}
-  Total PnL: ${trade_metrics.get('total_pnl', 0):,.2f}
-  Total Fees: ${trade_metrics.get('total_fees', 0):,.2f}
-  Largest Win: ${trade_metrics.get('largest_win', 0):,.2f}
-  Largest Loss: ${trade_metrics.get('largest_loss', 0):,.2f}
-  Average Win: ${trade_metrics.get('avg_win', 0):,.2f}
-  Average Loss: ${trade_metrics.get('avg_loss', 0):,.2f}
+        except Exception as e:
+            logger.error(f"Error calculating position size: {e}")
+            return 0.0
 
-📊 EQUITY CURVE
-  Initial Equity: ${initial_equity:,.2f}
-  Final Equity: ${final_equity:,.2f}
-  Peak Equity: ${peak_equity:,.2f}
+    def _calculate_kelly_position_size(self, signal_strength: float) -> float:
+        """
+        Calculate Kelly criterion optimal position size.
 
-{'=' * 60}
-"""
+        Args:
+            signal_strength: Signal strength (0-1)
 
-    # Add note if profit factor is N/A
-    if trade_metrics.get("profit_factor") == "N/A":
-        report += "\n⚠️  NOTE: No losing trades recorded; verify accounting.\n"
+        Returns:
+            Kelly optimal position size
+        """
+        if len(self.daily_returns) < 10:
+            return signal_strength * self.max_position_size
 
-    return report
+        try:
+            # Calculate win rate and average win/loss
+            returns = pd.Series(self.daily_returns)
+            wins = returns[returns > 0]
+            losses = returns[returns < 0]
+
+            if len(wins) == 0 or len(losses) == 0:
+                return signal_strength * self.max_position_size
+
+            win_rate = len(wins) / len(returns)
+            avg_win = wins.mean()
+            avg_loss = abs(losses.mean())
+
+            if avg_loss == 0:
+                return signal_strength * self.max_position_size
+
+            # Kelly formula: f = (bp - q) / b
+            # where b = avg_win/avg_loss, p = win_rate, q = 1-p
+            b = avg_win / avg_loss
+            p = win_rate
+            q = 1 - p
+
+            kelly_fraction = (b * p - q) / b
+
+            # Apply signal strength and cap at maximum
+            kelly_position = max(0.0, kelly_fraction * signal_strength)
+
+            return min(kelly_position, self.max_position_size)
+
+        except Exception as e:
+            logger.error(f"Error calculating Kelly position: {e}")
+            return signal_strength * self.max_position_size
+
+    def _calculate_performance_adjustment(self) -> float:
+        """Deprecated; retained for compatibility, returns neutral 1.0."""
+        return 1.0
+
+    def update_performance(self, daily_return: float, portfolio_value: float):
+        """
+        Update performance tracking.
+
+        Args:
+            daily_return: Daily return percentage
+            portfolio_value: Current portfolio value
+        """
+        self.daily_returns.append(daily_return)
+
+        # Keep only recent history
+        if len(self.daily_returns) > 252:  # One year
+            self.daily_returns = self.daily_returns[-252:]
+
+        # Record performance metrics
+        performance_record = {
+            "date": pd.Timestamp.now(),
+            "daily_return": daily_return,
+            "portfolio_value": portfolio_value,
+            "cumulative_return": (
+                portfolio_value / self.config.get("initial_capital", 100000)
+            )
+            - 1,
+        }
+
+        self.performance_history.append(performance_record)
+
+        logger.debug(
+            "Updated performance: return=%.4f, portfolio=%.2f",
+            daily_return,
+            portfolio_value,
+        )
+
+    def get_growth_metrics(self) -> Dict:
+        """
+        Get current growth and performance metrics.
+
+        Returns:
+            Dictionary of growth metrics
+        """
+        if not self.daily_returns:
+            return {
+                "avg_daily_return": 0.0,
+                "volatility": 0.0,
+                "sharpe_ratio": 0.0,
+                "objective_score": 0.0,
+                "days_tracked": 0,
+            }
+
+        try:
+            returns = pd.Series(self.daily_returns)
+            avg_return = returns.mean()
+            volatility = returns.std()
+            sharpe_ratio = avg_return / volatility if volatility > 0 else 0.0
+            score = self.objective.score(returns, pd.Series(dtype=float), {})
+            return {
+                "avg_daily_return": float(avg_return),
+                "volatility": float(volatility),
+                "sharpe_ratio": float(sharpe_ratio),
+                "objective_score": float(score),
+                "days_tracked": len(self.daily_returns),
+            }
+
+        except Exception as e:
+            logger.error(f"Error calculating growth metrics: {e}")
+            return {
+                "avg_daily_return": 0.0,
+                "volatility": 0.0,
+                "sharpe_ratio": 0.0,
+                "objective_score": 0.0,
+                "days_tracked": 0,
+            }
+
+    def should_adjust_target(self) -> Tuple[bool, str]:
+        """Deprecated; retained for CLI compatibility."""
+        return False, "Objective-based sizing active"

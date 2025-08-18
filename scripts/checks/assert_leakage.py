@@ -55,8 +55,8 @@ def test_leakage():
         with open("results/walkforward/results.json") as f:
             original_results = json.load(f)
         original_sharpe = original_results["aggregate"]["mean_sharpe"]
-    except:
-        print("FAIL: Could not load original results")
+    except (FileNotFoundError, KeyError, json.JSONDecodeError) as e:
+        print(f"FAIL: Could not load original results: {e}")
         return False
 
     # Create shuffled data (shuffle the second half)
@@ -85,8 +85,8 @@ def test_leakage():
         with open("results/walkforward/results.json") as f:
             shuffled_results = json.load(f)
         shuffled_sharpe = shuffled_results["aggregate"]["mean_sharpe"]
-    except:
-        print("FAIL: Could not load shuffled results")
+    except (FileNotFoundError, KeyError, json.JSONDecodeError) as e:
+        print(f"FAIL: Could not load shuffled results: {e}")
         return False
 
     # Check for leakage

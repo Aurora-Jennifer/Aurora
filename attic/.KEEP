@@ -1,0 +1,27 @@
+# Attic Directory - Archived Files
+
+This directory contains files that were moved during repository cleanup on 2025-08-15.
+
+## Cleanup Details
+- **Commit Hash:** 1db8cf9296248cab34d3526e1821b6761435e857
+- **Reason:** Repository maintenance - removing unused files while preserving functionality
+- **Method:** Safe cleanup - files moved to attic structure for potential recovery
+
+## Directory Structure
+- `root_tests/` - Test files that were in root directory but not referenced by pytest
+- `config/` - Test configuration files only used by unused test files
+- `docs/` - Obsolete documentation files superseded by newer documentation
+- `attic_pending/` - Files requiring manual review before final decision
+
+## Recovery Instructions
+If any of these files are needed:
+1. Check the specific .KEEP file in each subdirectory for details
+2. Move the file back to its original location
+3. Update any necessary imports or references
+4. Remove the file from attic
+
+## Validation
+After cleanup, all tests in `tests/` directory should still pass:
+```bash
+pytest -q
+```

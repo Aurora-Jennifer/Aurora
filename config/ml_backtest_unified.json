@@ -1,0 +1,28 @@
+{
+  "ml_enabled": true,
+  "unified_model": true,
+  "strategy": "regime_aware_ensemble",
+  "symbols": ["SPY", "AAPL", "TSLA", "GOOG", "BTC-USD"],
+  "capital": 100000,
+  "fast_mode": false,
+  "carry_positions_from_warmup": false,
+  "risk_management": {
+    "max_position_size": 0.2,
+    "max_drawdown": 0.20,
+    "stop_loss": 0.08
+  },
+  "ml_selector": {
+    "enabled": true,
+    "epsilon": 0.2
+  },
+  "unified_training": {
+    "enabled": true,
+    "cross_asset_features": true,
+    "asset_weighting": "equal",
+    "feature_engineering": {
+      "include_asset_correlation": true,
+      "include_sector_rotation": true,
+      "include_market_regime": true
+    }
+  }
+}

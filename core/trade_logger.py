@@ -7,6 +7,8 @@ import logging
 from dataclasses import dataclass
 from typing import Dict, List, Optional
 
+import pandas as pd
+
 logger = logging.getLogger(__name__)
 
 
@@ -102,6 +104,12 @@ class TradeBook:
                 f"CLOSED: {symbol} trade, Total PnL: ${tr.realized_pnl:.2f}"
             )
 
+    def reset(self):
+        """Reset the trade book (clear all trades)."""
+        self.open.clear()
+        self.closed.clear()
+        self.logger.info("Trade book reset")
+
     def mark_drawdown(self, symbol: str, mtm_pnl_pct: float):
         """Track worst drawdown while position is open."""
         tr = self.open.get(symbol)
@@ -115,6 +123,17 @@ class TradeBook:
     def get_closed_trades(self) -> List[TradeRecord]:
         """Get all closed trades."""
         return self.closed.copy()
+
+    def get_ledger(self) -> pd.DataFrame:
+        """Get trade ledger as DataFrame."""
+        trades_data = self.export_trades_csv()
+        if not trades_data:
+            return pd.DataFrame()
+        return pd.DataFrame(trades_data)
+
+    def get_trades(self) -> List[Dict]:
+        """Get all trades as list of dictionaries."""
+        return self.export_trades_csv()
 
     def get_trade_summary(self) -> Dict:
         """Get summary statistics of all trades."""

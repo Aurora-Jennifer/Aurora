@@ -27,7 +27,6 @@ def run_fold(
     Xtr = p.transform(tr)
     ytr = y[tr]
     Xte = p.transform(te)
-    yte = y[te]
 
     p.fit_model(Xtr, ytr, warm=None)
     signal = p.predict(Xte)

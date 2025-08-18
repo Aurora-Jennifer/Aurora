@@ -81,7 +81,7 @@ class IBKRDataProvider:
     def _load_from_cache(
         self, symbol: str, duration: str, bar_size: str
     ) -> Optional[pd.DataFrame]:
-        """Load data from cache."""
+        """Load data from cache with DataSanity validation."""
         if not self.use_cache:
             return None
 
@@ -95,9 +95,12 @@ class IBKRDataProvider:
                 )  # 1 hour for daily, 5 min for intraday
 
                 if cache_age < max_age:
-                    with open(cache_path, "rb") as f:
-                        data = pickle.load(f)
-                    logger.debug(f"Loaded {symbol} data from cache")
+                    # Use DataSanity wrapper for loading and validation
+                    from core.data_sanity import get_data_sanity_wrapper
+
+                    wrapper = get_data_sanity_wrapper()
+                    data = wrapper.load_and_validate(str(cache_path), symbol)
+                    logger.debug(f"Loaded {symbol} data from cache with validation")
                     return data
                 else:
                     logger.debug(f"Cache for {symbol} is stale, will refresh")
@@ -394,6 +397,8 @@ class IBKRDataProvider:
         """Context manager exit."""
         if self.broker:
             self.broker.disconnect()
+        # Return False to re-raise any exceptions
+        return False
 
 
 def test_data_provider():

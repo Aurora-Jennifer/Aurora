@@ -5,7 +5,7 @@
   "stride_days": 63,
   "anchored": false,
   "min_live_months": 6,
-  "run_timestamp": "2025-08-13T05:07:26.861543",
+  "run_timestamp": "2025-08-16T18:47:35.850088",
   "total_folds": 16,
   "data_shape": [
     1257,

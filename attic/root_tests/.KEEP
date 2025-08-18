@@ -1,0 +1,25 @@
+# Root Tests Directory - Archived Test Files
+
+## Files Moved
+- `test_data_integrity.py` - Duplicate of tests/test_data_integrity.py (not referenced by pytest)
+- `test_meaningful_validation.py` - Not referenced by pytest or other scripts
+- `test_walkforward_ml.py` - Not referenced by pytest or other scripts
+- `test_paper_engine.py` - Not referenced by pytest or other scripts
+- `test_enhanced_trading_system.py` - Not referenced by pytest or other scripts
+- `final_ml_validation.py` - Not referenced by pytest or other scripts
+- `test_ml_backtesting.py` - Not referenced by pytest or other scripts
+- `test_component_validation.py` - Not referenced by pytest or other scripts
+- `test_core_functionality.py` - Not referenced by pytest or other scripts
+
+## Analysis
+- These files were in the root directory but not discovered by pytest (which uses testpaths = tests)
+- No imports or references found in active codebase
+- Some files import each other but are not used by the main test suite
+- Active test suite is in `tests/` directory
+
+## Recovery
+If any of these tests are needed:
+1. Move to `tests/` directory
+2. Update any imports to use relative paths
+3. Ensure pytest can discover the tests
+4. Update any config references if needed

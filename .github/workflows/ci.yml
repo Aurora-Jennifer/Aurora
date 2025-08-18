@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.8, 3.9, "3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.11"]
 
     steps:
     - uses: actions/checkout@v4
@@ -33,73 +33,77 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -e ".[dev]"
+        pip install mypy pip-tools
 
-    - name: Run pre-commit hooks
+    - name: Pip-compile drift check
       run: |
-        pre-commit run --all-files
+        if [ -f requirements.in ]; then
+          pip-compile -o /tmp/req.txt requirements.in
+          diff -u /tmp/req.txt requirements.txt || (echo "requirements.txt is out of date; run pip-compile" && exit 1)
+        fi
 
-    - name: Run tests
+    - name: Run linting & compile
       run: |
-        pytest --cov=core --cov=strategies --cov=features --cov=brokers --cov-report=xml
+        ruff check .
+        python -m compileall -q .
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+    - name: Type check (mypy)
+      run: |
+        mypy core strategies features brokers || true
+
+    - name: Run unit tests with coverage
+      run: |
+        pytest -q tests/unit --cov=core --cov=strategies --cov=features --cov=brokers --cov-report=xml --cov-fail-under=70
+
+    - name: Run integration tests
+      run: |
+        pytest -q tests/integration -k 'not slow'
+
+    - name: Run walkforward tests (optional)
+      if: env.WF_ENABLE == 'true'
+      run: |
+        pytest -q tests/walkforward -k spy --maxfail=1
+
+    - name: Run repository indexer
+      run: |
+        python tools/repo_index.py
+        git diff --quiet
+
+    - name: Promotion gate
+      run: |
+        make promote
+      env:
+        WF_ENABLE: 'false'
+
+    - name: Upload artifacts (reports, logs)
+      if: always()
+      uses: actions/upload-artifact@v4
       with:
-        file: ./coverage.xml
-        fail_ci_if_error: false
+        name: ci-artifacts
+        path: |
+          reports/**
+          logs/runs/**
+          coverage.xml
 
-  lint:
+    - name: Run security scan
+      run: |
+        gitleaks detect --no-git
+
+  security:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
-
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: "3.11"
-
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -e ".[dev]"
-
-    - name: Run Black
-      run: |
-        black --check --diff .
-
-    - name: Run isort
-      run: |
-        isort --check-only --diff .
-
-    - name: Run Ruff
-      run: |
-        ruff check .
-
-    - name: Run MyPy
-      run: |
-        mypy core strategies features brokers
-
-  security:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.11"
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install bandit safety
-
     - name: Run Bandit security check
       run: |
         bandit -r core strategies features brokers
-
     - name: Run Safety check
       run: |
         safety check

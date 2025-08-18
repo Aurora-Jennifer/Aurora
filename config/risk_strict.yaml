@@ -1,0 +1,9 @@
+risk:
+  vol_target: 0.20
+  max_drawdown: 0.25
+  daily_loss_limit: 0.04
+
+composer:
+  params:
+    temperature: 1.2
+    min_confidence: 0.05

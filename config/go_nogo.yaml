@@ -1,0 +1,46 @@
+profile: strict
+
+data:
+  max_gap_minutes: 5
+  allow_negative_prices: false
+  max_price: 100000.0
+  allow_duplicate_timestamps: false
+  timezone: "UTC"
+
+leakage:
+  forbid_future_lookback: true
+  min_rolling_window: 20
+  check_train_test_separation: true
+
+backtest:
+  require_fees: true
+  require_slippage: true
+  max_slippage_bps: 50
+  allow_shorting: true
+  require_borrow_check: true
+
+risk:
+  max_position_pct: 0.15        # per symbol
+  max_gross_leverage: 2.0
+  daily_loss_cut_pct: 0.03
+  max_drawdown_cut_pct: 0.20
+  max_turnover_pct: 300
+
+accounting:
+  pnl_tolerance: 1e-6
+  inventory_nonnegative: true   # for long-only; if shorting, enforce borrow
+
+walkforward:
+  require_oos: true
+  min_oos_days: 30
+  min_oos_sharpe: 0.2
+  min_oos_winrate: 0.35
+
+observability:
+  require_structured_logs: true
+  require_run_id: true
+  require_config_hash: true
+
+killswitch:
+  require_signal_path: "runtime/killswitch.signal"
+  require_manual_override_path: "runtime/ALLOW_LIVE.txt"

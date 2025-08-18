@@ -1,0 +1,3 @@
+# Exclude attic directory from pytest discovery
+attic/
+attic_pending/

@@ -1,0 +1,25 @@
+# Docs Directory - Archived Documentation Files
+
+## Files Moved
+- `HONEST_SYSTEM_ASSESSMENT.md` - Old system assessment, superseded by newer documentation
+- `FINAL_VALIDATION_REPORT.md` - Superseded by newer validation reports
+- `COMPREHENSIVE_VALIDATION_REPORT.md` - Superseded by newer validation reports
+- `ENHANCED_TRADING_SYSTEM_SUMMARY.md` - Superseded by newer system documentation
+- `WALKFORWARD_AND_DATA_FIXES_SUMMARY.md` - Superseded by newer documentation
+- `UNIFIED_CONTEXT_SUMMARY.md` - Superseded by newer context documentation
+- `UNIFIED_CONTEXT.md` - Superseded by newer context documentation
+- `LEAN_CODEBASE_SUMMARY.md` - Superseded by newer codebase documentation
+- `unification_plan.md` - Old unification plan, no longer relevant
+- `END_TO_END_TESTING_GUIDE.md` - Superseded by newer testing documentation
+
+## Analysis
+- These documentation files appear to be outdated or superseded by newer documentation
+- No active references found in current codebase
+- Current documentation is in `docs/` directory and README files
+- Some files may contain historical information but are not actively used
+
+## Recovery
+If any of these docs are needed:
+1. Move back to root directory or appropriate docs location
+2. Update any references in README or other documentation
+3. Consider if content should be merged into current documentation

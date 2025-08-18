@@ -1,0 +1,204 @@
+# DataSanity Test Cases Catalog
+# Add rows, not files - grow coverage systematically
+
+# Price validation cases
+- id: neg_prices_fail
+  kind: FAIL
+  rules: [NEG_PRICE]
+  factory: neg_prices
+  description: "Negative prices should fail in strict mode"
+
+- id: extreme_prices_fail
+  kind: FAIL
+  rules: [EXTREME_PRICE]
+  factory: extreme_prices
+  description: "Extreme prices should fail in strict mode"
+
+- id: zero_prices_fail
+  kind: FAIL
+  rules: [ZERO_PRICE]
+  factory: zero_prices
+  description: "Zero prices should fail in strict mode"
+
+# Volume validation cases
+- id: neg_volume_fail
+  kind: FAIL
+  rules: [NEG_VOLUME]
+  factory: neg_volume
+  description: "Negative volume should fail in strict mode"
+
+- id: zero_volume_fail
+  kind: FAIL
+  rules: [ZERO_VOLUME]
+  factory: zero_volume
+  description: "Zero volume should fail in strict mode"
+
+- id: extreme_volume_fail
+  kind: FAIL
+  rules: [EXTREME_VOLUME]
+  factory: extreme_volume
+  description: "Extreme volume should fail in strict mode"
+
+# NaN validation cases
+- id: nan_burst_fail
+  kind: FAIL
+  rules: [Lookahead contamination]
+  factory: nan_burst
+  description: "NaN burst should fail in strict mode"
+
+- id: nan_scattered_fail
+  kind: FAIL
+  rules: [Non-finite values]
+  factory: nan_scattered
+  description: "Scattered NaN values should fail in strict mode"
+
+- id: inf_values_fail
+  kind: FAIL
+  rules: [Prices >]
+  factory: inf_values
+  description: "Infinite values should fail in strict mode"
+
+# Time series validation cases
+- id: duplicate_timestamps_fail
+  kind: FAIL
+  rules: [DUPLICATE_TIMESTAMPS]
+  factory: duplicate_timestamps
+  description: "Duplicate timestamps should fail in strict mode"
+
+- id: non_monotonic_fail
+  kind: FAIL
+  rules: [Index is not monotonic]
+  factory: non_monotonic
+  description: "Non-monotonic index should fail in strict mode"
+
+- id: naive_timezone_fail
+  kind: FAIL
+  rules: [Naive timezone not allowed]
+  factory: naive_timezone
+  description: "Naive timezone should fail in strict mode"
+
+- id: wrong_timezone_fail
+  kind: FAIL
+  rules: [Non-UTC timezone not allowed]
+  factory: wrong_timezone
+  description: "Non-UTC timezone should fail in strict mode"
+
+- id: mixed_timezones_fail
+  kind: FAIL
+  rules: [No valid datetime index found]
+  factory: mixed_timezones
+  description: "Mixed timezones should fail in strict mode"
+
+# OHLC validation cases
+- id: ohlc_inconsistent_fail
+  kind: FAIL
+  rules: [OHLC invariant violation]
+  factory: ohlc_inconsistent
+  description: "OHLC inconsistency should fail in strict mode"
+
+- id: high_below_open_fail
+  kind: FAIL
+  rules: [OHLC invariant violation]
+  factory: high_below_open
+  description: "High below Open should fail in strict mode"
+
+- id: low_above_close_fail
+  kind: FAIL
+  rules: [OHLC invariant violation]
+  factory: low_above_close
+  description: "Low above Close should fail in strict mode"
+
+# Lookahead contamination cases
+- id: lookahead_returns_fail
+  kind: FAIL
+  rules: [Lookahead contamination]
+  factory: lookahead_returns
+  description: "Lookahead contamination in Returns should fail"
+
+- id: future_data_fail
+  kind: FAIL
+  rules: [Lookahead contamination]
+  factory: future_data
+  description: "Future data should fail in strict mode"
+
+# Data type validation cases
+- id: string_prices_fail
+  kind: FAIL
+  rules: [Cannot convert string data to numeric]
+  factory: string_prices
+  description: "String prices should fail in strict mode"
+
+- id: mixed_dtypes_fail
+  kind: FAIL
+  rules: [Cannot convert string data to numeric]
+  factory: mixed_dtypes
+  description: "Mixed data types should fail in strict mode"
+
+# Missing data cases
+- id: missing_columns_fail
+  kind: FAIL
+  rules: [MISSING_COLUMNS]
+  factory: missing_columns
+  description: "Missing required columns should fail"
+
+- id: empty_df_fail
+  kind: FAIL
+  rules: [Empty data not allowed]
+  factory: empty_df
+  description: "Empty DataFrame should fail in strict mode"
+
+- id: single_row_pass
+  kind: PASS
+  rules: [MIN_DATA]
+  factory: single_row
+  description: "Single row should pass validation"
+
+# Clean data cases
+- id: clean_pass
+  kind: PASS
+  rules: [ALL_RULES]
+  factory: clean
+  description: "Clean data should pass all validations"
+
+# Edge cases
+- id: very_small_pass
+  kind: PASS
+  rules: [MIN_DATA]
+  factory: very_small
+  description: "Very small dataset should pass"
+
+- id: very_large_pass
+  kind: PASS
+  rules: [PERFORMANCE]
+  factory: very_large
+  description: "Very large dataset should pass"
+
+- id: single_price_pass
+  kind: PASS
+  rules: [MIN_DATA]
+  factory: single_price
+  description: "Single price should pass"
+
+- id: two_prices_pass
+  kind: PASS
+  rules: [MIN_DATA]
+  factory: two_prices
+  description: "Two prices should pass"
+
+- id: decreasing_prices_pass
+  kind: PASS
+  rules: [PRICE_VALIDATION]
+  factory: decreasing_prices
+  description: "Decreasing prices should pass"
+
+- id: constant_prices_pass
+  kind: PASS
+  rules: [PRICE_VALIDATION]
+  factory: constant_prices
+  description: "Constant prices should pass"
+
+- id: volatile_prices_pass
+  kind: PASS
+  rules: [PRICE_VALIDATION]
+  factory: volatile_prices
+  description: "Volatile prices should pass"

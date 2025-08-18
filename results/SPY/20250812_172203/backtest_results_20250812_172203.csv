@@ -1,2 +1,0 @@
-ticker,strategy_name,strategy_params,fee_bps,cagr,sharpe,max_dd,trades,final_equity,start_date,end_date
-SPY,Momentum,"{'lookback_period': 15, 'threshold': 0.025}",5.0,0.024339084994992266,0.37588222245127884,-0.09098050430305338,348,1.2896984613013973,2015-01-01,2025-08-12

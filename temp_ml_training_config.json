@@ -1,0 +1,14 @@
+{
+  "ml_enabled": true,
+  "strategy": "regime_aware_ensemble",
+  "symbols": [
+    "SPY"
+  ],
+  "capital": 100000,
+  "fast_mode": false,
+  "risk_management": {
+    "max_position_size": 0.1,
+    "max_drawdown": 0.15,
+    "stop_loss": 0.05
+  }
+}

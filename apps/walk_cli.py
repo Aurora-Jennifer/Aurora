@@ -181,12 +181,12 @@ def main():
         import numba
 
         print(f"  numba: {numba.__version__}")
-    except:
+    except ImportError:
         print("  numba: not available")
 
     try:
         print(f"  polars: {pl.__version__}")
-    except:
+    except AttributeError:
         print("  polars: version unknown")
 
     print(f"  numpy: {np.__version__}")

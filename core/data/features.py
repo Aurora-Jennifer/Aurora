@@ -22,26 +22,31 @@ def _to_polars_ohlcv(df: pd.DataFrame) -> pl.DataFrame:
     col_mapping = {}
     if "Date" in df.columns:
         col_mapping["Date"] = "ts"
+
+    # Handle standard column names
     if "Open" in df.columns:
         col_mapping["Open"] = "open"
-    elif "Open_SPY" in df.columns:
-        col_mapping["Open_SPY"] = "open"
     if "High" in df.columns:
         col_mapping["High"] = "high"
-    elif "High_SPY" in df.columns:
-        col_mapping["High_SPY"] = "high"
     if "Low" in df.columns:
         col_mapping["Low"] = "low"
-    elif "Low_SPY" in df.columns:
-        col_mapping["Low_SPY"] = "low"
     if "Close" in df.columns:
         col_mapping["Close"] = "close"
-    elif "Close_SPY" in df.columns:
-        col_mapping["Close_SPY"] = "close"
     if "Volume" in df.columns:
         col_mapping["Volume"] = "volume"
-    elif "Volume_SPY" in df.columns:
-        col_mapping["Volume_SPY"] = "volume"
+
+    # Handle symbol-specific column names (e.g., Open_SPY, Close_QQQ, etc.)
+    for col in df.columns:
+        if col.startswith("Open_"):
+            col_mapping[col] = "open"
+        elif col.startswith("High_"):
+            col_mapping[col] = "high"
+        elif col.startswith("Low_"):
+            col_mapping[col] = "low"
+        elif col.startswith("Close_"):
+            col_mapping[col] = "close"
+        elif col.startswith("Volume_"):
+            col_mapping[col] = "volume"
 
     # Rename columns
     df = df.rename(columns=col_mapping)

@@ -1,0 +1,164 @@
+{
+  "symbols": ["SPY", "QQQ", "AAPL", "MSFT", "NVDA", "GOOGL", "TSLA", "AMZN", "BTC-USD", "ETH-USD"],
+  "default_symbol": "SPY",
+  "initial_capital": 100000,
+  "use_ibkr": false,
+  "shorting_enabled": false,
+  "close_positions_at_end": true,
+  "carry_positions_from_warmup": false,
+  "fast_mode": true,
+  "mode": "backtest",
+
+  "walkforward": {
+    "train_len": 252,
+    "test_len": 63,
+    "stride": 21,
+    "warmup": 50,
+    "anchored": false,
+    "min_test_len": 30,
+    "min_folds": 5,
+    "max_folds": 20,
+    "allow_truncated_final_fold": false
+  },
+
+  "risk_params": {
+    "max_gross_exposure_pct": 50.0,
+    "max_daily_loss_pct": 2.0,
+    "max_position_size": 0.1,
+    "max_drawdown_pct": 15.0,
+    "stop_loss_pct": 3.0,
+    "take_profit_pct": 6.0,
+    "volatility_target": 0.15,
+    "max_correlation": 0.7,
+    "position_sizing_method": "kelly_optimal",
+    "max_gross_leverage": 2.0,
+    "max_drawdown_cut_pct": 0.25
+  },
+
+  "engine": {
+    "min_history_bars": 120
+  },
+
+  "composer": {
+    "use_composer": false,
+    "composer_mode": "softmax_blender",
+    "eligible_strategies": ["momentum", "mean_reversion", "breakout"],
+    "regime_extractor": "basic_kpis",
+    "min_history_bars": 120,
+    "hold_on_nan": true,
+    "composer_params": {
+      "temperature": 1.0,
+      "trend_bias": 1.2,
+      "chop_bias": 1.1,
+      "min_confidence": 0.1
+    }
+  },
+
+  "optimization": {
+    "optimize_metric_weights": false,
+    "metric_weight_trials": 50,
+    "metric_weight_max_dd_cap": 0.25,
+    "metric_weight_min_trades": 200,
+    "metric_weights": {
+      "alpha": 0.4,
+      "beta": 0.3,
+      "gamma": 0.2,
+      "delta": 0.1
+    }
+  },
+
+  "objective": {
+    "type": "log_utility",
+    "kelly_cap_fraction": 0.15,
+    "risk_aversion_lambda": 5.0,
+    "downside_lambda": 3.0,
+    "volatility_adjustment": true,
+    "performance_lookback_days": 60
+  },
+
+  "data": {
+    "data_dir": "data/ibkr",
+    "output_dir": "results",
+    "artifacts_dir": "artifacts",
+    "logs_dir": "logs",
+    "checkpoints_dir": "runs/checkpoints",
+    "auto_adjust": false
+  },
+
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "file_logging": true,
+    "console_logging": true
+  },
+
+  "validation": {
+    "data_sanity_checks": true,
+    "risk_guardrails": true,
+    "determinism_checks": true,
+    "leakage_checks": true
+  },
+
+  "asset_classes": {
+    "crypto": {
+      "symbols": ["BTC-USD", "ETH-USD"],
+      "composer_params": {
+        "temperature": 1.3,
+        "trend_bias": 1.6
+      },
+      "eligible_strategies": ["momentum", "mean_reversion", "breakout"],
+      "risk_multiplier": 1.5
+    },
+    "etf": {
+      "symbols": ["SPY", "QQQ"],
+      "composer_params": {
+        "temperature": 0.9,
+        "trend_bias": 1.1
+      },
+      "eligible_strategies": ["momentum", "mean_reversion"],
+      "risk_multiplier": 1.0
+    },
+    "equity": {
+      "symbols": ["AAPL", "MSFT", "NVDA", "GOOGL", "TSLA", "AMZN"],
+      "composer_params": {
+        "temperature": 1.1,
+        "trend_bias": 1.4
+      },
+      "eligible_strategies": ["momentum", "breakout"],
+      "risk_multiplier": 1.2
+    }
+  },
+
+  "profiles": {
+    "risk_low": {
+      "risk_params": {
+        "max_gross_exposure_pct": 25.0,
+        "max_daily_loss_pct": 1.0,
+        "max_position_size": 0.05,
+        "max_drawdown_pct": 8.0,
+        "stop_loss_pct": 2.0,
+        "take_profit_pct": 4.0
+      }
+    },
+    "risk_balanced": {
+      "risk_params": {
+        "max_gross_exposure_pct": 50.0,
+        "max_daily_loss_pct": 2.0,
+        "max_position_size": 0.1,
+        "max_drawdown_pct": 15.0,
+        "stop_loss_pct": 3.0,
+        "take_profit_pct": 6.0
+      }
+    },
+    "risk_strict": {
+      "risk_params": {
+        "max_gross_exposure_pct": 75.0,
+        "max_daily_loss_pct": 3.0,
+        "max_position_size": 0.15,
+        "max_drawdown_pct": 25.0,
+        "stop_loss_pct": 4.0,
+        "take_profit_pct": 8.0
+      }
+    }
+  }
+}

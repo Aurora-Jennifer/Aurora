@@ -195,8 +195,6 @@ class FeatureEngine:
         """Generate volatility and regime filter features."""
         data = self._prepare_data(data)
         close = data["Close"]
-        high = data["High"]
-        low = data["Low"]
 
         # ATR and ATR%
         atr = self._calculate_atr(data, self.config.atr_period)
@@ -231,7 +229,6 @@ class FeatureEngine:
         close = data["Close"]
 
         # RSI Extremes
-        rsi = self._calculate_rsi(close, 14)
         rsi_2 = self._calculate_rsi(close, 2)
         rsi_3 = self._calculate_rsi(close, 3)
 
@@ -363,7 +360,6 @@ class FeatureEngine:
         """Calculate ADX (simplified version)."""
         high = data["High"]
         low = data["Low"]
-        close = data["Close"]
 
         # Calculate +DM and -DM
         high_diff = high.diff()
@@ -440,7 +436,6 @@ class FeatureEngine:
         """Calculate Choppiness Index."""
         high = data["High"]
         low = data["Low"]
-        close = data["Close"]
 
         tr = self._calculate_atr(data, 1) * period
         range_sum = (high - low).rolling(period).sum()
@@ -517,8 +512,14 @@ class FeatureEngine:
 if __name__ == "__main__":
     import yfinance as yf
 
+    from core.data_sanity import get_data_sanity_wrapper
+
     # Fetch sample data
-    data = yf.download("SPY", start="2020-01-01", end="2025-01-01")
+    raw_data = yf.download("SPY", start="2020-01-01", end="2025-01-01")
+
+    # Validate and repair data using DataSanity
+    data_sanity = get_data_sanity_wrapper()
+    data = data_sanity.validate_dataframe(raw_data, "SPY")
 
     # Create feature engine
     config = FeatureConfig()
