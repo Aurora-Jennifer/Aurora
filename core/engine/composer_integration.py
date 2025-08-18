@@ -254,11 +254,29 @@ class ComposerIntegration:
                 "composer_metadata": result.metadata,
             }
 
-            logger.debug(
-                f"Composer decision: signal={result.final_signal:.4f}, "
-                f"regime={result.regime_features.regime_type}, "
-                f"weights={result.strategy_weights}"
-            )
+            if logger.isEnabledFor(logging.INFO):
+                try:
+                    fam = None
+                    elig = None
+                    if asset_class and asset_class in self.config.get("assets", {}):
+                        fam = self.config["assets"][asset_class].get("composer_params", {}).get("family")
+                        elig = self.config["assets"][asset_class].get("eligible_strategies")
+                    logger.info(
+                        "composer: asset_class=%s family=%s elig=%s conf=%.3f signal=%.3f regime=%s",
+                        asset_class or self.get_asset_class(symbol),
+                        fam,
+                        ",".join(elig) if isinstance(elig, list) else str(elig),
+                        float(result.confidence),
+                        float(result.final_signal),
+                        result.regime_features.regime_type,
+                    )
+                except Exception:
+                    # Fall back to debug if logging payload fails
+                    logger.debug(
+                        f"Composer decision: signal={result.final_signal:.4f}, "
+                        f"regime={result.regime_features.regime_type}, "
+                        f"weights={result.strategy_weights}"
+                    )
 
             return result.final_signal, metadata
 
