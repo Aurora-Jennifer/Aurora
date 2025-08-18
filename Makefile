@@ -46,7 +46,7 @@ lint:
 	black --check .
 	isort --check-only .
 
-CHANGED_PY := $(shell git diff --name-only --diff-filter=ACMRT origin/main...HEAD | grep -E '\.py$$' || true)
+CHANGED_PY := $(shell git fetch origin main >/dev/null 2>&1; git diff --name-only --diff-filter=ACMRT origin/main...HEAD | grep -E '\.py$$' || true)
 
 lint-changed:
 	@if [ -z "$(CHANGED_PY)" ]; then echo "No changed Python files."; else ruff check --output-format=github $(CHANGED_PY); fi

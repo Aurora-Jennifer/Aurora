@@ -42,9 +42,10 @@ jobs:
           diff -u /tmp/req.txt requirements.txt || (echo "requirements.txt is out of date; run pip-compile" && exit 1)
         fi
 
-    - name: Lint (focused)
+    - name: Lint (changed files)
       run: |
-        ruff check --output-format=github tools/ core/metrics/ core/io_* tests/unit/
+        CHANGED=$(git fetch origin main >/dev/null 2>&1; git diff --name-only --diff-filter=ACMRT origin/main...HEAD | grep -E '\.py$' || true)
+        if [ -n "$CHANGED" ]; then ruff check --output-format=github $CHANGED; else echo "No changed Python files."; fi
 
     - name: Compile bytecode
       run: |
@@ -53,8 +54,14 @@ jobs:
     - name: Lint (full, non-blocking)
       if: always()
       continue-on-error: true
-      run: |
-        ruff check --output-format=github .
+      run: tools/scripts/lint_report.sh
+
+    - name: Upload lint artifact
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: ruff-full
+        path: artifacts/ruff_full.txt
 
     - name: Type check (mypy)
       run: |
