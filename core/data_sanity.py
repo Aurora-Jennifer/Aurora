@@ -38,6 +38,33 @@ class ValidationResult:
     validation_time: float  # Time taken for validation
 
 
+# Lightweight CI-facing result (non-breaking: new types and methods)
+@dataclass
+class SanityViolation:
+    code: str
+    details: str
+
+
+@dataclass
+class SanityCheckResult:
+    mode: str
+    violations: List[SanityViolation]
+    ok: bool
+
+    def as_dict(self) -> Dict:
+        return {
+            "mode": self.mode,
+            "ok": self.ok,
+            "violations": [vi.__dict__ for vi in self.violations],
+        }
+
+    def summary(self) -> str:
+        if self.ok or not self.violations:
+            return "data_sanity_ok"
+        v = self.violations[0]
+        return f"data_sanity_violation[{v.code}]: {v.details}"
+
+
 class DataSanityGuard:
     """
     Runtime guard to ensure DataFrames are validated before use.
@@ -181,6 +208,52 @@ class DataSanityValidator:
             profile = "default"
 
         return profiles.get(profile, {})
+
+    @staticmethod
+    def in_ci() -> bool:
+        import os
+        return str(os.getenv("CI", "")).lower() in {"1", "true", "yes", "on"}
+
+    @staticmethod
+    def _normalize_tz(idx: pd.DatetimeIndex, tz: str) -> pd.DatetimeIndex:
+        if getattr(idx, "tz", None) is None:
+            return idx.tz_localize(tz)
+        return idx.tz_convert(tz)
+
+    def validate_dataframe_fast(self, df: pd.DataFrame, profile: str) -> SanityCheckResult:
+        import numpy as np
+        vio: List[SanityViolation] = []
+        mode = self._get_profile_config(profile).get("mode", "warn")
+        if df is None or len(df) == 0:
+            return SanityCheckResult(mode=mode, violations=[SanityViolation("EMPTY_SERIES","no rows")], ok=False)
+        cfg = self._get_profile_config(profile)
+        # timezone
+        tz = cfg.get("tz")
+        idx = df.index if isinstance(df.index, pd.DatetimeIndex) else None
+        if tz and isinstance(idx, pd.DatetimeIndex):
+            try:
+                new_idx = self._normalize_tz(idx, tz)
+                if not new_idx.equals(idx):
+                    df = df.copy(); df.index = new_idx; idx = new_idx
+            except Exception:
+                pass
+        # monotonic & duplicates
+        if cfg.get("require_monotonic_dates", False) and idx is not None and not idx.is_monotonic_increasing:
+            vio.append(SanityViolation("NON_MONO_INDEX","index not non-decreasing"))
+        if cfg.get("forbid_duplicates", False) and idx is not None and idx.has_duplicates:
+            n_dupes = int(idx.duplicated().sum())
+            vio.append(SanityViolation("DUP_TS", f"{n_dupes} duplicate stamps"))
+        # numeric inf/nan
+        nums = df.select_dtypes(include=[np.number])
+        arr = np.asarray(nums.to_numpy(dtype="float64"), dtype="float64") if nums.shape[1] else np.empty((len(df),0))
+        if cfg.get("forbid_infinite", False) and arr.size and np.isinf(arr).any():
+            vio.append(SanityViolation("INF_VALUES","infinite values present"))
+        max_nan = cfg.get("max_nan_pct", None)
+        if max_nan is not None and arr.size:
+            nan_pct = float(np.isnan(arr).mean())
+            if nan_pct > max_nan:
+                vio.append(SanityViolation("NAN_VALUES", f"NaN fraction {nan_pct:.4f} > {max_nan:.4f}"))
+        return SanityCheckResult(mode=mode, violations=vio, ok=(len(vio)==0))
 
     def _get_default_config(self) -> Dict:
         """Get default configuration."""

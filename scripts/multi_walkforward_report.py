@@ -14,6 +14,7 @@ import logging
 import math
 import random
 import time
+import traceback
 from pathlib import Path
 from typing import Dict, List, Tuple
 
@@ -31,6 +32,35 @@ from walkforward_framework import (
     LeakageProofPipeline,
     walkforward_run,
 )
+
+# Data sanity (fast pre-check for smoke)
+try:
+    from core.data_sanity import DataSanityValidator
+except Exception:  # pragma: no cover
+    DataSanityValidator = None  # type: ignore
+
+
+def in_ci() -> bool:
+    return str(os.getenv("CI", "")).lower() in {"1", "true", "yes", "on"}
+
+
+def _write_smoke_json(payload: Dict) -> None:
+    payload = {
+        "timestamp": dt.datetime.now(dt.UTC).strftime("%Y%m%dT%H%M%SZ"),
+        **payload,
+    }
+    out = Path("reports")
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "smoke_run.json").write_text(json.dumps(payload, indent=2))
+
+
+def _map_violation(result) -> tuple[str, str]:
+    if not getattr(result, "violations", None):
+        return ("UNKNOWN", "data_sanity_violation")
+    v0 = result.violations[0]
+    code = getattr(v0, "code", "UNKNOWN")
+    details = getattr(v0, "details", getattr(v0, "msg", str(v0)))
+    return (code, f"data_sanity_violation[{code}]: {details}")
 
 
 def load_data(symbol: str, start: str, end: str) -> pd.DataFrame:
@@ -156,6 +186,20 @@ def run_smoke(symbols: List[str], train: int = 60, test: int = 10) -> Dict:
     # Use fixed short window and CI data if present
     start, end = "2020-01-01", "2020-03-31"
     ordered = symbols
+    # Fast pre-check: DataSanity in enforce mode for CI
+    sanity_profile = "walkforward_ci" if in_ci() else "walkforward"
+    if DataSanityValidator is not None:
+        try:
+            validator = DataSanityValidator("config/data_sanity.yaml", profile=sanity_profile)
+            for sym in ordered:
+                df_sanity = load_data(sym, start, end)
+                res = validator.validate_dataframe_fast(df_sanity, sanity_profile)
+                if res.violations and getattr(res, "mode", "warn") == "enforce":
+                    code, reason = _map_violation(res)
+                    return {"status": "FAIL", "violation_code": code, "reason": reason, "symbols": [sym]}
+        except Exception:
+            # Do not fail pre-check hard; main run will still guard
+            pass
     start_time = time.monotonic()
     summary = make_report(
         out_path=Path("docs/analysis") / f"walkforward_smoke_{dt.datetime.now(dt.UTC).strftime('%Y%m%d_%H%M%S')}.md",
@@ -170,10 +214,12 @@ def run_smoke(symbols: List[str], train: int = 60, test: int = 10) -> Dict:
     )
     duration = time.monotonic() - start_time
     return {
+        "status": "OK",
         "folds": 1,
         "total_trades": int(summary.get("total_trades", 0)),
         "any_nan_inf": bool(summary.get("any_nan_inf", False)),
         "duration_s": float(f"{duration:.3f}"),
+        "symbols": ordered,
     }
 
 
@@ -397,32 +443,41 @@ def main():
         )
         # Smoke guardrails and summary
         if args.smoke:
-            if summary.get("any_nan_inf"):
-                raise RuntimeError("NaN/inf metrics detected in smoke run")
-            if int(summary.get("total_trades", 0)) <= 0:
-                raise RuntimeError("No trades across test window for all symbols")
-            duration = time.monotonic() - start_time
-            if duration > args.max_runtime:
-                raise RuntimeError(f"Smoke exceeded {args.max_runtime}s budget (took {duration:.2f}s)")
-            overall = summary.get("overall_summary", {})
-            avg_sharpe = float(np.mean([v.get("avg_sharpe", 0.0) for v in overall.values()])) if overall else 0.0
-            avg_maxdd = float(np.mean([v.get("avg_maxdd", 0.0) for v in overall.values()])) if overall else 0.0
-            print(f"SMOKE OK | folds={eff_folds} | symbols={','.join(ordered)} | sharpe={avg_sharpe:.3f} maxdd={avg_maxdd:.3f}")
-            # Emit machine-readable metrics for CI
-            rep_dir = Path("reports")
-            rep_dir.mkdir(parents=True, exist_ok=True)
-            run_meta = {
-                "timestamp": dt.datetime.now(dt.UTC).strftime("%Y%m%dT%H%M%SZ"),
-                "folds": eff_folds,
-                "symbols": ordered,
-                "trades": int(summary.get("total_trades", 0)),
-                "duration_s": float(f"{duration:.3f}"),
-                "sharpe": float(avg_sharpe),
-                "max_drawdown": float(avg_maxdd),
-                "seed": 1337,
-                "auto_adjust": False,
-            }
-            (rep_dir / "smoke_run.json").write_text(json.dumps(run_meta, indent=2))
+            try:
+                if summary.get("any_nan_inf"):
+                    payload = {"status":"FAIL","violation_code":"NAN_INF_METRICS","reason":"NaN/inf metrics detected","symbols": ordered}
+                    _write_smoke_json(payload)
+                    raise SystemExit(1)
+                if int(summary.get("total_trades", 0)) <= 0:
+                    payload = {"status":"FAIL","violation_code":"NO_TRADES","reason":"No trades across test window","symbols": ordered}
+                    _write_smoke_json(payload)
+                    raise SystemExit(1)
+                duration = time.monotonic() - start_time
+                if duration > args.max_runtime:
+                    payload = {"status":"FAIL","violation_code":"RUNTIME_BUDGET","reason":f"Exceeded {args.max_runtime}s","symbols": ordered}
+                    _write_smoke_json(payload)
+                    raise SystemExit(1)
+                overall = summary.get("overall_summary", {})
+                avg_sharpe = float(np.mean([v.get("avg_sharpe", 0.0) for v in overall.values()])) if overall else 0.0
+                avg_maxdd = float(np.mean([v.get("avg_maxdd", 0.0) for v in overall.values()])) if overall else 0.0
+                print(f"SMOKE OK | folds={eff_folds} | symbols={','.join(ordered)} | sharpe={avg_sharpe:.3f} maxdd={avg_maxdd:.3f}")
+                _write_smoke_json({
+                    "status":"OK",
+                    "folds": eff_folds,
+                    "symbols": ordered,
+                    "trades": int(summary.get("total_trades", 0)),
+                    "duration_s": float(f"{duration:.3f}"),
+                    "sharpe": float(avg_sharpe),
+                    "max_drawdown": float(avg_maxdd),
+                    "seed": 1337,
+                    "auto_adjust": False,
+                })
+            except SystemExit:
+                raise
+            except Exception as e:
+                fail_payload = {"status":"FAIL","violation_code":"UNEXPECTED_ERROR","reason":f"{e.__class__.__name__}: {e}","symbols": ordered}
+                _write_smoke_json(fail_payload)
+                raise
 
     print(f"Report written: {out_file}")
 
