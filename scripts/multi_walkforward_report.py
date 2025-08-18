@@ -22,6 +22,7 @@ import pandas as pd
 import json
 
 import os
+import pathlib
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from walkforward_framework import (
@@ -37,7 +38,25 @@ def load_data(symbol: str, start: str, end: str) -> pd.DataFrame:
         import yfinance as yf
     except ImportError as e:
         raise RuntimeError("yfinance is required for this script") from e
-
+    # CI offline cache (deterministic)
+    if os.getenv("CI") == "true":
+        cache_path = pathlib.Path("data/smoke_cache") / f"{symbol}.parquet"
+        if cache_path.exists():
+            df = pd.read_parquet(cache_path)
+            if isinstance(df.index, pd.DatetimeIndex) and df.index.tz is None:
+                df.index = df.index.tz_localize("UTC")
+            # If only Close exists, synthesize minimal OHLCV
+            cols = set(df.columns)
+            if "Open" not in cols or "High" not in cols or "Low" not in cols or "Volume" not in cols:
+                close = df[df.columns[0]] if len(df.columns) == 1 else df.get("Close", df.iloc[:, 0])
+                out = pd.DataFrame(index=df.index)
+                out["Close"] = close
+                out["Open"] = close.shift(1).fillna(close)
+                out["High"] = out[["Open", "Close"]].max(axis=1) * 1.002
+                out["Low"] = out[["Open", "Close"]].min(axis=1) * 0.998
+                out["Volume"] = 1_000_000
+                return out[["Open", "High", "Low", "Close", "Volume"]]
+            return df[["Open", "High", "Low", "Close", "Volume"]]
     df = yf.download(symbol, start=start, end=end, progress=False, auto_adjust=False)
     if not isinstance(df, pd.DataFrame) or df.empty:
         raise RuntimeError(f"No data for {symbol} in range {start}..{end}")

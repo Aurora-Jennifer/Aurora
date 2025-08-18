@@ -1,5 +1,7 @@
 # 🚀 Advanced Trading System with Composer
 
+![Smoke](https://github.com/<you>/<repo>/actions/workflows/smoke.yml/badge.svg)
+
 A config-driven, asset-class-aware trading system with a two-level composer for strategy selection and performance optimization.
 
 ## 📋 Table of Contents
