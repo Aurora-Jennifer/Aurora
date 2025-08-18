@@ -3,6 +3,7 @@
 .PHONY: help install test sanity falsify bench-sanity clean coverage lint lint-changed format promote wf smoke type datasanity golden bless_golden quality configcheck lock audit
 
 # Default target
+.DEFAULT_GOAL := smoke
 help:
 	@echo "Available targets:"
 	@echo "  install      - Install dependencies"
