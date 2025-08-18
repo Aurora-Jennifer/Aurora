@@ -5,7 +5,7 @@ beautifulsoup4==4.13.4
 blinker==1.9.0
 boltons @ file:///croot/boltons_1737061692168/work
 Brotli @ file:///croot/brotli-split_1736182456865/work
-catppuccin==2.4.1
+catppuccin==2.5.0
 certifi @ file:///croot/certifi_1745939216646/work/certifi
 cffi @ file:///croot/cffi_1736182485317/work
 charset-normalizer @ file:///croot/charset-normalizer_1721748349566/work
