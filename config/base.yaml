@@ -23,6 +23,8 @@ risk:
   max_leverage: 1.0
   slippage_bps: 5
   fee_bps: 1
+  max_gross_exposure: 1.0
+  max_position_pct: 1.0
 
 composer:
   use_composer: true

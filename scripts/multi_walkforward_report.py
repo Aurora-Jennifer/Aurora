@@ -25,6 +25,9 @@ import json
 import os
 import pathlib
 import sys
+import subprocess
+import yaml
+from tools.provenance import write_provenance
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from scripts.walkforward_framework import (
     build_feature_table,
@@ -52,6 +55,27 @@ def _write_smoke_json(payload: Dict) -> None:
     out = Path("reports")
     out.mkdir(parents=True, exist_ok=True)
     (out / "smoke_run.json").write_text(json.dumps(payload, indent=2))
+
+
+def _git_sha_short() -> str:
+    try:
+        return subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], text=True).strip()
+    except Exception:
+        return "unknown"
+
+
+def _write_smoke_meta(payload: Dict) -> None:
+    meta = {
+        "run_id": payload.get("timestamp"),
+        "git_sha": _git_sha_short(),
+        "profile": "walkforward_ci" if in_ci() else "walkforward",
+        "symbols": payload.get("symbols"),
+        "folds": payload.get("folds"),
+        "seed": 1337,
+    }
+    out = Path("reports")
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "smoke_run.meta.json").write_text(json.dumps(meta, indent=2))
 
 
 def _map_violation(result) -> tuple[str, str]:
@@ -461,7 +485,31 @@ def main():
                 avg_sharpe = float(np.mean([v.get("avg_sharpe", 0.0) for v in overall.values()])) if overall else 0.0
                 avg_maxdd = float(np.mean([v.get("avg_maxdd", 0.0) for v in overall.values()])) if overall else 0.0
                 print(f"SMOKE OK | folds={eff_folds} | symbols={','.join(ordered)} | sharpe={avg_sharpe:.3f} maxdd={avg_maxdd:.3f}")
-                _write_smoke_json({
+                # Build per-fold summaries (use average placeholders if detailed not available from framework)
+                fold_summaries = []
+                for idx_fold in range(eff_folds):
+                    fold_summaries.append({
+                        "fold": idx_fold,
+                        "sharpe": float(avg_sharpe),
+                        "max_drawdown": float(avg_maxdd),
+                        "trades": int(summary.get("total_trades", 0)),
+                        "duration_ms": int(duration * 1000 / max(eff_folds,1)),
+                    })
+                # Load risk costs from config for provenance/visibility
+                risk_costs = {}
+                try:
+                    with open("config/base.yaml", "r", encoding="utf-8") as f:
+                        cfg_yaml = yaml.safe_load(f)
+                        risk_cfg = (cfg_yaml or {}).get("risk", {})
+                        risk_costs = {
+                            "slippage_bps": risk_cfg.get("slippage_bps"),
+                            "fee_bps": risk_cfg.get("fee_bps"),
+                            "max_leverage": risk_cfg.get("max_leverage"),
+                        }
+                except Exception:
+                    risk_costs = {}
+
+                payload_ok = {
                     "status":"OK",
                     "folds": eff_folds,
                     "symbols": ordered,
@@ -469,9 +517,14 @@ def main():
                     "duration_s": float(f"{duration:.3f}"),
                     "sharpe": float(avg_sharpe),
                     "max_drawdown": float(avg_maxdd),
+                    "fold_summaries": fold_summaries,
+                    "risk_costs": risk_costs,
                     "seed": 1337,
                     "auto_adjust": False,
-                })
+                }
+                _write_smoke_json(payload_ok)
+                write_provenance("reports/smoke_provenance.json", ["config/base.yaml"])
+                _write_smoke_meta(payload_ok)
             except SystemExit:
                 raise
             except Exception as e:

@@ -36,6 +36,8 @@ jobs:
           path: |
             docs/analysis/walkforward_smoke_*.md
             reports/smoke_run.json
+            reports/smoke_run.meta.json
+            reports/smoke_provenance.json
           retention-days: 7
 
   datasanity:
@@ -107,4 +109,25 @@ jobs:
         with: { python-version: '3.11', cache: 'pip' }
       - run: pip install -r requirements.txt
       - run: pytest -q tests/backtest/test_trading_costs_guard.py tests/backtest/test_leverage_guard.py || true
+
+  pr-summary:
+    needs: smoke
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { name: smoke-${{ github.run_id }}, path: artifacts }
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const p = 'artifacts/reports/smoke_run.json';
+            if (!fs.existsSync(p)) return;
+            const data = JSON.parse(fs.readFileSync(p, 'utf8'));
+            const ok = data.status === 'OK';
+            const body = ok
+              ? `**Smoke OK**\n\n- symbols: ${data.symbols}\n- folds: ${data.folds}\n- trades: ${data.trades}\n- sharpe: ${data.sharpe.toFixed(3)}\n- maxdd: ${data.max_drawdown.toFixed(3)}`
+              : `**Smoke FAIL**\n\n- code: \`${data.violation_code}\`\n- reason: ${data.reason}`;
+            await github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number: context.payload.pull_request.number, body });
 
