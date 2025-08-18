@@ -152,6 +152,31 @@ def run_for_symbol_profile(
     return results, fold_test_lengths, total_trades
 
 
+def run_smoke(symbols: List[str], train: int = 60, test: int = 10) -> Dict:
+    # Use fixed short window and CI data if present
+    start, end = "2020-01-01", "2020-03-31"
+    ordered = symbols
+    start_time = time.monotonic()
+    summary = make_report(
+        out_path=Path("docs/analysis") / f"walkforward_smoke_{dt.datetime.now(dt.UTC).strftime('%Y%m%d_%H%M%S')}.md",
+        profiles=["risk_balanced"],
+        symbols=ordered,
+        start=start,
+        end=end,
+        validate_data=True,
+        target_folds=1,
+        train_days=train,
+        test_days=test,
+    )
+    duration = time.monotonic() - start_time
+    return {
+        "folds": 1,
+        "total_trades": int(summary.get("total_trades", 0)),
+        "any_nan_inf": bool(summary.get("any_nan_inf", False)),
+        "duration_s": float(f"{duration:.3f}"),
+    }
+
+
 def make_report(
     out_path: Path,
     profiles: List[str],

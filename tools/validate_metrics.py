@@ -24,6 +24,14 @@ def main() -> int:
     except ValidationError as e:
         print(f"[PROMOTE FAIL] {e.message}")
         return 1
+    # Soft sanity checks
+    if data.get("trades", 0) < 1:
+        print("[PROMOTE FAIL] zero trades in smoke")
+        return 1
+    sharpe = float(data.get("sharpe", 0))
+    if not (-10 <= sharpe <= 10):
+        print("[PROMOTE FAIL] sharpe out of sane bounds")
+        return 1
     print("[PROMOTE OK]")
     return 0
 
