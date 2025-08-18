@@ -1,0 +1,35 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke-on-tag:
+    name: Smoke on tag
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11', cache: 'pip' }
+      - run: python -m pip install -U pip
+      - run: pip install -r requirements.txt
+      - name: Smoke run
+        run: make smoke
+      - name: Promote gate
+        run: python tools/validate_metrics.py --input reports/smoke_run.json --schema reports/smoke_run.schema.json
+
+  create-release:
+    needs: smoke-on-tag
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+
+

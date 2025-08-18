@@ -1,6 +1,6 @@
 # Makefile for Trading System with DataSanity Enforcement
 
-.PHONY: help install test sanity falsify bench-sanity clean coverage lint lint-changed format promote wf smoke type datasanity golden bless_golden
+.PHONY: help install test sanity falsify bench-sanity clean coverage lint lint-changed format promote wf smoke type datasanity golden bless_golden quality
 
 # Default target
 help:
@@ -80,6 +80,9 @@ tests/golden/SPY.parquet:
 bless_golden:
 	python tools/gen_golden_spy.py
 	python tools/bless_golden.py
+
+quality:
+	coverage run -m pytest -q && coverage report -m || true
 
 # Type checking (non-blocking for now)
 type:

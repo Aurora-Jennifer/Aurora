@@ -59,3 +59,17 @@ jobs:
           path: tests/golden/SPY.parquet
           retention-days: 7
 
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11', cache: 'pip' }
+      - run: pip install -r requirements.txt
+      - run: pip install coverage mypy
+      - run: coverage run -m pytest -q
+      - run: coverage xml
+      - uses: actions/upload-artifact@v4
+        with: { name: coverage-${{ github.run_id }}, path: coverage.xml, retention-days: 7 }
+      - run: mypy --strict || true
+
