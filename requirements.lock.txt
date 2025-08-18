@@ -35,7 +35,7 @@ itsdangerous==2.2.0
 Jinja2==3.1.6
 joblib==1.5.1
 jsonpatch @ file:///work/perseverance-python-buildout/croot/jsonpatch_1728399595941/work
-jsonpointer==2.1
+jsonpointer==3.0.0
 kiwisolver==1.4.8
 libmambapy @ file:///croot/mamba-split_1734469461757/work/libmambapy
 markdown-it-py @ file:///work/perseverance-python-buildout/croot/markdown-it-py_1728387994477/work
