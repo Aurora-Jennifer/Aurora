@@ -1,3 +1,4 @@
+- feat(paper): add paper broker, execution router, live risk loop, and runner (JSONL logs + meta/provenance)
 # 📝 Development Changelog
 
 ## 🚀 Major Release: ML Trading System v0.2 - Regime-Aware Features & Risk Management
