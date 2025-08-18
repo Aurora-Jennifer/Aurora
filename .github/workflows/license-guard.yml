@@ -1,0 +1,26 @@
+name: License Guard
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  license-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Scan for public license strings
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo TUlUIExpY2Vuc2U= | base64 -d > .forbid_patterns.txt
+          echo TGljZW5zZSA6OiBPU0kgQXBwcm92ZWQ= | base64 -d >> .forbid_patterns.txt
+          if rg -n --hidden --glob '!venv/**' --glob '!.git/**' --glob '!.github/workflows/**' -f .forbid_patterns.txt ; then
+            echo "::error::Public license strings found. Remove them." >&2
+            exit 1
+          fi
+          echo "No public license strings detected."
+
+

@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Enhanced trading system with regime detection and IBKR integration"
 readme = "README.md"
 requires-python = ">=3.8"
-license = {text = "MIT"}
+license = {text = "Proprietary"}
 authors = [
     {name = "Trading System Team"}
 ]
@@ -16,7 +16,7 @@ keywords = ["trading", "algorithmic", "ibkr", "regime-detection"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Financial and Insurance Industry",
-    "License :: OSI Approved :: MIT License",
+    # License classifier removed (proprietary)
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",

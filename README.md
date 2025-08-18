@@ -396,7 +396,7 @@ python -c "import pstats; pstats.Stats('profile.stats').sort_stats('cumulative')
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+Aurora Analytics — Proprietary License. See the LICENSE and NOTICE files for details.
 
 ---
 
