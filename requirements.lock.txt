@@ -75,7 +75,7 @@ schedule==1.2.2
 scikit-learn==1.7.1
 scipy==1.16.1
 seaborn==0.13.2
-setuptools==78.1.1
+setuptools==80.9.0
 six==1.17.0
 soupsieve==2.7
 sympy==1.14.0
