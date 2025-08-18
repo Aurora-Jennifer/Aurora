@@ -1,6 +1,6 @@
 # 🚀 Advanced Trading System with Composer
 
-![Smoke](https://github.com/<you>/<repo>/actions/workflows/smoke.yml/badge.svg)
+![Smoke](https://github.com/<owner>/<repo>/actions/workflows/smoke.yml/badge.svg)
 
 ### Smoke Run (CI)
 - Runs on push/PR (fast deterministic check)

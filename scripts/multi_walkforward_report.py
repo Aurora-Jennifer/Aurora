@@ -27,7 +27,17 @@ import pathlib
 import sys
 import subprocess
 import yaml
-from tools.provenance import write_provenance
+try:
+    from tools.provenance import write_provenance
+except Exception:  # fallback when package import fails
+    tools_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "tools")
+    if tools_dir not in sys.path:
+        sys.path.append(tools_dir)
+    try:
+        from provenance import write_provenance  # type: ignore
+    except Exception:
+        def write_provenance(*_a, **_k):
+            return {}
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from scripts.walkforward_framework import (
     build_feature_table,

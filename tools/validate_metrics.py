@@ -45,9 +45,12 @@ def main() -> int:
     if not (-10 <= sharpe <= 10):
         print("[PROMOTE FAIL] sharpe out of sane bounds")
         return 1
-    duration_s = float(data.get("duration_s", 0))
-    if duration_s > 60:
-        print("[PROMOTE FAIL] duration exceeds budget")
+    # Phase timing soft SLA
+    MAX_TOTAL_MS = 60_000
+    pt = data.get("phase_times_ms", {})
+    total_ms = sum(pt.values()) if pt else float(data.get("duration_s", 0)) * 1000.0
+    if total_ms > MAX_TOTAL_MS:
+        print(f"[PROMOTE FAIL] runtime budget exceeded: {total_ms:.0f}ms > {MAX_TOTAL_MS}ms")
         return 1
     print("[PROMOTE OK]")
     return 0

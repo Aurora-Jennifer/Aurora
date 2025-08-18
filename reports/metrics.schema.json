@@ -20,6 +20,16 @@
     "duration_s": {"type": "number", "maximum": 60},
     "sharpe": {"type": "number", "minimum": -10, "maximum": 10},
     "max_drawdown": {"type": "number", "minimum": -1.0, "maximum": 0.0},
+    "phase_times_ms": {
+      "type": "object",
+      "properties": {
+        "load": {"type": "number", "minimum": 0},
+        "features": {"type": "number", "minimum": 0},
+        "folds": {"type": "number", "minimum": 0},
+        "finalize": {"type": "number", "minimum": 0}
+      },
+      "additionalProperties": true
+    },
     "fold_summaries": {
       "type": "array",
       "items": {
