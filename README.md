@@ -2,6 +2,11 @@
 
 ![Smoke](https://github.com/<you>/<repo>/actions/workflows/smoke.yml/badge.svg)
 
+### Smoke Run (CI)
+- Runs on push/PR (fast deterministic check)
+- Artifacts: `docs/analysis/walkforward_smoke_*.md`, `reports/smoke_run.json`
+- Fails on: 0 folds, no trades, NaN/inf metrics, runtime >60s, DataSanity (CI enforce)
+
 A config-driven, asset-class-aware trading system with a two-level composer for strategy selection and performance optimization.
 
 ## 📋 Table of Contents
