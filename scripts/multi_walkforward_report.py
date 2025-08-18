@@ -10,6 +10,10 @@ walkforward framework APIs and writes a markdown report.
 
 import argparse
 import datetime as dt
+import logging
+import math
+import random
+import time
 from pathlib import Path
 from typing import Dict, List, Tuple
 
@@ -33,7 +37,7 @@ def load_data(symbol: str, start: str, end: str) -> pd.DataFrame:
     except ImportError as e:
         raise RuntimeError("yfinance is required for this script") from e
 
-    df = yf.download(symbol, start=start, end=end, progress=False)
+    df = yf.download(symbol, start=start, end=end, progress=False, auto_adjust=False)
     if not isinstance(df, pd.DataFrame) or df.empty:
         raise RuntimeError(f"No data for {symbol} in range {start}..{end}")
     # Ensure UTC index
@@ -69,11 +73,18 @@ def run_for_symbol_profile(
     end: str,
     target_folds: int,
     validate_data: bool,
-) -> Tuple[List[Dict], List[int]]:
+    train_days: int | None = None,
+    test_days: int | None = None,
+    warmup_days: int = 60,
+) -> Tuple[List[Dict], List[int], int]:
     data = load_data(symbol, start, end)
-    X, y, prices = build_feature_table(data, warmup_days=60)
+    X, y, prices = build_feature_table(data, warmup_days=warmup_days)
     n = len(X)
-    train_len, test_len, stride = choose_fold_params(n, target_folds)
+    if train_days is not None and test_days is not None:
+        train_len, test_len = int(train_days), int(test_days)
+        stride = test_len
+    else:
+        train_len, test_len, stride = choose_fold_params(n, target_folds)
     folds = list(
         gen_walkforward(
             n=n,
@@ -84,6 +95,23 @@ def run_for_symbol_profile(
             anchored=False,
         )
     )
+    logging.info(
+        "walkforward: start=%s end=%s train=%sd test=%sd folds=%s symbol=%s",
+        start,
+        end,
+        train_len,
+        test_len,
+        len(folds),
+        symbol,
+    )
+    if len(folds) == 0:
+        raise ValueError(
+            f"Computed 0 folds (n={n}) with train_len={train_len}, test_len={test_len}, stride={stride}. Increase date range or adjust windows."
+        )
+    if len(folds) == 0:
+        raise ValueError(
+            f"Computed 0 folds (n={n}) with train_len={train_len}, test_len={test_len}, stride={stride}. Increase date range or adjust windows."
+        )
     if len(folds) > target_folds:
         folds = folds[:target_folds]
 
@@ -97,7 +125,11 @@ def run_for_symbol_profile(
     )
     # Attach fold lengths for CAGR
     fold_test_lengths = [f.test_hi - f.test_lo + 1 for f in folds]
-    return results, fold_test_lengths
+    total_trades = 0
+    for _, _, trades in results:
+        if trades and isinstance(trades, list) and trades[0].get("count") is not None:
+            total_trades += int(trades[0]["count"])
+    return results, fold_test_lengths, total_trades
 
 
 def make_report(
@@ -107,16 +139,21 @@ def make_report(
     start: str,
     end: str,
     validate_data: bool,
+    target_folds: int,
+    train_days: int | None,
+    test_days: int | None,
 ):
     out_path.parent.mkdir(parents=True, exist_ok=True)
     lines: List[str] = []
-    lines.append(f"# Walkforward Report — {dt.datetime.utcnow().isoformat(timespec='seconds')}Z\n")
+    lines.append(f"# Walkforward Report — {dt.datetime.now(dt.UTC).isoformat(timespec='seconds')}\n")
     lines.append(f"Date range: {start} → {end}\n")
     lines.append(f"Symbols: {', '.join(symbols)}\n")
     lines.append(f"Profiles: {', '.join(profiles)}\n")
     lines.append(f"DataSanity: {'ON' if validate_data else 'OFF'}\n")
 
     overall_summary: Dict[str, Dict[str, float]] = {}
+    any_nan_inf = False
+    total_trades_all = 0
 
     for profile in profiles:
         lines.append(f"\n## Profile: {profile}\n")
@@ -127,13 +164,17 @@ def make_report(
         maxdd_vals: List[float] = []
 
         for symbol in symbols:
-            results, fold_lengths = run_for_symbol_profile(
+            results, fold_lengths, symbol_trades = run_for_symbol_profile(
                 symbol=symbol,
                 start=start,
                 end=end,
-                target_folds=5,
+                target_folds=target_folds,
                 validate_data=validate_data,
+                train_days=train_days,
+                test_days=test_days,
+                warmup_days=10 if (train_days is not None and test_days is not None and (train_days <= 30 or test_days <= 10)) else 60,
             )
+            total_trades_all += symbol_trades
             for (fold_id, metrics, _), bars in zip(results, fold_lengths):
                 sharpe = float(metrics.get("sharpe_nw", 0.0))
                 max_dd = float(metrics.get("max_dd", 0.0))
@@ -142,6 +183,8 @@ def make_report(
                 median_hold = float(metrics.get("median_hold", 0.0))
                 cagr_est = annualize_cagr(total_return, bars)
                 risk_ok = max_dd >= -0.03
+                if not all(math.isfinite(x) for x in [sharpe, max_dd, total_return, cagr_est]):
+                    any_nan_inf = True
 
                 sharpe_vals.append(sharpe)
                 maxdd_vals.append(max_dd)
@@ -175,6 +218,26 @@ def make_report(
         )
 
     out_path.write_text("".join(lines), encoding="utf-8")
+    return {"overall_summary": overall_summary, "any_nan_inf": any_nan_inf, "total_trades": total_trades_all}
+
+
+def _normalize_symbols(raw: List[str]) -> List[str]:
+    combined: List[str] = []
+    for token in raw:
+        if "," in token:
+            combined.extend([t for t in token.split(",") if t])
+        else:
+            combined.append(token)
+    seen = set()
+    out: List[str] = []
+    for s in combined:
+        sx = s.strip()
+        if not sx:
+            continue
+        if sx not in seen:
+            seen.add(sx)
+            out.append(sx)
+    return out
 
 
 def main():
@@ -194,32 +257,112 @@ def main():
     )
     ap.add_argument("--separate-crypto", action="store_true", help="Run crypto in a separate section")
     ap.add_argument("--validate-data", action="store_true")
+    ap.add_argument("--smoke", action="store_true")
+    ap.add_argument("--folds", type=int, default=None)
+    ap.add_argument("--train-window", type=int, default=None)
+    ap.add_argument("--test-window", type=int, default=None)
+    ap.add_argument("--max-runtime", type=int, default=60)
+    ap.add_argument("--log-level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR"])
     args = ap.parse_args()
 
-    ts = dt.datetime.utcnow().strftime("%Y%m%d_%H%M%S")
-    out_file = Path("docs/analysis") / f"walkforward_{ts}.md"
+    # Determinism
+    random.seed(1337)
+    np.random.seed(1337)
+    try:
+        import torch  # type: ignore
+        torch.manual_seed(1337)
+        try:
+            torch.use_deterministic_algorithms(True)  # type: ignore
+        except Exception:
+            pass
+    except Exception:
+        pass
+
+    # Logging level
+    logging.basicConfig(level=getattr(logging, args.log_level, logging.INFO))
+
+    # Resolve effective params
+    symbols = _normalize_symbols(args.symbols)
+    if args.smoke and not symbols:
+        symbols = ["SPY", "BTC-USD"]
+    if not symbols:
+        raise ValueError("No symbols provided.")
+    if args.smoke:
+        eff_start = "2020-01-01"
+        eff_end = "2020-03-31"
+        eff_folds = 1
+        eff_train = 60
+        eff_test = 10
+        out_prefix = "walkforward_smoke"
+    else:
+        eff_start = args.start
+        eff_end = args.end
+        eff_folds = args.folds or 5
+        eff_train = args.train_window
+        eff_test = args.test_window
+        out_prefix = "walkforward"
+
+    ts = dt.datetime.now(dt.UTC).strftime("%Y%m%d_%H%M%S")
+    out_file = Path("docs/analysis") / f"{out_prefix}_{ts}.md"
 
     # Separate crypto vs. non-crypto if requested
-    crypto = [s for s in args.symbols if s.endswith("-USD")]
-    non_crypto = [s for s in args.symbols if s not in crypto]
+    crypto = [s for s in symbols if s.endswith("-USD")]
+    non_crypto = [s for s in symbols if s not in crypto]
 
     if args.separate_crypto and crypto and non_crypto:
-        ts = dt.datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+        ts = dt.datetime.now(dt.UTC).strftime("%Y%m%d_%H%M%S")
         out_non = out_file.with_name(out_file.stem + f"_noncrypto_{ts}.md")
         out_cry = out_file.with_name(out_file.stem + f"_crypto_{ts}.md")
-        make_report(out_non, args.profiles, non_crypto, args.start, args.end, args.validate_data)
-        make_report(out_cry, args.profiles, crypto, args.start, args.end, args.validate_data)
+        make_report(out_non, args.profiles, non_crypto, eff_start, eff_end, args.validate_data, eff_folds, eff_train, eff_test)
+        make_report(out_cry, args.profiles, crypto, eff_start, eff_end, args.validate_data, eff_folds, eff_train, eff_test)
         print(f"Report written: {out_non}\nReport written: {out_cry}")
     else:
         ordered = non_crypto + crypto
-        make_report(
+        # For smoke, ensure ≥1 fold by adapting windows if needed
+        if args.smoke:
+            probe_symbol = ordered[0]
+            data_probe = load_data(probe_symbol, eff_start, eff_end)
+            # Use small warmup to maximize available bars
+            X_probe, _, _ = build_feature_table(data_probe, warmup_days=10)
+            n_probe = len(X_probe)
+            if eff_train + eff_test > n_probe:
+                # Adapt windows conservatively
+                new_train = max(10, min(30, n_probe - (eff_test or 10) - 1))
+                new_test = max(5, min(10, n_probe - new_train - 1))
+                logging.info(
+                    "smoke: adapting windows train %s->%s, test %s->%s to allow ≥1 fold (n=%s)",
+                    eff_train,
+                    new_train,
+                    eff_test,
+                    new_test,
+                    n_probe,
+                )
+                eff_train, eff_test = new_train, new_test
+        start_time = time.monotonic()
+        summary = make_report(
             out_path=out_file,
             profiles=args.profiles,
             symbols=ordered,
-            start=args.start,
-            end=args.end,
+            start=eff_start,
+            end=eff_end,
             validate_data=args.validate_data,
+            target_folds=eff_folds,
+            train_days=eff_train,
+            test_days=eff_test,
         )
+        # Smoke guardrails and summary
+        if args.smoke:
+            if summary.get("any_nan_inf"):
+                raise RuntimeError("NaN/inf metrics detected in smoke run")
+            if int(summary.get("total_trades", 0)) <= 0:
+                raise RuntimeError("No trades across test window for all symbols")
+            duration = time.monotonic() - start_time
+            if duration > args.max_runtime:
+                raise RuntimeError(f"Smoke exceeded {args.max_runtime}s budget (took {duration:.2f}s)")
+            overall = summary.get("overall_summary", {})
+            avg_sharpe = float(np.mean([v.get("avg_sharpe", 0.0) for v in overall.values()])) if overall else 0.0
+            avg_maxdd = float(np.mean([v.get("avg_maxdd", 0.0) for v in overall.values()])) if overall else 0.0
+            print(f"SMOKE OK | folds={eff_folds} | symbols={','.join(ordered)} | sharpe={avg_sharpe:.3f} maxdd={avg_maxdd:.3f}")
 
     print(f"Report written: {out_file}")
 
