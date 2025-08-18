@@ -7,3 +7,9 @@
   - Meta: `reports/paper_run.meta.json`
   - Provenance: `reports/paper_provenance.json`
 - Guards: daily_loss_limit, max_drawdown, max_leverage, max_gross_exposure, max_position_pct
+
+## Using Models (optional)
+- Flip `models.enable: true` in `config/base.yaml`
+- Pick `models.selected` from `config/models.yaml`
+- Place artifact at `artifacts/models/...` (do not commit binaries)
+- If inference errors or missing features → runner logs once and falls back

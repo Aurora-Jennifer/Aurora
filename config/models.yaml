@@ -1,0 +1,11 @@
+registry:
+  dummy_v1:
+    kind: "pickle"
+    path: "artifacts/models/dummy_v1.pkl"
+    metadata:
+      version: "1.0.0"
+      trained_on: "synthetic"
+      preprocess: "zscore"
+      feature_order: ["ret_1d", "ret_5d", "vol_10d"]
+
+

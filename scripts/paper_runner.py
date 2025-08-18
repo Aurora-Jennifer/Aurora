@@ -3,8 +3,15 @@ import argparse
 import json
 from datetime import datetime, timezone
 from pathlib import Path
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from brokers.paper import PaperBroker
 from utils.ops_runtime import kill_switch, notify_ntfy
+import yaml
+import pandas as pd
+from ml.model_interface import ModelSpec
+from ml.registry import load_model
+from ml.runtime import set_seeds, build_features, infer_weights
 
 try:
     from tools.provenance import write_provenance
@@ -40,6 +47,53 @@ def main(argv: list[str] | None = None):
     }
     (Path("reports") / "paper_run.meta.json").write_text(json.dumps(meta, indent=2))
     write_provenance("reports/paper_provenance.json", ["config/base.yaml"])
+
+    # Optional model runtime (feature-flagged)
+    try:
+        cfg = yaml.safe_load(Path("config/base.yaml").read_text())
+        models_cfg = (cfg or {}).get("models", {}) or {}
+        if models_cfg.get("enable", False):
+            set_seeds(1337)
+            reg = yaml.safe_load(Path("config/models.yaml").read_text())["registry"]
+            m_id = models_cfg["selected"]
+            spec_cfg = reg[m_id]
+            spec = ModelSpec(kind=spec_cfg["kind"], path=spec_cfg["path"], metadata=spec_cfg.get("metadata", {}))
+            model, art_sha = load_model(spec)
+            feats_list = models_cfg.get("input_features", [])
+            feat_order = (spec.metadata or {}).get("feature_order", feats_list)
+            min_bars = int(models_cfg.get("min_history_bars", 120))
+            # Load cached CI data if present; fallback to synthetic drift
+            weights_by_symbol = {}
+            for sym in meta["symbols"]:
+                cache_pq = Path("data/smoke_cache") / f"{sym}.parquet"
+                if cache_pq.exists():
+                    df = pd.read_parquet(cache_pq)
+                    if df.index.tz is None:
+                        df.index = df.index.tz_localize("UTC")
+                else:
+                    # synthetic small series
+                    idx = pd.date_range("2020-01-01", periods=180, tz="UTC")
+                    close = pd.Series(100.0, index=idx).cumprod() * 0 + 100.0
+                    df = pd.DataFrame({"Close": close.values}, index=idx)
+                if "Close" not in df.columns and df.shape[1] > 0:
+                    # pick first as close-like
+                    df = pd.DataFrame({"Close": df.iloc[:, 0]}, index=df.index)
+                F = build_features(df, feats_list)
+                w = infer_weights(model, F, feat_order, models_cfg.get("score_to_weight", "tanh"), float(models_cfg.get("max_abs_weight", 0.5)), min_bars)
+                # map index 0 weight to symbol for now
+                if isinstance(w, dict) and "status" not in w:
+                    # use first weight
+                    weights_by_symbol[sym] = float(next(iter(w.values())))
+            meta.update({
+                "model_id": m_id,
+                "model_kind": spec.kind,
+                "artifact_sha256": art_sha,
+                "feature_order": feat_order,
+            })
+            # weights_by_symbol is ready for router integration (future step)
+    except Exception:
+        # Non-fatal: log via meta note and continue fallback
+        meta["model_runtime"] = "fallback"
 
     for stopped in kill_switch(interval_s=args.poll_sec):
         if stopped:

@@ -1,3 +1,4 @@
+artifacts/models/*.pkl
 # Cache directories
 __pycache__/
 .pytest_cache/

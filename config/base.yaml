@@ -76,3 +76,12 @@ assets:
       top_k: 2
       min_conf: 0.50
       tie_break: "sharpe_first"
+
+# Optional model runtime (feature-flagged)
+models:
+  enable: false
+  selected: "dummy_v1"
+  input_features: ["ret_1d", "ret_5d", "vol_10d"]
+  score_to_weight: "tanh"    # {linear|tanh|softmax}
+  max_abs_weight: 0.5
+  min_history_bars: 120
