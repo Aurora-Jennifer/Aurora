@@ -10,6 +10,7 @@ __pycache__/
 trading_system.egg-info/
 results/
 logs/
+artifacts/
 trading.log
 state/selector.pkl
 
@@ -45,6 +46,7 @@ wheels/
 
 # Environment files
 .env
+*.env
 .venv
 env/
 venv/
@@ -71,6 +73,22 @@ Thumbs.db
 data/ibkr/*.pkl
 data/ibkr/*.csv
 data/ibkr/*.json
+data/
+datasets/
+**/*.parquet
+**/*.feather
+**/*.csv
+**/*.tsv
+**/*.pkl
+**/*.npz
+**/*.pt
+**/*.onnx
+**/*.bin
+**/checkpoints/
+tmp/
+.cache/
+**/secrets*.{json,yaml}
+**/credentials*.{json,yaml}
 
 # Model files (can be regenerated)
 state/*.pkl
