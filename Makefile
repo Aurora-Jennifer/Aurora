@@ -1,6 +1,6 @@
 # Makefile for Trading System with DataSanity Enforcement
 
-.PHONY: help install test sanity falsify bench-sanity clean coverage lint lint-changed format promote wf smoke type
+.PHONY: help install test sanity falsify bench-sanity clean coverage lint lint-changed format promote wf smoke type datasanity
 
 # Default target
 help:
@@ -67,6 +67,9 @@ promote:
 # Smoke preset (fast CI-friendly walkforward)
 smoke:
 	python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO
+
+datasanity:
+	pytest -q tests/walkforward/test_datasanity_*.py tests/backtest/test_datasanity_*.py
 
 # Type checking (non-blocking for now)
 type:

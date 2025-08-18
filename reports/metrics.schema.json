@@ -3,6 +3,7 @@
   "type": "object",
   "required": [
     "timestamp",
+    "status",
     "folds",
     "symbols",
     "trades",
@@ -12,12 +13,29 @@
   ],
   "properties": {
     "timestamp": {"type": "string"},
+    "status": {"type": "string", "enum": ["OK", "FAIL"]},
     "folds": {"type": "integer", "minimum": 1},
     "symbols": {"type": "array", "items": {"type": "string"}},
     "trades": {"type": "integer", "minimum": 1},
     "duration_s": {"type": "number", "maximum": 60},
-    "sharpe": {"type": "number"},
-    "max_drawdown": {"type": "number", "maximum": 0.0}
+    "sharpe": {"type": "number", "minimum": -10, "maximum": 10},
+    "max_drawdown": {"type": "number", "minimum": -1.0, "maximum": 0.0},
+    "fold_summaries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fold", "sharpe", "max_drawdown", "trades", "duration_ms"],
+        "properties": {
+          "fold": {"type": "integer", "minimum": 0},
+          "sharpe": {"type": "number", "minimum": -10, "maximum": 10},
+          "max_drawdown": {"type": "number", "minimum": -1.0, "maximum": 0.0},
+          "trades": {"type": "integer", "minimum": 0},
+          "duration_ms": {"type": "number", "minimum": 0}
+        }
+      }
+    },
+    "violation_code": {"type": "string"},
+    "reason": {"type": "string"}
   }
 }
 

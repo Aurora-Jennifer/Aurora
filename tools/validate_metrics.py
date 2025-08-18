@@ -24,6 +24,19 @@ def main() -> int:
     except ValidationError as e:
         print(f"[PROMOTE FAIL] {e.message}")
         return 1
+
+    status = data.get("status")
+    if status == "FAIL":
+        code = data.get("violation_code", "UNKNOWN")
+        print(f"[PROMOTE FAIL] status=FAIL code={code}")
+        return 1
+
+    # status OK path
+    fold_summaries = data.get("fold_summaries", [])
+    if not fold_summaries:
+        print("[PROMOTE FAIL] missing fold_summaries on OK status")
+        return 1
+
     # Soft sanity checks
     if data.get("trades", 0) < 1:
         print("[PROMOTE FAIL] zero trades in smoke")
@@ -31,6 +44,10 @@ def main() -> int:
     sharpe = float(data.get("sharpe", 0))
     if not (-10 <= sharpe <= 10):
         print("[PROMOTE FAIL] sharpe out of sane bounds")
+        return 1
+    duration_s = float(data.get("duration_s", 0))
+    if duration_s > 60:
+        print("[PROMOTE FAIL] duration exceeds budget")
         return 1
     print("[PROMOTE OK]")
     return 0
