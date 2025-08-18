@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["model", "stats", "psi", "psi_global", "thresholds"],
+  "properties": {
+    "model": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string" },
+        "artifact_sha256": { "type": "string" }
+      }
+    },
+    "stats": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["mean", "std", "missing_pct"],
+        "properties": {
+          "mean": { "type": "number" },
+          "std": { "type": "number", "minimum": 0 },
+          "missing_pct": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    },
+    "psi": {
+      "type": "object",
+      "additionalProperties": { "type": "number", "minimum": 0 }
+    },
+    "psi_global": { "type": "number", "minimum": 0 },
+    "thresholds": {
+      "type": "object",
+      "required": ["psi_warn", "psi_fail", "max_missing_pct"],
+      "properties": {
+        "psi_warn": { "type": "number", "minimum": 0 },
+        "psi_fail": { "type": "number", "minimum": 0 },
+        "max_missing_pct": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    }
+  }
+}
+
+
