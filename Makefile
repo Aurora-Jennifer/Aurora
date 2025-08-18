@@ -71,8 +71,11 @@ smoke:
 datasanity:
 	pytest -q tests/walkforward/test_datasanity_*.py tests/backtest/test_datasanity_*.py
 
-golden:
+golden: tests/golden/SPY.parquet
 	pytest -q tests/backtest/test_golden_regression.py
+
+tests/golden/SPY.parquet:
+	python tools/gen_golden_spy.py
 
 bless_golden:
 	python tools/gen_golden_spy.py

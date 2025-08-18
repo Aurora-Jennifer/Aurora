@@ -1,5 +1,5 @@
 # Core dependencies for trading system
-pandas>=1.5.0
+pandas>=2.2
 numpy>=1.21.0
 yfinance>=0.2.0
 ib_insync>=0.9.85
@@ -22,3 +22,5 @@ dash>=2.0.0
 # DataSanity enforcement dependencies
 hypothesis>=6.0.0
 pytest-randomly>=3.0.0
+pyarrow>=15
+jsonschema>=4.21
