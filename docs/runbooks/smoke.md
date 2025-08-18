@@ -46,3 +46,8 @@ python tools/gen_smoke_cache.py
 - Smoke must pass on PRs/main
 - Artifacts retained 7 days
 - Promote gate validates `reports/smoke_run.json`
+
+## Golden Regression
+- Generate golden data: `make bless_golden`
+- Run regression guard: `make golden`
+- After intentional changes, re-bless baselines and adjust tolerances thoughtfully.
