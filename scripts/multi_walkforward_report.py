@@ -26,7 +26,7 @@ import os
 import pathlib
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from walkforward_framework import (
+from scripts.walkforward_framework import (
     build_feature_table,
     gen_walkforward,
     LeakageProofPipeline,
@@ -196,7 +196,7 @@ def run_smoke(symbols: List[str], train: int = 60, test: int = 10) -> Dict:
                 res = validator.validate_dataframe_fast(df_sanity, sanity_profile)
                 if res.violations and getattr(res, "mode", "warn") == "enforce":
                     code, reason = _map_violation(res)
-                    return {"status": "FAIL", "violation_code": code, "reason": reason, "symbols": [sym]}
+                    return {"status": "FAIL", "violation_code": code, "reason": reason, "symbols": [sym], "folds": 0, "any_nan_inf": False, "total_trades": 0}
         except Exception:
             # Do not fail pre-check hard; main run will still guard
             pass

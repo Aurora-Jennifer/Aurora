@@ -223,10 +223,12 @@ class DataSanityValidator:
     def validate_dataframe_fast(self, df: pd.DataFrame, profile: str) -> SanityCheckResult:
         import numpy as np
         vio: List[SanityViolation] = []
-        mode = self._get_profile_config(profile).get("mode", "warn")
+        cfg_raw = self._get_profile_config(profile)
+        mode = cfg_raw.get("mode", "warn")
+        enforced = (mode == "enforce")
         if df is None or len(df) == 0:
             return SanityCheckResult(mode=mode, violations=[SanityViolation("EMPTY_SERIES","no rows")], ok=False)
-        cfg = self._get_profile_config(profile)
+        cfg = cfg_raw
         # timezone
         tz = cfg.get("tz")
         idx = df.index if isinstance(df.index, pd.DatetimeIndex) else None
@@ -238,17 +240,20 @@ class DataSanityValidator:
             except Exception:
                 pass
         # monotonic & duplicates
-        if cfg.get("require_monotonic_dates", False) and idx is not None and not idx.is_monotonic_increasing:
+        require_monotonic = cfg.get("require_monotonic_dates", False) or enforced
+        if require_monotonic and idx is not None and not idx.is_monotonic_increasing:
             vio.append(SanityViolation("NON_MONO_INDEX","index not non-decreasing"))
-        if cfg.get("forbid_duplicates", False) and idx is not None and idx.has_duplicates:
+        forbid_duplicates = cfg.get("forbid_duplicates", False) or enforced
+        if forbid_duplicates and idx is not None and idx.has_duplicates:
             n_dupes = int(idx.duplicated().sum())
             vio.append(SanityViolation("DUP_TS", f"{n_dupes} duplicate stamps"))
         # numeric inf/nan
         nums = df.select_dtypes(include=[np.number])
         arr = np.asarray(nums.to_numpy(dtype="float64"), dtype="float64") if nums.shape[1] else np.empty((len(df),0))
-        if cfg.get("forbid_infinite", False) and arr.size and np.isinf(arr).any():
+        forbid_inf = cfg.get("forbid_infinite", False) or enforced
+        if forbid_inf and arr.size and np.isinf(arr).any():
             vio.append(SanityViolation("INF_VALUES","infinite values present"))
-        max_nan = cfg.get("max_nan_pct", None)
+        max_nan = cfg.get("max_nan_pct", (0.0 if enforced else None))
         if max_nan is not None and arr.size:
             nan_pct = float(np.isnan(arr).mean())
             if nan_pct > max_nan:
