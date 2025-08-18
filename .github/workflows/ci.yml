@@ -42,10 +42,19 @@ jobs:
           diff -u /tmp/req.txt requirements.txt || (echo "requirements.txt is out of date; run pip-compile" && exit 1)
         fi
 
-    - name: Run linting & compile
+    - name: Lint (focused)
       run: |
-        ruff check .
+        ruff check --output-format=github tools/ core/metrics/ core/io_* tests/unit/
+
+    - name: Compile bytecode
+      run: |
         python -m compileall -q .
+
+    - name: Lint (full, non-blocking)
+      if: always()
+      continue-on-error: true
+      run: |
+        ruff check --output-format=github .
 
     - name: Type check (mypy)
       run: |

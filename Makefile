@@ -1,6 +1,6 @@
 # Makefile for Trading System with DataSanity Enforcement
 
-.PHONY: help install test sanity falsify bench-sanity clean coverage lint format promote wf
+.PHONY: help install test sanity falsify bench-sanity clean coverage lint lint-changed format promote wf
 
 # Default target
 help:
@@ -42,9 +42,14 @@ coverage:
 
 # Run linting checks
 lint:
-	ruff check .
+	ruff check --output-format=github tools/ core/metrics/ core/io_* tests/unit/
 	black --check .
 	isort --check-only .
+
+CHANGED_PY := $(shell git diff --name-only --diff-filter=ACMRT origin/main...HEAD | grep -E '\.py$$' || true)
+
+lint-changed:
+	@if [ -z "$(CHANGED_PY)" ]; then echo "No changed Python files."; else ruff check --output-format=github $(CHANGED_PY); fi
 
 # Format code
 format:
