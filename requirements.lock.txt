@@ -25,7 +25,7 @@ dash==3.2.0
 distro @ file:///work/perseverance-python-buildout/croot/distro_1728396110052/work
 eventkit==1.0.3
 Flask==3.1.1
-fonttools==4.58.4
+fonttools==4.59.1
 frozendict @ file:///work/perseverance-python-buildout/croot/frozendict_1728497542215/work
 ib-insync==0.9.86
 ibapi==9.81.1.post1
