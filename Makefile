@@ -1,6 +1,6 @@
 # Makefile for Trading System with DataSanity Enforcement
 
-.PHONY: help install test sanity falsify bench-sanity clean coverage lint lint-changed format promote wf smoke type datasanity golden bless_golden quality
+.PHONY: help install test sanity falsify bench-sanity clean coverage lint lint-changed format promote wf smoke type datasanity golden bless_golden quality configcheck lock audit
 
 # Default target
 help:
@@ -83,6 +83,15 @@ bless_golden:
 
 quality:
 	coverage run -m pytest -q && coverage report -m || true
+
+configcheck:
+	python tools/validate_config.py config/base.yaml
+
+lock:
+	pip install pip-tools && pip-compile --generate-hashes -o requirements.lock requirements.in
+
+audit:
+	pip install pip-audit && pip-audit || true
 
 # Type checking (non-blocking for now)
 type:

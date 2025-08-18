@@ -1,0 +1,5 @@
+# Protected domains
+/core/ @your-handle
+/core/** @your-handle
+/brokers/ @your-handle
+/engine/ @your-handle

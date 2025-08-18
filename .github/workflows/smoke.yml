@@ -19,6 +19,8 @@ jobs:
         with: { python-version: '3.11', cache: 'pip' }
       - run: python -m pip install -U pip
       - run: pip install -r requirements.txt
+      - name: Config schema check
+        run: make configcheck
       - name: Lint & unit-fast
         run: |
           make lint || true
@@ -58,6 +60,30 @@ jobs:
           name: golden-parquet
           path: tests/golden/SPY.parquet
           retention-days: 7
+
+  open-issue-on-fail:
+    needs: smoke
+    if: ${{ failure() && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { name: smoke-${{ github.run_id }}, path: artifacts }
+      - name: Read smoke json
+        id: readjson
+        run: echo "payload=$(cat artifacts/reports/smoke_run.json | tr -d '\n' | sed 's/"/\\"/g')" >> $GITHUB_OUTPUT
+      - name: Create issue
+        uses: actions-ecosystem/action-create-issue@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          title: "Smoke failed on main — ${{ github.sha }}"
+          body: |
+            Auto-filed due to red Smoke on main.
+
+            ```json
+            ${{ steps.readjson.outputs.payload }}
+            ```
+          labels: smoke, ci-fail
 
   quality:
     runs-on: ubuntu-latest

@@ -1,0 +1,21 @@
+name: Nightly Smoke (broad)
+on:
+  schedule: [{ cron: "23 3 * * *" }]
+jobs:
+  smoke-broad:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11', cache: 'pip' }
+      - run: pip install -r requirements.txt
+      - run: python scripts/multi_walkforward_report.py --smoke --symbols "SPY,TLT,GLD,QQQ,BTC-USD"
+      - uses: actions/upload-artifact@v4
+        with: { name: nightly-smoke, path: reports/smoke_run.json, retention-days: 7 }
+      - name: Notify on fail
+        if: failure()
+        run: |
+          curl -H "Title: Aurora Nightly Smoke FAILED" \
+               -H "Content-Type: application/json" \
+               -d @reports/smoke_run.json "${{ secrets.NTFY_URL }}"
+
