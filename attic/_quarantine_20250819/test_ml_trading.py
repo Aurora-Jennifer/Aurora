@@ -11,12 +11,13 @@ from pathlib import Path
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+import builtins
+import contextlib
+
 import yaml
 
 from core.engine.backtest import BacktestEngine
 from core.ml.profit_learner import ProfitLearner, TradeOutcome
-import contextlib
-import builtins
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
