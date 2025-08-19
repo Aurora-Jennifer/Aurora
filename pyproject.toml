@@ -84,9 +84,10 @@ known_first_party = ["core", "strategies", "features", "brokers"]
 [tool.ruff]
 target-version = "py311"
 line-length = 100
+
+[tool.ruff.lint]
 extend-select = ["E","F","I","B","UP","SIM"]
 ignore = ["E203","E266","E501"]
-fix = true
 exclude = [
     "attic/",
     "docs/",
@@ -97,6 +98,9 @@ exclude = [
     "*.yaml",
     "*.yml"
 ]
+
+[tool.ruff.format]
+line-length = 100
 
 [tool.ruff.per-file-ignores]
 "__init__.py" = ["F401"]
