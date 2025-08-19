@@ -63,29 +63,17 @@ def test_string_price_conversion(strict_validator, mk_ts):
 
         # Check that no NaNs were introduced
         for col in ["Open", "High", "Low", "Close", "Volume"]:
-            assert (
-                not result[col].isna().any()
-            ), f"{col} should have no NaN values after conversion"
+            assert not result[col].isna().any(), f"{col} should have no NaN values after conversion"
 
         # Check specific conversions
-        assert (
-            abs(result["Open"].iloc[0] - 100.01) < 0.001
-        ), "Currency symbol should be stripped"
+        assert abs(result["Open"].iloc[0] - 100.01) < 0.001, "Currency symbol should be stripped"
         assert abs(result["Open"].iloc[1] - 100.02) < 0.001, "Comma should be handled"
-        assert (
-            abs(result["Open"].iloc[2] - 100.03) < 0.001
-        ), "Whitespace should be stripped"
-        assert (
-            abs(result["Open"].iloc[3] - 100.04) < 0.001
-        ), "Scientific notation should work"
-        assert (
-            abs(result["Open"].iloc[4] - 100.05) < 0.001
-        ), "Currency suffix should be stripped"
+        assert abs(result["Open"].iloc[2] - 100.03) < 0.001, "Whitespace should be stripped"
+        assert abs(result["Open"].iloc[3] - 100.04) < 0.001, "Scientific notation should work"
+        assert abs(result["Open"].iloc[4] - 100.05) < 0.001, "Currency suffix should be stripped"
 
         # Check volume conversion
-        assert (
-            result["Volume"].iloc[0] == 1000000
-        ), "Thousands separators should be handled"
+        assert result["Volume"].iloc[0] == 1000000, "Thousands separators should be handled"
     else:
         pytest.skip("coerce_dtypes method not implemented")
 
@@ -116,20 +104,12 @@ def test_mixed_numeric_string_conversion(strict_validator, mk_ts):
         assert not result["Open"].isna().any(), "Should have no NaN values"
 
         # Check that numeric values were preserved
-        assert (
-            abs(result["Open"].iloc[0] - 100.0) < 0.001
-        ), "Numeric values should be preserved"
-        assert (
-            abs(result["Open"].iloc[4] - 500.0) < 0.001
-        ), "Numeric values should be preserved"
+        assert abs(result["Open"].iloc[0] - 100.0) < 0.001, "Numeric values should be preserved"
+        assert abs(result["Open"].iloc[4] - 500.0) < 0.001, "Numeric values should be preserved"
 
         # Check that string values were converted
-        assert (
-            abs(result["Open"].iloc[5] - 600.01) < 0.001
-        ), "String values should be converted"
-        assert (
-            abs(result["Open"].iloc[9] - 1000.05) < 0.001
-        ), "String values should be converted"
+        assert abs(result["Open"].iloc[5] - 600.01) < 0.001, "String values should be converted"
+        assert abs(result["Open"].iloc[9] - 1000.05) < 0.001, "String values should be converted"
     else:
         pytest.skip("coerce_dtypes method not implemented")
 
@@ -146,15 +126,9 @@ def test_invalid_string_handling(strict_validator, mk_ts):
         result = strict_validator.coerce_dtypes(data)
 
         # Check that valid strings were converted
-        assert (
-            abs(result["Open"].iloc[0] - 100.01) < 0.001
-        ), "Valid string should be converted"
-        assert (
-            abs(result["Open"].iloc[2] - 100.03) < 0.001
-        ), "Valid string should be converted"
-        assert (
-            abs(result["Open"].iloc[4] - 100.05) < 0.001
-        ), "Valid string should be converted"
+        assert abs(result["Open"].iloc[0] - 100.01) < 0.001, "Valid string should be converted"
+        assert abs(result["Open"].iloc[2] - 100.03) < 0.001, "Valid string should be converted"
+        assert abs(result["Open"].iloc[4] - 100.05) < 0.001, "Valid string should be converted"
 
         # Check that invalid strings became NaN
         assert pd.isna(result["Open"].iloc[1]), "Invalid string should become NaN"
@@ -199,9 +173,7 @@ def test_thousands_separator_handling(strict_validator, mk_ts):
         assert result["Volume"].iloc[0] == 1000, "1,000 should be 1000"
         assert result["Volume"].iloc[1] == 2500000, "2,500,000 should be 2500000"
         assert result["Volume"].iloc[2] == 3456789, "3,456,789 should be 3456789"
-        assert (
-            result["Volume"].iloc[3] == 1234567890
-        ), "1,234,567,890 should be 1234567890"
+        assert result["Volume"].iloc[3] == 1234567890, "1,234,567,890 should be 1234567890"
         assert result["Volume"].iloc[4] == 999999, "999,999 should be 999999"
     else:
         pytest.skip("coerce_dtypes method not implemented")

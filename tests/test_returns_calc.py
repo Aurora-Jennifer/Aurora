@@ -2,7 +2,7 @@
 Test returns calculation - verify correct returns logic.
 """
 
-from datetime import timezone
+from datetime import UTC
 
 import numpy as np
 import pandas as pd
@@ -64,9 +64,9 @@ def test_returns_no_off_by_one(strict_validator, mk_ts):
         assert abs(returns.iloc[1] - 0.1) < 1e-10, "Second return should be 0.1"
 
         # Third return should be (105-110)/110 = -0.04545...
-        assert (
-            abs(returns.iloc[2] - (-0.045454545454545456)) < 1e-10
-        ), "Third return should be -0.04545..."
+        assert abs(returns.iloc[2] - (-0.045454545454545456)) < 1e-10, (
+            "Third return should be -0.04545..."
+        )
     else:
         pytest.skip("compute_returns method not implemented")
 
@@ -74,7 +74,7 @@ def test_returns_no_off_by_one(strict_validator, mk_ts):
 def test_returns_gaps_with_unchanged_price(strict_validator, mk_ts):
     """Test that gaps with unchanged price produce zero returns."""
     # Create data with gaps and constant price
-    dates = pd.date_range("2023-01-01", periods=10, freq="1min", tz=timezone.utc)
+    dates = pd.date_range("2023-01-01", periods=10, freq="1min", tz=UTC)
     # Create gaps by removing some timestamps
     dates = dates.drop(dates[2:4])  # Remove timestamps 2 and 3
 
@@ -113,9 +113,7 @@ def test_returns_no_nans_for_finite_input(strict_validator, mk_ts):
         returns = strict_validator.compute_returns(data["Close"])
 
         # Check that no NaNs were produced
-        assert (
-            not returns.isna().any()
-        ), "Returns should have no NaN values for finite input"
+        assert not returns.isna().any(), "Returns should have no NaN values for finite input"
 
         # Check that all values are finite
         assert np.isfinite(returns).all(), "All returns should be finite"
@@ -215,8 +213,8 @@ def test_returns_with_zero_price(strict_validator, mk_ts):
         # Third return should be inf or handled appropriately
         # This depends on implementation - could be inf, nan, or handled specially
         third_return = returns.iloc[2]
-        assert (
-            np.isinf(third_return) or np.isnan(third_return) or third_return == 0
-        ), f"Third return should be inf/nan/0, got {third_return}"
+        assert np.isinf(third_return) or np.isnan(third_return) or third_return == 0, (
+            f"Third return should be inf/nan/0, got {third_return}"
+        )
     else:
         pytest.skip("compute_returns method not implemented")

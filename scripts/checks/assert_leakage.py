@@ -62,9 +62,7 @@ def test_leakage():
     # Create shuffled data (shuffle the second half)
     mid_point = len(data) // 2
     shuffled_data = data.copy()
-    shuffled_data.iloc[mid_point:] = (
-        shuffled_data.iloc[mid_point:].sample(frac=1).values
-    )
+    shuffled_data.iloc[mid_point:] = shuffled_data.iloc[mid_point:].sample(frac=1).values
 
     # Save shuffled data
     shuffled_data.to_csv("temp_data_shuffled.csv", index=False)

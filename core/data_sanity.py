@@ -8,9 +8,8 @@ import hashlib
 import logging
 import weakref
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -29,8 +28,8 @@ class DataSanityError(Exception):
 class ValidationResult:
     """Result of data validation with detailed information."""
 
-    repairs: List[str]  # List of repairs performed
-    flags: List[str]  # List of flags raised (e.g., ["lookahead_detected"])
+    repairs: list[str]  # List of repairs performed
+    flags: list[str]  # List of flags raised (e.g., ["lookahead_detected"])
     outliers: int  # Number of outliers detected
     rows_in: int  # Number of input rows
     rows_out: int  # Number of output rows
@@ -48,10 +47,10 @@ class SanityViolation:
 @dataclass
 class SanityCheckResult:
     mode: str
-    violations: List[SanityViolation]
+    violations: list[SanityViolation]
     ok: bool
 
-    def as_dict(self) -> Dict:
+    def as_dict(self) -> dict:
         return {
             "mode": self.mode,
             "ok": self.ok,
@@ -108,11 +107,9 @@ class DataSanityGuard:
                 f"DataSanityGuard: DataFrame used before validation in {context}. "
                 f"ID: {self._df_id}, Hash: {self._df_hash}"
             )
-        logger.debug(
-            f"DataSanityGuard: DataFrame {self._df_id} validated for {context}"
-        )
+        logger.debug(f"DataSanityGuard: DataFrame {self._df_id} validated for {context}")
 
-    def get_status(self) -> Dict:
+    def get_status(self) -> dict:
         """Get guard status information."""
         return {
             "df_id": self._df_id,
@@ -135,7 +132,7 @@ def attach_guard(df: pd.DataFrame) -> DataSanityGuard:
     return guard
 
 
-def get_guard(df: pd.DataFrame) -> Optional[DataSanityGuard]:
+def get_guard(df: pd.DataFrame) -> DataSanityGuard | None:
     """Get the DataSanityGuard for a DataFrame."""
     return getattr(df, "_sanity_guard", None)
 
@@ -147,9 +144,7 @@ def assert_validated(df: pd.DataFrame, context: str = "unknown"):
         guard.assert_validated(context)
     else:
         # If no guard, create one and mark as validated (backward compatibility)
-        logger.warning(
-            f"DataSanityGuard: No guard found for DataFrame in {context}, creating one"
-        )
+        logger.warning(f"DataSanityGuard: No guard found for DataFrame in {context}, creating one")
         attach_guard(df)
 
 
@@ -165,9 +160,7 @@ class DataSanityValidator:
     - Outlier detection and repair
     """
 
-    def __init__(
-        self, config_path: str = "config/data_sanity.yaml", profile: str = "default"
-    ):
+    def __init__(self, config_path: str = "config/data_sanity.yaml", profile: str = "default"):
         """
         Initialize DataSanityValidator.
 
@@ -186,7 +179,7 @@ class DataSanityValidator:
             f"Initialized DataSanityValidator with profile: {profile}, mode: {self.profile_config['mode']}"
         )
 
-    def _load_config(self, config_path: str) -> Dict:
+    def _load_config(self, config_path: str) -> dict:
         """Load configuration from YAML file."""
         try:
             with open(config_path) as f:
@@ -200,7 +193,7 @@ class DataSanityValidator:
             logger.error(f"Error loading config {config_path}: {e}")
             return self._get_default_config()
 
-    def _get_profile_config(self, profile: str) -> Dict:
+    def _get_profile_config(self, profile: str) -> dict:
         """Get profile-specific configuration."""
         profiles = self.config.get("profiles", {})
         if profile not in profiles:
@@ -212,6 +205,7 @@ class DataSanityValidator:
     @staticmethod
     def in_ci() -> bool:
         import os
+
         return str(os.getenv("CI", "")).lower() in {"1", "true", "yes", "on"}
 
     @staticmethod
@@ -222,12 +216,15 @@ class DataSanityValidator:
 
     def validate_dataframe_fast(self, df: pd.DataFrame, profile: str) -> SanityCheckResult:
         import numpy as np
-        vio: List[SanityViolation] = []
+
+        vio: list[SanityViolation] = []
         cfg_raw = self._get_profile_config(profile)
         mode = cfg_raw.get("mode", "warn")
-        enforced = (mode == "enforce")
+        enforced = mode == "enforce"
         if df is None or len(df) == 0:
-            return SanityCheckResult(mode=mode, violations=[SanityViolation("EMPTY_SERIES","no rows")], ok=False)
+            return SanityCheckResult(
+                mode=mode, violations=[SanityViolation("EMPTY_SERIES", "no rows")], ok=False
+            )
         cfg = cfg_raw
         # timezone
         tz = cfg.get("tz")
@@ -236,31 +233,39 @@ class DataSanityValidator:
             try:
                 new_idx = self._normalize_tz(idx, tz)
                 if not new_idx.equals(idx):
-                    df = df.copy(); df.index = new_idx; idx = new_idx
+                    df = df.copy()
+                    df.index = new_idx
+                    idx = new_idx
             except Exception:
                 pass
         # monotonic & duplicates
         require_monotonic = cfg.get("require_monotonic_dates", False) or enforced
         if require_monotonic and idx is not None and not idx.is_monotonic_increasing:
-            vio.append(SanityViolation("NON_MONO_INDEX","index not non-decreasing"))
+            vio.append(SanityViolation("NON_MONO_INDEX", "index not non-decreasing"))
         forbid_duplicates = cfg.get("forbid_duplicates", False) or enforced
         if forbid_duplicates and idx is not None and idx.has_duplicates:
             n_dupes = int(idx.duplicated().sum())
             vio.append(SanityViolation("DUP_TS", f"{n_dupes} duplicate stamps"))
         # numeric inf/nan
         nums = df.select_dtypes(include=[np.number])
-        arr = np.asarray(nums.to_numpy(dtype="float64"), dtype="float64") if nums.shape[1] else np.empty((len(df),0))
+        arr = (
+            np.asarray(nums.to_numpy(dtype="float64"), dtype="float64")
+            if nums.shape[1]
+            else np.empty((len(df), 0))
+        )
         forbid_inf = cfg.get("forbid_infinite", False) or enforced
         if forbid_inf and arr.size and np.isinf(arr).any():
-            vio.append(SanityViolation("INF_VALUES","infinite values present"))
+            vio.append(SanityViolation("INF_VALUES", "infinite values present"))
         max_nan = cfg.get("max_nan_pct", (0.0 if enforced else None))
         if max_nan is not None and arr.size:
             nan_pct = float(np.isnan(arr).mean())
             if nan_pct > max_nan:
-                vio.append(SanityViolation("NAN_VALUES", f"NaN fraction {nan_pct:.4f} > {max_nan:.4f}"))
-        return SanityCheckResult(mode=mode, violations=vio, ok=(len(vio)==0))
+                vio.append(
+                    SanityViolation("NAN_VALUES", f"NaN fraction {nan_pct:.4f} > {max_nan:.4f}")
+                )
+        return SanityCheckResult(mode=mode, violations=vio, ok=(len(vio) == 0))
 
-    def _get_default_config(self) -> Dict:
+    def _get_default_config(self) -> dict:
         """Get default configuration."""
         return {
             "profiles": {
@@ -330,7 +335,7 @@ class DataSanityValidator:
 
     def validate_and_repair(
         self, data: pd.DataFrame, symbol: str = "UNKNOWN"
-    ) -> Tuple[pd.DataFrame, ValidationResult]:
+    ) -> tuple[pd.DataFrame, ValidationResult]:
         """
         Validate and repair market data with strict invariants.
 
@@ -359,14 +364,10 @@ class DataSanityValidator:
                 )
                 return data, result
             else:
-                raise DataSanityError(
-                    f"{symbol}: Empty data not allowed in strict mode"
-                )
+                raise DataSanityError(f"{symbol}: Empty data not allowed in strict mode")
 
         original_shape = data.shape
-        logger.info(
-            f"Validating {symbol}: {original_shape[0]} rows, {original_shape[1]} columns"
-        )
+        logger.info(f"Validating {symbol}: {original_shape[0]} rows, {original_shape[1]} columns")
 
         # Initialize validation result
         repairs = []
@@ -393,9 +394,7 @@ class DataSanityValidator:
             attach_guard(clean_data)
 
         # 1. Validate and repair time series (strict invariants)
-        clean_data, time_repairs, time_flags = self._validate_time_series_strict(
-            clean_data, symbol
-        )
+        clean_data, time_repairs, time_flags = self._validate_time_series_strict(clean_data, symbol)
         repairs.extend(time_repairs)
         flags.extend(time_flags)
 
@@ -452,9 +451,7 @@ class DataSanityValidator:
 
         # In strict mode: fail if any repairs occurred
         if self.profile_config.get("fail_if_any_repair", False) and repairs:
-            raise DataSanityError(
-                f"{symbol}: Repairs occurred in strict mode: {repairs}"
-            )
+            raise DataSanityError(f"{symbol}: Repairs occurred in strict mode: {repairs}")
 
         # Also fail if repairs are not allowed but repairs were attempted
         if not self.profile_config.get("allow_repairs", True) and repairs:
@@ -491,7 +488,7 @@ class DataSanityValidator:
 
     def _validate_time_series_strict(
         self, data: pd.DataFrame, symbol: str
-    ) -> Tuple[pd.DataFrame, List[str], List[str]]:
+    ) -> tuple[pd.DataFrame, list[str], list[str]]:
         """Validate time series with strict profile rules."""
         repairs = []
         flags = []
@@ -520,28 +517,24 @@ class DataSanityValidator:
         # Check for timezone consistency
         if data.index.tz is None:
             if self.profile_config.get("allow_repairs", True):
-                data.index = data.index.tz_localize(timezone.utc)
+                data.index = data.index.tz_localize(UTC)
                 repairs.append("localized_to_utc")
             else:
-                raise DataSanityError(
-                    f"{symbol}: Naive timezone not allowed in strict mode"
-                )
-        elif data.index.tz != timezone.utc:
+                raise DataSanityError(f"{symbol}: Naive timezone not allowed in strict mode")
+        elif data.index.tz != UTC:
             if self.profile_config.get("allow_repairs", True):
                 try:
-                    data.index = data.index.tz_convert(timezone.utc)
+                    data.index = data.index.tz_convert(UTC)
                     repairs.append("converted_to_utc")
                 except Exception as e:
                     # Handle mixed timezone data by localizing to UTC
                     logger.warning(
                         f"Timezone conversion failed for {symbol}: {e}, localizing to UTC"
                     )
-                    data.index = data.index.tz_localize(timezone.utc)
+                    data.index = data.index.tz_localize(UTC)
                     repairs.append("localized_mixed_timezone_to_utc")
             else:
-                raise DataSanityError(
-                    f"{symbol}: Non-UTC timezone not allowed in strict mode"
-                )
+                raise DataSanityError(f"{symbol}: Non-UTC timezone not allowed in strict mode")
 
         return data, repairs, flags
 
@@ -554,9 +547,7 @@ class DataSanityValidator:
             if "Date" in data.columns:
                 data = data.set_index("Date")
             else:
-                self._handle_validation_failure(
-                    f"{symbol}: No valid datetime index found"
-                )
+                self._handle_validation_failure(f"{symbol}: No valid datetime index found")
                 return data
 
         # Check for monotonic timestamps
@@ -580,7 +571,7 @@ class DataSanityValidator:
                 # Assume UTC if no timezone
                 data.index = data.index.tz_localize("UTC")
                 self._log_repair(f"{symbol}: Localized timestamps to UTC")
-            elif data.index.tz != timezone.utc:
+            elif data.index.tz != UTC:
                 # Convert to UTC
                 data.index = data.index.tz_convert("UTC")
                 self._log_repair(f"{symbol}: Converted timestamps to UTC")
@@ -600,7 +591,7 @@ class DataSanityValidator:
 
     def _validate_price_data_strict(
         self, data: pd.DataFrame, symbol: str
-    ) -> Tuple[pd.DataFrame, List[str], List[str]]:
+    ) -> tuple[pd.DataFrame, list[str], list[str]]:
         """Validate price data with strict profile rules."""
         repairs = []
         flags = []
@@ -691,14 +682,10 @@ class DataSanityValidator:
             if non_finite.any():
                 count = non_finite.sum()
                 if self.config["repair_mode"] == "fail":
-                    self._handle_validation_failure(
-                        f"{symbol}: {count} non-finite values in {col}"
-                    )
+                    self._handle_validation_failure(f"{symbol}: {count} non-finite values in {col}")
                 elif self.config["repair_mode"] == "drop":
                     data = data[~non_finite]
-                    self._log_repair(
-                        f"{symbol}: Dropped {count} non-finite values from {col}"
-                    )
+                    self._log_repair(f"{symbol}: Dropped {count} non-finite values from {col}")
                 else:
                     # Forward fill non-finite values
                     # Handle edge cases where NaN might be at the beginning or end
@@ -714,9 +701,7 @@ class DataSanityValidator:
                             f"{symbol}: Used median ({median_val:.2f}) to fill remaining NaN values in {col}"
                         )
                     data[col] = filled_series
-                    self._log_repair(
-                        f"{symbol}: Forward-filled {count} non-finite values in {col}"
-                    )
+                    self._log_repair(f"{symbol}: Forward-filled {count} non-finite values in {col}")
 
             # Check price bounds
             too_high = series > price_config["max_price"]
@@ -779,7 +764,7 @@ class DataSanityValidator:
 
     def _validate_ohlc_consistency_strict(
         self, data: pd.DataFrame, symbol: str
-    ) -> Tuple[pd.DataFrame, List[str], List[str]]:
+    ) -> tuple[pd.DataFrame, list[str], list[str]]:
         """Validate OHLC consistency with strict profile rules."""
         repairs = []
         flags = []
@@ -803,9 +788,7 @@ class DataSanityValidator:
 
         return data, repairs, flags
 
-    def _validate_ohlc_consistency(
-        self, data: pd.DataFrame, symbol: str
-    ) -> pd.DataFrame:
+    def _validate_ohlc_consistency(self, data: pd.DataFrame, symbol: str) -> pd.DataFrame:
         """Validate and repair OHLC consistency."""
         ohlc_config = self.config["ohlc_validation"]
 
@@ -864,7 +847,7 @@ class DataSanityValidator:
 
     def _validate_volume_data_strict(
         self, data: pd.DataFrame, symbol: str
-    ) -> Tuple[pd.DataFrame, List[str], List[str]]:
+    ) -> tuple[pd.DataFrame, list[str], list[str]]:
         """Validate volume data with strict profile rules."""
         repairs = []
         flags = []
@@ -894,9 +877,7 @@ class DataSanityValidator:
                 data.loc[excessive_volume, volume_col] = max_volume
                 repairs.append("capped_excessive_volume")
             else:
-                raise DataSanityError(
-                    f"{symbol}: Excessive volume values > {max_volume}"
-                )
+                raise DataSanityError(f"{symbol}: Excessive volume values > {max_volume}")
 
         # Check for zero volume
         if not self.config["ohlc_validation"]["allow_zero_volume"]:
@@ -927,14 +908,10 @@ class DataSanityValidator:
         if negative_volume.any():
             count = negative_volume.sum()
             if self.config["repair_mode"] == "fail":
-                self._handle_validation_failure(
-                    f"{symbol}: {count} negative volume values"
-                )
+                self._handle_validation_failure(f"{symbol}: {count} negative volume values")
             else:
                 data[volume_col] = volume.abs()
-                self._log_repair(
-                    f"{symbol}: Made {count} negative volume values positive"
-                )
+                self._log_repair(f"{symbol}: Made {count} negative volume values positive")
 
         # Check for excessive volume
         max_volume = self.config["price_limits"]["max_volume"]
@@ -958,24 +935,20 @@ class DataSanityValidator:
             if zero_volume.any():
                 count = zero_volume.sum()
                 if self.config["repair_mode"] == "fail":
-                    self._handle_validation_failure(
-                        f"{symbol}: {count} zero volume values"
-                    )
+                    self._handle_validation_failure(f"{symbol}: {count} zero volume values")
                 else:
                     # Replace with median volume
                     median_volume = volume[volume > 0].median()
                     if pd.isna(median_volume):
                         median_volume = 1000000  # Default
                     data.loc[zero_volume, volume_col] = median_volume
-                    self._log_repair(
-                        f"{symbol}: Replaced {count} zero volume values with median"
-                    )
+                    self._log_repair(f"{symbol}: Replaced {count} zero volume values with median")
 
         return data
 
     def _detect_and_repair_outliers_strict(
         self, data: pd.DataFrame, symbol: str
-    ) -> Tuple[pd.DataFrame, List[str], int]:
+    ) -> tuple[pd.DataFrame, list[str], int]:
         """Detect and repair outliers with strict profile rules."""
         repairs = []
         outlier_count = 0
@@ -1021,15 +994,11 @@ class DataSanityValidator:
                     data[col] = series.clip(lower=lower_bound, upper=upper_bound)
                     repairs.append(f"winsorized_outliers_in_{col}")
                 else:
-                    raise DataSanityError(
-                        f"{symbol}: {outliers.sum()} outliers detected in {col}"
-                    )
+                    raise DataSanityError(f"{symbol}: {outliers.sum()} outliers detected in {col}")
 
         return data, repairs, outlier_count
 
-    def _detect_and_repair_outliers(
-        self, data: pd.DataFrame, symbol: str
-    ) -> pd.DataFrame:
+    def _detect_and_repair_outliers(self, data: pd.DataFrame, symbol: str) -> pd.DataFrame:
         """Detect and repair outliers using robust statistics."""
         outlier_config = self.config["outlier_detection"]
 
@@ -1071,9 +1040,7 @@ class DataSanityValidator:
                     )
                 elif self.config["repair_mode"] == "drop":
                     data = data.loc[~outliers]
-                    self._log_repair(
-                        f"{symbol}: Dropped {outlier_count} outliers from {col}"
-                    )
+                    self._log_repair(f"{symbol}: Dropped {outlier_count} outliers from {col}")
                 elif self.config["repair_mode"] == "winsorize":
                     # Winsorize outliers
                     q_low = self.config["winsorize_quantile"]
@@ -1081,16 +1048,14 @@ class DataSanityValidator:
                     lower_bound = series.quantile(q_low)
                     upper_bound = series.quantile(q_high)
                     data[col] = series.clip(lower=lower_bound, upper=upper_bound)
-                    self._log_repair(
-                        f"{symbol}: Winsorized {outlier_count} outliers in {col}"
-                    )
+                    self._log_repair(f"{symbol}: Winsorized {outlier_count} outliers in {col}")
 
         self.outlier_count = outliers_found
         return data
 
     def _calculate_returns_strict(
         self, data: pd.DataFrame, symbol: str
-    ) -> Tuple[pd.DataFrame, List[str], List[str]]:
+    ) -> tuple[pd.DataFrame, list[str], list[str]]:
         """Calculate returns with strict profile rules."""
         repairs = []
         flags = []
@@ -1167,9 +1132,7 @@ class DataSanityValidator:
         if extreme_returns.any():
             count = extreme_returns.sum()
             if self.config["repair_mode"] == "fail":
-                self._handle_validation_failure(
-                    f"{symbol}: {count} extreme returns > {max_return}"
-                )
+                self._handle_validation_failure(f"{symbol}: {count} extreme returns > {max_return}")
             elif self.config["repair_mode"] == "drop":
                 data = data.loc[~extreme_returns]
                 self._log_repair(f"{symbol}: Dropped {count} extreme returns")
@@ -1185,16 +1148,14 @@ class DataSanityValidator:
 
     def _final_validation_checks_strict(
         self, data: pd.DataFrame, symbol: str
-    ) -> Tuple[pd.DataFrame, List[str], List[str]]:
+    ) -> tuple[pd.DataFrame, list[str], list[str]]:
         """Perform final validation checks with strict profile rules."""
         repairs = []
         flags = []
 
         # 1. Ensure minimum data requirements
         if len(data) < 1:
-            raise DataSanityError(
-                f"{symbol}: Insufficient data (need >= 1 row, got {len(data)})"
-            )
+            raise DataSanityError(f"{symbol}: Insufficient data (need >= 1 row, got {len(data)})")
 
         # 2. Verify column schema
         required_cols = ["Open", "High", "Low", "Close", "Volume"]
@@ -1215,9 +1176,7 @@ class DataSanityValidator:
             if col in data.columns:
                 if isinstance(expected_type, tuple):
                     # Multiple allowed types
-                    if not any(
-                        np.issubdtype(data[col].dtype, t) for t in expected_type
-                    ):
+                    if not any(np.issubdtype(data[col].dtype, t) for t in expected_type):
                         raise DataSanityError(
                             f"{symbol}: Column {col} has wrong dtype: {data[col].dtype}"
                         )
@@ -1290,18 +1249,14 @@ class DataSanityValidator:
 
         # 1. Ensure minimum data requirements
         if len(data) < 1:
-            raise DataSanityError(
-                f"{symbol}: Insufficient data (need >= 1 row, got {len(data)})"
-            )
+            raise DataSanityError(f"{symbol}: Insufficient data (need >= 1 row, got {len(data)})")
 
         # 2. Check for lookahead contamination (basic check)
         if "Returns" in data.columns:
             # Returns should not have future information
             future_returns = data["Returns"].shift(-1).notna()
             if future_returns.any():
-                self._log_repair(
-                    f"{symbol}: Potential lookahead contamination detected"
-                )
+                self._log_repair(f"{symbol}: Potential lookahead contamination detected")
 
         # 3. Verify column schema
         required_cols = ["Open", "High", "Low", "Close", "Volume"]
@@ -1322,9 +1277,7 @@ class DataSanityValidator:
             if col in data.columns:
                 if isinstance(expected_type, tuple):
                     # Multiple allowed types
-                    if not any(
-                        np.issubdtype(data[col].dtype, t) for t in expected_type
-                    ):
+                    if not any(np.issubdtype(data[col].dtype, t) for t in expected_type):
                         raise DataSanityError(
                             f"{symbol}: Column {col} has wrong dtype: {data[col].dtype}"
                         )
@@ -1369,7 +1322,7 @@ class DataSanityValidator:
         logger.info(f"{symbol}: Final validation checks passed")
         return data
 
-    def _get_price_columns(self, data: pd.DataFrame) -> List[str]:
+    def _get_price_columns(self, data: pd.DataFrame) -> list[str]:
         """Get standardized price column names."""
         # Handle MultiIndex columns from yfinance
         if isinstance(data.columns, pd.MultiIndex):
@@ -1396,9 +1349,7 @@ class DataSanityValidator:
         }
 
         # Standardize column names
-        data.columns = [
-            column_mapping.get(str(col).lower(), col) for col in data.columns
-        ]
+        data.columns = [column_mapping.get(str(col).lower(), col) for col in data.columns]
 
         # Return price columns
         price_cols = []
@@ -1419,9 +1370,7 @@ class DataSanityValidator:
         column_mapping = {"volume": "Volume", "VOLUME": "Volume", "Volume": "Volume"}
 
         # Standardize column names
-        data.columns = [
-            column_mapping.get(str(col).lower(), col) for col in data.columns
-        ]
+        data.columns = [column_mapping.get(str(col).lower(), col) for col in data.columns]
 
         # Return volume column
         if "Volume" in data.columns:
@@ -1444,9 +1393,7 @@ class DataSanityValidator:
             # If High < Low, set High = Low + small amount
             high_low_violations = data["High"] < data["Low"]
             if high_low_violations.any():
-                data.loc[high_low_violations, "High"] = (
-                    data.loc[high_low_violations, "Low"] + 0.01
-                )
+                data.loc[high_low_violations, "High"] = data.loc[high_low_violations, "Low"] + 0.01
 
         return data
 
@@ -1465,9 +1412,7 @@ class DataSanityValidator:
         if self.config["logging"]["log_repairs"]:
             logger.info(f"Data repair: {message}")
 
-    def _log_validation_summary(
-        self, symbol: str, original_shape: Tuple, final_shape: Tuple
-    ):
+    def _log_validation_summary(self, symbol: str, original_shape: tuple, final_shape: tuple):
         """Log validation summary."""
         summary_msg = (
             f"{symbol} validation complete: "
@@ -1533,9 +1478,7 @@ class DataSanityValidator:
             if col in result.columns and result[col].dtype == "object":
                 try:
                     # Remove thousands separators and whitespace
-                    cleaned_series = (
-                        result[col].astype(str).str.replace(r",", "", regex=False)
-                    )
+                    cleaned_series = result[col].astype(str).str.replace(r",", "", regex=False)
                     cleaned_series = cleaned_series.str.strip()
 
                     # Convert to numeric
@@ -1573,9 +1516,7 @@ class DataSanityWrapper:
     Wrapper that applies data sanity validation to all data sources.
     """
 
-    def __init__(
-        self, config_path: str = "config/data_sanity.yaml", profile: str = "default"
-    ):
+    def __init__(self, config_path: str = "config/data_sanity.yaml", profile: str = "default"):
         """Initialize DataSanityWrapper."""
         self.validator = DataSanityValidator(config_path, profile)
         self.profile = profile
@@ -1651,7 +1592,7 @@ class DataSanityWrapper:
         """
         return self.validate_dataframe(data, symbol=symbol)
 
-    def get_validation_stats(self) -> Dict:
+    def get_validation_stats(self) -> dict:
         """Get validation statistics."""
         return {
             "repair_count": self.validator.repair_count,

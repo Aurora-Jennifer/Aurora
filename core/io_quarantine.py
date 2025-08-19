@@ -1,11 +1,17 @@
 from __future__ import annotations
-from pathlib import Path
+
 import json
-import pandas as pd
 from datetime import datetime
+from pathlib import Path
+
+import pandas as pd
+
 from core.schemas.io_contracts import PriceFrame
 
-def validate_or_quarantine(df: pd.DataFrame, name: str, path: str = "quarantine/") -> tuple[bool, Path | None]:
+
+def validate_or_quarantine(
+    df: pd.DataFrame, name: str, path: str = "quarantine/"
+) -> tuple[bool, Path | None]:
     try:
         PriceFrame.validate_df(df)
         return True, None
@@ -17,5 +23,3 @@ def validate_or_quarantine(df: pd.DataFrame, name: str, path: str = "quarantine/
         df.tail(50).to_csv(str(base) + "_tail.csv")
         (base.with_suffix(".json")).write_text(json.dumps({"error": str(e)}, indent=2))
         return False, base
-
-

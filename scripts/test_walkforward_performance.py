@@ -27,9 +27,7 @@ from scripts.walkforward_framework import (
 )
 
 # Setup logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -79,17 +77,15 @@ def test_performance_configurations():
     results = []
 
     for config in configs:
-        logger.info(f"\n{'='*60}")
+        logger.info(f"\n{'=' * 60}")
         logger.info(f"Testing: {config['name']}")
-        logger.info(f"{'='*60}")
+        logger.info(f"{'=' * 60}")
 
         try:
             # Load data
             import yfinance as yf
 
-            logger.info(
-                f"Loading SPY data: {config['start_date']} to {config['end_date']}"
-            )
+            logger.info(f"Loading SPY data: {config['start_date']} to {config['end_date']}")
 
             start_time = time.time()
             data = yf.download(
@@ -164,9 +160,7 @@ def test_performance_configurations():
 
             # Calculate metrics
             total_trades = sum(len(trades) for _, _, trades in results_fast)
-            avg_sharpe = np.mean(
-                [metrics["sharpe_nw"] for _, metrics, _ in results_fast]
-            )
+            avg_sharpe = np.mean([metrics["sharpe_nw"] for _, metrics, _ in results_fast])
 
             # Store results
             result = {
@@ -192,7 +186,7 @@ def test_performance_configurations():
             logger.info(f"  Walkforward (fast): {fast_time:.2f}s")
             if slow_success:
                 logger.info(f"  Walkforward (slow): {slow_time:.2f}s")
-                logger.info(f"  Speedup: {slow_time/fast_time:.1f}x")
+                logger.info(f"  Speedup: {slow_time / fast_time:.1f}x")
             logger.info(f"  Total trades: {total_trades}")
             logger.info(f"  Avg Sharpe: {avg_sharpe:.3f}")
 
@@ -201,9 +195,9 @@ def test_performance_configurations():
             results.append({"config": config, "success": False, "error": str(e)})
 
     # Print final summary
-    logger.info(f"\n{'='*80}")
+    logger.info(f"\n{'=' * 80}")
     logger.info("PERFORMANCE TEST SUMMARY")
-    logger.info(f"{'='*80}")
+    logger.info(f"{'=' * 80}")
 
     successful_results = [r for r in results if r["success"]]
 
@@ -224,9 +218,9 @@ def test_performance_configurations():
             logger.info(f"  Sharpe: {result['avg_sharpe']:.3f}")
 
         # Performance recommendations
-        logger.info(f"\n{'='*60}")
+        logger.info(f"\n{'=' * 60}")
         logger.info("PERFORMANCE RECOMMENDATIONS")
-        logger.info(f"{'='*60}")
+        logger.info(f"{'=' * 60}")
 
         avg_speedup = np.mean(
             [r["speedup"] for r in successful_results if r["speedup"] != float("inf")]
@@ -249,9 +243,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Test walkforward performance with different configurations"
     )
-    parser.add_argument(
-        "--quick", action="store_true", help="Run only short and medium tests"
-    )
+    parser.add_argument("--quick", action="store_true", help="Run only short and medium tests")
 
     args = parser.parse_args()
 
@@ -261,6 +253,4 @@ if __name__ == "__main__":
     results = test_performance_configurations()
 
     logger.info("\n✅ Performance test completed!")
-    logger.info(
-        f"Results: {len([r for r in results if r['success']])}/{len(results)} successful"
-    )
+    logger.info(f"Results: {len([r for r in results if r['success']])}/{len(results)} successful")

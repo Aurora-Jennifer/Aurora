@@ -5,7 +5,7 @@ All strategies should inherit from this class.
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Any, Dict
+from typing import Any
 
 import pandas as pd
 
@@ -46,7 +46,7 @@ class BaseStrategy(ABC):
         """Return default parameters for this strategy."""
 
     @abstractmethod
-    def get_param_ranges(self) -> Dict[str, Any]:
+    def get_param_ranges(self) -> dict[str, Any]:
         """Return parameter ranges for optimization."""
 
     def backtest(self, df: pd.DataFrame, fee_bps: float = 5.0) -> tuple[pd.Series, int]:

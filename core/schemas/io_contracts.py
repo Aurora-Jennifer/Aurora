@@ -1,7 +1,9 @@
 from __future__ import annotations
-from pydantic import BaseModel
-import pandas as pd
+
 import numpy as np
+import pandas as pd
+from pydantic import BaseModel
+
 
 class PriceFrame(BaseModel):
     @staticmethod
@@ -16,9 +18,7 @@ class PriceFrame(BaseModel):
         for c in required:
             if c not in df.columns:
                 raise ValueError(f"Missing required column: {c}")
-        numeric_cols = [c for c in ["Open","High","Low","Close","Volume"] if c in df.columns]
+        numeric_cols = [c for c in ["Open", "High", "Low", "Close", "Volume"] if c in df.columns]
         for c in numeric_cols:
             if not np.isfinite(df[c]).all():
                 raise ValueError(f"Non-finite values in {c}")
-
-

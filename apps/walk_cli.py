@@ -51,9 +51,7 @@ def main():
 
     n = df.height
     folds = list(
-        gen_walkforward(
-            n, args.train, args.test, args.stride, warmup=20, anchored=args.anchored
-        )
+        gen_walkforward(n, args.train, args.test, args.stride, warmup=20, anchored=args.anchored)
     )
     p = Pipeline(X, y)
 
@@ -87,9 +85,7 @@ def main():
     weighted_metrics = calculate_weighted_metrics(out, pnls)
 
     # Calculate contiguous trusted span
-    has_sufficient_span, best_span = contiguous_trusted_span(
-        out, fold_dates, args.min_live_months
-    )
+    has_sufficient_span, best_span = contiguous_trusted_span(out, fold_dates, args.min_live_months)
 
     # Stitch equity curve
     stitched_equity = stitch_equity(pnls)
@@ -99,7 +95,7 @@ def main():
 
     # Add weights to metrics
     weights = [fold_weight(m) for m in out]
-    for m, w in zip(out, weights):
+    for m, w in zip(out, weights, strict=False):
         m["weight"] = float(w)
 
     # Add weighted metrics to output

@@ -10,7 +10,7 @@ and improve prediction reliability.
 import logging
 import warnings
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -44,13 +44,13 @@ warnings.filterwarnings("ignore", category=UserWarning)
 def fit_predict(
     train_df: pd.DataFrame,
     test_df: pd.DataFrame,
-    feature_cols: List[str],
+    feature_cols: list[str],
     target_col: str,
     model_type: str = "xgb",
     calibrate: str = "isotonic",
     task_type: str = "regression",
     **model_params: Any,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Train a machine learning model and generate predictions.
 
@@ -121,7 +121,7 @@ def fit_predict(
 
 def rolling_walkforward(
     df: pd.DataFrame,
-    feature_cols: List[str],
+    feature_cols: list[str],
     target_col: str,
     fold_length: int,
     step: int,
@@ -178,9 +178,7 @@ def rolling_walkforward(
     fold_id = 0
 
     # Generate fold boundaries
-    fold_boundaries = _generate_fold_boundaries(
-        all_timestamps, fold_length, step, retrain_every
-    )
+    fold_boundaries = _generate_fold_boundaries(all_timestamps, fold_length, step, retrain_every)
 
     logger.info(f"Starting walkforward validation with {len(fold_boundaries)} folds")
 
@@ -219,9 +217,7 @@ def rolling_walkforward(
             # Store results
             test_df["fold_id"] = fold_id
             test_df["y_pred"] = result["y_pred"]
-            test_df["y_cal"] = (
-                result["y_cal"] if result["y_cal"] is not None else result["y_pred"]
-            )
+            test_df["y_cal"] = result["y_cal"] if result["y_cal"] is not None else result["y_pred"]
 
             # Select output columns
             output_cols = [ts_col, asset_col, "fold_id", target_col, "y_pred", "y_cal"]
@@ -242,13 +238,9 @@ def rolling_walkforward(
 
     # Combine all results
     final_results = pd.concat(results, ignore_index=True)
-    final_results = final_results.sort_values([asset_col, ts_col]).reset_index(
-        drop=True
-    )
+    final_results = final_results.sort_values([asset_col, ts_col]).reset_index(drop=True)
 
-    logger.info(
-        f"Walkforward validation completed. Total predictions: {len(final_results)}"
-    )
+    logger.info(f"Walkforward validation completed. Total predictions: {len(final_results)}")
 
     return final_results
 
@@ -309,9 +301,7 @@ def _train_model(
     return model
 
 
-def _generate_predictions(
-    model: Any, X_test: pd.DataFrame, task_type: str
-) -> np.ndarray:
+def _generate_predictions(model: Any, X_test: pd.DataFrame, task_type: str) -> np.ndarray:
     """
     Generate predictions from trained model.
 
@@ -342,7 +332,7 @@ def _calibrate_predictions(
     X_test: pd.DataFrame,
     y_pred: np.ndarray,
     calibrate: str,
-) -> Tuple[np.ndarray, Any]:
+) -> tuple[np.ndarray, Any]:
     """
     Calibrate model predictions.
 
@@ -379,11 +369,11 @@ def _calibrate_predictions(
 
 
 def _compute_metrics(
-    y_true: Optional[pd.Series],
+    y_true: pd.Series | None,
     y_pred: np.ndarray,
-    y_cal: Optional[np.ndarray],
+    y_cal: np.ndarray | None,
     task_type: str,
-) -> Dict[str, float]:
+) -> dict[str, float]:
     """
     Compute performance metrics.
 
@@ -432,7 +422,7 @@ def _compute_metrics(
     return metrics
 
 
-def _get_feature_importance(model: Any, feature_cols: List[str]) -> pd.DataFrame:
+def _get_feature_importance(model: Any, feature_cols: list[str]) -> pd.DataFrame:
     """
     Extract feature importance from model.
 
@@ -465,7 +455,7 @@ def _get_feature_importance(model: Any, feature_cols: List[str]) -> pd.DataFrame
 
 def _generate_fold_boundaries(
     timestamps: np.ndarray, fold_length: int, step: int, retrain_every: str
-) -> List[Tuple[datetime, datetime, datetime]]:
+) -> list[tuple[datetime, datetime, datetime]]:
     """
     Generate fold boundaries for walkforward validation.
 
@@ -506,7 +496,7 @@ def _generate_fold_boundaries(
     return boundaries
 
 
-def validate_walkforward_results(results_df: pd.DataFrame) -> Dict[str, Any]:
+def validate_walkforward_results(results_df: pd.DataFrame) -> dict[str, Any]:
     """
     Validate walkforward validation results.
 

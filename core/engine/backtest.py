@@ -5,19 +5,18 @@ Handles the main backtesting logic and simulation
 
 import json
 import logging
+import os
 from datetime import date, datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Optional
 
 import numpy as np
 import pandas as pd
 import yfinance as yf
 
+from core.data_sanity import DataSanityValidator
 from core.engine.paper import PaperTradingEngine
 from core.portfolio import PortfolioState
 from core.trade_logger import TradeBook
-from core.data_sanity import DataSanityValidator
-import os
 
 # ML imports
 try:
@@ -66,9 +65,7 @@ class BacktestEngine:
         self.MIN_HISTORY = 252  # Minimum history for regime detection
 
         # ML system
-        self.ml_enabled = ML_AVAILABLE and self.trading_system.config.get(
-            "ml_enabled", False
-        )
+        self.ml_enabled = ML_AVAILABLE and self.trading_system.config.get("ml_enabled", False)
         print(
             f"🔍 ML Debug: ML_AVAILABLE={ML_AVAILABLE}, ml_enabled_config={self.trading_system.config.get('ml_enabled', False)}"
         )
@@ -81,9 +78,7 @@ class BacktestEngine:
 
                 with open("config/ml_config.yaml") as f:
                     ml_config = yaml.safe_load(f)
-                self.profit_learner = ProfitLearner(
-                    ml_config.get("ml_profit_learner", {})
-                )
+                self.profit_learner = ProfitLearner(ml_config.get("ml_profit_learner", {}))
                 print("✅ ML profit learner initialized")
                 self.logger.info("ML profit learner initialized")
             except Exception as e:
@@ -95,9 +90,7 @@ class BacktestEngine:
             print("❌ ML system disabled")
             self.logger.info("ML system disabled")
 
-    def run_backtest(
-        self, start_date: str, end_date: str, symbols: List[str] = None
-    ) -> Dict:
+    def run_backtest(self, start_date: str, end_date: str, symbols: list[str] = None) -> dict:
         """Run comprehensive backtest over specified period."""
         self.start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
         self.end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
@@ -118,9 +111,7 @@ class BacktestEngine:
 
         # Load data with warmup period
         print("📊 Loading data with warmup period...")
-        warmup_days = (
-            300 if self.fast_mode else 600
-        )  # Ensure enough data for regime detection
+        warmup_days = 300 if self.fast_mode else 600  # Ensure enough data for regime detection
         warmup_start = self.start_date - timedelta(days=warmup_days)  # Ensure lookbacks
         all_data = self._load_historical_data(warmup_start, self.end_date)
 
@@ -142,9 +133,7 @@ class BacktestEngine:
 
         # Separate warmup and backtest periods
         warmup_dates = [d for d in all_trading_dates if d < self.start_date]
-        backtest_dates = [
-            d for d in all_trading_dates if self.start_date <= d <= self.end_date
-        ]
+        backtest_dates = [d for d in all_trading_dates if self.start_date <= d <= self.end_date]
 
         print(f"🔥 Warmup period: {len(warmup_dates)} days")
         print(f"📈 Backtest period: {len(backtest_dates)} days")
@@ -155,9 +144,7 @@ class BacktestEngine:
             for warmup_date in warmup_dates:
                 self._run_daily_trading(warmup_date, all_data, {})
 
-            print(
-                f"🔥 Warmup complete. Portfolio value: ${self.portfolio.value_at({}):,.2f}"
-            )
+            print(f"🔥 Warmup complete. Portfolio value: ${self.portfolio.value_at({}):,.2f}")
 
             # Reset trade book for actual backtest
             if not self.carry_positions_from_warmup:
@@ -169,7 +156,7 @@ class BacktestEngine:
         print("📈 Running backtest period...")
         for i, backtest_date in enumerate(backtest_dates):
             if i % 50 == 0:  # Progress indicator
-                print(f"📈 Progress: {i+1}/{len(backtest_dates)} days")
+                print(f"📈 Progress: {i + 1}/{len(backtest_dates)} days")
 
             # Get current prices
             current_prices = self._get_prices_for_date(backtest_date, all_data)
@@ -198,18 +185,14 @@ class BacktestEngine:
             for symbol, positions in self.ml_trade_positions.items():
                 if positions:
                     # Get final price for the symbol
-                    final_prices = self._get_prices_for_date(
-                        backtest_dates[-1], all_data
-                    )
+                    final_prices = self._get_prices_for_date(backtest_dates[-1], all_data)
                     if symbol in final_prices:
                         final_price = final_prices[symbol]
                         for position in positions:
                             # Calculate P&L for remaining position
                             entry_price = position["entry_price"]
                             exit_price = final_price
-                            profit_loss = (exit_price - entry_price) * position[
-                                "shares"
-                            ]
+                            profit_loss = (exit_price - entry_price) * position["shares"]
                             profit_loss_pct = (exit_price - entry_price) / entry_price
 
                             # Record completed trade
@@ -222,9 +205,7 @@ class BacktestEngine:
                                 "shares": position["shares"],
                                 "profit_loss": profit_loss,
                                 "profit_loss_pct": profit_loss_pct,
-                                "hold_duration": (
-                                    backtest_dates[-1] - position["entry_date"]
-                                ).days,
+                                "hold_duration": (backtest_dates[-1] - position["entry_date"]).days,
                             }
 
                             self.ml_trade_history.append(completed_trade)
@@ -251,9 +232,7 @@ class BacktestEngine:
 
         return results
 
-    def _get_data_up_to_date(
-        self, all_data: pd.DataFrame, current_date: date
-    ) -> pd.DataFrame:
+    def _get_data_up_to_date(self, all_data: pd.DataFrame, current_date: date) -> pd.DataFrame:
         """Get data up to the current date for regime detection."""
         # Filter data up to current date
         data_up_to_date = all_data[all_data.index.date <= current_date].copy()
@@ -270,9 +249,7 @@ class BacktestEngine:
 
         return data_up_to_date
 
-    def _load_historical_data(
-        self, start_date: date, end_date: date
-    ) -> Optional[pd.DataFrame]:
+    def _load_historical_data(self, start_date: date, end_date: date) -> pd.DataFrame | None:
         """Load historical data for all symbols."""
         symbols = self.trading_system.config.get("symbols", ["SPY"])
         all_data = []
@@ -286,9 +263,7 @@ class BacktestEngine:
             try:
                 # Use yfinance for historical data
                 ticker = yf.Ticker(symbol)
-                data = ticker.history(
-                    start=start_date, end=end_date + timedelta(days=1)
-                )
+                data = ticker.history(start=start_date, end=end_date + timedelta(days=1))
 
                 if not data.empty:
                     # Validate and repair data using DataSanity
@@ -297,9 +272,7 @@ class BacktestEngine:
                     # Add symbol column
                     clean_data["Symbol"] = symbol
                     all_data.append(clean_data)
-                    print(
-                        f"✅ Loaded and validated {len(clean_data)} data points for {symbol}"
-                    )
+                    print(f"✅ Loaded and validated {len(clean_data)} data points for {symbol}")
                 else:
                     print(f"⚠️  No data for {symbol}")
 
@@ -314,7 +287,7 @@ class BacktestEngine:
         else:
             return None
 
-    def _get_trading_dates_from_data(self, data: pd.DataFrame) -> List[date]:
+    def _get_trading_dates_from_data(self, data: pd.DataFrame) -> list[date]:
         """Extract trading dates from data."""
         if data.empty:
             return []
@@ -340,7 +313,7 @@ class BacktestEngine:
             self.portfolio.last_prices[symbol] = price
 
     def _run_daily_trading(
-        self, current_date: date, data: pd.DataFrame, current_prices: Dict[str, float]
+        self, current_date: date, data: pd.DataFrame, current_prices: dict[str, float]
     ):
         """Run daily trading cycle."""
         # Get data up to current date for regime detection
@@ -351,9 +324,7 @@ class BacktestEngine:
             return
 
         # Detect regime
-        regime_name, regime_params = self._detect_regime_with_rate_limit(
-            data_up_to_date
-        )
+        regime_name, regime_params = self._detect_regime_with_rate_limit(data_up_to_date)
 
         # Generate signals
         signals = self._generate_signals(data_up_to_date, regime_name, regime_params)
@@ -382,7 +353,7 @@ class BacktestEngine:
             self.logger.error(f"Error detecting regime: {e}")
             return "unknown", None
 
-    def _get_historical_data(self, current_date: date) -> Optional[pd.DataFrame]:
+    def _get_historical_data(self, current_date: date) -> pd.DataFrame | None:
         """Get historical data for current date."""
         try:
             # This is a simplified implementation
@@ -394,9 +365,7 @@ class BacktestEngine:
                 ticker = yf.Ticker(symbol)
                 # Get data for the last 300 days
                 start_date = current_date - timedelta(days=300)
-                data = ticker.history(
-                    start=start_date, end=current_date + timedelta(days=1)
-                )
+                data = ticker.history(start=start_date, end=current_date + timedelta(days=1))
 
                 if not data.empty:
                     data["Symbol"] = symbol
@@ -413,7 +382,7 @@ class BacktestEngine:
 
     def _generate_signals(
         self, data: pd.DataFrame, regime_name: str, regime_params
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         """Generate trading signals."""
         signals = {}
 
@@ -433,9 +402,7 @@ class BacktestEngine:
 
         return signals
 
-    def _get_prices_for_date(
-        self, current_date: date, all_data: pd.DataFrame
-    ) -> Dict[str, float]:
+    def _get_prices_for_date(self, current_date: date, all_data: pd.DataFrame) -> dict[str, float]:
         """Get prices for all symbols on a specific date."""
         prices = {}
 
@@ -458,9 +425,7 @@ class BacktestEngine:
         try:
             # Get historical data up to current date for feature extraction
             # This should be the same data used for regime detection
-            all_data = self._load_historical_data(
-                current_date - timedelta(days=300), current_date
-            )
+            all_data = self._load_historical_data(current_date - timedelta(days=300), current_date)
 
             if all_data is not None and not all_data.empty:
                 # Filter to symbol and current date
@@ -500,13 +465,9 @@ class BacktestEngine:
                 latest_trade = self.ml_trade_history[-1]
 
                 trade_outcome = TradeOutcome(
-                    timestamp=datetime.combine(
-                        latest_trade["exit_date"], datetime.min.time()
-                    ),
+                    timestamp=datetime.combine(latest_trade["exit_date"], datetime.min.time()),
                     symbol=latest_trade["symbol"],
-                    strategy=self.trading_system.config.get(
-                        "strategy", "regime_aware_ensemble"
-                    ),
+                    strategy=self.trading_system.config.get("strategy", "regime_aware_ensemble"),
                     regime=getattr(regime_params, "regime_name", "unknown")
                     if regime_params
                     else "unknown",
@@ -518,8 +479,7 @@ class BacktestEngine:
                     profit_loss_pct=latest_trade["profit_loss_pct"],
                     market_features=market_features,
                     trade_features={
-                        "position_size": latest_trade["shares"]
-                        * latest_trade["entry_price"],
+                        "position_size": latest_trade["shares"] * latest_trade["entry_price"],
                         "entry_price": latest_trade["entry_price"],
                         "exit_price": latest_trade["exit_price"],
                         "hold_duration": latest_trade["hold_duration"],
@@ -528,9 +488,7 @@ class BacktestEngine:
                         ),
                         "market_regime": self._get_regime_confidence(regime_params),
                         "signal_strength": abs(self._get_last_signal_strength(symbol)),
-                        "market_volatility": self._get_market_volatility(
-                            symbol, current_date
-                        ),
+                        "market_volatility": self._get_market_volatility(symbol, current_date),
                     },
                 )
 
@@ -549,9 +507,7 @@ class BacktestEngine:
                 trade_outcome = TradeOutcome(
                     timestamp=datetime.combine(current_date, datetime.min.time()),
                     symbol=symbol,
-                    strategy=self.trading_system.config.get(
-                        "strategy", "regime_aware_ensemble"
-                    ),
+                    strategy=self.trading_system.config.get("strategy", "regime_aware_ensemble"),
                     regime=getattr(regime_params, "regime_name", "unknown")
                     if regime_params
                     else "unknown",
@@ -572,9 +528,7 @@ class BacktestEngine:
                         ),
                         "market_regime": self._get_regime_confidence(regime_params),
                         "signal_strength": abs(self._get_last_signal_strength(symbol)),
-                        "market_volatility": self._get_market_volatility(
-                            symbol, current_date
-                        ),
+                        "market_volatility": self._get_market_volatility(symbol, current_date),
                     },
                 )
 
@@ -637,10 +591,7 @@ class BacktestEngine:
 
             elif action == "SELL":
                 # Closing positions
-                if (
-                    symbol in self.ml_trade_positions
-                    and self.ml_trade_positions[symbol]
-                ):
+                if symbol in self.ml_trade_positions and self.ml_trade_positions[symbol]:
                     # Match sells with buys (FIFO)
                     remaining_shares_to_sell = abs(shares)
                     positions_to_close = []
@@ -649,9 +600,7 @@ class BacktestEngine:
                         if remaining_shares_to_sell <= 0:
                             break
 
-                        shares_to_close = min(
-                            remaining_shares_to_sell, position["shares"]
-                        )
+                        shares_to_close = min(remaining_shares_to_sell, position["shares"])
 
                         # Calculate P&L for this position
                         entry_price = position["entry_price"]
@@ -669,9 +618,7 @@ class BacktestEngine:
                             "shares": shares_to_close,
                             "profit_loss": profit_loss,
                             "profit_loss_pct": profit_loss_pct,
-                            "hold_duration": (
-                                current_date - position["entry_date"]
-                            ).days,
+                            "hold_duration": (current_date - position["entry_date"]).days,
                         }
 
                         self.ml_trade_history.append(completed_trade)
@@ -693,10 +640,10 @@ class BacktestEngine:
     def _execute_trades_with_portfolio(
         self,
         symbol: str,
-        signals: Dict[str, float],
+        signals: dict[str, float],
         current_date: date,
         regime_params,
-        current_prices: Dict[str, float],
+        current_prices: dict[str, float],
     ):
         """Execute trades using portfolio management."""
         if symbol not in signals or symbol not in current_prices:
@@ -709,14 +656,10 @@ class BacktestEngine:
         if self.ml_enabled and self.profit_learner:
             try:
                 # Get current market data for ML prediction
-                current_market_data = self._get_current_market_data(
-                    symbol, current_date
-                )
+                current_market_data = self._get_current_market_data(symbol, current_date)
 
                 # Predict profit potential for current strategy
-                strategy_name = self.trading_system.config.get(
-                    "strategy", "regime_aware_ensemble"
-                )
+                strategy_name = self.trading_system.config.get("strategy", "regime_aware_ensemble")
                 prediction = self.profit_learner.predict_profit_potential(
                     current_market_data, strategy_name, symbol
                 )
@@ -731,9 +674,7 @@ class BacktestEngine:
                     >= self.profit_learner.min_trades_for_learning
                 ):
                     # ML system is trained - use strict thresholds
-                    if (
-                        expected_profit > 0.001 and confidence > 0.3
-                    ):  # 0.1% profit, 30% confidence
+                    if expected_profit > 0.001 and confidence > 0.3:  # 0.1% profit, 30% confidence
                         signal *= confidence  # Scale signal by confidence
                         self.logger.info(
                             f"ML prediction: {expected_profit:.2%} profit, {confidence:.1%} confidence"
@@ -819,15 +760,11 @@ class BacktestEngine:
                 f"🔍 Executing {action} trade: {shares} shares of {symbol} @ ${current_price:.2f}"
             )
             if action == "BUY":
-                self.trade_book.on_buy(
-                    str(current_date), symbol, shares, current_price, 0.0
-                )
+                self.trade_book.on_buy(str(current_date), symbol, shares, current_price, 0.0)
             else:
                 # For sell, we need to calculate remaining quantity
                 current_position = self.portfolio.get_position(symbol)
-                remaining_qty = (
-                    (current_position.qty - shares) if current_position else 0
-                )
+                remaining_qty = (current_position.qty - shares) if current_position else 0
                 self.trade_book.on_sell(
                     str(current_date), symbol, shares, current_price, 0.0, remaining_qty
                 )
@@ -863,7 +800,7 @@ class BacktestEngine:
 
         return backtest_ledger
 
-    def _get_trades_in_backtest_window(self) -> List[Dict]:
+    def _get_trades_in_backtest_window(self) -> list[dict]:
         """Get trades that occurred during the backtest window."""
         trades = self.trade_book.get_trades()
 
@@ -878,7 +815,7 @@ class BacktestEngine:
 
         return backtest_trades
 
-    def _calculate_trade_metrics_from(self, trades: List[Dict]) -> Dict:
+    def _calculate_trade_metrics_from(self, trades: list[dict]) -> dict:
         """Calculate trade-level metrics."""
         if not trades:
             return {}
@@ -892,11 +829,7 @@ class BacktestEngine:
         open_trades = len(trades_df[trades_df["action"] == "OPEN"])
 
         # Volume metrics (using qty * price)
-        if (
-            not trades_df.empty
-            and "qty" in trades_df.columns
-            and "price" in trades_df.columns
-        ):
+        if not trades_df.empty and "qty" in trades_df.columns and "price" in trades_df.columns:
             trades_df["value"] = trades_df["qty"] * trades_df["price"]
             total_volume = trades_df["value"].sum()
             avg_trade_size = trades_df["value"].mean()
@@ -916,9 +849,7 @@ class BacktestEngine:
             "avg_price": avg_price,
         }
 
-    def _calculate_portfolio_metrics(
-        self, backtest_ledger: pd.DataFrame = None
-    ) -> Dict:
+    def _calculate_portfolio_metrics(self, backtest_ledger: pd.DataFrame = None) -> dict:
         """Calculate portfolio-level metrics."""
         # Only return empty if backtest_ledger is provided and empty
         if backtest_ledger is not None and backtest_ledger.empty:
@@ -932,9 +863,7 @@ class BacktestEngine:
             else:
                 prev_value = self.daily_returns[i - 1]["portfolio_value"]
                 current_value = daily["portfolio_value"]
-                daily_return = (
-                    (current_value - prev_value) / prev_value if prev_value > 0 else 0.0
-                )
+                daily_return = (current_value - prev_value) / prev_value if prev_value > 0 else 0.0
 
             daily_returns.append(daily_return)
 
@@ -949,18 +878,12 @@ class BacktestEngine:
 
         total_return = (final_portfolio_value / self.initial_capital) - 1
         annualized_return = (
-            (1 + total_return) ** (252 / len(returns_series)) - 1
-            if len(returns_series) > 0
-            else 0
+            (1 + total_return) ** (252 / len(returns_series)) - 1 if len(returns_series) > 0 else 0
         )
 
         # Risk metrics
-        volatility = (
-            returns_series.std() * np.sqrt(252) if len(returns_series) > 0 else 0
-        )
-        sharpe_ratio = (
-            (returns_series.mean() * 252) / volatility if volatility > 0 else 0
-        )
+        volatility = returns_series.std() * np.sqrt(252) if len(returns_series) > 0 else 0
+        sharpe_ratio = (returns_series.mean() * 252) / volatility if volatility > 0 else 0
 
         # Drawdown
         cumulative_returns = (1 + returns_series).cumprod()
@@ -978,7 +901,7 @@ class BacktestEngine:
             "initial_capital": self.initial_capital,
         }
 
-    def _generate_results(self, trade_metrics: Dict, portfolio_metrics: Dict) -> Dict:
+    def _generate_results(self, trade_metrics: dict, portfolio_metrics: dict) -> dict:
         """Generate comprehensive results dictionary."""
         results = {
             "backtest_info": {
@@ -1000,7 +923,7 @@ class BacktestEngine:
         self._last_results = results
         return results
 
-    def _save_results(self, results: Dict, backtest_ledger: pd.DataFrame = None):
+    def _save_results(self, results: dict, backtest_ledger: pd.DataFrame = None):
         """Save backtest results to files."""
         # Save results JSON
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -1018,36 +941,36 @@ class BacktestEngine:
 
         print(f"💾 Results saved to {results_file}")
 
-    def _format_summary(self, results: Dict) -> str:
+    def _format_summary(self, results: dict) -> str:
         """Format results summary for display."""
         summary = results.get("summary", {})
 
         summary_text = f"""
 📊 BACKTEST SUMMARY
-{'='*50}
-📅 Period: {results['backtest_info']['start_date']} to {results['backtest_info']['end_date']}
-💰 Initial Capital: ${results['backtest_info']['initial_capital']:,.2f}
-💵 Final Value: ${results['portfolio_metrics']['final_value']:,.2f}
+{"=" * 50}
+📅 Period: {results["backtest_info"]["start_date"]} to {results["backtest_info"]["end_date"]}
+💰 Initial Capital: ${results["backtest_info"]["initial_capital"]:,.2f}
+💵 Final Value: ${results["portfolio_metrics"]["final_value"]:,.2f}
 
 📈 PERFORMANCE
-Total Return: {summary['total_return_pct']:.2f}%
-Sharpe Ratio: {summary['sharpe_ratio']:.2f}
-Max Drawdown: {summary['max_drawdown_pct']:.2f}%
+Total Return: {summary["total_return_pct"]:.2f}%
+Sharpe Ratio: {summary["sharpe_ratio"]:.2f}
+Max Drawdown: {summary["max_drawdown_pct"]:.2f}%
 
 📊 TRADING
-Total Trades: {summary['total_trades']}
+Total Trades: {summary["total_trades"]}
 """
 
         return summary_text
 
-    def get_last_summary(self) -> Dict:
+    def get_last_summary(self) -> dict:
         """Get summary of last backtest run."""
         if self._last_results is None:
             return {}
 
         return self._last_results.get("summary", {})
 
-    def print_results(self, results: Dict):
+    def print_results(self, results: dict):
         """Print backtest results."""
         summary_text = self._format_summary(results)
         print(summary_text)
@@ -1073,7 +996,7 @@ Total Trades: {summary['total_trades']}
             else:
                 print(f"{key}: {value}")
 
-    def _generate_final_results(self) -> Dict:
+    def _generate_final_results(self) -> dict:
         """Generate final results from backtest."""
         # Get trades in backtest window
         trades = self._get_trades_in_backtest_window()
@@ -1089,7 +1012,7 @@ Total Trades: {summary['total_trades']}
 
 
 # Lightweight wrapper for tests and parity with smoke gates
-def run_backtest(df: pd.DataFrame, cfg: Dict, *, sanity_profile: str = "walkforward") -> Dict:
+def run_backtest(df: pd.DataFrame, cfg: dict, *, sanity_profile: str = "walkforward") -> dict:
     """
     Deterministic, side-effect-free backtest gate used in unit tests.
     - Enforce DataSanity via validate_dataframe_fast
@@ -1104,7 +1027,11 @@ def run_backtest(df: pd.DataFrame, cfg: Dict, *, sanity_profile: str = "walkforw
             reason = res.summary() if hasattr(res, "summary") else code
             return {"status": "FAIL", "violation_code": code, "reason": reason}
     except Exception as e:
-        return {"status": "FAIL", "violation_code": "UNEXPECTED_ERROR", "reason": f"{e.__class__.__name__}: {e}"}
+        return {
+            "status": "FAIL",
+            "violation_code": "UNEXPECTED_ERROR",
+            "reason": f"{e.__class__.__name__}: {e}",
+        }
 
     # Trading cost / leverage guards (CI-enforced)
     risk_cfg = (cfg or {}).get("risk", {})
@@ -1114,19 +1041,43 @@ def run_backtest(df: pd.DataFrame, cfg: Dict, *, sanity_profile: str = "walkforw
     max_lev = risk_cfg.get("max_leverage")
     if in_ci:
         if slippage_bps is None:
-            return {"status": "FAIL", "violation_code": "MISSING_COSTS", "reason": "slippage_bps not set in risk config"}
+            return {
+                "status": "FAIL",
+                "violation_code": "MISSING_COSTS",
+                "reason": "slippage_bps not set in risk config",
+            }
         if fee_bps is None:
-            return {"status": "FAIL", "violation_code": "MISSING_COSTS", "reason": "fee_bps not set in risk config"}
+            return {
+                "status": "FAIL",
+                "violation_code": "MISSING_COSTS",
+                "reason": "fee_bps not set in risk config",
+            }
         if max_lev is None:
-            return {"status": "FAIL", "violation_code": "LEVERAGE_LIMIT", "reason": "max_leverage not set in risk config"}
+            return {
+                "status": "FAIL",
+                "violation_code": "LEVERAGE_LIMIT",
+                "reason": "max_leverage not set in risk config",
+            }
         if max_lev > 3.0:
-            return {"status": "FAIL", "violation_code": "LEVERAGE_LIMIT", "reason": f"max_leverage too high: {max_lev}"}
+            return {
+                "status": "FAIL",
+                "violation_code": "LEVERAGE_LIMIT",
+                "reason": f"max_leverage too high: {max_lev}",
+            }
         max_gross = risk_cfg.get("max_gross_exposure", 1.0)
         max_pos = risk_cfg.get("max_position_pct", 1.0)
         if max_gross > 2.0:
-            return {"status": "FAIL", "violation_code": "GROSS_EXPOSURE_LIMIT", "reason": f"max_gross_exposure too high: {max_gross}"}
+            return {
+                "status": "FAIL",
+                "violation_code": "GROSS_EXPOSURE_LIMIT",
+                "reason": f"max_gross_exposure too high: {max_gross}",
+            }
         if max_pos > 1.0:
-            return {"status": "FAIL", "violation_code": "POSITION_LIMIT", "reason": f"max_position_pct too high: {max_pos}"}
+            return {
+                "status": "FAIL",
+                "violation_code": "POSITION_LIMIT",
+                "reason": f"max_position_pct too high: {max_pos}",
+            }
 
     # Minimal OK payload with placeholder metrics for tests
     n = len(df) if isinstance(df, pd.DataFrame) else 0

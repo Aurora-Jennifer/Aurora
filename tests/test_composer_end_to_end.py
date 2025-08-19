@@ -2,7 +2,6 @@
 End-to-end test for the refactored composer system.
 """
 
-
 import numpy as np
 import pandas as pd
 import pytest
@@ -64,9 +63,7 @@ def test_composer_end_to_end():
             train_len,
             test_len,
             stride,
-            allow_truncated_final_fold=config["walkforward"][
-                "allow_truncated_final_fold"
-            ],
+            allow_truncated_final_fold=config["walkforward"]["allow_truncated_final_fold"],
         )
     )
 
@@ -105,9 +102,7 @@ def test_composer_end_to_end():
         # Check that metrics are finite or have reason
         for key, value in metrics.items():
             if key != "reason":
-                assert (
-                    np.isfinite(value) or value == 0.0
-                ), f"Non-finite metric {key}: {value}"
+                assert np.isfinite(value) or value == 0.0, f"Non-finite metric {key}: {value}"
 
 
 def test_config_overlay():

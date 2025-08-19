@@ -10,9 +10,9 @@ when protections are removed or weakened.
 import logging
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -29,9 +29,7 @@ logger = logging.getLogger(__name__)
 class DataSanityFalsifier:
     """Apply corruption scenarios to test DataSanity robustness."""
 
-    def __init__(
-        self, config_path: str = "config/data_sanity.yaml", profile: str = "strict"
-    ):
+    def __init__(self, config_path: str = "config/data_sanity.yaml", profile: str = "strict"):
         """Initialize falsifier with configuration."""
         self.config_path = config_path
         self.profile = profile
@@ -40,7 +38,7 @@ class DataSanityFalsifier:
 
     def create_base_data(self, rows: int = 100) -> pd.DataFrame:
         """Create base test data."""
-        dates = pd.date_range("2023-01-01", periods=rows, freq="D", tz=timezone.utc)
+        dates = pd.date_range("2023-01-01", periods=rows, freq="D", tz=UTC)
 
         # Generate realistic price data
         np.random.seed(42)
@@ -64,9 +62,7 @@ class DataSanityFalsifier:
 
         return data
 
-    def apply_corruption(
-        self, data: pd.DataFrame, corruption_type: str, **kwargs
-    ) -> pd.DataFrame:
+    def apply_corruption(self, data: pd.DataFrame, corruption_type: str, **kwargs) -> pd.DataFrame:
         """Apply specific corruption to data."""
         corrupted = data.copy()
 
@@ -133,9 +129,7 @@ class DataSanityFalsifier:
         elif corruption_type == "timezone_mixing":
             # Mix timezone-aware and naive timestamps
             naive_dates = pd.date_range("2023-01-01", periods=len(corrupted), freq="D")
-            aware_dates = pd.date_range(
-                "2023-01-01", periods=len(corrupted), freq="D", tz=timezone.utc
-            )
+            aware_dates = pd.date_range("2023-01-01", periods=len(corrupted), freq="D", tz=UTC)
             mixed_dates = []
             for i in range(len(corrupted)):
                 if i % 2 == 0:
@@ -161,9 +155,7 @@ class DataSanityFalsifier:
         elif corruption_type == "lookahead_contamination":
             # Add lookahead contamination
             if "Returns" not in corrupted.columns:
-                corrupted["Returns"] = np.log(
-                    corrupted["Close"] / corrupted["Close"].shift(1)
-                )
+                corrupted["Returns"] = np.log(corrupted["Close"] / corrupted["Close"].shift(1))
 
             # Add future information
             indices = kwargs.get("indices", [5, 10, 15])
@@ -195,9 +187,7 @@ class DataSanityFalsifier:
 
         return corrupted
 
-    def test_corruption_scenario(
-        self, corruption_type: str, **kwargs
-    ) -> Dict[str, Any]:
+    def test_corruption_scenario(self, corruption_type: str, **kwargs) -> dict[str, Any]:
         """Test a specific corruption scenario."""
         logger.info(f"Testing corruption scenario: {corruption_type}")
 
@@ -225,9 +215,7 @@ class DataSanityFalsifier:
                 "error_type": None,
             }
 
-            logger.error(
-                f"❌ Corruption scenario {corruption_type} PASSED but should have failed!"
-            )
+            logger.error(f"❌ Corruption scenario {corruption_type} PASSED but should have failed!")
 
         except Exception as e:
             validation_time = time.time() - start_time
@@ -248,7 +236,7 @@ class DataSanityFalsifier:
 
         return result
 
-    def run_falsification_battery(self) -> List[Dict[str, Any]]:
+    def run_falsification_battery(self) -> list[dict[str, Any]]:
         """Run the complete falsification battery."""
         logger.info("🚀 Starting DataSanity Falsification Battery")
 
@@ -324,25 +312,17 @@ class DataSanityFalsifier:
                 if result["status"] == "PASSED"
                 else "⚠️"
             )
-            report_lines.append(
-                f"{status_icon} {result['scenario']}: {result['status']}"
-            )
+            report_lines.append(f"{status_icon} {result['scenario']}: {result['status']}")
 
             if result["error"]:
-                report_lines.append(
-                    f"   Error: {result['error_type']}: {result['error'][:100]}..."
-                )
+                report_lines.append(f"   Error: {result['error_type']}: {result['error'][:100]}...")
 
             report_lines.append(f"   Time: {result['validation_time']:.3f}s")
-            report_lines.append(
-                f"   Rows: {result['original_rows']} → {result['clean_rows']}"
-            )
+            report_lines.append(f"   Rows: {result['original_rows']} → {result['clean_rows']}")
             report_lines.append("")
 
         # Performance summary
-        avg_time = np.mean(
-            [r["validation_time"] for r in self.results if r["validation_time"] > 0]
-        )
+        avg_time = np.mean([r["validation_time"] for r in self.results if r["validation_time"] > 0])
         report_lines.append(f"Average validation time: {avg_time:.3f}s")
 
         # Recommendations
@@ -351,23 +331,15 @@ class DataSanityFalsifier:
         report_lines.append("-" * 60)
 
         if passed > 0:
-            report_lines.append(
-                "❌ CRITICAL: Some corruption scenarios passed validation!"
-            )
-            report_lines.append(
-                "   This indicates DataSanity protections are insufficient."
-            )
+            report_lines.append("❌ CRITICAL: Some corruption scenarios passed validation!")
+            report_lines.append("   This indicates DataSanity protections are insufficient.")
             report_lines.append("   Review and strengthen validation rules.")
         else:
-            report_lines.append(
-                "✅ All corruption scenarios correctly failed validation."
-            )
+            report_lines.append("✅ All corruption scenarios correctly failed validation.")
             report_lines.append("   DataSanity protections are working correctly.")
 
         if avg_time > 1.0:
-            report_lines.append(
-                "⚠️  Validation performance may be too slow for production."
-            )
+            report_lines.append("⚠️  Validation performance may be too slow for production.")
             report_lines.append("   Consider optimizing validation logic.")
 
         report_lines.append("\n" + "=" * 60)
@@ -411,9 +383,7 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(description="DataSanity Falsification Script")
-    parser.add_argument(
-        "--config", default="config/data_sanity.yaml", help="Config file path"
-    )
+    parser.add_argument("--config", default="config/data_sanity.yaml", help="Config file path")
     parser.add_argument(
         "--output",
         default="results/falsification_results.json",

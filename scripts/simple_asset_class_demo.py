@@ -10,9 +10,7 @@ import numpy as np
 import pandas as pd
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 # Import composer integration
@@ -91,13 +89,9 @@ def main():
             logger.info(f"    Point {idx}: Signal={signal:.4f}")
             if metadata.get("composer_used", False):
                 logger.info(f"      Regime: {metadata.get('regime_type', 'unknown')}")
-                logger.info(
-                    f"      Strategy Weights: {metadata.get('strategy_weights', {})}"
-                )
+                logger.info(f"      Strategy Weights: {metadata.get('strategy_weights', {})}")
             else:
-                logger.info(
-                    f"      Composer not used: {metadata.get('reason', 'unknown')}"
-                )
+                logger.info(f"      Composer not used: {metadata.get('reason', 'unknown')}")
 
     # Test performance evaluation
     logger.info("\n3. Performance Evaluation by Asset Class:")
@@ -132,13 +126,9 @@ def main():
     for symbol, asset_class, metrics in test_performances:
         logger.info(f"\n  --- {symbol} ({asset_class}) ---")
 
-        evaluation = composer.evaluate_strategy_performance(
-            metrics, symbol, asset_class
-        )
+        evaluation = composer.evaluate_strategy_performance(metrics, symbol, asset_class)
 
-        logger.info(
-            f"    Composite Score: {evaluation.get('composite_score', 0.0):.4f}"
-        )
+        logger.info(f"    Composite Score: {evaluation.get('composite_score', 0.0):.4f}")
         logger.info(f"    Weights Used: {evaluation.get('weights_used', {})}")
 
     # Show configuration overrides
@@ -146,9 +136,7 @@ def main():
 
     for asset_class, asset_config in config.get("assets", {}).items():
         logger.info(f"\n  --- {asset_class} ---")
-        logger.info(
-            f"    Eligible Strategies: {asset_config.get('eligible_strategies', [])}"
-        )
+        logger.info(f"    Eligible Strategies: {asset_config.get('eligible_strategies', [])}")
         logger.info(f"    Composer Params: {asset_config.get('composer_params', {})}")
 
     logger.info("\n=== Demo Complete ===")

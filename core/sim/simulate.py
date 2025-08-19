@@ -57,9 +57,7 @@ def simulate_orders_numba(
             holds[a] = holds[m]
             holds[m] = tmp
         mid = hix // 2
-        median_hold = (
-            holds[mid] if (hix % 2 == 1) else (holds[mid - 1] + holds[mid]) // 2
-        )
+        median_hold = holds[mid] if (hix % 2 == 1) else (holds[mid - 1] + holds[mid]) // 2
 
     return pnl, wins + losses, wins, losses, median_hold
 

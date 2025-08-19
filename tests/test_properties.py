@@ -2,7 +2,7 @@
 Property-based tests for DataSanity using Hypothesis.
 """
 
-from datetime import timezone
+from datetime import UTC
 
 import numpy as np
 import pandas as pd
@@ -24,11 +24,7 @@ except ImportError:
 class TestDataSanityProperties:
     """Property-based tests for DataSanity."""
 
-    @given(
-        prices=st.lists(
-            st.floats(min_value=0.01, max_value=1000000.0), min_size=5, max_size=20
-        )
-    )
+    @given(prices=st.lists(st.floats(min_value=0.01, max_value=1000000.0), min_size=5, max_size=20))
     @settings(max_examples=50, deadline=None)
     def test_finite_prices_produce_finite_returns(self, prices):
         """Property: finite prices should produce finite returns."""
@@ -43,15 +39,9 @@ class TestDataSanityProperties:
         returns = validator.compute_returns(price_series)
 
         # All returns should be finite
-        assert np.isfinite(
-            returns
-        ).all(), "All returns should be finite for finite prices"
+        assert np.isfinite(returns).all(), "All returns should be finite for finite prices"
 
-    @given(
-        prices=st.lists(
-            st.floats(min_value=0.01, max_value=1000000.0), min_size=5, max_size=20
-        )
-    )
+    @given(prices=st.lists(st.floats(min_value=0.01, max_value=1000000.0), min_size=5, max_size=20))
     @settings(max_examples=50, deadline=None)
     def test_returns_no_nan_for_finite_input(self, prices):
         """Property: finite prices should not produce NaN returns."""
@@ -66,15 +56,9 @@ class TestDataSanityProperties:
         returns = validator.compute_returns(price_series)
 
         # No NaNs should be produced
-        assert (
-            not returns.isna().any()
-        ), "No NaN returns should be produced for finite prices"
+        assert not returns.isna().any(), "No NaN returns should be produced for finite prices"
 
-    @given(
-        prices=st.lists(
-            st.floats(min_value=0.01, max_value=1000000.0), min_size=5, max_size=20
-        )
-    )
+    @given(prices=st.lists(st.floats(min_value=0.01, max_value=1000000.0), min_size=5, max_size=20))
     @settings(max_examples=50, deadline=None)
     def test_returns_length_matches_input(self, prices):
         """Property: returns length should match input length."""
@@ -89,15 +73,9 @@ class TestDataSanityProperties:
         returns = validator.compute_returns(price_series)
 
         # Length should match
-        assert len(returns) == len(
-            price_series
-        ), "Returns length should match input length"
+        assert len(returns) == len(price_series), "Returns length should match input length"
 
-    @given(
-        prices=st.lists(
-            st.floats(min_value=0.01, max_value=1000000.0), min_size=5, max_size=20
-        )
-    )
+    @given(prices=st.lists(st.floats(min_value=0.01, max_value=1000000.0), min_size=5, max_size=20))
     @settings(max_examples=50, deadline=None)
     def test_returns_first_element_is_zero(self, prices):
         """Property: first return should always be zero."""
@@ -114,11 +92,7 @@ class TestDataSanityProperties:
         # First return should be zero
         assert abs(returns.iloc[0]) < 1e-10, "First return should be zero"
 
-    @given(
-        prices=st.lists(
-            st.floats(min_value=0.01, max_value=1000000.0), min_size=5, max_size=20
-        )
-    )
+    @given(prices=st.lists(st.floats(min_value=0.01, max_value=1000000.0), min_size=5, max_size=20))
     @settings(max_examples=50, deadline=None)
     def test_returns_equals_pct_change(self, prices):
         """Property: returns should equal pct_change().fillna(0.0)."""
@@ -150,9 +124,7 @@ class TestDataSanityProperties:
         """Property: shuffling timestamps should break monotonicity and cause strict mode to fail."""
         validator = DataSanityValidator(profile="strict")
         # Create clean data
-        dates = pd.date_range(
-            "2023-01-01", periods=data_size, freq="1min", tz=timezone.utc
-        )
+        dates = pd.date_range("2023-01-01", periods=data_size, freq="1min", tz=UTC)
         data = pd.DataFrame(
             {
                 "Open": np.random.uniform(100, 200, data_size),
@@ -169,9 +141,7 @@ class TestDataSanityProperties:
         shuffled_data.index = shuffled_data.index.to_series().sample(frac=1).index
 
         # Should fail in strict mode due to non-monotonic index
-        with pytest.raises(
-            DataSanityError, match="monotonic|non-monotonic|timestamp.*order"
-        ):
+        with pytest.raises(DataSanityError, match="monotonic|non-monotonic|timestamp.*order"):
             validator.validate_and_repair(shuffled_data, "SHUFFLED_TEST")
 
     @given(data_size=st.integers(min_value=5, max_value=20))
@@ -180,9 +150,7 @@ class TestDataSanityProperties:
         """Property: negative prices should always fail in strict mode."""
         validator = DataSanityValidator(profile="strict")
         # Create clean data
-        dates = pd.date_range(
-            "2023-01-01", periods=data_size, freq="1min", tz=timezone.utc
-        )
+        dates = pd.date_range("2023-01-01", periods=data_size, freq="1min", tz=UTC)
         data = pd.DataFrame(
             {
                 "Open": np.random.uniform(100, 200, data_size),
@@ -210,9 +178,7 @@ class TestDataSanityProperties:
         """Property: clean data should always pass strict mode."""
         validator = DataSanityValidator(profile="strict")
         # Create clean data with realistic price movements
-        dates = pd.date_range(
-            "2023-01-01", periods=data_size, freq="1min", tz=timezone.utc
-        )
+        dates = pd.date_range("2023-01-01", periods=data_size, freq="1min", tz=UTC)
 
         # Generate realistic price data without extreme movements
         base_price = 100.0
@@ -241,9 +207,7 @@ class TestDataSanityProperties:
         # Should always pass in strict mode (but may have lookahead flag due to Returns column)
         try:
             clean_data, result = validator.validate_and_repair(data, "CLEAN_DATA_TEST")
-            assert (
-                len(clean_data) == data_size
-            ), "Should preserve all rows for clean data"
+            assert len(clean_data) == data_size, "Should preserve all rows for clean data"
         except DataSanityError as e:
             if "Lookahead contamination" in str(e):
                 # This is expected due to Returns column addition

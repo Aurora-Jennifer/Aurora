@@ -77,9 +77,7 @@ def main():
                 shutil.copy(src, tag_dir / name)
 
         # postmortem returns printed output; we rely on run_log.csv for win rate
-        subprocess.run(
-            ["python", "scripts/postmortem.py", run_id, idea["desc"]], check=True
-        )
+        subprocess.run(["python", "scripts/postmortem.py", run_id, idea["desc"]], check=True)
 
         # inspect run_log.csv for last line's win_rate
         import pandas as pd

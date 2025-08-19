@@ -146,7 +146,7 @@ def test_ml_system():
     # Record trades for learning
     for i, trade in enumerate(synthetic_trades):
         profit_learner.record_trade_outcome(trade)
-        print(f"📈 Recorded trade {i+1}: {trade.profit_loss_pct:.1%} profit")
+        print(f"📈 Recorded trade {i + 1}: {trade.profit_loss_pct:.1%} profit")
 
     # Get learning summary
     summary = profit_learner.get_learning_summary()

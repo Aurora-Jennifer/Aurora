@@ -7,7 +7,7 @@ confidence thresholds, and position decay mechanisms.
 """
 
 import logging
-from typing import Any, Dict, Literal
+from typing import Any, Literal
 
 import numpy as np
 import pandas as pd
@@ -116,9 +116,7 @@ def condition_signal(
     # Sort final result
     result_df = result_df.sort_values([asset_col, ts_col]).reset_index(drop=True)
 
-    logger.info(
-        f"Generated signals for {len(result_df)} rows across {len(signal_dfs)} assets"
-    )
+    logger.info(f"Generated signals for {len(result_df)} rows across {len(signal_dfs)} assets")
 
     return result_df
 
@@ -304,7 +302,7 @@ def compute_signal_metrics(
     ret_col: str = "ret_1d",
     ts_col: str = "ts",
     asset_col: str = "asset",
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Compute signal performance metrics.
 
@@ -323,9 +321,7 @@ def compute_signal_metrics(
         raise ValueError(f"Position column '{pos_col}' not found")
 
     if ret_col not in df.columns:
-        logger.warning(
-            f"Return column '{ret_col}' not found, skipping return-based metrics"
-        )
+        logger.warning(f"Return column '{ret_col}' not found, skipping return-based metrics")
         return _compute_basic_signal_metrics(df, pos_col, ts_col, asset_col)
 
     # Calculate position-weighted returns
@@ -344,7 +340,7 @@ def compute_signal_metrics(
 
 def _compute_basic_signal_metrics(
     df: pd.DataFrame, pos_col: str, ts_col: str, asset_col: str
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Compute basic signal statistics.
 
@@ -379,7 +375,7 @@ def _compute_basic_signal_metrics(
 
 def _compute_return_metrics(
     df: pd.DataFrame, pos_col: str, ret_col: str, ts_col: str, asset_col: str
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Compute return-based signal metrics.
 
@@ -405,8 +401,7 @@ def _compute_return_metrics(
         "total_return": pos_df["weighted_ret"].sum(),
         "avg_return_per_signal": pos_df["weighted_ret"].mean(),
         "return_std": pos_df["weighted_ret"].std(),
-        "sharpe_ratio": pos_df["weighted_ret"].mean()
-        / (pos_df["weighted_ret"].std() + 1e-8),
+        "sharpe_ratio": pos_df["weighted_ret"].mean() / (pos_df["weighted_ret"].std() + 1e-8),
         "win_rate": len(pos_df[pos_df["weighted_ret"] > 0]) / len(pos_df),
         "max_gain": pos_df["weighted_ret"].max(),
         "max_loss": pos_df["weighted_ret"].min(),
@@ -447,7 +442,7 @@ def _compute_return_metrics(
     return metrics
 
 
-def validate_signals(df: pd.DataFrame, pos_col: str = "pos_sized") -> Dict[str, Any]:
+def validate_signals(df: pd.DataFrame, pos_col: str = "pos_sized") -> dict[str, Any]:
     """
     Validate generated signals for data quality and consistency.
 
@@ -474,9 +469,7 @@ def validate_signals(df: pd.DataFrame, pos_col: str = "pos_sized") -> Dict[str, 
     # Check for extreme position values
     extreme_pos = df[df[pos_col].abs() > 2]
     if len(extreme_pos) > 0:
-        validation["warnings"].append(
-            f"Extreme position values: {len(extreme_pos)} rows"
-        )
+        validation["warnings"].append(f"Extreme position values: {len(extreme_pos)} rows")
 
     # Check for position consistency
     pos_changes = df[pos_col].diff().abs()
@@ -493,9 +486,7 @@ def validate_signals(df: pd.DataFrame, pos_col: str = "pos_sized") -> Dict[str, 
     if "ret_1d" in df.columns:
         correlation = df[pos_col].corr(df["ret_1d"].shift(-1))
         if abs(correlation) > 0.8:
-            validation["errors"].append(
-                f"Potential data leakage: correlation = {correlation:.3f}"
-            )
+            validation["errors"].append(f"Potential data leakage: correlation = {correlation:.3f}")
             validation["signal_quality"] = "FAILED"
 
     return validation

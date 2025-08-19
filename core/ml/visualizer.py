@@ -7,7 +7,6 @@ import logging
 import warnings
 from datetime import datetime
 from pathlib import Path
-from typing import Dict
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -55,7 +54,7 @@ class MLVisualizer:
 
     def create_learning_progress_plots(
         self, profit_learner, save_plots: bool = True
-    ) -> Dict[str, str]:
+    ) -> dict[str, str]:
         """
         Create plots showing ML learning progress.
 
@@ -97,7 +96,7 @@ class MLVisualizer:
 
     def create_prediction_analysis_plots(
         self, profit_learner, save_plots: bool = True
-    ) -> Dict[str, str]:
+    ) -> dict[str, str]:
         """
         Create plots analyzing ML prediction accuracy.
 
@@ -143,7 +142,7 @@ class MLVisualizer:
 
     def create_strategy_performance_plots(
         self, profit_learner, save_plots: bool = True
-    ) -> Dict[str, str]:
+    ) -> dict[str, str]:
         """
         Create plots comparing strategy performance.
 
@@ -183,9 +182,7 @@ class MLVisualizer:
         plt.show()
         return plots
 
-    def create_risk_analysis_plots(
-        self, profit_learner, save_plots: bool = True
-    ) -> Dict[str, str]:
+    def create_risk_analysis_plots(self, profit_learner, save_plots: bool = True) -> dict[str, str]:
         """
         Create plots analyzing risk metrics.
 
@@ -231,7 +228,7 @@ class MLVisualizer:
 
     def create_comprehensive_report(
         self, profit_learner, save_plots: bool = True
-    ) -> Dict[str, str]:
+    ) -> dict[str, str]:
         """
         Create a comprehensive report with all visualizations.
 
@@ -247,15 +244,9 @@ class MLVisualizer:
         all_plots = {}
 
         # Generate all plot types
-        all_plots.update(
-            self.create_learning_progress_plots(profit_learner, save_plots)
-        )
-        all_plots.update(
-            self.create_prediction_analysis_plots(profit_learner, save_plots)
-        )
-        all_plots.update(
-            self.create_strategy_performance_plots(profit_learner, save_plots)
-        )
+        all_plots.update(self.create_learning_progress_plots(profit_learner, save_plots))
+        all_plots.update(self.create_prediction_analysis_plots(profit_learner, save_plots))
+        all_plots.update(self.create_strategy_performance_plots(profit_learner, save_plots))
         all_plots.update(self.create_risk_analysis_plots(profit_learner, save_plots))
 
         # Create summary report
@@ -320,9 +311,7 @@ class MLVisualizer:
 
         # Create bar chart
         x_pos = np.arange(len(model_names))
-        ax.bar(
-            x_pos, [1] * len(model_names), alpha=0.7
-        )  # Placeholder for actual metrics
+        ax.bar(x_pos, [1] * len(model_names), alpha=0.7)  # Placeholder for actual metrics
 
         ax.set_title("Model Performance Metrics")
         ax.set_xlabel("Models")
@@ -349,9 +338,7 @@ class MLVisualizer:
         for strategy in strategies:
             perf = profit_learner.get_strategy_performance(strategy)
             if perf:
-                avg_profits.append(
-                    perf["avg_profit_pct"] * 100
-                )  # Convert to percentage
+                avg_profits.append(perf["avg_profit_pct"] * 100)  # Convert to percentage
                 win_rates.append(perf["win_rate"] * 100)  # Convert to percentage
                 trade_counts.append(perf["total_trades"])
             else:
@@ -363,20 +350,14 @@ class MLVisualizer:
         x_pos = np.arange(len(strategies))
         width = 0.35
 
-        bars1 = ax.bar(
-            x_pos - width / 2, avg_profits, width, label="Avg Profit (%)", alpha=0.7
-        )
-        bars2 = ax.bar(
-            x_pos + width / 2, win_rates, width, label="Win Rate (%)", alpha=0.7
-        )
+        bars1 = ax.bar(x_pos - width / 2, avg_profits, width, label="Avg Profit (%)", alpha=0.7)
+        bars2 = ax.bar(x_pos + width / 2, win_rates, width, label="Win Rate (%)", alpha=0.7)
 
         ax.set_title("Strategy Performance Comparison")
         ax.set_xlabel("Strategies")
         ax.set_ylabel("Percentage")
         ax.set_xticks(x_pos)
-        ax.set_xticklabels(
-            [s.replace("_", " ").title() for s in strategies], rotation=45
-        )
+        ax.set_xticklabels([s.replace("_", " ").title() for s in strategies], rotation=45)
         ax.legend()
         ax.grid(True, alpha=0.3)
 
@@ -399,13 +380,13 @@ class MLVisualizer:
         summary_text = f"""
         Learning Summary:
 
-        Total Trades: {summary['total_trades']}
-        Models Trained: {summary['models_trained']}
-        Performance History: {summary['performance_history_length']} trades
-        Min Trades for Learning: {summary['min_trades_for_learning']}
+        Total Trades: {summary["total_trades"]}
+        Models Trained: {summary["models_trained"]}
+        Performance History: {summary["performance_history_length"]} trades
+        Min Trades for Learning: {summary["min_trades_for_learning"]}
 
-        Learning Status: {'✅ Active' if summary['total_trades'] >= summary['min_trades_for_learning'] else '⏳ Collecting Data'}
-        Last Update: {summary['last_update'][:19]}
+        Learning Status: {"✅ Active" if summary["total_trades"] >= summary["min_trades_for_learning"] else "⏳ Collecting Data"}
+        Last Update: {summary["last_update"][:19]}
         """
 
         ax.text(
@@ -581,13 +562,11 @@ class MLVisualizer:
         ax.set_title("Strategy Win Rates")
         ax.set_xlabel("Strategies")
         ax.set_ylabel("Win Rate (%)")
-        ax.set_xticklabels(
-            [s.replace("_", " ").title() for s in strategies], rotation=45
-        )
+        ax.set_xticklabels([s.replace("_", " ").title() for s in strategies], rotation=45)
         ax.grid(True, alpha=0.3)
 
         # Add value labels on bars
-        for bar, rate in zip(bars, win_rates):
+        for bar, rate in zip(bars, win_rates, strict=False):
             height = bar.get_height()
             ax.text(
                 bar.get_x() + bar.get_width() / 2.0,
@@ -617,13 +596,11 @@ class MLVisualizer:
         ax.set_title("Strategy Average Profits")
         ax.set_xlabel("Strategies")
         ax.set_ylabel("Average Profit (%)")
-        ax.set_xticklabels(
-            [s.replace("_", " ").title() for s in strategies], rotation=45
-        )
+        ax.set_xticklabels([s.replace("_", " ").title() for s in strategies], rotation=45)
         ax.grid(True, alpha=0.3)
 
         # Add value labels on bars
-        for bar, profit in zip(bars, avg_profits):
+        for bar, profit in zip(bars, avg_profits, strict=False):
             height = bar.get_height()
             ax.text(
                 bar.get_x() + bar.get_width() / 2.0,
@@ -652,13 +629,11 @@ class MLVisualizer:
         ax.set_title("Strategy Profit Volatility")
         ax.set_xlabel("Strategies")
         ax.set_ylabel("Profit Std Dev (%)")
-        ax.set_xticklabels(
-            [s.replace("_", " ").title() for s in strategies], rotation=45
-        )
+        ax.set_xticklabels([s.replace("_", " ").title() for s in strategies], rotation=45)
         ax.grid(True, alpha=0.3)
 
         # Add value labels on bars
-        for bar, std in zip(bars, profit_stds):
+        for bar, std in zip(bars, profit_stds, strict=False):
             height = bar.get_height()
             ax.text(
                 bar.get_x() + bar.get_width() / 2.0,
@@ -687,13 +662,11 @@ class MLVisualizer:
         ax.set_title("Strategy Trade Counts")
         ax.set_xlabel("Strategies")
         ax.set_ylabel("Number of Trades")
-        ax.set_xticklabels(
-            [s.replace("_", " ").title() for s in strategies], rotation=45
-        )
+        ax.set_xticklabels([s.replace("_", " ").title() for s in strategies], rotation=45)
         ax.grid(True, alpha=0.3)
 
         # Add value labels on bars
-        for bar, count in zip(bars, trade_counts):
+        for bar, count in zip(bars, trade_counts, strict=False):
             height = bar.get_height()
             ax.text(
                 bar.get_x() + bar.get_width() / 2.0,
@@ -717,9 +690,7 @@ class MLVisualizer:
             ax.set_title("Profit Distribution")
             return
 
-        profits = [
-            trade.profit_loss_pct * 100 for trade in profit_learner.performance_history
-        ]
+        profits = [trade.profit_loss_pct * 100 for trade in profit_learner.performance_history]
 
         ax.hist(profits, bins=20, alpha=0.7, edgecolor="black", color="skyblue")
         ax.axvline(
@@ -749,9 +720,7 @@ class MLVisualizer:
             return
 
         # Calculate cumulative returns and drawdown
-        profits = [
-            trade.profit_loss_pct for trade in profit_learner.performance_history
-        ]
+        profits = [trade.profit_loss_pct for trade in profit_learner.performance_history]
         cumulative = np.cumprod(1 + np.array(profits))
 
         # Calculate drawdown
@@ -781,9 +750,7 @@ class MLVisualizer:
             ax.set_title("Volatility Analysis")
             return
 
-        profits = [
-            trade.profit_loss_pct * 100 for trade in profit_learner.performance_history
-        ]
+        profits = [trade.profit_loss_pct * 100 for trade in profit_learner.performance_history]
 
         # Calculate rolling volatility
         window = min(20, len(profits) // 2)
@@ -859,7 +826,7 @@ class MLVisualizer:
             ax.axhline(y=0, color="black", linestyle="-", alpha=0.3)
             ax.axvline(x=0, color="black", linestyle="-", alpha=0.3)
 
-    def _create_summary_report(self, profit_learner, plot_paths: Dict[str, str]):
+    def _create_summary_report(self, profit_learner, plot_paths: dict[str, str]):
         """Create a summary report with all plot paths."""
         report_path = self.output_dir / "ml_analysis_report.md"
 
@@ -885,12 +852,8 @@ class MLVisualizer:
             f.write(
                 "2. **Analyze prediction accuracy** - Compare ML predictions vs actual outcomes\n"
             )
-            f.write(
-                "3. **Tune ML parameters** - Optimize learning rates and thresholds\n"
-            )
-            f.write(
-                "4. **Add more guardrails** - Implement safety checks for ML predictions\n"
-            )
+            f.write("3. **Tune ML parameters** - Optimize learning rates and thresholds\n")
+            f.write("4. **Add more guardrails** - Implement safety checks for ML predictions\n")
             f.write(
                 "5. **Test on different market conditions** - Validate across various market regimes\n"
             )

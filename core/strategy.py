@@ -4,7 +4,7 @@ Simple Strategy Interface for MVB
 
 import logging
 from abc import ABC, abstractmethod
-from typing import Any, Dict
+from typing import Any
 
 import numpy as np
 
@@ -12,12 +12,12 @@ import numpy as np
 class Strategy(ABC):
     """Abstract strategy interface"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         self.config = config
         self.logger = logging.getLogger(__name__)
 
     @abstractmethod
-    def on_bar(self, ctx: Dict[str, Any], bar: Dict[str, Any]) -> Dict[str, float]:
+    def on_bar(self, ctx: dict[str, Any], bar: dict[str, Any]) -> dict[str, float]:
         """
         Process a new bar and return signals.
 
@@ -34,13 +34,13 @@ class Strategy(ABC):
 class SimpleMAStrategy(Strategy):
     """Simple moving average crossover strategy"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         super().__init__(config)
         self.short_window = config.get("short_window", 20)
         self.long_window = config.get("long_window", 50)
         self.price_history = {}
 
-    def on_bar(self, ctx: Dict[str, Any], bar: Dict[str, Any]) -> Dict[str, float]:
+    def on_bar(self, ctx: dict[str, Any], bar: dict[str, Any]) -> dict[str, float]:
         """Generate signals based on MA crossover"""
         signals = {}
 
@@ -55,9 +55,7 @@ class SimpleMAStrategy(Strategy):
                 # Keep only recent history
                 max_history = max(self.short_window, self.long_window) * 2
                 if len(self.price_history[symbol]) > max_history:
-                    self.price_history[symbol] = self.price_history[symbol][
-                        -max_history:
-                    ]
+                    self.price_history[symbol] = self.price_history[symbol][-max_history:]
 
                 # Calculate moving averages
                 if len(self.price_history[symbol]) >= self.long_window:
@@ -80,15 +78,15 @@ class SimpleMAStrategy(Strategy):
 class RandomStrategy(Strategy):
     """Random strategy for testing"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         super().__init__(config)
         self.signal_strength = config.get("signal_strength", 0.3)
 
-    def on_bar(self, ctx: Dict[str, Any], bar: Dict[str, Any]) -> Dict[str, float]:
+    def on_bar(self, ctx: dict[str, Any], bar: dict[str, Any]) -> dict[str, float]:
         """Generate random signals"""
         signals = {}
 
-        for symbol in bar.keys():
+        for symbol in bar:
             # Random signal between -signal_strength and +signal_strength
             signal = np.random.uniform(-self.signal_strength, self.signal_strength)
             signals[symbol] = signal
@@ -99,14 +97,14 @@ class RandomStrategy(Strategy):
 class RegimeAwareStrategy(Strategy):
     """Regime-aware strategy using existing regime detector"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         super().__init__(config)
         from core.regime_detector import RegimeDetector
 
         self.regime_detector = RegimeDetector(lookback_period=252)
         self.price_history = {}
 
-    def on_bar(self, ctx: Dict[str, Any], bar: Dict[str, Any]) -> Dict[str, float]:
+    def on_bar(self, ctx: dict[str, Any], bar: dict[str, Any]) -> dict[str, float]:
         """Generate regime-aware signals"""
         signals = {}
 
@@ -126,7 +124,7 @@ class RegimeAwareStrategy(Strategy):
             regime_name = self.regime_detector.get_current_regime_name()
 
             # Generate signals based on regime
-            for symbol in bar.keys():
+            for symbol in bar:
                 if regime_name == "trend":
                     signals[symbol] = 0.4  # Moderate buy in trend
                 elif regime_name == "mean_reversion":
@@ -139,7 +137,7 @@ class RegimeAwareStrategy(Strategy):
         return signals
 
 
-def create_strategy(strategy_type: str, config: Dict[str, Any]) -> Strategy:
+def create_strategy(strategy_type: str, config: dict[str, Any]) -> Strategy:
     """Factory function to create strategies"""
     if strategy_type == "simple_ma":
         return SimpleMAStrategy(config)

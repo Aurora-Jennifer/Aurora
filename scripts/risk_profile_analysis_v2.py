@@ -45,20 +45,14 @@ def run_backtest_analysis(symbol, start_date, end_date, profile_config):
                 elif "Sharpe Ratio:" in line:
                     metrics["sharpe"] = float(line.split(":")[1].strip())
                 elif "Max Drawdown:" in line:
-                    metrics["max_dd"] = (
-                        float(line.split(":")[1].strip().replace("%", "")) / 100
-                    )
+                    metrics["max_dd"] = float(line.split(":")[1].strip().replace("%", "")) / 100
                 elif "Total Trades:" in line:
                     metrics["total_trades"] = int(line.split(":")[1].strip())
                 elif "Final Value:" in line:
-                    final_value = (
-                        line.split(":")[1].strip().replace("$", "").replace(",", "")
-                    )
+                    final_value = line.split(":")[1].strip().replace("$", "").replace(",", "")
                     metrics["final_value"] = float(final_value)
                 elif "Initial Capital:" in line:
-                    initial_capital = (
-                        line.split(":")[1].strip().replace("$", "").replace(",", "")
-                    )
+                    initial_capital = line.split(":")[1].strip().replace("$", "").replace(",", "")
                     metrics["initial_capital"] = float(initial_capital)
 
             return metrics
@@ -169,9 +163,7 @@ def main():
             metrics = run_backtest_analysis(symbol, start_date, end_date, profile)
 
             if metrics:
-                cagr = calculate_cagr(
-                    metrics.get("total_return", 0), start_date, end_date
-                )
+                cagr = calculate_cagr(metrics.get("total_return", 0), start_date, end_date)
 
                 result = {
                     "profile": profile_name,
@@ -263,9 +255,7 @@ def main():
         os.makedirs("results/risk_analysis", exist_ok=True)
 
         # Save profile shootout results
-        df_results.to_csv(
-            f"results/risk_analysis/profile_shootout_{timestamp}.csv", index=False
-        )
+        df_results.to_csv(f"results/risk_analysis/profile_shootout_{timestamp}.csv", index=False)
 
         print(
             f"\n✅ Analysis complete! Results saved to results/risk_analysis/profile_shootout_{timestamp}.csv"

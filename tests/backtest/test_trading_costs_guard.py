@@ -11,4 +11,3 @@ def test_missing_costs_fails_in_ci(monkeypatch):
     res = bt.run_backtest(df, {"risk": {}}, sanity_profile="walkforward_ci")
     # run_backtest currently returns OK with placeholder metrics; this test will be enabled when guard added
     assert isinstance(res, dict)
-

@@ -7,7 +7,6 @@ All functions return structured dataclasses for consistent output.
 
 import warnings
 from dataclasses import dataclass
-from typing import Optional
 
 import numpy as np
 import pandas as pd
@@ -121,9 +120,7 @@ def sortino_ratio(
     if downside_std == 0:
         return np.inf
 
-    return (excess_returns.mean() * periods_per_year) / (
-        downside_std * np.sqrt(periods_per_year)
-    )
+    return (excess_returns.mean() * periods_per_year) / (downside_std * np.sqrt(periods_per_year))
 
 
 def calmar_ratio(returns: pd.Series, periods_per_year: int = 252) -> float:
@@ -496,7 +493,7 @@ def compute_performance_metrics(
 
 def compute_risk_metrics(
     returns: pd.Series,
-    benchmark_returns: Optional[pd.Series] = None,
+    benchmark_returns: pd.Series | None = None,
     risk_free_rate: float = 0.0,
     periods_per_year: int = 252,
 ) -> RiskMetrics:
@@ -533,9 +530,7 @@ def compute_risk_metrics(
     # Downside deviation
     negative_returns = returns[returns < 0]
     downside_deviation = (
-        negative_returns.std() * np.sqrt(periods_per_year)
-        if len(negative_returns) > 0
-        else 0.0
+        negative_returns.std() * np.sqrt(periods_per_year) if len(negative_returns) > 0 else 0.0
     )
 
     # Benchmark-relative metrics
@@ -543,9 +538,7 @@ def compute_risk_metrics(
         beta_val = beta(returns, benchmark_returns)
         alpha_val = alpha(returns, benchmark_returns, risk_free_rate, periods_per_year)
         info_ratio = information_ratio(returns, benchmark_returns)
-        treynor = treynor_ratio(
-            returns, benchmark_returns, risk_free_rate, periods_per_year
-        )
+        treynor = treynor_ratio(returns, benchmark_returns, risk_free_rate, periods_per_year)
     else:
         beta_val = alpha_val = info_ratio = treynor = np.nan
 
@@ -563,7 +556,7 @@ def compute_risk_metrics(
 
 
 def compute_daily_metrics(
-    daily_returns: pd.Series, daily_positions: Optional[pd.Series] = None
+    daily_returns: pd.Series, daily_positions: pd.Series | None = None
 ) -> DailyMetrics:
     """
     Compute daily performance metrics.

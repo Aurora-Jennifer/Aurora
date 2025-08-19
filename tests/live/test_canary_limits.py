@@ -1,8 +1,8 @@
 from core.execution.canary_limits import (
     CanaryConfig,
-    enforce_per_trade_notional,
-    enforce_daily_notional,
     check_caps,
+    enforce_daily_notional,
+    enforce_per_trade_notional,
 )
 
 
@@ -30,5 +30,3 @@ def test_check_caps_ok_then_block():
     # Block on per-trade: 4% > 2%
     d_block = check_caps("SPY", qty=20.0, px=100.0, day_used=0.0, cfg=cfg)
     assert d_block.action == "HOLD"
-
-

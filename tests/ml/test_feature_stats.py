@@ -1,13 +1,17 @@
 import numpy as np
 import pandas as pd
-from ml.feature_stats import stats, psi
+
+from ml.feature_stats import psi, stats
 
 
 def test_stats_finite_and_missing_bounds():
-    df = pd.DataFrame({
-        "a": [1.0, 2.0, np.nan, 4.0],
-        "b": [0.0, 0.0, 0.0, 0.0],
-    }, index=pd.date_range("2020-01-01", periods=4, tz="UTC"))
+    df = pd.DataFrame(
+        {
+            "a": [1.0, 2.0, np.nan, 4.0],
+            "b": [0.0, 0.0, 0.0, 0.0],
+        },
+        index=pd.date_range("2020-01-01", periods=4, tz="UTC"),
+    )
     s = stats(df)
     assert set(s.keys()) == {"a", "b"}
     assert 0.0 <= s["a"]["missing_pct"] <= 1.0
@@ -22,5 +26,3 @@ def test_psi_returns_nonnegative_and_finite():
     p = psi(df, ref)
     assert "x" in p and p["x"] >= 0.0
     assert np.isfinite(p["x"]) or np.isnan(p["x"]) is False
-
-

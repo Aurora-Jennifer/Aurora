@@ -11,9 +11,7 @@ results_json = json.loads((results_dir / "results.json").read_text())
 trades = pd.read_csv(results_dir / "trades.csv")
 
 final_equity = float(ledger["equity"].iloc[-1])
-initial_capital = float(
-    results_json.get("trading_summary", {}).get("initial_capital", 0.0)
-)
+initial_capital = float(results_json.get("trading_summary", {}).get("initial_capital", 0.0))
 # equity-based pnl
 pnl_equity = final_equity - initial_capital
 

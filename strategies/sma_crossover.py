@@ -3,7 +3,7 @@ Simple Moving Average (SMA) Crossover Strategy
 """
 
 from dataclasses import dataclass
-from typing import Any, Dict
+from typing import Any
 
 import pandas as pd
 
@@ -48,7 +48,7 @@ class SMACrossover(BaseStrategy):
         """Return default SMA parameters."""
         return SMAParams(fast_period=10, slow_period=50)
 
-    def get_param_ranges(self) -> Dict[str, Any]:
+    def get_param_ranges(self) -> dict[str, Any]:
         """Return parameter ranges for optimization."""
         return {"fast_period": range(5, 31, 5), "slow_period": range(40, 201, 20)}
 

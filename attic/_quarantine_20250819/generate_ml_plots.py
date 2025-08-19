@@ -56,9 +56,7 @@ def generate_ml_plots():
 
     try:
         # Generate comprehensive report
-        plot_paths = visualizer.create_comprehensive_report(
-            profit_learner, save_plots=True
-        )
+        plot_paths = visualizer.create_comprehensive_report(profit_learner, save_plots=True)
 
         print(f"\n✅ Generated {len(plot_paths)} plots:")
         for plot_name, plot_path in plot_paths.items():

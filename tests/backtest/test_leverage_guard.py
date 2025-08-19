@@ -14,5 +14,3 @@ def test_leverage_limit_in_ci(monkeypatch):
         sanity_profile="walkforward_ci",
     )
     assert res["status"] == "FAIL" and res["violation_code"] == "LEVERAGE_LIMIT"
-
-

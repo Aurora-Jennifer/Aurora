@@ -3,9 +3,7 @@
 from __future__ import annotations
 
 
-def should_rebalance(
-    current_vol: float, target_vol: float, threshold_pct: float
-) -> bool:
+def should_rebalance(current_vol: float, target_vol: float, threshold_pct: float) -> bool:
     if target_vol <= 0.0:
         return False
     deviation = abs(current_vol - target_vol) / target_vol * 100.0

@@ -5,7 +5,8 @@ Registration and factory system for strategies, regime extractors, and composers
 """
 
 import logging
-from typing import Any, Callable, Dict, Optional, Type
+from collections.abc import Callable
+from typing import Any
 
 # Import safety functions
 from ..utils import _last, _safe_len
@@ -18,15 +19,15 @@ class Registry:
     """Registry for components."""
 
     def __init__(self):
-        self._strategies: Dict[str, Type[Strategy]] = {}
-        self._regime_extractors: Dict[str, Type[RegimeExtractor]] = {}
-        self._composers: Dict[str, Type[Composer]] = {}
-        self._factories: Dict[str, Callable] = {}
+        self._strategies: dict[str, type[Strategy]] = {}
+        self._regime_extractors: dict[str, type[RegimeExtractor]] = {}
+        self._composers: dict[str, type[Composer]] = {}
+        self._factories: dict[str, Callable] = {}
 
     def register_strategy(self, name: str):
         """Decorator to register a strategy."""
 
-        def decorator(cls: Type[Strategy]):
+        def decorator(cls: type[Strategy]):
             if not issubclass(cls, Strategy):
                 raise ValueError(f"{cls.__name__} must inherit from Strategy")
 
@@ -39,7 +40,7 @@ class Registry:
     def register_regime_extractor(self, name: str):
         """Decorator to register a regime extractor."""
 
-        def decorator(cls: Type[RegimeExtractor]):
+        def decorator(cls: type[RegimeExtractor]):
             if not issubclass(cls, RegimeExtractor):
                 raise ValueError(f"{cls.__name__} must inherit from RegimeExtractor")
 
@@ -52,7 +53,7 @@ class Registry:
     def register_composer(self, name: str):
         """Decorator to register a composer."""
 
-        def decorator(cls: Type[Composer]):
+        def decorator(cls: type[Composer]):
             if not issubclass(cls, Composer):
                 raise ValueError(f"{cls.__name__} must inherit from Composer")
 
@@ -67,7 +68,7 @@ class Registry:
         self._factories[name] = factory_func
         logger.info(f"Registered factory: {name}")
 
-    def build_strategy(self, name: str, **kwargs) -> Optional[Strategy]:
+    def build_strategy(self, name: str, **kwargs) -> Strategy | None:
         """Build a strategy instance."""
         if name in self._strategies:
             cls = self._strategies[name]
@@ -79,7 +80,7 @@ class Registry:
             logger.error(f"Strategy not found: {name}")
             return None
 
-    def build_regime_extractor(self, name: str, **kwargs) -> Optional[RegimeExtractor]:
+    def build_regime_extractor(self, name: str, **kwargs) -> RegimeExtractor | None:
         """Build a regime extractor instance."""
         if name in self._regime_extractors:
             cls = self._regime_extractors[name]
@@ -91,7 +92,7 @@ class Registry:
             logger.error(f"Regime extractor not found: {name}")
             return None
 
-    def build_composer(self, name: str, **kwargs) -> Optional[Composer]:
+    def build_composer(self, name: str, **kwargs) -> Composer | None:
         """Build a composer instance."""
         if name in self._composers:
             cls = self._composers[name]
@@ -140,17 +141,17 @@ def register_composer(name: str):
     return registry.register_composer(name)
 
 
-def build_strategy(name: str, **kwargs) -> Optional[Strategy]:
+def build_strategy(name: str, **kwargs) -> Strategy | None:
     """Build a strategy from the global registry."""
     return registry.build_strategy(name, **kwargs)
 
 
-def build_regime_extractor(name: str, **kwargs) -> Optional[RegimeExtractor]:
+def build_regime_extractor(name: str, **kwargs) -> RegimeExtractor | None:
     """Build a regime extractor from the global registry."""
     return registry.build_regime_extractor(name, **kwargs)
 
 
-def build_composer(name: str, **kwargs) -> Optional[Composer]:
+def build_composer(name: str, **kwargs) -> Composer | None:
     """Build a composer from the global registry."""
     return registry.build_composer(name, **kwargs)
 
@@ -272,7 +273,7 @@ registry.register_factory("breakout", create_breakout_strategy_adapter)
 
 
 def build_composer_system(
-    config: Dict[str, Any]
+    config: dict[str, Any],
 ) -> tuple[list[Strategy], RegimeExtractor, Composer]:
     """
     Build a complete composer system from configuration.

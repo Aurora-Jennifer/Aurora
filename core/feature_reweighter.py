@@ -5,7 +5,6 @@ Adjusts feature importance based on rolling IC and Sharpe ratios by regime
 
 import logging
 from dataclasses import dataclass
-from typing import Dict, List
 
 import numpy as np
 import pandas as pd
@@ -64,7 +63,7 @@ class FeatureReweighter:
 
     def update_feature_performance(
         self,
-        features: Dict[str, pd.Series],
+        features: dict[str, pd.Series],
         returns: pd.Series,
         regime: str,
         date: pd.Timestamp,
@@ -110,9 +109,8 @@ class FeatureReweighter:
                 perf.rolling_ic = perf.rolling_ic * self.decay_factor + rolling_ic * (
                     1 - self.decay_factor
                 )
-                perf.rolling_sharpe = (
-                    perf.rolling_sharpe * self.decay_factor
-                    + rolling_sharpe * (1 - self.decay_factor)
+                perf.rolling_sharpe = perf.rolling_sharpe * self.decay_factor + rolling_sharpe * (
+                    1 - self.decay_factor
                 )
                 perf.rolling_returns = (
                     perf.rolling_returns * self.decay_factor
@@ -163,9 +161,7 @@ class FeatureReweighter:
 
         return rolling_corr.iloc[-1] if not rolling_corr.empty else 0.0
 
-    def _calculate_rolling_sharpe(
-        self, feature: pd.Series, returns: pd.Series
-    ) -> float:
+    def _calculate_rolling_sharpe(self, feature: pd.Series, returns: pd.Series) -> float:
         """Calculate rolling Sharpe ratio for feature."""
         if len(feature) < self.rolling_window:
             return 0.0
@@ -191,9 +187,7 @@ class FeatureReweighter:
         else:
             return 0.0
 
-    def _calculate_rolling_returns(
-        self, feature: pd.Series, returns: pd.Series
-    ) -> float:
+    def _calculate_rolling_returns(self, feature: pd.Series, returns: pd.Series) -> float:
         """Calculate rolling returns for feature."""
         if len(feature) < self.rolling_window:
             return 0.0
@@ -252,7 +246,7 @@ class FeatureReweighter:
         exp_x = np.exp(x - np.max(x))  # Subtract max for numerical stability
         return exp_x / np.sum(exp_x)
 
-    def get_feature_weights(self, regime: str) -> Dict[str, float]:
+    def get_feature_weights(self, regime: str) -> dict[str, float]:
         """Get feature weights for the specified regime."""
         weights = {}
 
@@ -262,7 +256,7 @@ class FeatureReweighter:
 
         return weights
 
-    def get_regime_performance_summary(self, regime: str) -> Dict:
+    def get_regime_performance_summary(self, regime: str) -> dict:
         """Get performance summary for a regime."""
         if regime not in self.regime_performance:
             return {}
@@ -284,7 +278,7 @@ class FeatureReweighter:
 
         return summary
 
-    def _get_top_features(self, regime: str, n: int = 5) -> List[Dict]:
+    def _get_top_features(self, regime: str, n: int = 5) -> list[dict]:
         """Get top performing features for a regime."""
         if regime not in self.regime_performance:
             return []
@@ -334,8 +328,8 @@ class AdaptiveFeatureEngine:
         logger.info("Initialized AdaptiveFeatureEngine")
 
     def generate_adaptive_features(
-        self, data: pd.DataFrame, regime: str, base_features: Dict[str, pd.Series]
-    ) -> Dict[str, pd.Series]:
+        self, data: pd.DataFrame, regime: str, base_features: dict[str, pd.Series]
+    ) -> dict[str, pd.Series]:
         """
         Generate features with adaptive weighting.
 
@@ -357,16 +351,14 @@ class AdaptiveFeatureEngine:
             weighted_features[feature_name] = feature_series * weight
 
         # Add regime-specific adaptive features
-        adaptive_features = self._generate_adaptive_features(
-            data, regime, base_features
-        )
+        adaptive_features = self._generate_adaptive_features(data, regime, base_features)
         weighted_features.update(adaptive_features)
 
         return weighted_features
 
     def _generate_adaptive_features(
-        self, data: pd.DataFrame, regime: str, base_features: Dict[str, pd.Series]
-    ) -> Dict[str, pd.Series]:
+        self, data: pd.DataFrame, regime: str, base_features: dict[str, pd.Series]
+    ) -> dict[str, pd.Series]:
         """Generate regime-specific adaptive features."""
         close = data["Close"]
         features = {}
@@ -379,15 +371,15 @@ class AdaptiveFeatureEngine:
             features["trend_adaptive_momentum"] = self._calculate_adaptive_momentum(
                 close, regime_summary
             )
-            features[
-                "trend_adaptive_strength"
-            ] = self._calculate_adaptive_trend_strength(close, regime_summary)
+            features["trend_adaptive_strength"] = self._calculate_adaptive_trend_strength(
+                close, regime_summary
+            )
 
         elif regime == "chop":
             # Chop-adaptive features
-            features[
-                "chop_adaptive_oscillation"
-            ] = self._calculate_adaptive_oscillation(close, regime_summary)
+            features["chop_adaptive_oscillation"] = self._calculate_adaptive_oscillation(
+                close, regime_summary
+            )
             features["chop_adaptive_reversion"] = self._calculate_adaptive_reversion(
                 close, regime_summary
             )
@@ -403,9 +395,7 @@ class AdaptiveFeatureEngine:
 
         return features
 
-    def _calculate_adaptive_momentum(
-        self, close: pd.Series, regime_summary: Dict
-    ) -> pd.Series:
+    def _calculate_adaptive_momentum(self, close: pd.Series, regime_summary: dict) -> pd.Series:
         """Calculate adaptive momentum based on regime performance."""
         # Adjust momentum calculation based on regime performance
         avg_ic = regime_summary.get("avg_ic", 0.0)
@@ -420,7 +410,7 @@ class AdaptiveFeatureEngine:
         return momentum * scaling_factor
 
     def _calculate_adaptive_trend_strength(
-        self, close: pd.Series, regime_summary: Dict
+        self, close: pd.Series, regime_summary: dict
     ) -> pd.Series:
         """Calculate adaptive trend strength."""
         # Use regime performance to adjust trend strength calculation
@@ -435,9 +425,7 @@ class AdaptiveFeatureEngine:
 
         return trend_strength
 
-    def _calculate_adaptive_oscillation(
-        self, close: pd.Series, regime_summary: Dict
-    ) -> pd.Series:
+    def _calculate_adaptive_oscillation(self, close: pd.Series, regime_summary: dict) -> pd.Series:
         """Calculate adaptive oscillation for chop regime."""
         avg_ic = regime_summary.get("avg_ic", 0.0)
 
@@ -449,9 +437,7 @@ class AdaptiveFeatureEngine:
 
         return oscillation.rolling(period).std()
 
-    def _calculate_adaptive_reversion(
-        self, close: pd.Series, regime_summary: Dict
-    ) -> pd.Series:
+    def _calculate_adaptive_reversion(self, close: pd.Series, regime_summary: dict) -> pd.Series:
         """Calculate adaptive mean reversion."""
         avg_sharpe = regime_summary.get("avg_sharpe", 0.0)
 
@@ -463,9 +449,7 @@ class AdaptiveFeatureEngine:
 
         return reversion
 
-    def _calculate_adaptive_volatility(
-        self, close: pd.Series, regime_summary: Dict
-    ) -> pd.Series:
+    def _calculate_adaptive_volatility(self, close: pd.Series, regime_summary: dict) -> pd.Series:
         """Calculate adaptive volatility."""
         avg_returns = regime_summary.get("avg_returns", 0.0)
 
@@ -477,9 +461,7 @@ class AdaptiveFeatureEngine:
 
         return volatility
 
-    def _calculate_adaptive_risk(
-        self, close: pd.Series, regime_summary: Dict
-    ) -> pd.Series:
+    def _calculate_adaptive_risk(self, close: pd.Series, regime_summary: dict) -> pd.Series:
         """Calculate adaptive risk measure."""
         avg_sharpe = regime_summary.get("avg_sharpe", 0.0)
 
@@ -487,15 +469,13 @@ class AdaptiveFeatureEngine:
         period = int(10 * (1 + avg_sharpe))
 
         returns = close.pct_change()
-        risk = returns.rolling(period).apply(
-            lambda x: np.percentile(x, 5)
-        )  # 5th percentile
+        risk = returns.rolling(period).apply(lambda x: np.percentile(x, 5))  # 5th percentile
 
         return risk
 
     def update_performance(
         self,
-        features: Dict[str, pd.Series],
+        features: dict[str, pd.Series],
         returns: pd.Series,
         regime: str,
         date: pd.Timestamp,

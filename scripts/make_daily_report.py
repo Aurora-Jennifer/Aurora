@@ -57,14 +57,14 @@ def generate_daily_report(data: dict) -> str:
 
     report = f"""
 📊 Daily Trading Report - {today}
-{'=' * 50}
+{"=" * 50}
 
 💰 PERFORMANCE SUMMARY
-  Total Return: {perf.get('total_return', 0):.2%}
-  Current Capital: ${perf.get('current_capital', 0):,.2f}
-  Sharpe Ratio: {perf.get('sharpe_ratio', 0):.2f}
-  Max Drawdown: {perf.get('max_drawdown', 0):.2%}
-  Total Trades: {perf.get('total_trades', 0)}
+  Total Return: {perf.get("total_return", 0):.2%}
+  Current Capital: ${perf.get("current_capital", 0):,.2f}
+  Sharpe Ratio: {perf.get("sharpe_ratio", 0):.2f}
+  Max Drawdown: {perf.get("max_drawdown", 0):.2%}
+  Total Trades: {perf.get("total_trades", 0)}
 
 📈 TRADING ACTIVITY
   Trades Today: {len(trades)}
@@ -97,9 +97,7 @@ def generate_daily_report(data: dict) -> str:
 def save_report(report: str, output_dir: str = "results"):
     """Save the report to file."""
     try:
-        output_path = (
-            Path(output_dir) / f"daily_report_{date.today().strftime('%Y-%m-%d')}.txt"
-        )
+        output_path = Path(output_dir) / f"daily_report_{date.today().strftime('%Y-%m-%d')}.txt"
         with open(output_path, "w") as f:
             f.write(report)
         print(f"✅ Daily report saved to: {output_path}")

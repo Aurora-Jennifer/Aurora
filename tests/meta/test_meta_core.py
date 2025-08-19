@@ -26,9 +26,7 @@ def test_clean_invariance(transform):
     original_df = base_df()
 
     # Original should pass
-    original_clean, original_result = assert_verdict(
-        validator, original_df, "PASS", "ORIGINAL"
-    )
+    original_clean, original_result = assert_verdict(validator, original_df, "PASS", "ORIGINAL")
 
     # Transformed should also pass
     transformed_df = transform(original_df)
@@ -75,9 +73,7 @@ def test_scale_invariance():
             scaled_data[col] = scaled_data[col] * scale
 
         # All should pass
-        clean_data, result = assert_verdict(
-            validator, scaled_data, "PASS", f"SCALE_{scale}"
-        )
+        clean_data, result = assert_verdict(validator, scaled_data, "PASS", f"SCALE_{scale}")
 
         if clean_data is not None:
             # Returns should be the same (scale invariant)
@@ -102,9 +98,7 @@ def test_time_invariance():
         shifted_data.index = shifted_data.index + pd.Timedelta(shift)
 
         # All should pass
-        clean_data, result = assert_verdict(
-            validator, shifted_data, "PASS", f"SHIFT_{shift}"
-        )
+        clean_data, result = assert_verdict(validator, shifted_data, "PASS", f"SHIFT_{shift}")
 
         if clean_data is not None:
             # Data should be identical except for timestamps
@@ -125,9 +119,7 @@ def test_volume_scale_invariance():
         scaled_data["Volume"] = scaled_data["Volume"] * scale
 
         # All should pass
-        clean_data, result = assert_verdict(
-            validator, scaled_data, "PASS", f"VOL_SCALE_{scale}"
-        )
+        clean_data, result = assert_verdict(validator, scaled_data, "PASS", f"VOL_SCALE_{scale}")
 
         if clean_data is not None:
             # Price data should be unchanged
@@ -188,18 +180,14 @@ def test_additive_invariance():
             shifted_data[col] = shifted_data[col] + const
 
         # All should pass
-        clean_data, result = assert_verdict(
-            validator, shifted_data, "PASS", f"ADD_{const}"
-        )
+        clean_data, result = assert_verdict(validator, shifted_data, "PASS", f"ADD_{const}")
 
         if clean_data is not None:
             # Returns should remain highly correlated under additive shifts for percent returns
             if "Returns" in clean_data.columns:
                 original_returns = base_data["Close"].pct_change().fillna(0.0)
                 shifted_returns = clean_data["Returns"]
-                corr = np.corrcoef(original_returns.values, shifted_returns.values)[
-                    0, 1
-                ]
+                corr = np.corrcoef(original_returns.values, shifted_returns.values)[0, 1]
                 assert corr >= 0.999
 
 
@@ -224,18 +212,16 @@ def test_monotonic_transformations():
             transformed_data[col] = transform(transformed_data[col])
 
         # All should pass (monotonic transformations preserve order)
-        clean_data, result = assert_verdict(
-            validator, transformed_data, "PASS", f"MONO_{i}"
-        )
+        clean_data, result = assert_verdict(validator, transformed_data, "PASS", f"MONO_{i}")
 
         if clean_data is not None:
             # OHLC relationships should be preserved
-            assert (
-                clean_data["High"] >= clean_data["Low"]
-            ).all(), "High >= Low should be preserved"
-            assert (
-                clean_data["High"] >= clean_data["Open"]
-            ).all(), "High >= Open should be preserved"
-            assert (
-                clean_data["High"] >= clean_data["Close"]
-            ).all(), "High >= Close should be preserved"
+            assert (clean_data["High"] >= clean_data["Low"]).all(), (
+                "High >= Low should be preserved"
+            )
+            assert (clean_data["High"] >= clean_data["Open"]).all(), (
+                "High >= Open should be preserved"
+            )
+            assert (clean_data["High"] >= clean_data["Close"]).all(), (
+                "High >= Close should be preserved"
+            )

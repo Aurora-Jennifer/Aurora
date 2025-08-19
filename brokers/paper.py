@@ -1,24 +1,27 @@
 from __future__ import annotations
+
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any
 
 from brokers.interface import Broker
 
 
 class PaperBroker(Broker):
-    def __init__(self, *, slippage_bps: float = 5.0, fee_bps: float = 1.0, log_dir: str = "logs/trades"):
-        self._pos: Dict[str, float] = {}
+    def __init__(
+        self, *, slippage_bps: float = 5.0, fee_bps: float = 1.0, log_dir: str = "logs/trades"
+    ):
+        self._pos: dict[str, float] = {}
         self._cash: float = 100_000.0
         self._slip = float(slippage_bps) * 1e-4
         self._fee = float(fee_bps) * 1e-4
         self._log_dir = Path(log_dir)
         self._log_dir.mkdir(parents=True, exist_ok=True)
-        self._run_id = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H%M%SZ")
+        self._run_id = datetime.now(UTC).strftime("%Y-%m-%dT%H%M%SZ")
 
-    def submit(self, order: Dict[str, Any]) -> Dict[str, Any]:
-        ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    def submit(self, order: dict[str, Any]) -> dict[str, Any]:
+        ts = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
         symbol, side, qty = order["symbol"], order["side"].upper(), float(order["qty"])
         px_theory = float(order.get("px") or 0.0)
         px_fill = px_theory * (1 + self._slip * (1 if side == "BUY" else -1))
@@ -44,18 +47,16 @@ class PaperBroker(Broker):
     def cancel(self, order_id: str) -> bool:
         return True
 
-    def positions(self) -> Dict[str, float]:
+    def positions(self) -> dict[str, float]:
         return dict(self._pos)
 
     def cash(self) -> float:
         return float(self._cash)
 
     def now(self):
-        return datetime.now(timezone.utc)
+        return datetime.now(UTC)
 
-    def _append(self, rec: Dict[str, Any]) -> None:
-        fp = self._log_dir / f"{datetime.now(timezone.utc).date()}.jsonl"
+    def _append(self, rec: dict[str, Any]) -> None:
+        fp = self._log_dir / f"{datetime.now(UTC).date()}.jsonl"
         with fp.open("a", encoding="utf-8") as f:
             f.write(json.dumps(rec) + "\n")
-
-

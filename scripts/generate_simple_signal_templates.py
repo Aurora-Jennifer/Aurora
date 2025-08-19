@@ -10,7 +10,7 @@ import json
 import logging
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 class SimpleSignalTemplateGenerator:
     """Generate signal templates using simple historical analysis."""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         """
         Initialize the simple signal template generator.
 
@@ -42,9 +42,7 @@ class SimpleSignalTemplateGenerator:
         self.templates = {}
         self.performance_metrics = {}
 
-    def fetch_historical_data(
-        self, symbol: str, start_date: str, end_date: str
-    ) -> pd.DataFrame:
+    def fetch_historical_data(self, symbol: str, start_date: str, end_date: str) -> pd.DataFrame:
         """
         Fetch historical data for a symbol.
 
@@ -68,9 +66,7 @@ class SimpleSignalTemplateGenerator:
 
             # Ensure we have all required columns
             required_columns = ["Open", "High", "Low", "Close", "Volume"]
-            missing_columns = [
-                col for col in required_columns if col not in data.columns
-            ]
+            missing_columns = [col for col in required_columns if col not in data.columns]
 
             if missing_columns:
                 logger.error(f"Missing columns for {symbol}: {missing_columns}")
@@ -83,9 +79,7 @@ class SimpleSignalTemplateGenerator:
             logger.error(f"Error fetching data for {symbol}: {e}")
             return pd.DataFrame()
 
-    def calculate_technical_indicators(
-        self, data: pd.DataFrame
-    ) -> Dict[str, pd.Series]:
+    def calculate_technical_indicators(self, data: pd.DataFrame) -> dict[str, pd.Series]:
         """
         Calculate technical indicators from price data.
 
@@ -147,7 +141,7 @@ class SimpleSignalTemplateGenerator:
         return indicators
 
     def generate_simple_signals(
-        self, data: pd.DataFrame, indicators: Dict[str, pd.Series]
+        self, data: pd.DataFrame, indicators: dict[str, pd.Series]
     ) -> pd.Series:
         """
         Generate simple trading signals based on technical indicators.
@@ -201,7 +195,7 @@ class SimpleSignalTemplateGenerator:
 
     def calculate_performance_metrics(
         self, data: pd.DataFrame, signals: pd.Series
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         """
         Calculate performance metrics from signals.
 
@@ -259,7 +253,7 @@ class SimpleSignalTemplateGenerator:
             "total_trades": int(total_trades),
         }
 
-    def analyze_symbol(self, symbol: str) -> Dict[str, Any]:
+    def analyze_symbol(self, symbol: str) -> dict[str, Any]:
         """
         Analyze a symbol and generate signal template.
 
@@ -308,8 +302,8 @@ class SimpleSignalTemplateGenerator:
         }
 
     def _generate_signal_template(
-        self, symbol: str, metrics: Dict[str, float], indicators: Dict[str, pd.Series]
-    ) -> Dict[str, Any]:
+        self, symbol: str, metrics: dict[str, float], indicators: dict[str, pd.Series]
+    ) -> dict[str, Any]:
         """
         Generate signal template from metrics and indicators.
 
@@ -363,9 +357,7 @@ class SimpleSignalTemplateGenerator:
             "confidence": float(confidence),
             "market_regime": {
                 "volatility_level": "high" if avg_volatility > 0.02 else "low",
-                "trend_strength": "strong"
-                if abs(trend_strength - 1.0) > 0.02
-                else "weak",
+                "trend_strength": "strong" if abs(trend_strength - 1.0) > 0.02 else "weak",
                 "rsi_regime": "overbought"
                 if avg_rsi > 70
                 else "oversold"
@@ -384,9 +376,7 @@ class SimpleSignalTemplateGenerator:
                 "mean_reversion_weight": float(mean_rev_weight),
             },
             "position_sizing": {
-                "max_position_size_pct": min(
-                    10.0, max(5.0, metrics["sharpe_ratio"] * 10)
-                ),
+                "max_position_size_pct": min(10.0, max(5.0, metrics["sharpe_ratio"] * 10)),
                 "base_position_size": 1000.0,
                 "volatility_adjustment": True,
             },
@@ -399,9 +389,7 @@ class SimpleSignalTemplateGenerator:
 
         return template
 
-    def _summarize_indicators(
-        self, indicators: Dict[str, pd.Series]
-    ) -> Dict[str, float]:
+    def _summarize_indicators(self, indicators: dict[str, pd.Series]) -> dict[str, float]:
         """
         Summarize technical indicators.
 
@@ -421,7 +409,7 @@ class SimpleSignalTemplateGenerator:
 
         return summary
 
-    def generate_all_templates(self) -> Dict[str, Any]:
+    def generate_all_templates(self) -> dict[str, Any]:
         """
         Generate signal templates for all symbols.
 
@@ -472,18 +460,14 @@ class SimpleSignalTemplateGenerator:
                     "avg_win_rate_across_symbols": float(np.mean(all_win_rates)),
                     "best_performing_symbol": max(
                         all_results.keys(),
-                        key=lambda x: all_results[x]["performance_metrics"][
-                            "sharpe_ratio"
-                        ],
+                        key=lambda x: all_results[x]["performance_metrics"]["sharpe_ratio"],
                     ),
                 }
             )
 
         return {"summary": summary_stats, "templates": all_results}
 
-    def save_templates(
-        self, results: Dict[str, Any], output_dir: str = "results/signal_templates"
-    ):
+    def save_templates(self, results: dict[str, Any], output_dir: str = "results/signal_templates"):
         """
         Save signal templates to files.
 

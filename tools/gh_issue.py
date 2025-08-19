@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-import os
 import json
+import os
 import sys
 import urllib.request
 
@@ -28,7 +28,12 @@ def create_issue(repo: str, title: str, body: dict, token: str) -> int:
 
 def main():
     repo = os.getenv("GITHUB_REPOSITORY") or (len(sys.argv) > 1 and sys.argv[1]) or ""
-    token = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN") or (len(sys.argv) > 2 and sys.argv[2]) or ""
+    token = (
+        os.getenv("GITHUB_TOKEN")
+        or os.getenv("GH_TOKEN")
+        or (len(sys.argv) > 2 and sys.argv[2])
+        or ""
+    )
     if not repo or not token:
         print("missing repo or token; skipping")
         return 0
@@ -47,5 +52,3 @@ def main():
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
-

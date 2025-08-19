@@ -261,12 +261,19 @@ python scripts/walkforward_alpha_v1.py \
   --test-len 63 \
   --stride 21
 
-# Expected results:
-# Fold 1: Sharpe=6.136, WinRate=0.750, Trades=12
-# Fold 2: Sharpe=3.256, WinRate=0.583, Trades=12
-# Fold 3: Sharpe=-0.965, WinRate=0.462, Trades=13
-# Fold 4: Sharpe=-0.443, WinRate=0.417, Trades=12
-# Average Sharpe: 1.996, Average Win Rate: 0.553
+# For testing with smaller datasets, use smaller parameters:
+python scripts/walkforward_alpha_v1.py \
+  --symbols SPY \
+  --train-len 50 \
+  --test-len 20 \
+  --stride 10 \
+  --warmup 10
+
+# Expected results (small dataset):
+# Fold 1: Sharpe=-2.143, WinRate=0.400, Trades=10
+# Fold 2: Sharpe=1.633, WinRate=0.625, Trades=8
+# Fold 3: Sharpe=-1.939, WinRate=0.500, Trades=8
+# Average Sharpe: -0.816, Average Win Rate: 0.508
 ```
 
 ### **Comparing Approaches**

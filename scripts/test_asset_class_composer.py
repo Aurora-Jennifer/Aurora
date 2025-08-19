@@ -114,9 +114,7 @@ def test_asset_class_composer_decisions():
             logger.info(f"  Point {idx}: Signal={signal:.4f}")
             if metadata.get("composer_used", False):
                 logger.info(f"    Regime: {metadata.get('regime_type', 'unknown')}")
-                logger.info(
-                    f"    Strategy Weights: {metadata.get('strategy_weights', {})}"
-                )
+                logger.info(f"    Strategy Weights: {metadata.get('strategy_weights', {})}")
                 logger.info(f"    Confidence: {metadata.get('confidence', 0.0):.3f}")
 
 
@@ -144,9 +142,7 @@ def test_walkforward_integration():
             data_up_to_step = data.iloc[:step]
 
             # Get composer decision
-            signal, metadata = composer.get_composer_decision(
-                data_up_to_step, symbol, step - 1
-            )
+            signal, metadata = composer.get_composer_decision(data_up_to_step, symbol, step - 1)
 
             if metadata.get("composer_used", False):
                 logger.info(
@@ -209,9 +205,7 @@ def test_performance_evaluation():
     for symbol, asset_class, metrics in test_cases:
         logger.info(f"\n--- Performance evaluation for {symbol} ({asset_class}) ---")
 
-        evaluation = composer.evaluate_strategy_performance(
-            metrics, symbol, asset_class
-        )
+        evaluation = composer.evaluate_strategy_performance(metrics, symbol, asset_class)
 
         logger.info(f"  Composite Score: {evaluation.get('composite_score', 0.0):.4f}")
         logger.info(f"  Weights Used: {evaluation.get('weights_used', {})}")
@@ -229,9 +223,7 @@ def test_configuration_overrides():
     # Test asset-specific settings
     for asset_class, asset_config in config.get("assets", {}).items():
         logger.info(f"\n--- Configuration for {asset_class} ---")
-        logger.info(
-            f"  Eligible Strategies: {asset_config.get('eligible_strategies', [])}"
-        )
+        logger.info(f"  Eligible Strategies: {asset_config.get('eligible_strategies', [])}")
         logger.info(f"  Composer Params: {asset_config.get('composer_params', {})}")
 
 

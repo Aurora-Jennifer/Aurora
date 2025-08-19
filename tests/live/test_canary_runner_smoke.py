@@ -1,6 +1,6 @@
 import json
-from pathlib import Path
-import subprocess, sys
+import subprocess
+import sys
 
 
 def test_canary_smoke(tmp_path, monkeypatch):
@@ -38,13 +38,21 @@ registry:
     # dummy model artifact
     (tmp_path / "artifacts/models").mkdir(parents=True, exist_ok=True)
     import pickle
+
     from ml.models.dummy_model import DummyModel
+
     # 3-feature weight vector
-    (tmp_path / "artifacts/models/dummy_v1.pkl").write_bytes(pickle.dumps(DummyModel([0.5, -0.2, 0.1])))
+    (tmp_path / "artifacts/models/dummy_v1.pkl").write_bytes(
+        pickle.dumps(DummyModel([0.5, -0.2, 0.1]))
+    )
 
     # run one-iteration canary
     out = subprocess.run(
-        [sys.executable, "-c", "import scripts.canary_runner as m; m.main(['--symbols','SPY,TSLA','--shadow'])"],
+        [
+            sys.executable,
+            "-c",
+            "import scripts.canary_runner as m; m.main(['--symbols','SPY,TSLA','--shadow'])",
+        ],
         capture_output=True,
         text=True,
     )
@@ -56,5 +64,3 @@ registry:
     assert files, "no canary log written"
     meta = json.loads((tmp_path / "reports/canary_run.meta.json").read_text())
     assert "model" in meta and "fallbacks" in meta
-
-

@@ -9,7 +9,6 @@ import os
 import random
 import subprocess
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
@@ -18,7 +17,7 @@ from .composite import CompositePenalties, CompositeWeights, composite_score
 logger = logging.getLogger(__name__)
 
 
-def softmax_normalize(weights: List[float]) -> List[float]:
+def softmax_normalize(weights: list[float]) -> list[float]:
     """Normalize weights using softmax function."""
     exp_weights = np.exp(weights)
     return (exp_weights / np.sum(exp_weights)).tolist()
@@ -40,7 +39,7 @@ def generate_weight_candidate() -> CompositeWeights:
 
 def run_walkforward_analysis(
     symbol: str, start_date: str, end_date: str, config_file: str
-) -> Optional[Dict]:
+) -> dict | None:
     """
     Run walkforward analysis and extract metrics.
 
@@ -94,11 +93,7 @@ def run_walkforward_analysis(
                 # Estimate CAGR (simplified calculation)
                 total_return = aggregate.get("mean_total_return", 0)
                 years = 5  # Approximate for 2019-2023
-                cagr = (
-                    ((1 + total_return) ** (1 / years) - 1)
-                    if total_return > -1
-                    else -0.5
-                )
+                cagr = ((1 + total_return) ** (1 / years) - 1) if total_return > -1 else -0.5
 
                 # Estimate win rate (simplified)
                 win_rate = aggregate.get("mean_hit_rate", 0.5)
@@ -127,7 +122,7 @@ def run_walkforward_analysis(
 
 def evaluate_weights(
     weights: CompositeWeights,
-    symbols: List[str],
+    symbols: list[str],
     start_date: str,
     end_date: str,
     config_file: str,
@@ -169,10 +164,10 @@ def tune_weights(
     config_path: str,
     trials: int = 50,
     save_to: str = "config/metrics_weights.json",
-    symbols: Optional[List[str]] = None,
+    symbols: list[str] | None = None,
     start_date: str = "2019-01-01",
     end_date: str = "2023-12-31",
-) -> Tuple[CompositeWeights, float]:
+) -> tuple[CompositeWeights, float]:
     """
     Tune metric weights through walkforward analysis.
 
@@ -234,9 +229,7 @@ def tune_weights(
 
         # Early stopping
         if no_improve_count >= 10:
-            logger.info(
-                f"Early stopping after {trial + 1} trials (no improvement for 10 trials)"
-            )
+            logger.info(f"Early stopping after {trial + 1} trials (no improvement for 10 trials)")
             break
 
     # Save best weights

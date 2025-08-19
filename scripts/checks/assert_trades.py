@@ -14,9 +14,7 @@ trades = pd.read_csv(trades_p, parse_dates=["timestamp"])
 ok = True
 
 # No zero-delta trades
-zero_delta = (
-    (trades["delta_qty"].abs() < 1e-6).sum() if "delta_qty" in trades.columns else 0
-)
+zero_delta = (trades["delta_qty"].abs() < 1e-6).sum() if "delta_qty" in trades.columns else 0
 if zero_delta > 0:
     print(f"FAIL: zero-delta trades found: {zero_delta}")
     ok = False

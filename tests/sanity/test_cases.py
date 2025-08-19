@@ -40,16 +40,14 @@ def test_case(spec):
             assert len(clean_data) > 0, "Clean data should have rows"
             # Returns column should be added for multi-row data
             if len(clean_data) > 1:
-                assert (
-                    "Returns" in clean_data.columns
-                ), "Returns column should be added for multi-row data"
+                assert "Returns" in clean_data.columns, (
+                    "Returns column should be added for multi-row data"
+                )
     else:
         assert_verdict_with_rules(validator, df, "FAIL", spec["rules"], spec["id"])
 
 
-@pytest.mark.parametrize(
-    "spec", [c for c in CASES if c["kind"] == "FAIL"], ids=lambda s: s["id"]
-)
+@pytest.mark.parametrize("spec", [c for c in CASES if c["kind"] == "FAIL"], ids=lambda s: s["id"])
 def test_failure_cases(spec):
     """Test only failure cases with detailed error checking."""
     validator = DataSanityValidator(profile="strict")
@@ -65,9 +63,7 @@ def test_failure_cases(spec):
     assert rule_found, f"Expected rules {spec['rules']} not found in error: {error_msg}"
 
 
-@pytest.mark.parametrize(
-    "spec", [c for c in CASES if c["kind"] == "PASS"], ids=lambda s: s["id"]
-)
+@pytest.mark.parametrize("spec", [c for c in CASES if c["kind"] == "PASS"], ids=lambda s: s["id"])
 def test_success_cases(spec):
     """Test only success cases with data integrity checks."""
     validator = DataSanityValidator(profile="strict")
@@ -80,9 +76,9 @@ def test_success_cases(spec):
         assert len(clean_data) > 0, "Clean data should have rows"
         # Returns column should be added for multi-row data
         if len(clean_data) > 1:
-            assert (
-                "Returns" in clean_data.columns
-            ), "Returns column should be added for multi-row data"
+            assert "Returns" in clean_data.columns, (
+                "Returns column should be added for multi-row data"
+            )
 
         # Check that all required columns are present
         required_cols = ["Open", "High", "Low", "Close", "Volume"]
@@ -131,9 +127,7 @@ def test_case_structure(spec):
 
 # Performance tests for large datasets
 @pytest.mark.slow
-@pytest.mark.parametrize(
-    "spec", [c for c in CASES if "large" in c["id"]], ids=lambda s: s["id"]
-)
+@pytest.mark.parametrize("spec", [c for c in CASES if "large" in c["id"]], ids=lambda s: s["id"])
 def test_large_datasets(spec):
     """Test performance with large datasets."""
     validator = DataSanityValidator(profile="strict")
@@ -169,9 +163,7 @@ def test_edge_cases(spec):
         clean_data, result = assert_verdict(validator, df, "PASS", spec["id"])
         # Additional edge case specific checks
         if "single" in spec["id"]:
-            assert (
-                len(clean_data) == 1
-            ), "Single row case should preserve exactly one row"
+            assert len(clean_data) == 1, "Single row case should preserve exactly one row"
         elif "very_small" in spec["id"]:
             assert len(clean_data) <= 10, "Very small case should have few rows"
     else:

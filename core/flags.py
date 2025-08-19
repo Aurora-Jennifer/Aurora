@@ -4,7 +4,6 @@ Use environment variables to gate specific validation rules.
 """
 
 import os
-from typing import Optional
 
 
 def enabled(flag: str, default: bool = True) -> bool:
@@ -46,7 +45,7 @@ def disabled(flag: str, default: bool = False) -> bool:
     return not enabled(flag, not default)
 
 
-def get_flag_value(flag: str, default: Optional[str] = None) -> Optional[str]:
+def get_flag_value(flag: str, default: str | None = None) -> str | None:
     """
     Get the raw value of a flag.
 

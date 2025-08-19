@@ -3,17 +3,15 @@ Data factories for DataSanity tests.
 Generate test data with composable mutations.
 """
 
-from datetime import timezone
+from datetime import UTC
 
 import numpy as np
 import pandas as pd
 
 
-def base_df(
-    n: int = 100, start: str = "2024-01-01", freq: str = "1min"
-) -> pd.DataFrame:
+def base_df(n: int = 100, start: str = "2024-01-01", freq: str = "1min") -> pd.DataFrame:
     """Create base OHLCV DataFrame with realistic market data."""
-    ts = pd.date_range(start, periods=n, freq=freq, tz=timezone.utc)
+    ts = pd.date_range(start, periods=n, freq=freq, tz=UTC)
 
     # Generate realistic price data without lookahead
     base_price = 100.0
@@ -51,22 +49,12 @@ def build_case(name: str, **kwargs) -> pd.DataFrame:
 
     mutations = {
         # Price violations
-        "neg_prices": lambda d: d.assign(
-            Close=d["Close"].where(d.index != d.index[50], -50.0)
-        ),
-        "extreme_prices": lambda d: d.assign(
-            Close=d["Close"].where(d.index != d.index[50], 1e12)
-        ),
-        "zero_prices": lambda d: d.assign(
-            Close=d["Close"].where(d.index != d.index[50], 0.0)
-        ),
+        "neg_prices": lambda d: d.assign(Close=d["Close"].where(d.index != d.index[50], -50.0)),
+        "extreme_prices": lambda d: d.assign(Close=d["Close"].where(d.index != d.index[50], 1e12)),
+        "zero_prices": lambda d: d.assign(Close=d["Close"].where(d.index != d.index[50], 0.0)),
         # Volume violations
-        "neg_volume": lambda d: d.assign(
-            Volume=d["Volume"].where(d.index != d.index[50], -1000.0)
-        ),
-        "zero_volume": lambda d: d.assign(
-            Volume=d["Volume"].where(d.index != d.index[50], 0.0)
-        ),
+        "neg_volume": lambda d: d.assign(Volume=d["Volume"].where(d.index != d.index[50], -1000.0)),
+        "zero_volume": lambda d: d.assign(Volume=d["Volume"].where(d.index != d.index[50], 0.0)),
         "extreme_volume": lambda d: d.assign(
             Volume=d["Volume"].where(d.index != d.index[50], 1e15)
         ),
@@ -77,9 +65,7 @@ def build_case(name: str, **kwargs) -> pd.DataFrame:
         "nan_scattered": lambda d: d.assign(
             Close=d["Close"].where([i % 10 != 0 for i in range(len(d))], np.nan)
         ),
-        "inf_values": lambda d: d.assign(
-            Close=d["Close"].where(d.index != d.index[50], np.inf)
-        ),
+        "inf_values": lambda d: d.assign(Close=d["Close"].where(d.index != d.index[50], np.inf)),
         # Time series violations
         "duplicate_timestamps": lambda d: d.set_index(d.index.repeat(2)[::2]),
         "non_monotonic": lambda d: d.reindex(d.index[::-1]),
@@ -89,9 +75,7 @@ def build_case(name: str, **kwargs) -> pd.DataFrame:
         ),
         "mixed_timezones": lambda d: pd.concat(
             [
-                d.iloc[:50].set_index(
-                    d.index[:50].tz_localize(None).tz_localize("US/Eastern")
-                ),
+                d.iloc[:50].set_index(d.index[:50].tz_localize(None).tz_localize("US/Eastern")),
                 d.iloc[50:],
             ]
         ),
@@ -134,9 +118,7 @@ def build_case(name: str, **kwargs) -> pd.DataFrame:
             Low=pd.Series(range(100, 50, -1), index=d.index[:50]) * 0.99,
             Open=pd.Series(range(100, 50, -1), index=d.index[:50]) * 1.005,
         ).iloc[:50],
-        "constant_prices": lambda d: d.assign(
-            Close=100.0, High=101.0, Low=99.0, Open=100.5
-        ),
+        "constant_prices": lambda d: d.assign(Close=100.0, High=101.0, Low=99.0, Open=100.5),
         "volatile_prices": lambda d: d.assign(
             Close=100 + 50 * np.sin(np.arange(len(d)) * 0.5),
             High=100 + 50 * np.sin(np.arange(len(d)) * 0.5) + 1,
@@ -180,9 +162,7 @@ def build_stress_case(name: str, **kwargs) -> pd.DataFrame:
     stress_cases = {
         "large_dataset": lambda: base_df(n=50000),
         "many_nans": lambda: base_df(n=1000).assign(
-            Close=np.where(
-                np.random.random(1000) < 0.1, np.nan, base_df(n=1000)["Close"]
-            )
+            Close=np.where(np.random.random(1000) < 0.1, np.nan, base_df(n=1000)["Close"])
         ),
         "many_duplicates": lambda: pd.concat([base_df(n=100)] * 10),
         "extreme_volatility": lambda: base_df(n=1000).assign(

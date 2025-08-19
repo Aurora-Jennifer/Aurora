@@ -14,9 +14,7 @@ from core.engine.backtest import BacktestEngine
 CFG_PATH = "config/enhanced_paper_trading_config.json"
 
 cfg = json.load(open(CFG_PATH))
-assert not cfg.get(
-    "carry_positions_from_warmup", False
-), "Set carry_positions_from_warmup=false"
+assert not cfg.get("carry_positions_from_warmup", False), "Set carry_positions_from_warmup=false"
 
 eng = BacktestEngine(CFG_PATH)
 eng.run_backtest("2024-01-02", "2024-01-09", ["SPY"])

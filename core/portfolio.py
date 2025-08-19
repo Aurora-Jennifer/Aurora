@@ -5,7 +5,6 @@ Single source of truth for position tracking and PnL calculation.
 
 import logging
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
 
 import pandas as pd
 
@@ -25,9 +24,7 @@ class Position:
         # The validation will be handled at the portfolio level
         pass
 
-    def apply_fill(
-        self, side: str, qty: float, price: float, fee: float = 0.0
-    ) -> float:
+    def apply_fill(self, side: str, qty: float, price: float, fee: float = 0.0) -> float:
         """
         Apply a trade fill to this position.
 
@@ -57,9 +54,7 @@ class Position:
                 # Short position - this reduces exposure (covers short)
                 if qty <= abs(self.qty):
                     # Partial cover
-                    realized = (
-                        self.avg_price - price
-                    ) * qty  # For shorts: profit when price falls
+                    realized = (self.avg_price - price) * qty  # For shorts: profit when price falls
                     self.qty += qty  # qty is positive, so this reduces the negative
                     if abs(self.qty) < 1e-6:
                         self.avg_price = 0.0
@@ -126,12 +121,12 @@ class PortfolioState:
     """Portfolio state with cash, positions, and mark-to-market functionality."""
 
     cash: float
-    positions: Dict[str, Position] = field(default_factory=dict)
-    last_prices: Dict[str, float] = field(default_factory=dict)
+    positions: dict[str, Position] = field(default_factory=dict)
+    last_prices: dict[str, float] = field(default_factory=dict)
     realized_pnl: float = 0.0
     fees_paid: float = 0.0
     total_trades: int = 0
-    trades: List[Dict] = field(default_factory=list)
+    trades: list[dict] = field(default_factory=list)
     ledger: pd.DataFrame = field(default_factory=lambda: pd.DataFrame())
     shorting_enabled: bool = True
 
@@ -151,7 +146,7 @@ class PortfolioState:
                 ]
             )
 
-    def value_at(self, prices_by_symbol: Dict[str, float]) -> float:
+    def value_at(self, prices_by_symbol: dict[str, float]) -> float:
         """Calculate portfolio value at given prices."""
         pos_val = 0.0
         for symbol, pos in self.positions.items():
@@ -204,9 +199,7 @@ class PortfolioState:
         )
 
         # Append to ledger
-        self.ledger = pd.concat(
-            [self.ledger, pd.DataFrame([mtm_row])], ignore_index=True
-        )
+        self.ledger = pd.concat([self.ledger, pd.DataFrame([mtm_row])], ignore_index=True)
 
     def execute_order(
         self,
@@ -215,7 +208,7 @@ class PortfolioState:
         price: float,
         fee: float = 0.0,
         *,
-        timestamp: Optional[pd.Timestamp] = None,
+        timestamp: pd.Timestamp | None = None,
         log_trade: bool = True,
     ) -> bool:
         """
@@ -250,18 +243,14 @@ class PortfolioState:
         # Check guards for selling when flat or short (but allow short creation)
         if side == "SELL" and current_qty <= 0:
             # If we're trying to sell more than we have, and we're not creating a short position
-            if abs(delta) > abs(current_qty) and (
-                target_qty >= 0 or not self.shorting_enabled
-            ):
+            if abs(delta) > abs(current_qty) and (target_qty >= 0 or not self.shorting_enabled):
                 logger.warning(
                     f"Cannot sell {abs(delta):.2f} of {symbol} - only {abs(current_qty):.2f} available"
                 )
                 return False
         elif side == "SELL" and current_qty > 0:
             # If we're trying to sell more than we have, and we're not creating a short position
-            if abs(delta) > current_qty and (
-                target_qty >= 0 or not self.shorting_enabled
-            ):
+            if abs(delta) > current_qty and (target_qty >= 0 or not self.shorting_enabled):
                 logger.warning(
                     f"Cannot sell {abs(delta):.2f} of {symbol} - only {current_qty:.2f} available"
                 )
@@ -314,10 +303,10 @@ class PortfolioState:
 
     def close_all_positions(
         self,
-        prices_by_symbol: Dict[str, float],
+        prices_by_symbol: dict[str, float],
         fee: float = 0.0,
         *,
-        timestamp: Optional[pd.Timestamp] = None,
+        timestamp: pd.Timestamp | None = None,
         log_trade: bool = True,
     ):
         """Close all positions at given prices."""
@@ -344,7 +333,7 @@ class PortfolioState:
                         log_trade=log_trade,
                     )
 
-    def get_position(self, symbol: str) -> Optional[Position]:
+    def get_position(self, symbol: str) -> Position | None:
         """Get position for a specific symbol."""
         return self.positions.get(symbol)
 
@@ -352,7 +341,7 @@ class PortfolioState:
         """Get count of open positions."""
         return len([pos for pos in self.positions.values() if abs(pos.qty) > 1e-6])
 
-    def get_summary(self) -> Dict:
+    def get_summary(self) -> dict:
         """Get portfolio summary."""
         return {
             "initial_capital": (
@@ -368,9 +357,7 @@ class PortfolioState:
             ),
             "realized_pnl": self.realized_pnl,
             "unrealized_pnl": (
-                self.ledger.iloc[-1]["unrealized_pnl_total"]
-                if not self.ledger.empty
-                else 0.0
+                self.ledger.iloc[-1]["unrealized_pnl_total"] if not self.ledger.empty else 0.0
             ),
             "total_fees": self.fees_paid,
             "total_trades": self.total_trades,

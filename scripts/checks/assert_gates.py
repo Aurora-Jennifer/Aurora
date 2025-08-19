@@ -38,9 +38,7 @@ def check_gates(results_file: str = "results/walkforward/results.json"):
     total_folds = len(sharpe_scores)
     psr = positive_sharpe_folds / total_folds if total_folds > 0 else 0.0
 
-    print(
-        f"PSR: {psr:.3f} ({positive_sharpe_folds}/{total_folds} folds with positive Sharpe)"
-    )
+    print(f"PSR: {psr:.3f} ({positive_sharpe_folds}/{total_folds} folds with positive Sharpe)")
 
     # Gate 2: MaxDD <= 20%
     max_dd_threshold = 0.20
@@ -48,7 +46,7 @@ def check_gates(results_file: str = "results/walkforward/results.json"):
     max_dd_gate = max_dd_violations == 0
 
     print(
-        f"MaxDD Gate: {'PASS' if max_dd_gate else 'FAIL'} ({max_dd_violations} folds exceed {max_dd_threshold*100}% drawdown)"
+        f"MaxDD Gate: {'PASS' if max_dd_gate else 'FAIL'} ({max_dd_violations} folds exceed {max_dd_threshold * 100}% drawdown)"
     )
 
     # Gate 3: Minimum trades per fold
@@ -63,7 +61,9 @@ def check_gates(results_file: str = "results/walkforward/results.json"):
     # Gate 4: Trusted fold requirements
     # Need at least 6 months of contiguous trusted folds
     trusted_folds = []
-    for i, (sharpe, max_dd, trades) in enumerate(zip(sharpe_scores, max_dds, n_trades)):
+    for i, (sharpe, max_dd, trades) in enumerate(
+        zip(sharpe_scores, max_dds, n_trades, strict=False)
+    ):
         is_trusted = (
             sharpe > 0  # positive Sharpe
             and max_dd > -max_dd_threshold  # acceptable drawdown
@@ -85,9 +85,7 @@ def check_gates(results_file: str = "results/walkforward/results.json"):
     min_contiguous_folds = 2
     contiguous_gate = max_contiguous >= min_contiguous_folds
 
-    print(
-        f"Contiguous Trusted: {max_contiguous} folds (need >= {min_contiguous_folds})"
-    )
+    print(f"Contiguous Trusted: {max_contiguous} folds (need >= {min_contiguous_folds})")
     print(f"Contiguous Gate: {'PASS' if contiguous_gate else 'FAIL'}")
 
     # Overall gate status

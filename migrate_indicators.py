@@ -95,8 +95,7 @@ def main():
         dirs[:] = [
             d
             for d in dirs
-            if not d.startswith(".")
-            and d not in ["__pycache__", "node_modules", "venv", "env"]
+            if not d.startswith(".") and d not in ["__pycache__", "node_modules", "venv", "env"]
         ]
         for file in files:
             if file.endswith(".py") and file != "migrate_indicators.py":

@@ -28,9 +28,7 @@ def main():
         help="Configuration file path",
     )
     parser.add_argument("--profile", help="Profile configuration file path")
-    parser.add_argument(
-        "--paper", action="store_true", help="Run in paper trading mode"
-    )
+    parser.add_argument("--paper", action="store_true", help="Run in paper trading mode")
 
     args = parser.parse_args()
 
@@ -67,14 +65,8 @@ def main():
 
     except Exception as e:
         # Send error notification
-        if (
-            "system" in locals()
-            and hasattr(system, "discord_notifier")
-            and system.discord_notifier
-        ):
-            system.discord_notifier.send_error_notification(
-                str(e), "Daily trading execution"
-            )
+        if "system" in locals() and hasattr(system, "discord_notifier") and system.discord_notifier:
+            system.discord_notifier.send_error_notification(str(e), "Daily trading execution")
         if "system" in locals() and hasattr(system, "trading_logger"):
             system.trading_logger.log_error(str(e), "Daily trading execution", e)
         raise

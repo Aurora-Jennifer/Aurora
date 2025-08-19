@@ -1,5 +1,5 @@
-from pathlib import Path
 import json
+from pathlib import Path
 
 
 def test_paper_meta_written(tmp_path, monkeypatch):
@@ -16,5 +16,3 @@ def test_paper_meta_written(tmp_path, monkeypatch):
     assert meta_path.exists()
     data = json.loads(meta_path.read_text())
     assert "run_id" in data and "start" in data and "stop" in data
-
-

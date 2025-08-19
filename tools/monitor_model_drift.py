@@ -4,14 +4,14 @@ import json
 import os
 import sys
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any
 
 import numpy as np
 import pandas as pd
 import yaml
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from ml.feature_stats import stats, psi  # noqa: E402
+from ml.feature_stats import psi, stats  # noqa: E402
 
 
 def _deterministic_prices(n: int = 360, start: float = 100.0) -> pd.DataFrame:
@@ -23,7 +23,7 @@ def _deterministic_prices(n: int = 360, start: float = 100.0) -> pd.DataFrame:
 
 
 def _build_features(df: pd.DataFrame) -> pd.DataFrame:
-    feats: Dict[str, Any] = {}
+    feats: dict[str, Any] = {}
     feats["ret_1d"] = df["Close"].pct_change()
     feats["ret_5d"] = df["Close"].pct_change(5)
     feats["vol_10d"] = df["Close"].pct_change().rolling(10).std()
@@ -37,7 +37,7 @@ def main() -> None:
     selected = models_cfg.get("selected", "dummy_v1")
     model_cfg = reg[selected]
 
-    training_stats = (model_cfg.get("training_stats") or {})
+    training_stats = model_cfg.get("training_stats") or {}
     thresholds = {
         "psi_warn": model_cfg.get("psi_warn", 0.10),
         "psi_fail": model_cfg.get("psi_fail", 0.25),
@@ -67,5 +67,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-

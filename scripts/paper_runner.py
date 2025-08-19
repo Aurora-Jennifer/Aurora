@@ -1,30 +1,45 @@
 from __future__ import annotations
+
 import argparse
 import json
-from datetime import datetime, timezone
+import os
+import sys
+from datetime import UTC, datetime
 from pathlib import Path
-import os, sys
+
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from brokers.paper import PaperBroker
-from utils.ops_runtime import kill_switch, notify_ntfy
-import yaml
+import shutil
+import subprocess
+
 import numpy as np
 import pandas as pd
+import yaml
+
+from brokers.paper import PaperBroker
 from ml.model_interface import ModelSpec
 from ml.registry import load_model
-from ml.runtime import set_seeds, build_features, infer_weights, detect_weight_spikes, compute_turnover
-import shutil, subprocess
+from ml.runtime import (
+    build_features,
+    compute_turnover,
+    detect_weight_spikes,
+    infer_weights,
+    set_seeds,
+)
+from utils.ops_runtime import kill_switch, notify_ntfy
 
 try:
     from tools.provenance import write_provenance
 except Exception:
-    import os, sys
+    import os
+    import sys
+
     tools_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "tools")
     if tools_dir not in sys.path:
         sys.path.append(tools_dir)
     try:
         from provenance import write_provenance  # type: ignore
     except Exception:
+
         def write_provenance(*_a, **_k):
             return {}
 
@@ -38,7 +53,7 @@ def main(argv: list[str] | None = None):
     ap.add_argument("--ntfy", action="store_true")
     args = ap.parse_args(argv)
 
-    run_id = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H%M%SZ")
+    run_id = datetime.now(UTC).strftime("%Y-%m-%dT%H%M%SZ")
     Path("reports").mkdir(parents=True, exist_ok=True)
     broker = PaperBroker()
     meta = {
@@ -67,6 +82,7 @@ def main(argv: list[str] | None = None):
             STATE.write_text(json.dumps({"prev_weights": prev_weights}, indent=2))
         except Exception:
             pass
+
     try:
         cfg = yaml.safe_load(Path("config/base.yaml").read_text())
         models_cfg = (cfg or {}).get("models", {}) or {}
@@ -75,7 +91,9 @@ def main(argv: list[str] | None = None):
             reg = yaml.safe_load(Path("config/models.yaml").read_text())["registry"]
             m_id = models_cfg["selected"]
             spec_cfg = reg[m_id]
-            spec = ModelSpec(kind=spec_cfg["kind"], path=spec_cfg["path"], metadata=spec_cfg.get("metadata", {}))
+            spec = ModelSpec(
+                kind=spec_cfg["kind"], path=spec_cfg["path"], metadata=spec_cfg.get("metadata", {})
+            )
             model, art_sha = load_model(spec)
             feats_list = models_cfg.get("input_features", [])
             feat_order = (spec.metadata or {}).get("feature_order", feats_list)
@@ -101,7 +119,14 @@ def main(argv: list[str] | None = None):
                     # pick first as close-like
                     df = pd.DataFrame({"Close": df.iloc[:, 0]}, index=df.index)
                 F = build_features(df, feats_list)
-                w = infer_weights(model, F, feat_order, models_cfg.get("score_to_weight", "tanh"), float(models_cfg.get("max_abs_weight", 0.5)), min_bars)
+                w = infer_weights(
+                    model,
+                    F,
+                    feat_order,
+                    models_cfg.get("score_to_weight", "tanh"),
+                    float(models_cfg.get("max_abs_weight", 0.5)),
+                    min_bars,
+                )
                 # map index 0 weight to symbol for now
                 if isinstance(w, dict) and "status" not in w:
                     # use first weight
@@ -120,14 +145,16 @@ def main(argv: list[str] | None = None):
                 if turnover > TURNOVER_CAP:
                     meta["model_tripwire_turnover"] = {"turnover": turnover}
                     model_fallbacks += 1
-            meta.update({
-                "model_id": m_id,
-                "model_kind": spec.kind,
-                "artifact_sha256": art_sha,
-                "feature_order": feat_order,
-                "model_enabled": True,
-                "model_fallbacks": model_fallbacks,
-            })
+            meta.update(
+                {
+                    "model_id": m_id,
+                    "model_kind": spec.kind,
+                    "artifact_sha256": art_sha,
+                    "feature_order": feat_order,
+                    "model_enabled": True,
+                    "model_fallbacks": model_fallbacks,
+                }
+            )
             # weights_by_symbol is ready for router integration (future step)
             prev_weights = weights_by_symbol.copy()
     except Exception:
@@ -139,7 +166,7 @@ def main(argv: list[str] | None = None):
             break
         # integrate signal + routing here in next iteration
 
-    meta["stop"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H%M%SZ")
+    meta["stop"] = datetime.now(UTC).strftime("%Y-%m-%dT%H%M%SZ")
     (Path("reports") / "paper_run.meta.json").write_text(json.dumps(meta, indent=2))
     # Persist prev weights across restarts
     try:
@@ -171,5 +198,3 @@ def main(argv: list[str] | None = None):
 
 if __name__ == "__main__":
     main()
-
-

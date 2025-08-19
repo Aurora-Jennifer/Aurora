@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 import numpy as np
 
@@ -19,7 +19,7 @@ from .pipeline import Pipeline
 
 def run_fold(
     p: Pipeline, close: np.ndarray, X: np.ndarray, y: np.ndarray, f: Fold
-) -> Tuple[Dict[str, Any], np.ndarray, np.ndarray]:
+) -> tuple[dict[str, Any], np.ndarray, np.ndarray]:
     tr = np.arange(f.train_lo, f.train_hi + 1)
     te = np.arange(f.test_lo, f.test_hi + 1)
 
@@ -31,9 +31,7 @@ def run_fold(
     p.fit_model(Xtr, ytr, warm=None)
     signal = p.predict(Xte)
 
-    pnl, ntrades, wins, losses, med_hold = simulate_safe(
-        close[te], signal.astype(np.int8)
-    )
+    pnl, ntrades, wins, losses, med_hold = simulate_safe(close[te], signal.astype(np.int8))
     ret = np.diff(pnl)
 
     metrics = {
@@ -52,7 +50,7 @@ def run_fold(
     return metrics, pnl, signal
 
 
-def gate_fold(metrics: Dict[str, Any], gates: Dict[str, Any]) -> Dict[str, Any]:
+def gate_fold(metrics: dict[str, Any], gates: dict[str, Any]) -> dict[str, Any]:
     ok = True
     reasons = []
     if metrics["n_bars"] < gates.get("min_days", 30):
@@ -72,7 +70,7 @@ def gate_fold(metrics: Dict[str, Any], gates: Dict[str, Any]) -> Dict[str, Any]:
     return metrics
 
 
-def stitch_equity(pnl_per_fold: List[np.ndarray]) -> np.ndarray:
+def stitch_equity(pnl_per_fold: list[np.ndarray]) -> np.ndarray:
     """Stitch fold PnL series into a continuous equity curve."""
     if not pnl_per_fold:
         return np.array([])
@@ -88,7 +86,7 @@ def stitch_equity(pnl_per_fold: List[np.ndarray]) -> np.ndarray:
     return np.concatenate(out)
 
 
-def fold_weight(m: Dict[str, Any], tau: float = 0.6) -> float:
+def fold_weight(m: dict[str, Any], tau: float = 0.6) -> float:
     """Calculate fold weight based on composite score with stable softmax."""
     # Composite score from multiple metrics
     s = np.nan_to_num(m["sharpe_nw"], nan=0.0)
@@ -106,7 +104,7 @@ def fold_weight(m: Dict[str, Any], tau: float = 0.6) -> float:
     return w / (w.sum() if w.sum() > 0 else 1.0)
 
 
-def reweight(metrics_list: List[Dict[str, Any]]) -> np.ndarray:
+def reweight(metrics_list: list[dict[str, Any]]) -> np.ndarray:
     """Normalize fold weights using stable softmax."""
     if not metrics_list:
         return np.array([])
@@ -132,15 +130,15 @@ def reweight(metrics_list: List[Dict[str, Any]]) -> np.ndarray:
 
 
 def contiguous_trusted_span(
-    fold_meta: List[Dict[str, Any]],
-    fold_dates: List[Tuple[datetime, datetime]],
+    fold_meta: list[dict[str, Any]],
+    fold_dates: list[tuple[datetime, datetime]],
     min_months: int = 6,
-) -> Tuple[bool, timedelta]:
+) -> tuple[bool, timedelta]:
     """Calculate longest contiguous trusted span."""
     span = timedelta(0)
     best = timedelta(0)
 
-    for i, (meta, (start, end)) in enumerate(zip(fold_meta, fold_dates)):
+    for i, (meta, (start, end)) in enumerate(zip(fold_meta, fold_dates, strict=False)):
         if meta["trusted"]:
             span += end - start
             best = max(best, span)
@@ -151,8 +149,8 @@ def contiguous_trusted_span(
 
 
 def calculate_weighted_metrics(
-    metrics_list: List[Dict[str, Any]], pnl_per_fold: List[np.ndarray]
-) -> Dict[str, float]:
+    metrics_list: list[dict[str, Any]], pnl_per_fold: list[np.ndarray]
+) -> dict[str, float]:
     """Calculate weighted aggregate metrics with payoff analysis."""
     if not metrics_list or not pnl_per_fold:
         return {}
@@ -161,24 +159,16 @@ def calculate_weighted_metrics(
     weights = reweight(metrics_list)
 
     # Weighted metrics
-    weighted_sharpe = np.average(
-        [m["sharpe_nw"] for m in metrics_list], weights=weights
-    )
+    weighted_sharpe = np.average([m["sharpe_nw"] for m in metrics_list], weights=weights)
     weighted_sortino = np.average([m["sortino"] for m in metrics_list], weights=weights)
     weighted_max_dd = np.average([m["max_dd"] for m in metrics_list], weights=weights)
-    weighted_win_rate = np.average(
-        [m["win_rate"] for m in metrics_list], weights=weights
-    )
-    weighted_turnover = np.average(
-        [m["turnover"] for m in metrics_list], weights=weights
-    )
+    weighted_win_rate = np.average([m["win_rate"] for m in metrics_list], weights=weights)
+    weighted_turnover = np.average([m["turnover"] for m in metrics_list], weights=weights)
 
     # Stitched equity metrics
     stitched_equity_curve = stitch_equity(pnl_per_fold)
     if len(stitched_equity_curve) > 1:
-        stitched_returns = np.diff(
-            stitched_equity_curve, prepend=stitched_equity_curve[0]
-        )
+        stitched_returns = np.diff(stitched_equity_curve, prepend=stitched_equity_curve[0])
         stitched_sharpe = sharpe_newey_west(stitched_returns)
         stitched_max_dd = max_drawdown(stitched_equity_curve)
     else:

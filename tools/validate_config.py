@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 import sys
-import json
-import yaml
 from pathlib import Path
-from jsonschema import validate, ValidationError
+
+import yaml
+from jsonschema import ValidationError, validate
 
 SCHEMA = {
     "type": "object",
@@ -53,5 +53,3 @@ def main(path: str = "config/base.yaml") -> int:
 if __name__ == "__main__":
     p = sys.argv[1] if len(sys.argv) > 1 else "config/base.yaml"
     raise SystemExit(main(p))
-
-

@@ -16,7 +16,6 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
 
 # Performance baselines (in seconds)
 PERFORMANCE_BASELINES = {
@@ -46,7 +45,7 @@ PERFORMANCE_TEST_PATTERNS = [
 logger = logging.getLogger(__name__)
 
 
-def parse_perf_log(log_file: Path) -> List[Dict]:
+def parse_perf_log(log_file: Path) -> list[dict]:
     """Parse pytest performance log file or output."""
     results = []
 
@@ -65,7 +64,7 @@ def parse_perf_log(log_file: Path) -> List[Dict]:
         return _parse_standard_output(content)
 
 
-def _parse_report_log(content: str) -> List[Dict]:
+def _parse_report_log(content: str) -> list[dict]:
     """Parse pytest report log format."""
     results = []
     lines = content.split("\n")
@@ -115,7 +114,7 @@ def _parse_report_log(content: str) -> List[Dict]:
     return results
 
 
-def _parse_standard_output(content: str) -> List[Dict]:
+def _parse_standard_output(content: str) -> list[dict]:
     """Parse standard pytest output for performance information."""
     results = []
 
@@ -173,7 +172,7 @@ def _parse_standard_output(content: str) -> List[Dict]:
     return results
 
 
-def extract_memory_usage(test_name: str, log_content: str) -> Optional[float]:
+def extract_memory_usage(test_name: str, log_content: str) -> float | None:
     """Extract memory usage from test output."""
     # Look for memory usage patterns in the test output
     memory_patterns = [
@@ -191,16 +190,14 @@ def extract_memory_usage(test_name: str, log_content: str) -> Optional[float]:
 
 
 def check_performance_thresholds(
-    results: List[Dict], mode: str = "RELAXED"
-) -> Tuple[bool, List[str]]:
+    results: list[dict], mode: str = "RELAXED"
+) -> tuple[bool, list[str]]:
     """Check performance results against thresholds."""
     tolerance = TOLERANCE_MODES.get(mode, 0.30)
     failures = []
     passed = True
 
-    logger.info(
-        f"Checking performance with {mode} mode (tolerance: +{tolerance*100:.0f}%)"
-    )
+    logger.info(f"Checking performance with {mode} mode (tolerance: +{tolerance * 100:.0f}%)")
 
     for result in results:
         if result["outcome"] != "passed":
@@ -237,9 +234,7 @@ def check_performance_thresholds(
     return passed, failures
 
 
-def check_memory_thresholds(
-    results: List[Dict], mode: str = "RELAXED"
-) -> Tuple[bool, List[str]]:
+def check_memory_thresholds(results: list[dict], mode: str = "RELAXED") -> tuple[bool, list[str]]:
     """Check memory usage against thresholds."""
     tolerance = TOLERANCE_MODES.get(mode, 0.30)
     failures = []
@@ -274,17 +269,13 @@ def check_memory_thresholds(
             passed = False
             logger.error(failure_msg)
         else:
-            logger.info(
-                f"✓ {test_name}: {memory_usage:.1f} MB (baseline: {MEMORY_BASELINE} MB)"
-            )
+            logger.info(f"✓ {test_name}: {memory_usage:.1f} MB (baseline: {MEMORY_BASELINE} MB)")
 
     return passed, failures
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Performance gate for DataSanity tests"
-    )
+    parser = argparse.ArgumentParser(description="Performance gate for DataSanity tests")
     parser.add_argument(
         "--mode",
         choices=["RELAXED", "STRICT"],

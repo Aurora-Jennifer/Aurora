@@ -6,7 +6,7 @@ Handles the main trading logic and state management
 import json
 from datetime import date as date_class
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -98,9 +98,7 @@ class PaperTradingEngine:
 
         # Initialize other components
         self.regime_detector = RegimeDetector(lookback_period=252)
-        self.feature_reweighter = FeatureReweighter(
-            rolling_window=60, reweight_frequency=20
-        )
+        self.feature_reweighter = FeatureReweighter(rolling_window=60, reweight_frequency=20)
         self.adaptive_engine = AdaptiveFeatureEngine(reweighter=self.feature_reweighter)
 
         # Initialize growth target calculator
@@ -120,7 +118,7 @@ class PaperTradingEngine:
 
         self.logger.info("All components initialized successfully")
 
-    def _initialize_kill_switches(self) -> Dict[str, Any]:
+    def _initialize_kill_switches(self) -> dict[str, Any]:
         """Initialize kill switches for risk management."""
         kill_switches = self.config.get("kill_switches", {})
 
@@ -140,7 +138,7 @@ class PaperTradingEngine:
 
         return kill_switches
 
-    def _setup_discord_notifications(self) -> Optional[DiscordNotifier]:
+    def _setup_discord_notifications(self) -> DiscordNotifier | None:
         """Setup Discord notifications if configured."""
         notifications_config = self.config.get("notifications", {})
 
@@ -149,9 +147,7 @@ class PaperTradingEngine:
             bot_name = notifications_config.get("bot_name", "Trading Bot")
 
             if webhook_url:
-                discord_config = DiscordConfig(
-                    webhook_url=webhook_url, bot_name=bot_name
-                )
+                discord_config = DiscordConfig(webhook_url=webhook_url, bot_name=bot_name)
                 return DiscordNotifier(discord_config)
             else:
                 self.logger.warning("Discord enabled but no webhook URL provided")
@@ -196,7 +192,7 @@ class PaperTradingEngine:
         if hasattr(self.trading_logger, "log_event"):
             self.trading_logger.log_event("STARTUP", startup_info)
 
-    def load_config(self) -> Dict[str, Any]:
+    def load_config(self) -> dict[str, Any]:
         """Load configuration from file."""
         try:
             with open(self.config_file) as f:
@@ -227,7 +223,7 @@ class PaperTradingEngine:
         except json.JSONDecodeError as e:
             self.logger.error(f"Invalid JSON in profile file: {e}")
 
-    def run_trading_cycle(self, current_date: date_class = None) -> Dict[str, Any]:
+    def run_trading_cycle(self, current_date: date_class = None) -> dict[str, Any]:
         """
         Run a complete trading cycle for the current date.
 
@@ -293,9 +289,7 @@ class PaperTradingEngine:
             self.logger.error(f"Error in trading cycle: {e}")
             return {"status": "error", "error": str(e)}
 
-    def _get_market_data(
-        self, current_date: date_class
-    ) -> Optional[Dict[str, pd.DataFrame]]:
+    def _get_market_data(self, current_date: date_class) -> dict[str, pd.DataFrame] | None:
         """Get market data for all symbols."""
         symbols = self.config.get("symbols", ["SPY"])
         market_data = {}
@@ -309,9 +303,7 @@ class PaperTradingEngine:
             try:
                 if self.use_ibkr and self.data_provider:
                     # Use IBKR data provider (already uses DataSanity)
-                    symbol_data = self.data_provider.get_historical_data(
-                        symbol, "1 M", "1 day"
-                    )
+                    symbol_data = self.data_provider.get_historical_data(symbol, "1 M", "1 day")
                 else:
                     # Use yfinance as fallback
                     ticker = yf.Ticker(symbol)
@@ -332,16 +324,14 @@ class PaperTradingEngine:
 
         return market_data if market_data else None
 
-    def _detect_regime(self, market_data: Dict[str, pd.DataFrame]) -> Dict[str, Any]:
+    def _detect_regime(self, market_data: dict[str, pd.DataFrame]) -> dict[str, Any]:
         """Detect market regime using regime detector."""
         try:
             # Use the first symbol's data for regime detection
             first_symbol = list(market_data.keys())[0]
             symbol_data = market_data[first_symbol]
 
-            regime_name, confidence, regime_params = self.regime_detector.detect_regime(
-                symbol_data
-            )
+            regime_name, confidence, regime_params = self.regime_detector.detect_regime(symbol_data)
 
             regime_info = {
                 "regime_name": regime_name,
@@ -353,9 +343,7 @@ class PaperTradingEngine:
             # Record regime history
             self.regime_history.append(regime_info)
 
-            self.logger.info(
-                f"Detected regime: {regime_name} (confidence: {confidence:.2f})"
-            )
+            self.logger.info(f"Detected regime: {regime_name} (confidence: {confidence:.2f})")
             return regime_info
 
         except Exception as e:
@@ -363,8 +351,8 @@ class PaperTradingEngine:
             return {"regime_name": "unknown", "confidence": 0.0, "regime_params": None}
 
     def _select_optimal_strategy(
-        self, market_data: Dict[str, pd.DataFrame], regime_info: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, market_data: dict[str, pd.DataFrame], regime_info: dict[str, Any]
+    ) -> dict[str, Any]:
         """Select optimal strategy for current market conditions."""
         try:
             # Use the first symbol's data for strategy selection
@@ -379,17 +367,13 @@ class PaperTradingEngine:
             ) = self.strategy_selector.select_best_strategy(symbol_data)
 
             # Check if we need to switch strategies
-            current_strategy_name = self.strategy.__class__.__name__.lower().replace(
-                "strategy", ""
-            )
+            current_strategy_name = self.strategy.__class__.__name__.lower().replace("strategy", "")
 
             if strategy_name != current_strategy_name:
                 self.logger.info(
                     f"Switching strategy from {current_strategy_name} to {strategy_name}"
                 )
-                self.strategy = self._initialize_strategy_by_name(
-                    strategy_name, strategy_params
-                )
+                self.strategy = self._initialize_strategy_by_name(strategy_name, strategy_params)
 
             strategy_info = {
                 "strategy_name": strategy_name,
@@ -411,9 +395,7 @@ class PaperTradingEngine:
                 "selection_timestamp": pd.Timestamp.now(),
             }
 
-    def _initialize_strategy_by_name(
-        self, strategy_name: str, strategy_params: Dict
-    ) -> Any:
+    def _initialize_strategy_by_name(self, strategy_name: str, strategy_params: dict) -> Any:
         """Initialize strategy by name with given parameters."""
         try:
             if strategy_name == "regime_aware_ensemble":
@@ -439,10 +421,10 @@ class PaperTradingEngine:
 
     def _generate_signals(
         self,
-        market_data: Dict[str, pd.DataFrame],
-        regime_info: Dict[str, Any],
-        strategy_info: Dict[str, Any],
-    ) -> Dict[str, float]:
+        market_data: dict[str, pd.DataFrame],
+        regime_info: dict[str, Any],
+        strategy_info: dict[str, Any],
+    ) -> dict[str, float]:
         """Generate trading signals for all symbols using the selected strategy."""
         signals = {}
 
@@ -474,10 +456,10 @@ class PaperTradingEngine:
 
     def _execute_trades(
         self,
-        signals: Dict[str, float],
-        market_data: Dict[str, pd.DataFrame],
+        signals: dict[str, float],
+        market_data: dict[str, pd.DataFrame],
         current_date: date_class,
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """Execute trades based on signals with improved risk management."""
         executed_trades = []
 
@@ -496,9 +478,7 @@ class PaperTradingEngine:
             available_capital = available_capital * (1 - safety_buffer)
 
             # Calculate maximum position size per symbol
-            max_position_pct = self.config.get("risk_params", {}).get(
-                "max_position_size", 0.1
-            )
+            max_position_pct = self.config.get("risk_params", {}).get("max_position_size", 0.1)
             max_position_value = available_capital * max_position_pct
 
             for symbol, signal in signals.items():
@@ -518,24 +498,18 @@ class PaperTradingEngine:
                 signal_strength = min(abs(signal), 1.0)  # Cap at 1.0
 
                 # Calculate dynamic position size using growth target calculator
-                position_size_pct = (
-                    self.growth_calculator.calculate_dynamic_position_size(
-                        signal_strength=signal_strength,
-                        current_capital=self.capital,
-                        symbol_volatility=self._calculate_symbol_volatility(
-                            symbol_data
-                        ),
-                        portfolio_volatility=self._calculate_portfolio_volatility(),
-                    )
+                position_size_pct = self.growth_calculator.calculate_dynamic_position_size(
+                    signal_strength=signal_strength,
+                    current_capital=self.capital,
+                    symbol_volatility=self._calculate_symbol_volatility(symbol_data),
+                    portfolio_volatility=self._calculate_portfolio_volatility(),
                 )
 
                 position_value = position_size_pct * available_capital
 
                 # Ensure we don't exceed available capital
                 if position_value > available_capital:
-                    position_value = (
-                        available_capital * 0.8
-                    )  # Use 80% of remaining capital
+                    position_value = available_capital * 0.8  # Use 80% of remaining capital
 
                 shares = int(position_value / current_price)
 
@@ -599,9 +573,7 @@ class PaperTradingEngine:
             position_value = shares * price
 
             # Check against maximum position size
-            max_position_pct = self.config.get("risk_params", {}).get(
-                "max_position_size", 0.1
-            )
+            max_position_pct = self.config.get("risk_params", {}).get("max_position_size", 0.1)
             max_position_value = self.capital * max_position_pct
 
             if position_value > max_position_value:
@@ -640,9 +612,7 @@ class PaperTradingEngine:
             self.logger.error(f"Error validating position size: {e}")
             return False
 
-    def _update_portfolio(
-        self, market_data: Dict[str, pd.DataFrame], current_date: date_class
-    ):
+    def _update_portfolio(self, market_data: dict[str, pd.DataFrame], current_date: date_class):
         """Update portfolio with current market data."""
         try:
             # Update position values and track last prices
@@ -651,9 +621,7 @@ class PaperTradingEngine:
             for symbol, position in self.positions.items():
                 if symbol in market_data and not market_data[symbol].empty:
                     current_price = market_data[symbol]["Close"].iloc[-1]
-                    self.last_prices[
-                        symbol
-                    ] = current_price  # Track for risk management
+                    self.last_prices[symbol] = current_price  # Track for risk management
                     position_value = position * current_price
                     total_value += position_value
 
@@ -698,7 +666,7 @@ class PaperTradingEngine:
         except Exception as e:
             self.logger.error(f"Error recording daily return: {e}")
 
-    def _calculate_performance_metrics(self) -> Dict[str, float]:
+    def _calculate_performance_metrics(self) -> dict[str, float]:
         """Calculate performance metrics."""
         try:
             if len(self.daily_returns) < 2:
@@ -713,9 +681,7 @@ class PaperTradingEngine:
             for i in range(1, len(self.daily_returns)):
                 prev_value = self.daily_returns[i - 1]["portfolio_value"]
                 curr_value = self.daily_returns[i]["portfolio_value"]
-                daily_return = (
-                    (curr_value - prev_value) / prev_value if prev_value > 0 else 0.0
-                )
+                daily_return = (curr_value - prev_value) / prev_value if prev_value > 0 else 0.0
                 returns.append(daily_return)
 
             returns_series = pd.Series(returns)
@@ -725,9 +691,7 @@ class PaperTradingEngine:
                 (self.capital / self.config.get("initial_capital", 100000)) - 1
             ) * 100
             sharpe_ratio = (
-                returns_series.mean() / returns_series.std()
-                if returns_series.std() > 0
-                else 0.0
+                returns_series.mean() / returns_series.std() if returns_series.std() > 0 else 0.0
             )
 
             # Calculate max drawdown
@@ -751,15 +715,11 @@ class PaperTradingEngine:
                 "max_drawdown_pct": 0.0,
             }
 
-    def _save_results(
-        self, current_date: date_class, performance_metrics: Dict[str, float]
-    ):
+    def _save_results(self, current_date: date_class, performance_metrics: dict[str, float]):
         """Save trading results."""
         try:
             # Ensure results directory exists
-            results_dir = self.config.get("performance_tracking", {}).get(
-                "results_dir", "results"
-            )
+            results_dir = self.config.get("performance_tracking", {}).get("results_dir", "results")
             ensure_directories(results_dir)
 
             # Save daily results
@@ -768,9 +728,7 @@ class PaperTradingEngine:
                 "portfolio_value": self.capital,
                 "performance_metrics": performance_metrics,
                 "positions": self.positions,
-                "trades_today": len(
-                    [t for t in self.trade_history if t["date"] == current_date]
-                ),
+                "trades_today": len([t for t in self.trade_history if t["date"] == current_date]),
             }
 
             results_file = f"{results_dir}/daily_results_{current_date}.json"
@@ -782,18 +740,14 @@ class PaperTradingEngine:
         except Exception as e:
             self.logger.error(f"Error saving results: {e}")
 
-    def _send_notifications(
-        self, current_date: date_class, performance_metrics: Dict[str, float]
-    ):
+    def _send_notifications(self, current_date: date_class, performance_metrics: dict[str, float]):
         """Send notifications about trading results."""
         try:
             if self.discord_notifier:
                 message = f"📊 Trading Update - {current_date}\n"
                 message += f"Portfolio Value: ${self.capital:,.2f}\n"
                 message += f"Total Return: {performance_metrics.get('total_return_pct', 0):.2f}%\n"
-                message += (
-                    f"Sharpe Ratio: {performance_metrics.get('sharpe_ratio', 0):.2f}\n"
-                )
+                message += f"Sharpe Ratio: {performance_metrics.get('sharpe_ratio', 0):.2f}\n"
                 message += f"Max Drawdown: {performance_metrics.get('max_drawdown_pct', 0):.2f}%"
 
                 self.discord_notifier.send_message(message)
@@ -801,7 +755,7 @@ class PaperTradingEngine:
         except Exception as e:
             self.logger.error(f"Error sending notifications: {e}")
 
-    def get_performance_summary(self) -> Dict[str, Any]:
+    def get_performance_summary(self) -> dict[str, Any]:
         """Get performance summary."""
         return {
             "total_return_pct": self.performance_metrics.get("total_return_pct", 0.0),
@@ -812,19 +766,19 @@ class PaperTradingEngine:
             "initial_capital": self.config.get("initial_capital", 100000),
         }
 
-    def get_positions(self) -> Dict[str, int]:
+    def get_positions(self) -> dict[str, int]:
         """Get current positions."""
         return self.positions.copy()
 
-    def get_trade_history(self) -> List[Dict[str, Any]]:
+    def get_trade_history(self) -> list[dict[str, Any]]:
         """Get trade history."""
         return self.trade_history.copy()
 
-    def get_daily_returns(self) -> List[Dict[str, Any]]:
+    def get_daily_returns(self) -> list[dict[str, Any]]:
         """Get daily returns."""
         return self.daily_returns.copy()
 
-    def get_regime_history(self) -> List[Dict[str, Any]]:
+    def get_regime_history(self) -> list[dict[str, Any]]:
         """Get regime detection history."""
         return self.regime_history.copy()
 
@@ -838,7 +792,9 @@ class PaperTradingEngine:
 
         # Send final notification
         if self.discord_notifier:
-            final_message = f"🔚 Trading Engine Shutdown\nFinal Portfolio Value: ${self.capital:,.2f}"
+            final_message = (
+                f"🔚 Trading Engine Shutdown\nFinal Portfolio Value: ${self.capital:,.2f}"
+            )
             self.discord_notifier.send_message(final_message)
 
         self.logger.info("Trading engine shutdown complete")
@@ -855,7 +811,7 @@ class PaperTradingEngine:
             return strategy_factory.create_strategy(strategy_name, strategy_params)
 
     def _update_strategy_performance(
-        self, strategy_info: Dict[str, Any], performance_metrics: Dict[str, float]
+        self, strategy_info: dict[str, Any], performance_metrics: dict[str, float]
     ):
         """Update the strategy selector with actual performance data."""
         try:
@@ -893,9 +849,7 @@ class PaperTradingEngine:
             for i in range(1, len(self.daily_returns)):
                 prev_value = self.daily_returns[i - 1]["portfolio_value"]
                 curr_value = self.daily_returns[i]["portfolio_value"]
-                daily_return = (
-                    (curr_value - prev_value) / prev_value if prev_value > 0 else 0.0
-                )
+                daily_return = (curr_value - prev_value) / prev_value if prev_value > 0 else 0.0
                 recent_returns.append(daily_return)
 
             return np.std(recent_returns) if recent_returns else 0.0

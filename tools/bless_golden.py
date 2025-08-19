@@ -1,11 +1,12 @@
 import json
+import os
+import sys
 from pathlib import Path
-import os, sys
+
 import pandas as pd
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from core.engine import backtest as bt
-
 
 BASE = Path("baselines/spy_golden.json")
 
@@ -28,5 +29,3 @@ def run():
 
 if __name__ == "__main__":
     run()
-
-

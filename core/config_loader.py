@@ -7,7 +7,7 @@ Handles base config, profile overrides, asset-specific overrides, and CLI overri
 import json
 import logging
 import os
-from typing import Any, Dict, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +19,7 @@ class ConfigLoader:
         self.base_config_path = base_config_path
         self.base_config = self._load_json(base_config_path)
 
-    def _load_json(self, path: str) -> Dict[str, Any]:
+    def _load_json(self, path: str) -> dict[str, Any]:
         """Load JSON file safely."""
         try:
             with open(path) as f:
@@ -31,18 +31,12 @@ class ConfigLoader:
             logger.error(f"Invalid JSON in {path}: {e}")
             return {}
 
-    def _deep_merge(
-        self, base: Dict[str, Any], override: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _deep_merge(self, base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
         """Deep merge two dictionaries."""
         result = base.copy()
 
         for key, value in override.items():
-            if (
-                key in result
-                and isinstance(result[key], dict)
-                and isinstance(value, dict)
-            ):
+            if key in result and isinstance(result[key], dict) and isinstance(value, dict):
                 result[key] = self._deep_merge(result[key], value)
             else:
                 result[key] = value
@@ -51,10 +45,10 @@ class ConfigLoader:
 
     def load_config(
         self,
-        profile: Optional[str] = None,
-        asset: Optional[str] = None,
-        cli_overrides: Optional[Dict[str, Any]] = None,
-    ) -> Dict[str, Any]:
+        profile: str | None = None,
+        asset: str | None = None,
+        cli_overrides: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         """
         Load configuration with optional profile and asset overrides.
 
@@ -89,7 +83,7 @@ class ConfigLoader:
 
         return config
 
-    def _get_asset_class(self, symbol: str) -> Optional[str]:
+    def _get_asset_class(self, symbol: str) -> str | None:
         """Determine asset class from symbol."""
         symbol_upper = symbol.upper()
 
@@ -100,27 +94,27 @@ class ConfigLoader:
         else:
             return "equity"
 
-    def get_symbols(self, config: Dict[str, Any]) -> list:
+    def get_symbols(self, config: dict[str, Any]) -> list:
         """Get list of symbols from config."""
         return config.get("symbols", [config.get("default_symbol", "SPY")])
 
-    def get_walkforward_params(self, config: Dict[str, Any]) -> Dict[str, Any]:
+    def get_walkforward_params(self, config: dict[str, Any]) -> dict[str, Any]:
         """Get walkforward parameters from config."""
         return config.get("walkforward", {})
 
-    def get_risk_params(self, config: Dict[str, Any]) -> Dict[str, Any]:
+    def get_risk_params(self, config: dict[str, Any]) -> dict[str, Any]:
         """Get risk parameters from config."""
         return config.get("risk_params", {})
 
-    def get_composer_config(self, config: Dict[str, Any]) -> Dict[str, Any]:
+    def get_composer_config(self, config: dict[str, Any]) -> dict[str, Any]:
         """Get composer configuration from config."""
         return config.get("composer", {})
 
-    def get_optimization_config(self, config: Dict[str, Any]) -> Dict[str, Any]:
+    def get_optimization_config(self, config: dict[str, Any]) -> dict[str, Any]:
         """Get optimization configuration from config."""
         return config.get("optimization", {})
 
-    def validate_config(self, config: Dict[str, Any]) -> bool:
+    def validate_config(self, config: dict[str, Any]) -> bool:
         """Validate configuration structure and values."""
         required_sections = ["symbols", "risk_params", "walkforward"]
 
@@ -153,11 +147,11 @@ class ConfigLoader:
 
 
 def load_config(
-    profile: Optional[str] = None,
-    asset: Optional[str] = None,
-    cli_overrides: Optional[Dict[str, Any]] = None,
+    profile: str | None = None,
+    asset: str | None = None,
+    cli_overrides: dict[str, Any] | None = None,
     base_config_path: str = "config/base.json",
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Convenience function to load configuration.
 
@@ -180,7 +174,7 @@ def load_config(
     return config
 
 
-def save_config(config: Dict[str, Any], path: str) -> None:
+def save_config(config: dict[str, Any], path: str) -> None:
     """Save configuration to file."""
     try:
         os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -193,7 +187,7 @@ def save_config(config: Dict[str, Any], path: str) -> None:
 
 def create_profile_config(
     profile_name: str,
-    overrides: Dict[str, Any],
+    overrides: dict[str, Any],
     base_config_path: str = "config/base.json",
 ) -> str:
     """

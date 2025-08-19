@@ -39,7 +39,10 @@ def run_data_sanity_tests():
     try:
         # Run the tests
         result = subprocess.run(
-            cmd, capture_output=True, text=True, timeout=300  # 5 minute timeout
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=300,  # 5 minute timeout
         )
 
         # Parse the output

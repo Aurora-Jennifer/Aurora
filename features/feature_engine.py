@@ -5,7 +5,6 @@ Comprehensive feature generation for trading strategies
 
 import logging
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -18,9 +17,9 @@ class FeatureConfig:
     """Configuration for feature generation."""
 
     # Trend/Momentum features
-    sma_periods: List[Tuple[int, int]] = None  # [(fast, slow), ...]
-    ema_periods: List[Tuple[int, int]] = None
-    macd_params: Tuple[int, int, int] = (12, 26, 9)  # (fast, slow, signal)
+    sma_periods: list[tuple[int, int]] = None  # [(fast, slow), ...]
+    ema_periods: list[tuple[int, int]] = None
+    macd_params: tuple[int, int, int] = (12, 26, 9)  # (fast, slow, signal)
     rsi_period: int = 14
     roc_period: int = 10
 
@@ -63,7 +62,7 @@ class FeatureEngine:
             config: Feature configuration
         """
         self.config = config or FeatureConfig()
-        self.features: Dict[str, pd.Series] = {}
+        self.features: dict[str, pd.Series] = {}
 
         # Set default SMA periods if not provided
         if self.config.sma_periods is None:
@@ -74,7 +73,7 @@ class FeatureEngine:
 
         logger.info("Initialized FeatureEngine")
 
-    def generate_all_features(self, data: pd.DataFrame) -> Dict[str, pd.Series]:
+    def generate_all_features(self, data: pd.DataFrame) -> dict[str, pd.Series]:
         """
         Generate all features from OHLCV data.
 
@@ -232,12 +231,8 @@ class FeatureEngine:
         rsi_2 = self._calculate_rsi(close, 2)
         rsi_3 = self._calculate_rsi(close, 3)
 
-        self.features["RSI_2_Extreme"] = ((rsi_2 < 10) * -1 + (rsi_2 > 90) * 1).fillna(
-            0
-        )
-        self.features["RSI_3_Extreme"] = ((rsi_3 < 10) * -1 + (rsi_3 > 90) * 1).fillna(
-            0
-        )
+        self.features["RSI_2_Extreme"] = ((rsi_2 < 10) * -1 + (rsi_2 > 90) * 1).fillna(0)
+        self.features["RSI_3_Extreme"] = ((rsi_3 < 10) * -1 + (rsi_3 > 90) * 1).fillna(0)
 
         # Z-score of price vs MA
         for period in [20, 50, 100]:
@@ -272,9 +267,9 @@ class FeatureEngine:
 
         # VWAP deviation (simplified)
         if "Volume" in data.columns:
-            vwap = (data["Close"] * data["Volume"]).rolling(20).sum() / data[
-                "Volume"
-            ].rolling(20).sum()
+            vwap = (data["Close"] * data["Volume"]).rolling(20).sum() / data["Volume"].rolling(
+                20
+            ).sum()
             vwap_dev = (close - vwap) / vwap
             self.features["VWAP_Deviation"] = vwap_dev.fillna(0)
 
@@ -328,9 +323,7 @@ class FeatureEngine:
         trend_strength = abs(returns.rolling(20).mean()) / vol
 
         self.features["Trend_Strength"] = trend_strength.fillna(0)
-        self.features["Trend_Regime"] = (
-            trend_strength > self.config.regime_threshold
-        ).astype(int)
+        self.features["Trend_Regime"] = (trend_strength > self.config.regime_threshold).astype(int)
         self.features["Mean_Reversion_Regime"] = (trend_strength < 0.1).astype(int)
 
     def _calculate_rsi(self, close: pd.Series, period: int) -> pd.Series:
@@ -419,14 +412,10 @@ class FeatureEngine:
         money_flow = typical_price * volume
 
         positive_flow = (
-            money_flow.where(typical_price > typical_price.shift(1), 0)
-            .rolling(period)
-            .sum()
+            money_flow.where(typical_price > typical_price.shift(1), 0).rolling(period).sum()
         )
         negative_flow = (
-            money_flow.where(typical_price < typical_price.shift(1), 0)
-            .rolling(period)
-            .sum()
+            money_flow.where(typical_price < typical_price.shift(1), 0).rolling(period).sum()
         )
 
         mfi = 100 - (100 / (1 + positive_flow / (negative_flow + 1e-6)))
@@ -464,7 +453,7 @@ class FeatureEngine:
 
         return pd.DataFrame(summary_data)
 
-    def plot_features(self, save_path: Optional[str] = None) -> None:
+    def plot_features(self, save_path: str | None = None) -> None:
         """Plot all features."""
         try:
             import matplotlib.pyplot as plt

@@ -19,13 +19,9 @@ from core.engine.backtest import BacktestEngine
 def main():
     """Main function for running backtests."""
     parser = argparse.ArgumentParser(description="Comprehensive Backtest System")
-    parser.add_argument(
-        "--start", type=str, required=True, help="Start date (YYYY-MM-DD)"
-    )
+    parser.add_argument("--start", type=str, required=True, help="Start date (YYYY-MM-DD)")
     parser.add_argument("--end", type=str, required=True, help="End date (YYYY-MM-DD)")
-    parser.add_argument(
-        "--symbols", nargs="+", help="Trading symbols (overrides config)"
-    )
+    parser.add_argument("--symbols", nargs="+", help="Trading symbols (overrides config)")
     parser.add_argument(
         "--config",
         type=str,
@@ -38,15 +34,11 @@ def main():
         choices=["risk_low", "risk_balanced", "risk_strict"],
         help="Risk profile to apply",
     )
-    parser.add_argument(
-        "--asset", type=str, help="Asset symbol for asset-specific configuration"
-    )
+    parser.add_argument("--asset", type=str, help="Asset symbol for asset-specific configuration")
     parser.add_argument(
         "--fast", action="store_true", help="Run in fast mode (reduced warmup period)"
     )
-    parser.add_argument(
-        "--initial-capital", type=float, help="Initial capital (overrides config)"
-    )
+    parser.add_argument("--initial-capital", type=float, help="Initial capital (overrides config)")
 
     args = parser.parse_args()
 

@@ -27,9 +27,7 @@ def build_features_for_symbol(
         from core.data.features import build_features_parquet
 
         print(f"Building features for {symbol}...")
-        df = yf.download(
-            symbol, start=start_date, end=end_date, auto_adjust=True
-        ).reset_index()
+        df = yf.download(symbol, start=start_date, end=end_date, auto_adjust=True).reset_index()
 
         if len(df) < 252:
             print(f"  Skipping {symbol}: insufficient data ({len(df)} days)")
@@ -146,9 +144,7 @@ def print_summary_report(results: dict):
     )
 
     print("\nPER-SYMBOL BREAKDOWN:")
-    print(
-        f"{'Symbol':<8} {'Stitched':<8} {'Weighted':<8} {'Trusted':<8} {'Win Rate':<8}"
-    )
+    print(f"{'Symbol':<8} {'Stitched':<8} {'Weighted':<8} {'Trusted':<8} {'Win Rate':<8}")
     print("-" * 50)
 
     for symbol in sorted(symbols):
@@ -160,16 +156,14 @@ def print_summary_report(results: dict):
 
     # Top performers
     positive_sharpe = [
-        (s, r["stitched_sharpe"])
-        for s, r in results.items()
-        if r["stitched_sharpe"] > 0
+        (s, r["stitched_sharpe"]) for s, r in results.items() if r["stitched_sharpe"] > 0
     ]
     positive_sharpe.sort(key=lambda x: x[1], reverse=True)
 
     if positive_sharpe:
         print("\nTOP PERFORMERS (by Stitched Sharpe):")
         for i, (symbol, sharpe) in enumerate(positive_sharpe[:5]):
-            print(f"  {i+1}. {symbol}: {sharpe:.3f}")
+            print(f"  {i + 1}. {symbol}: {sharpe:.3f}")
 
     # Regime analysis
     print("\nREGIME ANALYSIS:")
@@ -216,9 +210,7 @@ def main():
         if run_walkforward_test(symbol, parquet_path, output_dir):
             success_count += 1
 
-    print(
-        f"\nCompleted walk-forward tests for {success_count}/{len(parquet_paths)} symbols"
-    )
+    print(f"\nCompleted walk-forward tests for {success_count}/{len(parquet_paths)} symbols")
 
     # Analyze results
     results = analyze_results("artifacts/multi_symbol")

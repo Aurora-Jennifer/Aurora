@@ -23,7 +23,6 @@ import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List
 
 
 class MultiAssetWalkforwardRunner:
@@ -78,15 +77,13 @@ class MultiAssetWalkforwardRunner:
         # Results storage
         self.results = {}
 
-    def run_walkforward_for_asset(self, asset_key: str) -> Dict:
+    def run_walkforward_for_asset(self, asset_key: str) -> dict:
         """Run walkforward analysis for a specific asset."""
         asset = self.assets[asset_key]
 
-        print(f"\n{'='*60}")
-        print(
-            f"Running Walkforward Analysis for {asset['name']} ({asset['description']})"
-        )
-        print(f"{'='*60}")
+        print(f"\n{'=' * 60}")
+        print(f"Running Walkforward Analysis for {asset['name']} ({asset['description']})")
+        print(f"{'=' * 60}")
 
         # Build command
         cmd = [
@@ -133,7 +130,7 @@ class MultiAssetWalkforwardRunner:
             print(f"Error output: {e.stderr}")
             return {}
 
-    def run_all_assets(self, assets_to_run: List[str] = None) -> Dict:
+    def run_all_assets(self, assets_to_run: list[str] = None) -> dict:
         """Run walkforward analysis for all specified assets."""
         if assets_to_run is None:
             assets_to_run = list(self.assets.keys())
@@ -142,9 +139,7 @@ class MultiAssetWalkforwardRunner:
         print(f"Period: {self.start_date} to {self.end_date}")
         print(f"Fold length: {self.fold_length} days")
         print(f"Step size: {self.step_size} days")
-        print(
-            f"Assets: {', '.join([self.assets[asset]['name'] for asset in assets_to_run])}"
-        )
+        print(f"Assets: {', '.join([self.assets[asset]['name'] for asset in assets_to_run])}")
 
         start_time = datetime.now()
 
@@ -158,10 +153,10 @@ class MultiAssetWalkforwardRunner:
         end_time = datetime.now()
         duration = end_time - start_time
 
-        print(f"\n{'='*60}")
+        print(f"\n{'=' * 60}")
         print("Multi-Asset Walkforward Analysis Complete!")
         print(f"Duration: {duration}")
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
 
         return self.results
 
@@ -221,21 +216,13 @@ class MultiAssetWalkforwardRunner:
                 report.append(
                     f"- **Average Test Sharpe**: {overall_metrics.get('avg_test_sharpe', 0.0):.4f}"
                 )
-                report.append(
-                    f"- **Win Rate**: {overall_metrics.get('win_rate', 0.0):.2%}"
-                )
-                report.append(
-                    f"- **Total Folds**: {overall_metrics.get('total_folds', 0)}"
-                )
-                report.append(
-                    f"- **Positive Folds**: {overall_metrics.get('positive_folds', 0)}"
-                )
+                report.append(f"- **Win Rate**: {overall_metrics.get('win_rate', 0.0):.2%}")
+                report.append(f"- **Total Folds**: {overall_metrics.get('total_folds', 0)}")
+                report.append(f"- **Positive Folds**: {overall_metrics.get('positive_folds', 0)}")
                 report.append("")
 
                 # Feature importance summary
-                feature_summary = self.results[asset_key].get(
-                    "feature_importance_summary", {}
-                )
+                feature_summary = self.results[asset_key].get("feature_importance_summary", {})
                 top_features = feature_summary.get("top_alpha_features", [])
 
                 if top_features:
@@ -247,12 +234,8 @@ class MultiAssetWalkforwardRunner:
                                 and "name" in feature
                                 and "score" in feature
                             ):
-                                report.append(
-                                    f"{i}. {feature['name']}: {feature['score']:.4f}"
-                                )
-                            elif (
-                                isinstance(feature, (list, tuple)) and len(feature) >= 2
-                            ):
+                                report.append(f"{i}. {feature['name']}: {feature['score']:.4f}")
+                            elif isinstance(feature, (list, tuple)) and len(feature) >= 2:
                                 name = str(feature[0])
                                 score = (
                                     float(feature[1])
@@ -315,22 +298,14 @@ class MultiAssetWalkforwardRunner:
         report.append(
             "1. **Focus on top performers**: Analyze the best performing assets in detail"
         )
-        report.append(
-            "2. **Feature analysis**: Compare feature importance across assets"
-        )
+        report.append("2. **Feature analysis**: Compare feature importance across assets")
         report.append("3. **Risk management**: Implement asset-specific risk controls")
-        report.append(
-            "4. **Portfolio construction**: Consider combining multiple assets"
-        )
-        report.append(
-            "5. **Parameter optimization**: Fine-tune parameters for each asset"
-        )
+        report.append("4. **Portfolio construction**: Consider combining multiple assets")
+        report.append("5. **Parameter optimization**: Fine-tune parameters for each asset")
 
         return "\n".join(report)
 
-    def save_comparison_report(
-        self, output_file: str = "results/multi_asset_comparison.md"
-    ):
+    def save_comparison_report(self, output_file: str = "results/multi_asset_comparison.md"):
         """Save the comparison report to a file."""
         report = self.generate_comparison_report()
 
@@ -347,15 +322,9 @@ class MultiAssetWalkforwardRunner:
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description="Multi-Asset Walkforward Analysis")
-    parser.add_argument(
-        "--start-date", default="2019-01-01", help="Start date (YYYY-MM-DD)"
-    )
-    parser.add_argument(
-        "--end-date", default="2024-12-31", help="End date (YYYY-MM-DD)"
-    )
-    parser.add_argument(
-        "--fold-length", type=int, default=252, help="Fold length in days"
-    )
+    parser.add_argument("--start-date", default="2019-01-01", help="Start date (YYYY-MM-DD)")
+    parser.add_argument("--end-date", default="2024-12-31", help="End date (YYYY-MM-DD)")
+    parser.add_argument("--fold-length", type=int, default=252, help="Fold length in days")
     parser.add_argument("--step-size", type=int, default=63, help="Step size in days")
     parser.add_argument(
         "--assets",
@@ -412,9 +381,7 @@ def main():
                 asset_name = runner.assets[asset_key]["name"]
                 avg_return = overall_metrics.get("avg_test_return", 0.0)
                 avg_sharpe = overall_metrics.get("avg_test_sharpe", 0.0)
-                print(
-                    f"  {asset_name}: Return={avg_return:.4f}, Sharpe={avg_sharpe:.4f}"
-                )
+                print(f"  {asset_name}: Return={avg_return:.4f}, Sharpe={avg_sharpe:.4f}")
 
     except KeyboardInterrupt:
         print("\n⚠️  Analysis interrupted by user")

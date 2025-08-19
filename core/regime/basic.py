@@ -3,7 +3,6 @@ Basic Regime Extractor
 Simple regime detection using technical indicators.
 """
 
-
 import numpy as np
 
 from ..composer.contracts import MarketState, RegimeExtractor, RegimeFeatures
@@ -111,9 +110,7 @@ class BasicRegimeExtractor(RegimeExtractor):
 
     def _calculate_choppiness(self, prices: np.ndarray) -> float:
         """Calculate choppiness (ADX-like measure)."""
-        if (
-            len(prices) < self.lookback + 1
-        ):  # Need at least lookback + 1 elements for diff
+        if len(prices) < self.lookback + 1:  # Need at least lookback + 1 elements for diff
             return 0.0
 
         # Additional bounds check
@@ -121,9 +118,7 @@ class BasicRegimeExtractor(RegimeExtractor):
             return 0.0
 
         # Calculate high-low range
-        high_low_range = np.max(prices[-self.lookback :]) - np.min(
-            prices[-self.lookback :]
-        )
+        high_low_range = np.max(prices[-self.lookback :]) - np.min(prices[-self.lookback :])
 
         # Calculate path length (sum of absolute price changes)
         price_changes = np.diff(prices[-self.lookback :])
@@ -152,9 +147,7 @@ class BasicRegimeExtractor(RegimeExtractor):
         if _safe_len(prices) < self.lookback + 1:
             return 0.0
 
-        start_price = (
-            prices[-self.lookback] if _safe_len(prices) > self.lookback else None
-        )
+        start_price = prices[-self.lookback] if _safe_len(prices) > self.lookback else None
         end_price = _last(prices)
 
         if start_price == 0:
@@ -165,9 +158,7 @@ class BasicRegimeExtractor(RegimeExtractor):
         # Use tanh to bound between -1 and 1
         return np.tanh(momentum)
 
-    def _classify_regime(
-        self, trend_strength: float, choppiness: float, volatility: float
-    ) -> str:
+    def _classify_regime(self, trend_strength: float, choppiness: float, volatility: float) -> str:
         """
         Classify market regime based on features.
 
@@ -363,16 +354,13 @@ class AdvancedRegimeExtractor(RegimeExtractor):
             Regime type string
         """
         # Strong trend with alignment across timeframes
-        if abs(trend_strength) > self.trend_threshold and np.sign(
-            short_trend
-        ) == np.sign(long_trend):
+        if abs(trend_strength) > self.trend_threshold and np.sign(short_trend) == np.sign(
+            long_trend
+        ):
             return "trend"
 
         # High choppiness with low trend strength
-        elif (
-            choppiness > self.chop_threshold
-            and abs(trend_strength) < self.trend_threshold * 0.5
-        ):
+        elif choppiness > self.chop_threshold and abs(trend_strength) < self.trend_threshold * 0.5:
             return "chop"
 
         # High volatility

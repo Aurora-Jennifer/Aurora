@@ -9,7 +9,7 @@ import time
 from datetime import date as date_class
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import pandas as pd
 
@@ -78,9 +78,7 @@ class IBKRDataProvider:
         filename = f"{safe_symbol}_{safe_duration}_{safe_bar_size}.pkl"
         return self.cache_dir / filename
 
-    def _load_from_cache(
-        self, symbol: str, duration: str, bar_size: str
-    ) -> Optional[pd.DataFrame]:
+    def _load_from_cache(self, symbol: str, duration: str, bar_size: str) -> pd.DataFrame | None:
         """Load data from cache with DataSanity validation."""
         if not self.use_cache:
             return None
@@ -90,9 +88,7 @@ class IBKRDataProvider:
             if cache_path.exists():
                 # Check if cache is recent (within 1 hour for daily data, 5 minutes for intraday)
                 cache_age = time.time() - cache_path.stat().st_mtime
-                max_age = (
-                    3600 if "day" in bar_size else 300
-                )  # 1 hour for daily, 5 min for intraday
+                max_age = 3600 if "day" in bar_size else 300  # 1 hour for daily, 5 min for intraday
 
                 if cache_age < max_age:
                     # Use DataSanity wrapper for loading and validation
@@ -111,9 +107,7 @@ class IBKRDataProvider:
             logger.warning(f"Failed to load cache for {symbol}: {e}")
             return None
 
-    def _save_to_cache(
-        self, symbol: str, duration: str, bar_size: str, data: pd.DataFrame
-    ):
+    def _save_to_cache(self, symbol: str, duration: str, bar_size: str, data: pd.DataFrame):
         """Save data to cache."""
         if not self.use_cache:
             return
@@ -129,7 +123,7 @@ class IBKRDataProvider:
 
     def _fallback_to_yfinance(
         self, symbol: str, start_date: datetime, end_date: datetime
-    ) -> Optional[pd.DataFrame]:
+    ) -> pd.DataFrame | None:
         """Fallback to yfinance if IBKR fails."""
         if not self.fallback_to_yfinance:
             return None
@@ -170,7 +164,7 @@ class IBKRDataProvider:
 
     def get_historical_data(
         self, symbol: str, duration: str = "1 Y", bar_size: str = "1 day"
-    ) -> Optional[pd.DataFrame]:
+    ) -> pd.DataFrame | None:
         """
         Get historical data for a symbol.
 
@@ -244,7 +238,7 @@ class IBKRDataProvider:
         logger.error(f"Failed to get data for {symbol} from all sources")
         return None
 
-    def get_real_time_price(self, symbol: str) -> Optional[float]:
+    def get_real_time_price(self, symbol: str) -> float | None:
         """Get real-time price for a symbol."""
         # Check cache first
         if symbol in self._price_cache:
@@ -260,9 +254,7 @@ class IBKRDataProvider:
                     self._price_cache[symbol] = (time.time(), price)
                     return price
             except Exception as e:
-                logger.warning(
-                    f"Failed to get real-time price from IBKR for {symbol}: {e}"
-                )
+                logger.warning(f"Failed to get real-time price from IBKR for {symbol}: {e}")
 
         # Try to connect to IBKR if not connected
         if self.broker and not self.broker.is_connected():
@@ -286,15 +278,13 @@ class IBKRDataProvider:
                     self._price_cache[symbol] = (time.time(), price)
                     return price
             except Exception as e:
-                logger.warning(
-                    f"Failed to get real-time price from yfinance for {symbol}: {e}"
-                )
+                logger.warning(f"Failed to get real-time price from yfinance for {symbol}: {e}")
 
         return None
 
     def get_multiple_symbols_data(
-        self, symbols: List[str], duration: str = "1 Y", bar_size: str = "1 day"
-    ) -> Dict[str, pd.DataFrame]:
+        self, symbols: list[str], duration: str = "1 Y", bar_size: str = "1 day"
+    ) -> dict[str, pd.DataFrame]:
         """
         Get historical data for multiple symbols.
 
@@ -318,14 +308,12 @@ class IBKRDataProvider:
             except Exception as e:
                 logger.error(f"Error fetching data for {symbol}: {e}")
 
-        logger.info(
-            f"Successfully fetched data for {len(results)}/{len(symbols)} symbols"
-        )
+        logger.info(f"Successfully fetched data for {len(results)}/{len(symbols)} symbols")
         return results
 
     def get_daily_data(
         self, symbol: str, start_date: date_class, end_date: date_class
-    ) -> Optional[pd.DataFrame]:
+    ) -> pd.DataFrame | None:
         """
         Get daily data for a specific date range.
 
@@ -343,7 +331,7 @@ class IBKRDataProvider:
 
         return self.get_historical_data(symbol, duration, "1 day")
 
-    def clear_cache(self, symbol: Optional[str] = None):
+    def clear_cache(self, symbol: str | None = None):
         """Clear data cache."""
         if not self.use_cache:
             return
@@ -364,7 +352,7 @@ class IBKRDataProvider:
         except Exception as e:
             logger.error(f"Failed to clear cache: {e}")
 
-    def get_cache_info(self) -> Dict[str, Any]:
+    def get_cache_info(self) -> dict[str, Any]:
         """Get cache information."""
         if not self.use_cache:
             return {"cache_enabled": False}

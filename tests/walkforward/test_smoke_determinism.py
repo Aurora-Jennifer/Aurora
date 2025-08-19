@@ -12,5 +12,3 @@ def test_smoke_determinism(monkeypatch):
         a.pop(k, None)
         b.pop(k, None)
     assert a == b
-
-

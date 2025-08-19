@@ -2,7 +2,7 @@
 Strategy Factory for managing and creating trading strategies.
 """
 
-from typing import Any, Dict, Optional, Type
+from typing import Any
 
 from .base import BaseStrategy, StrategyParams
 from .ensemble_strategy import EnsembleStrategy, EnsembleStrategyParams
@@ -19,8 +19,8 @@ class StrategyFactory:
     """Factory for creating and managing trading strategies."""
 
     def __init__(self):
-        self._strategies: Dict[str, Type[BaseStrategy]] = {}
-        self._param_classes: Dict[str, Type[StrategyParams]] = {}
+        self._strategies: dict[str, type[BaseStrategy]] = {}
+        self._param_classes: dict[str, type[StrategyParams]] = {}
         self._register_default_strategies()
 
     def _register_default_strategies(self):
@@ -38,8 +38,8 @@ class StrategyFactory:
     def register_strategy(
         self,
         name: str,
-        strategy_class: Type[BaseStrategy],
-        param_class: Type[StrategyParams],
+        strategy_class: type[BaseStrategy],
+        param_class: type[StrategyParams],
     ):
         """Register a new strategy."""
         self._strategies[name] = strategy_class
@@ -49,9 +49,7 @@ class StrategyFactory:
         """Get list of available strategy names."""
         return list(self._strategies.keys())
 
-    def create_strategy(
-        self, name: str, params: Optional[Dict[str, Any]] = None
-    ) -> BaseStrategy:
+    def create_strategy(self, name: str, params: dict[str, Any] | None = None) -> BaseStrategy:
         """
         Create a strategy instance.
 
@@ -79,7 +77,7 @@ class StrategyFactory:
 
         return strategy_class(param_instance)
 
-    def get_strategy_info(self, name: str) -> Dict[str, Any]:
+    def get_strategy_info(self, name: str) -> dict[str, Any]:
         """Get information about a strategy."""
         if name not in self._strategies:
             raise ValueError(f"Unknown strategy: {name}")
@@ -99,7 +97,7 @@ class StrategyFactory:
             "param_ranges": strategy.get_param_ranges(),
         }
 
-    def list_strategies(self) -> Dict[str, str]:
+    def list_strategies(self) -> dict[str, str]:
         """List all available strategies with descriptions."""
         strategies = {}
         for name in self.get_available_strategies():

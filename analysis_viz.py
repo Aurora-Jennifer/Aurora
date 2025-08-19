@@ -16,7 +16,6 @@ import json
 import logging
 import warnings
 from pathlib import Path
-from typing import Dict, Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -36,9 +35,7 @@ plt.rcParams["axes.spines.top"] = False
 plt.rcParams["axes.spines.right"] = False
 
 # Set up logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -77,11 +74,9 @@ class TradingAnalysisVisualizer:
             "dark": "#2C3E50",
         }
 
-        logger.info(
-            f"Trading Analysis Visualizer initialized. Output directory: {self.output_dir}"
-        )
+        logger.info(f"Trading Analysis Visualizer initialized. Output directory: {self.output_dir}")
 
-    def load_ml_data(self) -> Optional[Dict]:
+    def load_ml_data(self) -> dict | None:
         """Load ML analysis data from existing files."""
         try:
             # Try to load from various possible locations
@@ -103,7 +98,7 @@ class TradingAnalysisVisualizer:
             logger.error(f"Error loading ML data: {e}")
             return None
 
-    def load_persistence_data(self) -> Optional[pd.DataFrame]:
+    def load_persistence_data(self) -> pd.DataFrame | None:
         """Load feature persistence data."""
         try:
             importance_file = Path("runs/feature_importance.csv")
@@ -118,7 +113,7 @@ class TradingAnalysisVisualizer:
             logger.error(f"Error loading persistence data: {e}")
             return None
 
-    def load_performance_data(self) -> Optional[Dict]:
+    def load_performance_data(self) -> dict | None:
         """Load performance data from various sources."""
         try:
             performance_data = {}
@@ -137,9 +132,7 @@ class TradingAnalysisVisualizer:
                         performance_data[Path(file_path).stem] = data
 
             if performance_data:
-                logger.info(
-                    f"Loaded performance data from {len(performance_data)} sources"
-                )
+                logger.info(f"Loaded performance data from {len(performance_data)} sources")
                 return performance_data
             else:
                 logger.warning("No performance data files found")
@@ -149,7 +142,7 @@ class TradingAnalysisVisualizer:
             logger.error(f"Error loading performance data: {e}")
             return None
 
-    def create_ml_learning_plots(self, save_plots: bool = True) -> Dict[str, str]:
+    def create_ml_learning_plots(self, save_plots: bool = True) -> dict[str, str]:
         """Create ML learning progress plots."""
         plots = {}
 
@@ -191,9 +184,7 @@ class TradingAnalysisVisualizer:
         plt.show()
         return plots
 
-    def create_prediction_analysis_plots(
-        self, save_plots: bool = True
-    ) -> Dict[str, str]:
+    def create_prediction_analysis_plots(self, save_plots: bool = True) -> dict[str, str]:
         """Create ML prediction analysis plots."""
         plots = {}
 
@@ -234,9 +225,7 @@ class TradingAnalysisVisualizer:
         plt.show()
         return plots
 
-    def create_strategy_performance_plots(
-        self, save_plots: bool = True
-    ) -> Dict[str, str]:
+    def create_strategy_performance_plots(self, save_plots: bool = True) -> dict[str, str]:
         """Create strategy performance comparison plots."""
         plots = {}
 
@@ -277,14 +266,12 @@ class TradingAnalysisVisualizer:
         plt.show()
         return plots
 
-    def create_risk_analysis_plots(self, save_plots: bool = True) -> Dict[str, str]:
+    def create_risk_analysis_plots(self, save_plots: bool = True) -> dict[str, str]:
         """Create risk analysis plots."""
         plots = {}
 
         fig, axes = plt.subplots(2, 2, figsize=(16, 12))
-        fig.suptitle(
-            "Risk Analysis", fontsize=16, fontweight="bold", color=self.colors["dark"]
-        )
+        fig.suptitle("Risk Analysis", fontsize=16, fontweight="bold", color=self.colors["dark"])
 
         # 1. Profit Distribution
         self._plot_profit_distribution_simulation(axes[0, 0])
@@ -315,9 +302,7 @@ class TradingAnalysisVisualizer:
         plt.show()
         return plots
 
-    def create_persistence_analysis_plots(
-        self, save_plots: bool = True
-    ) -> Dict[str, str]:
+    def create_persistence_analysis_plots(self, save_plots: bool = True) -> dict[str, str]:
         """Create feature persistence analysis plots."""
         plots = {}
 
@@ -363,7 +348,7 @@ class TradingAnalysisVisualizer:
         plt.show()
         return plots
 
-    def create_comprehensive_dashboard(self, save_plots: bool = True) -> Dict[str, str]:
+    def create_comprehensive_dashboard(self, save_plots: bool = True) -> dict[str, str]:
         """Create a comprehensive dashboard with all analyses."""
         plots = {}
 
@@ -384,16 +369,12 @@ class TradingAnalysisVisualizer:
         # Panel 1: ML Learning Progress (top left)
         ax1 = fig.add_subplot(gs[0, :2])
         self._plot_trade_count_simulation(ax1)
-        ax1.set_title(
-            "ML Learning Progress", fontweight="bold", color=self.colors["primary"]
-        )
+        ax1.set_title("ML Learning Progress", fontweight="bold", color=self.colors["primary"])
 
         # Panel 2: Strategy Performance (top right)
         ax2 = fig.add_subplot(gs[0, 2:])
         self._plot_cumulative_returns_simulation(ax2)
-        ax2.set_title(
-            "Strategy Performance", fontweight="bold", color=self.colors["primary"]
-        )
+        ax2.set_title("Strategy Performance", fontweight="bold", color=self.colors["primary"])
 
         # Panel 3: Risk Analysis (middle left)
         ax3 = fig.add_subplot(gs[1, :2])
@@ -403,9 +384,7 @@ class TradingAnalysisVisualizer:
         # Panel 4: Feature Importance (middle right)
         ax4 = fig.add_subplot(gs[1, 2:])
         self._plot_feature_importance_simulation(ax4)
-        ax4.set_title(
-            "Feature Importance", fontweight="bold", color=self.colors["primary"]
-        )
+        ax4.set_title("Feature Importance", fontweight="bold", color=self.colors["primary"])
 
         # Panel 5: Persistence Analysis (bottom left)
         ax5 = fig.add_subplot(gs[2, :2])
@@ -413,16 +392,12 @@ class TradingAnalysisVisualizer:
         if persistence_data is None:
             persistence_data = self._create_persistence_simulation()
         self._plot_importance_persistence(persistence_data, ax5)
-        ax5.set_title(
-            "Feature Persistence", fontweight="bold", color=self.colors["primary"]
-        )
+        ax5.set_title("Feature Persistence", fontweight="bold", color=self.colors["primary"])
 
         # Panel 6: Performance Metrics (bottom right)
         ax6 = fig.add_subplot(gs[2, 2:])
         self._plot_risk_metrics_simulation(ax6)
-        ax6.set_title(
-            "Performance Metrics", fontweight="bold", color=self.colors["primary"]
-        )
+        ax6.set_title("Performance Metrics", fontweight="bold", color=self.colors["primary"])
 
         # Panel 7: Summary Statistics (bottom full width)
         ax7 = fig.add_subplot(gs[3, :])
@@ -448,9 +423,7 @@ class TradingAnalysisVisualizer:
     def _plot_trade_count_simulation(self, ax):
         """Simulate trade count over time."""
         dates = pd.date_range("2024-01-01", periods=100, freq="D")
-        trade_counts = np.cumsum(
-            np.random.poisson(5, 100)
-        )  # Simulate trade accumulation
+        trade_counts = np.cumsum(np.random.poisson(5, 100))  # Simulate trade accumulation
         cumulative_trades = np.cumsum(trade_counts)
 
         ax.plot(dates, cumulative_trades, color=self.colors["primary"], linewidth=2)
@@ -486,7 +459,7 @@ class TradingAnalysisVisualizer:
         ax.set_ylim(0, 1)
 
         # Add value labels on bars
-        for bar, value in zip(bars, values):
+        for bar, value in zip(bars, values, strict=False):
             height = bar.get_height()
             ax.text(
                 bar.get_x() + bar.get_width() / 2.0,
@@ -514,7 +487,7 @@ class TradingAnalysisVisualizer:
         ax.axhline(y=0, color="black", linestyle="-", alpha=0.3)
 
         # Add value labels
-        for bar, value in zip(bars, returns):
+        for bar, value in zip(bars, returns, strict=False):
             height = bar.get_height()
             ax.text(
                 bar.get_x() + bar.get_width() / 2.0,
@@ -564,9 +537,7 @@ class TradingAnalysisVisualizer:
         """Simulate predicted vs actual profits."""
         n_points = 100
         actual = np.random.normal(0.001, 0.02, n_points)  # Simulated actual profits
-        predicted = actual + np.random.normal(
-            0, 0.005, n_points
-        )  # Simulated predictions
+        predicted = actual + np.random.normal(0, 0.005, n_points)  # Simulated predictions
 
         ax.scatter(actual, predicted, alpha=0.6, color=self.colors["primary"])
         ax.plot(
@@ -628,9 +599,7 @@ class TradingAnalysisVisualizer:
         features_sorted = [features[i] for i in sorted_idx]
         importance_sorted = importance[sorted_idx]
 
-        bars = ax.barh(
-            features_sorted, importance_sorted, color=self.colors["info"], alpha=0.8
-        )
+        bars = ax.barh(features_sorted, importance_sorted, color=self.colors["info"], alpha=0.8)
         ax.set_xlabel("Importance")
         ax.set_title("Feature Importance", fontweight="bold")
         ax.grid(True, alpha=0.3, axis="x")
@@ -792,9 +761,7 @@ class TradingAnalysisVisualizer:
         """Simulate profit distribution."""
         profits = np.random.normal(0.0065, 0.0173, 1000)  # Based on actual data
 
-        ax.hist(
-            profits, bins=50, alpha=0.7, color=self.colors["primary"], edgecolor="black"
-        )
+        ax.hist(profits, bins=50, alpha=0.7, color=self.colors["primary"], edgecolor="black")
         ax.axvline(
             profits.mean(),
             color=self.colors["warning"],
@@ -833,9 +800,7 @@ class TradingAnalysisVisualizer:
             linewidth=2,
             alpha=0.7,
         )
-        ax.fill_between(
-            dates, cumulative, running_max, alpha=0.3, color=self.colors["warning"]
-        )
+        ax.fill_between(dates, cumulative, running_max, alpha=0.3, color=self.colors["warning"])
 
         ax.set_xlabel("Date")
         ax.set_ylabel("Value")
@@ -892,7 +857,7 @@ class TradingAnalysisVisualizer:
         ax.set_ylabel("Value")
 
         # Add value labels
-        for bar, value in zip(bars, values):
+        for bar, value in zip(bars, values, strict=False):
             height = bar.get_height()
             ax.text(
                 bar.get_x() + bar.get_width() / 2.0,
@@ -956,21 +921,13 @@ class TradingAnalysisVisualizer:
 
         try:
             # Handle duplicate entries by taking the mean
-            df_clean = (
-                df.groupby(["run_id", "feature_name"])["importance"]
-                .mean()
-                .reset_index()
-            )
+            df_clean = df.groupby(["run_id", "feature_name"])["importance"].mean().reset_index()
 
             # Pivot data for plotting
-            pivot_df = df_clean.pivot(
-                index="run_id", columns="feature_name", values="importance"
-            )
+            pivot_df = df_clean.pivot(index="run_id", columns="feature_name", values="importance")
 
             # Plot top 5 features
-            top_features = (
-                df.groupby("feature_name")["importance"].mean().nlargest(5).index
-            )
+            top_features = df.groupby("feature_name")["importance"].mean().nlargest(5).index
             for feature in top_features:
                 if feature in pivot_df.columns:
                     ax.plot(
@@ -1003,14 +960,10 @@ class TradingAnalysisVisualizer:
 
         try:
             # Handle duplicate entries by taking the mean
-            df_clean = (
-                df.groupby(["run_id", "feature_name"])["rank"].mean().reset_index()
-            )
+            df_clean = df.groupby(["run_id", "feature_name"])["rank"].mean().reset_index()
 
             # Pivot data for heatmap
-            rank_pivot = df_clean.pivot(
-                index="run_id", columns="feature_name", values="rank"
-            )
+            rank_pivot = df_clean.pivot(index="run_id", columns="feature_name", values="rank")
 
             # Plot heatmap
             im = ax.imshow(rank_pivot.T, cmap="RdYlBu_r", aspect="auto")
@@ -1037,9 +990,7 @@ class TradingAnalysisVisualizer:
 
         # Calculate mean alpha scores
         alpha_scores = (
-            df.groupby("feature_name")["alpha_generation_score"]
-            .mean()
-            .sort_values(ascending=False)
+            df.groupby("feature_name")["alpha_generation_score"].mean().sort_values(ascending=False)
         )
 
         # Plot top 10 features
@@ -1064,9 +1015,7 @@ class TradingAnalysisVisualizer:
 
         # Calculate stability metrics
         stability = (
-            df.groupby("feature_name")
-            .agg({"importance": "std", "rank": "std"})
-            .reset_index()
+            df.groupby("feature_name").agg({"importance": "std", "rank": "std"}).reset_index()
         )
 
         # Plot stability vs importance
@@ -1096,9 +1045,7 @@ class TradingAnalysisVisualizer:
         }
 
         # Create a formatted summary
-        summary_text = "\n".join(
-            [f"{key}: {value}" for key, value in summary_data.items()]
-        )
+        summary_text = "\n".join([f"{key}: {value}" for key, value in summary_data.items()])
 
         ax.text(
             0.1,
@@ -1133,9 +1080,7 @@ def main():
     parser.add_argument(
         "--save-plots", action="store_true", default=True, help="Save plots to disk"
     )
-    parser.add_argument(
-        "--no-save", action="store_true", help="Do not save plots (show only)"
-    )
+    parser.add_argument("--no-save", action="store_true", help="Do not save plots (show only)")
 
     args = parser.parse_args()
 
@@ -1159,9 +1104,7 @@ def main():
         print("🧠 Generating ML analysis plots...")
         plots = {}
         plots.update(visualizer.create_ml_learning_plots(save_plots=args.save_plots))
-        plots.update(
-            visualizer.create_prediction_analysis_plots(save_plots=args.save_plots)
-        )
+        plots.update(visualizer.create_prediction_analysis_plots(save_plots=args.save_plots))
         print(f"✅ Generated {len(plots)} ML analysis plots")
 
     elif args.type == "persistence":
@@ -1172,9 +1115,7 @@ def main():
     elif args.type == "performance":
         print("⚡ Generating performance analysis plots...")
         plots = {}
-        plots.update(
-            visualizer.create_strategy_performance_plots(save_plots=args.save_plots)
-        )
+        plots.update(visualizer.create_strategy_performance_plots(save_plots=args.save_plots))
         plots.update(visualizer.create_risk_analysis_plots(save_plots=args.save_plots))
         print(f"✅ Generated {len(plots)} performance analysis plots")
 

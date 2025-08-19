@@ -12,10 +12,10 @@ import time
 
 def run_command(cmd, description=""):
     """Run a command and return success status."""
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"Running: {description}")
     print(f"Command: {' '.join(cmd)}")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
 
     start_time = time.time()
     result = subprocess.run(cmd, capture_output=True, text=True)
@@ -227,9 +227,9 @@ def main():
         success, elapsed = run_factory_tests()
 
     # Summary
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print("SUMMARY")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
     print(f"Mode: {args.mode}")
     print(f"Success: {'✅ PASS' if success else '❌ FAIL'}")
     print(f"Time: {elapsed:.2f}s")

@@ -8,7 +8,7 @@ All features are computed without forward-looking leakage.
 """
 
 import logging
-from typing import Any, Dict
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -80,9 +80,7 @@ def compute_regime_features(
             continue
 
         # Compute features for this asset
-        asset_features = _compute_asset_features(
-            asset_data, price_col, volume_col, ts_col
-        )
+        asset_features = _compute_asset_features(asset_data, price_col, volume_col, ts_col)
         feature_dfs.append(asset_features)
 
     if not feature_dfs:
@@ -148,12 +146,8 @@ def _compute_asset_features(
     df["atr_14"] = _compute_atr(df, price_col, window=14)
 
     # Realized volatility (annualized)
-    df["realized_vol_10"] = df["ret_1d"].rolling(
-        window=10, min_periods=10
-    ).std() * np.sqrt(252)
-    df["realized_vol_20"] = df["ret_1d"].rolling(
-        window=20, min_periods=20
-    ).std() * np.sqrt(252)
+    df["realized_vol_10"] = df["ret_1d"].rolling(window=10, min_periods=10).std() * np.sqrt(252)
+    df["realized_vol_20"] = df["ret_1d"].rolling(window=20, min_periods=20).std() * np.sqrt(252)
 
     # 3. LIQUIDITY FEATURES
     # Dollar volume
@@ -163,9 +157,7 @@ def _compute_asset_features(
     df["adv_20"] = df["dollar_volume"].rolling(window=20, min_periods=20).mean()
 
     # Spread proxy (inverse of ADV)
-    df["spread_proxy"] = 1 / (
-        df["adv_20"] + 1e-8
-    )  # Add small constant to avoid division by zero
+    df["spread_proxy"] = 1 / (df["adv_20"] + 1e-8)  # Add small constant to avoid division by zero
 
     # 4. BINARY REGIME TAGS
     # Bull market indicator
@@ -209,9 +201,7 @@ def _compute_rsi(prices: pd.Series, window: int = 14) -> pd.Series:
     """
     delta = prices.diff()
     gain = (delta.where(delta > 0, 0)).rolling(window=window, min_periods=window).mean()
-    loss = (
-        (-delta.where(delta < 0, 0)).rolling(window=window, min_periods=window).mean()
-    )
+    loss = (-delta.where(delta < 0, 0)).rolling(window=window, min_periods=window).mean()
 
     rs = gain / (loss + 1e-8)
     rsi = 100 - (100 / (1 + rs))
@@ -221,7 +211,7 @@ def _compute_rsi(prices: pd.Series, window: int = 14) -> pd.Series:
 
 def _compute_macd(
     prices: pd.Series, fast: int = 12, slow: int = 26, signal: int = 9
-) -> Dict[str, pd.Series]:
+) -> dict[str, pd.Series]:
     """
     Compute MACD (Moving Average Convergence Divergence).
 
@@ -275,7 +265,7 @@ def _compute_atr(df: pd.DataFrame, price_col: str, window: int = 14) -> pd.Serie
     return atr
 
 
-def validate_features(df: pd.DataFrame) -> Dict[str, Any]:
+def validate_features(df: pd.DataFrame) -> dict[str, Any]:
     """
     Validate computed features for data quality and leakage.
 
@@ -295,9 +285,7 @@ def validate_features(df: pd.DataFrame) -> Dict[str, Any]:
     }
 
     # Check for feature columns
-    feature_cols = [
-        col for col in df.columns if col not in ["ts", "asset", "close", "volume"]
-    ]
+    feature_cols = [col for col in df.columns if col not in ["ts", "asset", "close", "volume"]]
     validation_results["feature_columns"] = feature_cols
 
     # Check for missing values
@@ -318,9 +306,7 @@ def validate_features(df: pd.DataFrame) -> Dict[str, Any]:
         first_features = asset_data[feature_cols].iloc[:10]
         if not first_features.isnull().all().all():
             validation_results["leakage_check"] = "FAILED"
-            validation_results["warnings"].append(
-                f"Potential leakage detected in asset {asset}"
-            )
+            validation_results["warnings"].append(f"Potential leakage detected in asset {asset}")
 
     return validation_results
 

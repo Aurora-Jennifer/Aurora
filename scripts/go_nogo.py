@@ -159,9 +159,7 @@ def check_data(cfg):
                 if not df.index.is_monotonic_increasing:
                     fail(f"Timestamps in {data_file} must be monotonic increasing")
 
-                if (df["Close"] <= 0).any() and not cfg["data"][
-                    "allow_negative_prices"
-                ]:
+                if (df["Close"] <= 0).any() and not cfg["data"]["allow_negative_prices"]:
                     fail(f"Non-positive prices detected in {data_file}")
 
                 if df.index.tz is None or str(df.index.tz) != cfg["data"]["timezone"]:
@@ -169,9 +167,7 @@ def check_data(cfg):
 
                 # Use DataSanityValidator for comprehensive checks
                 try:
-                    clean_data, result = validator.validate_and_repair(
-                        df, f"GO_NOGO_{data_file}"
-                    )
+                    clean_data, result = validator.validate_and_repair(df, f"GO_NOGO_{data_file}")
                     ok(f"Data sanity: {len(clean_data):,} rows OK in {data_file}")
                 except Exception as e:
                     fail(f"DataSanity validation failed for {data_file}: {e}")
@@ -189,9 +185,7 @@ def check_leakage(cfg):
     print("\n🔒 Checking for Data Leakage...")
 
     if not MODULES_AVAILABLE:
-        ok(
-            "Leakage checks passed (placeholder). Ensure rolling windows use min_periods."
-        )
+        ok("Leakage checks passed (placeholder). Ensure rolling windows use min_periods.")
         return
 
     try:
@@ -208,9 +202,7 @@ def check_leakage(cfg):
                 # Check for future timestamps
                 future_data = df[df.index > current_time]
                 if not future_data.empty:
-                    fail(
-                        f"Future data detected in {data_file}: {len(future_data)} rows"
-                    )
+                    fail(f"Future data detected in {data_file}: {len(future_data)} rows")
 
                 # Check for reasonable data gaps
                 if len(df) > 1:
@@ -246,18 +238,12 @@ def check_backtest_realism(cfg):
                 # Check for fees and slippage settings
                 if cfg["backtest"]["require_fees"]:
                     # Check for execution_params with per_share_fee
-                    if (
-                        not config.get("execution_params", {}).get("per_share_fee", 0)
-                        > 0
-                    ):
+                    if not config.get("execution_params", {}).get("per_share_fee", 0) > 0:
                         fail(f"Fees not properly configured in {config_file}")
 
                 if cfg["backtest"]["require_slippage"]:
                     # Check for execution_params with slippage_bps
-                    if (
-                        not config.get("execution_params", {}).get("slippage_bps", 0)
-                        > 0
-                    ):
+                    if not config.get("execution_params", {}).get("slippage_bps", 0) > 0:
                         fail(f"Slippage not properly configured in {config_file}")
 
                 ok(f"Backtest realism: fees/slippage settings present in {config_file}")
@@ -327,8 +313,7 @@ def check_accounting(cfg):
                 elif results_file.endswith(".csv"):
                     df = pd.read_csv(results_file)
                     if len(df) > 0 and any(
-                        col in df.columns
-                        for col in ["equity", "portfolio_value", "cash"]
+                        col in df.columns for col in ["equity", "portfolio_value", "cash"]
                     ):
                         ok(f"Accounting data found in {results_file}")
                         results_found = True
@@ -380,9 +365,7 @@ def check_walkforward(cfg):
                             f"OOS win rate below threshold: {oos_winrate:.3f} < {cfg['walkforward']['min_oos_winrate']}"
                         )
 
-                ok(
-                    f"OOS ok: {oos_days}d, sharpe {oos_sharpe:.2f}, win {oos_winrate:.2%}"
-                )
+                ok(f"OOS ok: {oos_days}d, sharpe {oos_sharpe:.2f}, win {oos_winrate:.2%}")
                 wf_found = True
                 break
 

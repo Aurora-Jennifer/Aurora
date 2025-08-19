@@ -70,12 +70,8 @@ def test_backtesting_core():
         assert "max_drawdown" in portfolio_metrics, "Should have max drawdown"
 
         # Validate reasonable ranges for short period
-        assert (
-            -0.5 <= portfolio_metrics["total_return"] <= 0.5
-        ), "Total return should be reasonable"
-        assert (
-            portfolio_metrics["max_drawdown"] <= 0.2
-        ), "Max drawdown should be reasonable"
+        assert -0.5 <= portfolio_metrics["total_return"] <= 0.5, "Total return should be reasonable"
+        assert portfolio_metrics["max_drawdown"] <= 0.2, "Max drawdown should be reasonable"
 
         # Test 2: 6-month backtest for more comprehensive testing
         print("  📊 Running 6-month backtest...")
@@ -137,11 +133,7 @@ def test_walkforward_functionality():
         )
 
         # Test fold generation
-        folds = list(
-            gen_walkforward(
-                n=len(data), train_len=252, test_len=63, stride=21, warmup=50
-            )
-        )
+        folds = list(gen_walkforward(n=len(data), train_len=252, test_len=63, stride=21, warmup=50))
 
         assert len(folds) > 0, "Should generate at least one fold"
         assert all(isinstance(f, Fold) for f in folds), "All should be Fold objects"
@@ -172,9 +164,7 @@ def test_walkforward_functionality():
         pipeline = LeakageProofPipeline(X, y)
 
         # Generate folds for the valid data
-        folds = list(
-            gen_walkforward(n=len(X), train_len=252, test_len=63, stride=21, warmup=50)
-        )
+        folds = list(gen_walkforward(n=len(X), train_len=252, test_len=63, stride=21, warmup=50))
 
         if len(folds) == 0:
             print("    ⚠️  No folds generated, skipping walkforward run...")
@@ -183,14 +173,10 @@ def test_walkforward_functionality():
         print("  🏃 Testing walkforward run...")
         # Test walkforward run with correct signature
         try:
-            results = walkforward_run(
-                pipeline=pipeline, folds=folds, prices=prices, model_seed=42
-            )
+            results = walkforward_run(pipeline=pipeline, folds=folds, prices=prices, model_seed=42)
             assert isinstance(results, list), "Walkforward should return list"
             if len(results) > 0:
-                assert (
-                    len(results[0]) == 3
-                ), "Each result should have (fold_id, metrics, trades)"
+                assert len(results[0]) == 3, "Each result should have (fold_id, metrics, trades)"
         except Exception as e:
             print(f"    ⚠️  Walkforward run failed: {e}")
             # This might happen with the simple model, but should not crash
@@ -247,9 +233,7 @@ def test_paper_trading_core():
         # Test 1: Engine initialization
         assert engine.capital == 100000, "Initial capital should be set"
         assert engine.strategy is not None, "Strategy should be initialized"
-        assert (
-            engine.regime_detector is not None
-        ), "Regime detector should be initialized"
+        assert engine.regime_detector is not None, "Regime detector should be initialized"
 
         # Test 2: Single trading cycle with recent date
         print("  🔄 Testing single trading cycle...")
@@ -272,9 +256,7 @@ def test_paper_trading_core():
 
         for test_date in test_dates:
             cycle_result = engine.run_trading_cycle(test_date)
-            assert isinstance(
-                cycle_result, dict
-            ), f"Cycle for {test_date} should return dict"
+            assert isinstance(cycle_result, dict), f"Cycle for {test_date} should return dict"
             # Don't fail on no_data status as it's expected for some dates
 
         # Test 4: Portfolio state tracking
@@ -332,9 +314,9 @@ def test_live_trading_compatibility():
         signals = strategy.generate_signals(live_data)
         assert isinstance(signals, pd.Series), "Signals should be Series"
         assert len(signals) == len(live_data), "Signals length should match data"
-        assert all(
-            signals.isna() | (signals >= -1) & (signals <= 1)
-        ), "Signals should be in [-1, 1]"
+        assert all(signals.isna() | (signals >= -1) & (signals <= 1)), (
+            "Signals should be in [-1, 1]"
+        )
 
         # Test 2: Portfolio management compatibility
         print("  💰 Testing portfolio management...")
@@ -499,9 +481,7 @@ def test_consistency_across_modes():
         # Test 3: Performance metrics consistency
         print("  📊 Testing metrics consistency...")
         # Both should calculate same metrics for same data
-        assert (
-            portfolio1.realized_pnl == portfolio2.realized_pnl
-        ), "Realized PnL should match"
+        assert portfolio1.realized_pnl == portfolio2.realized_pnl, "Realized PnL should match"
         assert portfolio1.fees_paid == portfolio2.fees_paid, "Fees should match"
 
         print("✅ Consistency Across Modes tests passed")
@@ -646,9 +626,7 @@ def test_performance_benchmarks():
         signals = strategy.generate_signals(test_data)
 
         strategy_time = time.time() - start_time
-        print(
-            f"    📊 Signal generation: {strategy_time:.3f}s for {len(test_data)} bars"
-        )
+        print(f"    📊 Signal generation: {strategy_time:.3f}s for {len(test_data)} bars")
         assert strategy_time < 1.0, "Signal generation should be fast"
 
         # Test portfolio speed
@@ -704,9 +682,7 @@ def main():
     """Run all core functionality tests."""
     print("🧪 CORE FUNCTIONALITY TEST SUITE")
     print("=" * 60)
-    print(
-        "Testing backtesting, walkforward, paper trading, and live trading compatibility"
-    )
+    print("Testing backtesting, walkforward, paper trading, and live trading compatibility")
     print("=" * 60)
 
     tests = [
@@ -725,7 +701,7 @@ def main():
 
     for test_name, test_func in tests:
         try:
-            print(f"\n{'='*20} {test_name} {'='*20}")
+            print(f"\n{'=' * 20} {test_name} {'=' * 20}")
             if test_func():
                 passed += 1
                 results[test_name] = "PASS"
@@ -743,7 +719,7 @@ def main():
         status_icon = "✅" if result == "PASS" else "❌"
         print(f"{status_icon} {test_name}: {result}")
 
-    print(f"\n📈 OVERALL: {passed}/{total} tests passed ({passed/total*100:.1f}%)")
+    print(f"\n📈 OVERALL: {passed}/{total} tests passed ({passed / total * 100:.1f}%)")
 
     if passed == total:
         print("\n🎉 ALL TESTS PASSED!")
@@ -757,7 +733,7 @@ def main():
         print("\n🚀 System ready for live trading deployment!")
         return 0
     else:
-        print(f"\n⚠️ {total-passed} tests failed. Please review issues above.")
+        print(f"\n⚠️ {total - passed} tests failed. Please review issues above.")
         return 1
 
 

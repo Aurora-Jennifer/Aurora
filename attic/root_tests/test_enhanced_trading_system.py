@@ -54,9 +54,7 @@ def test_growth_target_calculator():
         portfolio_volatility=0.015,
     )
 
-    print(
-        f"Position size for strong signal: {position_size:.3f} ({position_size*100:.1f}%)"
-    )
+    print(f"Position size for strong signal: {position_size:.3f} ({position_size * 100:.1f}%)")
 
     # Test with some performance data
     for i in range(10):
@@ -107,9 +105,7 @@ def test_strategy_selector():
     )
 
     # Test strategy selection
-    strategy_name, strategy_params, expected_sharpe = selector.select_best_strategy(
-        market_data
-    )
+    strategy_name, strategy_params, expected_sharpe = selector.select_best_strategy(market_data)
 
     print(f"Selected strategy: {strategy_name}")
     print(f"Strategy parameters: {strategy_params}")
@@ -122,9 +118,7 @@ def test_strategy_selector():
         "max_drawdown": -0.05,
     }
 
-    selector.update_performance_data(
-        "regime_aware_ensemble", "trend", performance_metrics
-    )
+    selector.update_performance_data("regime_aware_ensemble", "trend", performance_metrics)
     print("Updated performance data for regime-aware ensemble in trend regime")
 
     return True
@@ -147,9 +141,7 @@ def test_paper_trading_engine():
 
         print(f"Initial capital: ${engine.capital:,.2f}")
         # Objective-based sizing; no fixed daily target
-        print(
-            f"Available strategies: {list(engine.strategy_selector.strategies.keys())}"
-        )
+        print(f"Available strategies: {list(engine.strategy_selector.strategies.keys())}")
 
         # Test a single trading cycle
         test_date = date.today()
@@ -234,7 +226,7 @@ def main():
 
     for test_name, test_func in tests:
         try:
-            print(f"\n{'='*20} {test_name} {'='*20}")
+            print(f"\n{'=' * 20} {test_name} {'=' * 20}")
             results[test_name] = test_func()
         except Exception as e:
             print(f"Test {test_name} failed with error: {e}")

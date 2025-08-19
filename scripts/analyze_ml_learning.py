@@ -114,7 +114,7 @@ def analyze_ml_learning():
                     if idx < len(feature_names):
                         feature_name = feature_names[idx]
                         importance = model.coef_[idx]
-                        print(f"       {i+1}. {feature_name}: {importance:.4f}")
+                        print(f"       {i + 1}. {feature_name}: {importance:.4f}")
     else:
         print("   No models trained yet")
 
@@ -134,23 +134,16 @@ def analyze_ml_learning():
     # Show what the system has learned
     print("\n🎓 What the System Has Learned:")
     if profit_learner.performance_history:
-        print(
-            f"   📈 Trade history available: {len(profit_learner.performance_history)} trades"
-        )
+        print(f"   📈 Trade history available: {len(profit_learner.performance_history)} trades")
 
         # Analyze recent trades
         recent_trades = profit_learner.performance_history[-5:]  # Last 5 trades
         print("   📊 Recent trades:")
         for i, trade in enumerate(recent_trades):
-            print(
-                f"     Trade {i+1}: {trade.profit_loss_pct:.2%} profit ({trade.strategy})"
-            )
+            print(f"     Trade {i + 1}: {trade.profit_loss_pct:.2%} profit ({trade.strategy})")
 
         # Show learning progress
-        if (
-            len(profit_learner.performance_history)
-            >= profit_learner.min_trades_for_learning
-        ):
+        if len(profit_learner.performance_history) >= profit_learner.min_trades_for_learning:
             print("   ✅ System has enough data for learning")
             print("   🧠 Models are being trained and updated")
         else:

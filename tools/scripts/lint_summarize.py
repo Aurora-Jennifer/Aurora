@@ -45,5 +45,3 @@ for code, path in sorted(samples.items()):
     md.append(f"- `{code}` → `{path}`")
 out.write_text("\n".join(md))
 print(f"Wrote {out}")
-
-

@@ -1,4 +1,4 @@
-from ml.runtime import detect_weight_spikes, compute_turnover
+from ml.runtime import compute_turnover, detect_weight_spikes
 
 
 def test_spike_tripwire():
@@ -10,5 +10,3 @@ def test_spike_tripwire():
 def test_turnover_cap():
     prev, now = {"A": 0.5, "B": 0.5}, {"A": -0.5, "B": -0.5}
     assert compute_turnover(prev, now) == 2.0
-
-

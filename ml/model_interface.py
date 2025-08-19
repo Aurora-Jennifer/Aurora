@@ -1,6 +1,7 @@
 from __future__ import annotations
+
 from dataclasses import dataclass
-from typing import Protocol, Any
+from typing import Any, Protocol
 
 
 class Model(Protocol):
@@ -12,5 +13,3 @@ class ModelSpec:
     kind: str
     path: str
     metadata: dict
-
-

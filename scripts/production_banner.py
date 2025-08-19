@@ -72,18 +72,14 @@ def print_production_banner():
             summary = readiness_report["summary"]
             print("\n📊 READINESS CHECK RESULTS:")
             print(f"   Pass Rate: {summary.get('pass_rate', 0):.1f}%")
-            print(
-                f"   Passed: {summary.get('passed_checks', 0)}/{summary.get('total_checks', 0)}"
-            )
+            print(f"   Passed: {summary.get('passed_checks', 0)}/{summary.get('total_checks', 0)}")
 
         # Show falsification details
         if "summary" in falsification_report:
             summary = falsification_report["summary"]
             print("\n🔍 FALSIFICATION TEST RESULTS:")
             print(f"   Pass Rate: {summary.get('pass_rate', 0):.1f}%")
-            print(
-                f"   Passed: {summary.get('passed_tests', 0)}/{summary.get('total_tests', 0)}"
-            )
+            print(f"   Passed: {summary.get('passed_tests', 0)}/{summary.get('total_tests', 0)}")
 
         print("\n✅ VERIFIED READY FOR AUTONOMOUS PAPER TRADING")
         print("✅ ALL INTEGRITY CHECKS PASSED")

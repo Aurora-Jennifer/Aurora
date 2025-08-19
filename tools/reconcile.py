@@ -9,7 +9,6 @@ import csv
 import json
 import sys
 from pathlib import Path
-from typing import Dict, List
 
 import pandas as pd
 
@@ -20,7 +19,7 @@ class PnLReconciler:
     def __init__(self, tolerance: float = 5.0):
         self.tolerance = tolerance  # Dollar tolerance for reconciliation
 
-    def load_trading_system_pnl(self, results_dir: str = "results") -> Dict:
+    def load_trading_system_pnl(self, results_dir: str = "results") -> dict:
         """Load PnL data from trading system results."""
         try:
             # Load performance report
@@ -51,7 +50,7 @@ class PnLReconciler:
             print(f"❌ Error loading trading system PnL: {e}")
             return {}
 
-    def load_ibkr_flex_statement(self, flex_file: str) -> Dict:
+    def load_ibkr_flex_statement(self, flex_file: str) -> dict:
         """Load IBKR Flex statement CSV."""
         try:
             if not Path(flex_file).exists():
@@ -68,9 +67,7 @@ class PnLReconciler:
             # Extract NetLiq values
             netliq_data = []
             for row in data:
-                if "NetLiq" in row.get("Type", "") or "NetLiquidation" in row.get(
-                    "Type", ""
-                ):
+                if "NetLiq" in row.get("Type", "") or "NetLiquidation" in row.get("Type", ""):
                     try:
                         netliq_data.append(
                             {
@@ -92,7 +89,7 @@ class PnLReconciler:
             print(f"❌ Error loading IBKR Flex statement: {e}")
             return {}
 
-    def calculate_daily_pnl_delta(self, netliq_data: List[Dict]) -> List[Dict]:
+    def calculate_daily_pnl_delta(self, netliq_data: list[dict]) -> list[dict]:
         """Calculate daily PnL deltas from NetLiq data."""
         if len(netliq_data) < 2:
             return []
@@ -113,21 +110,17 @@ class PnLReconciler:
 
         return deltas
 
-    def reconcile_pnl(self, trading_pnl: Dict, ibkr_data: Dict) -> bool:
+    def reconcile_pnl(self, trading_pnl: dict, ibkr_data: dict) -> bool:
         """Reconcile PnL between trading system and IBKR."""
         print("🔍 PnL Reconciliation")
         print("=" * 50)
 
         # Get trading system total PnL
-        trading_total_pnl = (
-            trading_pnl.get("current_capital", 0) - 100000
-        )  # Assuming 100k initial
+        trading_total_pnl = trading_pnl.get("current_capital", 0) - 100000  # Assuming 100k initial
         trading_total_return = trading_pnl.get("total_return", 0.0)
 
         # Get IBKR total PnL
-        ibkr_total_pnl = ibkr_data.get("latest_netliq", 0) - ibkr_data.get(
-            "initial_netliq", 0
-        )
+        ibkr_total_pnl = ibkr_data.get("latest_netliq", 0) - ibkr_data.get("initial_netliq", 0)
 
         print("Trading System:")
         print(f"  Current Capital: ${trading_pnl.get('current_capital', 0):,.2f}")
@@ -159,9 +152,7 @@ class PnLReconciler:
             print("  - Missing trades or fills")
             return False
 
-    def reconcile_daily_returns(
-        self, trading_returns: List[Dict], ibkr_deltas: List[Dict]
-    ) -> bool:
+    def reconcile_daily_returns(self, trading_returns: list[dict], ibkr_deltas: list[dict]) -> bool:
         """Reconcile daily returns between trading system and IBKR."""
         if not trading_returns or not ibkr_deltas:
             print("⚠️  Daily reconciliation skipped - insufficient data")
@@ -181,9 +172,7 @@ class PnLReconciler:
             ibkr_delta = ibkr_by_date.get(date_str, {})
 
             if trading_return and ibkr_delta:
-                trading_pnl = (
-                    trading_return.get("return", 0) * 100000
-                )  # Assuming 100k base
+                trading_pnl = trading_return.get("return", 0) * 100000  # Assuming 100k base
                 ibkr_pnl = ibkr_delta.get("netliq_delta", 0)
                 diff = abs(trading_pnl - ibkr_pnl)
 
@@ -201,9 +190,7 @@ class PnLReconciler:
 
 def main():
     """Main reconciliation function."""
-    parser = argparse.ArgumentParser(
-        description="Reconcile PnL between trading system and IBKR"
-    )
+    parser = argparse.ArgumentParser(description="Reconcile PnL between trading system and IBKR")
     parser.add_argument("--flex", required=True, help="Path to IBKR Flex statement CSV")
     parser.add_argument(
         "--tolerance",
@@ -211,9 +198,7 @@ def main():
         default=5.0,
         help="Dollar tolerance for reconciliation",
     )
-    parser.add_argument(
-        "--results-dir", default="results", help="Trading system results directory"
-    )
+    parser.add_argument("--results-dir", default="results", help="Trading system results directory")
 
     args = parser.parse_args()
 

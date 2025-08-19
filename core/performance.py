@@ -4,7 +4,6 @@ Handles dynamic position sizing and objective-based risk budgeting.
 """
 
 import logging
-from typing import Dict, List, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -16,8 +15,8 @@ logger = logging.getLogger(__name__)
 
 
 def calculate_trade_metrics(
-    closed_trades: List[TradeRecord],
-) -> Dict[str, Union[float, str]]:
+    closed_trades: list[TradeRecord],
+) -> dict[str, float | str]:
     """
     Calculate comprehensive trade metrics.
 
@@ -68,7 +67,7 @@ def calculate_trade_metrics(
     }
 
 
-def calculate_portfolio_metrics(equity_curve: List[Dict]) -> Dict[str, float]:
+def calculate_portfolio_metrics(equity_curve: list[dict]) -> dict[str, float]:
     """
     Calculate portfolio-level performance metrics.
 
@@ -136,7 +135,7 @@ def calculate_portfolio_metrics(equity_curve: List[Dict]) -> Dict[str, float]:
 class GrowthTargetCalculator:
     """Objective-driven position sizing and risk budgeting manager."""
 
-    def __init__(self, config: Dict):
+    def __init__(self, config: dict):
         """
         Initialize objective-driven risk manager.
 
@@ -205,27 +204,19 @@ class GrowthTargetCalculator:
 
             # Estimate edge/variance proxy from signal and volatility
             edge = max(0.0, float(signal_strength) - 0.5)  # centered signal ∈ [0,0.5]
-            variance = max(
-                1e-6, (symbol_volatility or portfolio_volatility or 0.02) ** 2
-            )
+            variance = max(1e-6, (symbol_volatility or portfolio_volatility or 0.02) ** 2)
 
             # Kelly-style base fraction scaled by cap and risk budget
             kelly_base = edge / variance
-            base_position_size = (
-                self.kelly_fraction * kelly_base * risk_budget * pos_mult
-            )
+            base_position_size = self.kelly_fraction * kelly_base * risk_budget * pos_mult
 
             # Volatility adjustment relative to target
             if self.volatility_adjustment and portfolio_volatility:
-                vol_adjustment = min(
-                    1.0, self.volatility_target / max(1e-6, portfolio_volatility)
-                )
+                vol_adjustment = min(1.0, self.volatility_target / max(1e-6, portfolio_volatility))
                 base_position_size *= vol_adjustment
 
             # Clamp to guardrails
-            final_position_size = float(
-                np.clip(base_position_size, 0.0, self.max_position_size)
-            )
+            final_position_size = float(np.clip(base_position_size, 0.0, self.max_position_size))
 
             logger.debug(
                 "Objective sizing -> signal=%.3f, risk_budget=%.3f, pos_mult=%.3f, edge=%.4f, var=%.6f, size=%.3f",
@@ -312,10 +303,7 @@ class GrowthTargetCalculator:
             "date": pd.Timestamp.now(),
             "daily_return": daily_return,
             "portfolio_value": portfolio_value,
-            "cumulative_return": (
-                portfolio_value / self.config.get("initial_capital", 100000)
-            )
-            - 1,
+            "cumulative_return": (portfolio_value / self.config.get("initial_capital", 100000)) - 1,
         }
 
         self.performance_history.append(performance_record)
@@ -326,7 +314,7 @@ class GrowthTargetCalculator:
             portfolio_value,
         )
 
-    def get_growth_metrics(self) -> Dict:
+    def get_growth_metrics(self) -> dict:
         """
         Get current growth and performance metrics.
 
@@ -366,6 +354,6 @@ class GrowthTargetCalculator:
                 "days_tracked": 0,
             }
 
-    def should_adjust_target(self) -> Tuple[bool, str]:
+    def should_adjust_target(self) -> tuple[bool, str]:
         """Deprecated; retained for CLI compatibility."""
         return False, "Objective-based sizing active"

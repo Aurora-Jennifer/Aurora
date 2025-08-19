@@ -9,7 +9,7 @@ import logging
 import pickle
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import numpy as np
 from sklearn.linear_model import Ridge
@@ -40,18 +40,14 @@ class WarmStartManager:
         }
 
     def get_warm_start_configuration(
-        self, feature_names: List[str], run_id: str = None
-    ) -> Dict[str, Any]:
+        self, feature_names: list[str], run_id: str = None
+    ) -> dict[str, Any]:
         """Get warm-start configuration for model training."""
         try:
-            warm_start_data = self.persistence_analyzer.get_warm_start_data(
-                feature_names, n_runs=5
-            )
+            warm_start_data = self.persistence_analyzer.get_warm_start_data(feature_names, n_runs=5)
 
             if "error" in warm_start_data:
-                logger.warning(
-                    f"No warm-start data available: {warm_start_data['error']}"
-                )
+                logger.warning(f"No warm-start data available: {warm_start_data['error']}")
                 return self._get_default_configuration(feature_names)
 
             # Feature priors
@@ -69,16 +65,14 @@ class WarmStartManager:
                 "checkpoint_data": checkpoint_data,
                 "warm_start_config": self.warm_start_config,
                 "recent_runs": warm_start_data.get("recent_runs", []),
-                "total_features": warm_start_data.get(
-                    "total_features", len(feature_names)
-                ),
+                "total_features": warm_start_data.get("total_features", len(feature_names)),
             }
 
         except Exception as e:
             logger.error(f"Error getting warm-start configuration: {e}")
             return self._get_default_configuration(feature_names)
 
-    def _get_default_configuration(self, feature_names: List[str]) -> Dict[str, Any]:
+    def _get_default_configuration(self, feature_names: list[str]) -> dict[str, Any]:
         """Get default configuration when no warm-start data is available."""
         feature_priors = {
             name: {
@@ -99,7 +93,7 @@ class WarmStartManager:
             "total_features": len(feature_names),
         }
 
-    def _get_checkpoint_data(self, run_id: str) -> Optional[Dict[str, Any]]:
+    def _get_checkpoint_data(self, run_id: str) -> dict[str, Any] | None:
         """Get checkpoint data for a specific run."""
         try:
             checkpoint_file = self.runs_dir / "checkpoints" / f"{run_id}_checkpoint.pkl"
@@ -112,7 +106,7 @@ class WarmStartManager:
             return None
 
     def apply_feature_priors(
-        self, model: Ridge, feature_names: List[str], warm_start_config: Dict[str, Any]
+        self, model: Ridge, feature_names: list[str], warm_start_config: dict[str, Any]
     ) -> Ridge:
         """Apply feature priors to warm-start the model."""
         try:
@@ -140,9 +134,7 @@ class WarmStartManager:
             if hasattr(model, "coef_") and model.coef_ is not None:
                 # Blend current coefficients with priors
                 alpha = 0.3  # Weight for priors
-                model.coef_ = (1 - alpha) * model.coef_ + alpha * np.array(
-                    prior_coefficients
-                )
+                model.coef_ = (1 - alpha) * model.coef_ + alpha * np.array(prior_coefficients)
 
                 # Adjust intercept if needed
                 if hasattr(model, "intercept_") and model.intercept_ is not None:
@@ -150,9 +142,7 @@ class WarmStartManager:
                     avg_prior = np.mean(prior_coefficients)
                     model.intercept_ += avg_prior * 0.1
 
-            logger.info(
-                f"Applied feature priors to model with {len(prior_coefficients)} features"
-            )
+            logger.info(f"Applied feature priors to model with {len(prior_coefficients)} features")
             return model
 
         except Exception as e:
@@ -163,9 +153,9 @@ class WarmStartManager:
         self,
         X: np.ndarray,
         y: np.ndarray,
-        feature_names: List[str],
-        warm_start_config: Dict[str, Any],
-    ) -> Tuple[np.ndarray, np.ndarray]:
+        feature_names: list[str],
+        warm_start_config: dict[str, Any],
+    ) -> tuple[np.ndarray, np.ndarray]:
         """Apply curriculum learning based on regime performance."""
         try:
             if not warm_start_config.get("use_curriculum_learning", True):
@@ -210,9 +200,7 @@ class WarmStartManager:
             X_weighted = X[weighted_indices]
             y_weighted = y[weighted_indices]
 
-            logger.info(
-                f"Applied curriculum learning: {len(X)} -> {len(X_weighted)} samples"
-            )
+            logger.info(f"Applied curriculum learning: {len(X)} -> {len(X_weighted)} samples")
             return X_weighted, y_weighted
 
         except Exception as e:
@@ -223,9 +211,9 @@ class WarmStartManager:
         self,
         model: Ridge,
         scaler: StandardScaler,
-        feature_names: List[str],
+        feature_names: list[str],
         run_id: str,
-        metadata: Dict[str, Any],
+        metadata: dict[str, Any],
     ) -> None:
         """Save model checkpoint for warm-start."""
         try:
@@ -251,7 +239,7 @@ class WarmStartManager:
         except Exception as e:
             logger.error(f"Error saving checkpoint: {e}")
 
-    def load_checkpoint(self, run_id: str) -> Optional[Dict[str, Any]]:
+    def load_checkpoint(self, run_id: str) -> dict[str, Any] | None:
         """Load model checkpoint for warm-start."""
         try:
             checkpoint_file = self.runs_dir / "checkpoints" / f"{run_id}_checkpoint.pkl"
@@ -275,7 +263,7 @@ class WarmStartManager:
         model: Ridge,
         X: np.ndarray,
         y: np.ndarray,
-        feature_names: List[str],
+        feature_names: list[str],
         run_id: str = None,
     ) -> Ridge:
         """Apply warm-start to a model."""
@@ -285,15 +273,11 @@ class WarmStartManager:
 
             # Apply curriculum learning to training data
             if warm_start_config.get("use_curriculum_learning", True):
-                X, y = self.apply_curriculum_learning(
-                    X, y, feature_names, warm_start_config
-                )
+                X, y = self.apply_curriculum_learning(X, y, feature_names, warm_start_config)
 
             # Apply feature priors to model
             if warm_start_config.get("use_feature_priors", True):
-                model = self.apply_feature_priors(
-                    model, feature_names, warm_start_config
-                )
+                model = self.apply_feature_priors(model, feature_names, warm_start_config)
 
             # Load checkpoint if available
             if warm_start_config.get("use_checkpoint_warm_start", True) and run_id:
@@ -301,16 +285,11 @@ class WarmStartManager:
                 if checkpoint_data:
                     # Use checkpoint model as starting point
                     checkpoint_model = checkpoint_data["model"]
-                    if (
-                        hasattr(checkpoint_model, "coef_")
-                        and checkpoint_model.coef_ is not None
-                    ):
+                    if hasattr(checkpoint_model, "coef_") and checkpoint_model.coef_ is not None:
                         # Blend checkpoint coefficients with current model
                         alpha = 0.5  # Weight for checkpoint
                         if hasattr(model, "coef_") and model.coef_ is not None:
-                            model.coef_ = (
-                                1 - alpha
-                            ) * model.coef_ + alpha * checkpoint_model.coef_
+                            model.coef_ = (1 - alpha) * model.coef_ + alpha * checkpoint_model.coef_
                         else:
                             model.coef_ = checkpoint_model.coef_
 
@@ -318,20 +297,14 @@ class WarmStartManager:
                             hasattr(checkpoint_model, "intercept_")
                             and checkpoint_model.intercept_ is not None
                         ):
-                            if (
-                                hasattr(model, "intercept_")
-                                and model.intercept_ is not None
-                            ):
+                            if hasattr(model, "intercept_") and model.intercept_ is not None:
                                 model.intercept_ = (
-                                    (1 - alpha) * model.intercept_
-                                    + alpha * checkpoint_model.intercept_
-                                )
+                                    1 - alpha
+                                ) * model.intercept_ + alpha * checkpoint_model.intercept_
                             else:
                                 model.intercept_ = checkpoint_model.intercept_
 
-            logger.info(
-                f"Applied warm-start to model with {len(feature_names)} features"
-            )
+            logger.info(f"Applied warm-start to model with {len(feature_names)} features")
             return model
 
         except Exception as e:
@@ -340,10 +313,10 @@ class WarmStartManager:
 
     def get_alpha_generation_features(
         self,
-        feature_names: List[str],
-        warm_start_config: Dict[str, Any],
+        feature_names: list[str],
+        warm_start_config: dict[str, Any],
         top_n: int = 10,
-    ) -> List[Tuple[str, float]]:
+    ) -> list[tuple[str, float]]:
         """Get top alpha generation features based on warm-start data."""
         try:
             feature_priors = warm_start_config.get("feature_priors", {})
@@ -368,8 +341,8 @@ class WarmStartManager:
             return []
 
     def generate_alpha_features(
-        self, feature_names: List[str], warm_start_config: Dict[str, Any]
-    ) -> Dict[str, np.ndarray]:
+        self, feature_names: list[str], warm_start_config: dict[str, Any]
+    ) -> dict[str, np.ndarray]:
         """Generate advanced alpha features based on warm-start data."""
         try:
             feature_priors = warm_start_config.get("feature_priors", {})
@@ -385,13 +358,11 @@ class WarmStartManager:
                         prior2 = feature_priors.get(feature2, {})
 
                         # Interaction score based on individual alpha potentials
-                        interaction_score = prior1.get(
+                        interaction_score = prior1.get("alpha_potential", 0.0) * prior2.get(
                             "alpha_potential", 0.0
-                        ) * prior2.get("alpha_potential", 0.0)
+                        )
 
-                        if (
-                            interaction_score > 0.001
-                        ):  # Threshold for meaningful interactions
+                        if interaction_score > 0.001:  # Threshold for meaningful interactions
                             interaction_name = f"{feature1}_{feature2}_interaction"
                             interaction_scores[interaction_name] = interaction_score
 

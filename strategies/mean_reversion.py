@@ -3,7 +3,7 @@ Mean Reversion Strategy
 """
 
 from dataclasses import dataclass
-from typing import Any, Dict
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -61,7 +61,7 @@ class MeanReversion(BaseStrategy):
         """Return default mean reversion parameters."""
         return MeanReversionParams(lookback_period=20, std_dev_threshold=2.0)
 
-    def get_param_ranges(self) -> Dict[str, Any]:
+    def get_param_ranges(self) -> dict[str, Any]:
         """Return parameter ranges for optimization."""
         return {
             "lookback_period": range(10, 51, 5),
@@ -74,4 +74,6 @@ class MeanReversion(BaseStrategy):
 
     def get_description(self) -> str:
         """Return strategy description."""
-        return f"Mean Reversion (lookback={self.lookback_period}, threshold={self.std_dev_threshold}σ)"
+        return (
+            f"Mean Reversion (lookback={self.lookback_period}, threshold={self.std_dev_threshold}σ)"
+        )

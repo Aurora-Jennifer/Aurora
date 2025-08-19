@@ -4,7 +4,6 @@ Combines multiple performance metrics into a single weighted score.
 """
 
 from dataclasses import dataclass
-from typing import Dict, Optional, Union
 
 import numpy as np
 
@@ -54,9 +53,9 @@ def normalize_avg_trade_return(avg_return: float) -> float:
 
 
 def composite_score(
-    metrics: Dict[str, Union[float, int]],
-    weights: Optional[CompositeWeights] = None,
-    penalties: Optional[CompositePenalties] = None,
+    metrics: dict[str, float | int],
+    weights: CompositeWeights | None = None,
+    penalties: CompositePenalties | None = None,
 ) -> float:
     """
     Calculate composite performance score.
@@ -93,9 +92,7 @@ def composite_score(
     norm_cagr = normalize_cagr(cagr * 100)  # Convert to percentage
     norm_sharpe = normalize_sharpe(sharpe)
     norm_win_rate = normalize_win_rate(win_rate)
-    norm_avg_return = normalize_avg_trade_return(
-        avg_trade_return * 100
-    )  # Convert to percentage
+    norm_avg_return = normalize_avg_trade_return(avg_trade_return * 100)  # Convert to percentage
 
     # Calculate weighted sum
     weighted_sum = (
@@ -125,10 +122,10 @@ def composite_score(
 
 
 def evaluate_strategy_performance(
-    results: Dict[str, Union[float, int]],
-    weights: Optional[CompositeWeights] = None,
-    penalties: Optional[CompositePenalties] = None,
-) -> Dict[str, float]:
+    results: dict[str, float | int],
+    weights: CompositeWeights | None = None,
+    penalties: CompositePenalties | None = None,
+) -> dict[str, float]:
     """
     Evaluate strategy performance with detailed breakdown.
 
@@ -201,7 +198,7 @@ def evaluate_strategy_performance(
     }
 
 
-def load_composite_config(config: Dict) -> tuple[CompositeWeights, CompositePenalties]:
+def load_composite_config(config: dict) -> tuple[CompositeWeights, CompositePenalties]:
     """
     Load composite scoring configuration from config dictionary.
 

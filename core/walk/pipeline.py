@@ -6,9 +6,7 @@ logger = logging.getLogger(__name__)
 
 
 class Pipeline:
-    def __init__(
-        self, X: np.ndarray, y: np.ndarray, strategy_type: str = "regime_ensemble"
-    ):
+    def __init__(self, X: np.ndarray, y: np.ndarray, strategy_type: str = "regime_ensemble"):
         self.X = X
         self.y = y
         self.mu = None
@@ -83,15 +81,11 @@ class Pipeline:
         if regime == "trend":
             signals = self._trend_following_signals(returns, price_ma_ratio, zscore)
         elif regime == "chop":
-            signals = self._mean_reversion_signals(
-                zscore, price_ma_ratio, volatility_ratio
-            )
+            signals = self._mean_reversion_signals(zscore, price_ma_ratio, volatility_ratio)
         elif regime == "volatile":
             signals = self._volatile_regime_signals(returns, zscore, volatility_ratio)
         else:
-            signals = self._ensemble_signals(
-                returns, zscore, price_ma_ratio, volatility_ratio
-            )
+            signals = self._ensemble_signals(returns, zscore, price_ma_ratio, volatility_ratio)
 
         # Apply confidence threshold
         threshold = self.model["signal_threshold"]
@@ -141,9 +135,7 @@ class Pipeline:
         zscore_signal = np.where(zscore > 1.0, -0.5, np.where(zscore < -1.0, 0.5, 0))
 
         # Price/MA ratio reversion
-        ma_signal = np.where(
-            price_ma_ratio > 1.02, -0.3, np.where(price_ma_ratio < 0.98, 0.3, 0)
-        )
+        ma_signal = np.where(price_ma_ratio > 1.02, -0.3, np.where(price_ma_ratio < 0.98, 0.3, 0))
 
         # Volatility adjustment
         vol_adj = np.clip(1.0 / (volatility * 100), 0.5, 2.0)

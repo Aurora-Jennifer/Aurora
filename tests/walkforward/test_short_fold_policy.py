@@ -10,5 +10,3 @@ def test_short_fold_policy(monkeypatch):
     monkeypatch.setattr(mwr, "load_data", lambda *a, **k: df)
     out = mwr.run_smoke(symbols=["SPY"], train=60, test=10)
     assert out.get("folds", 0) == 1 or out.get("violation_code") == "SHORT_FOLD"
-
-

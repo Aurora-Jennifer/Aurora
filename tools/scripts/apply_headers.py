@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-import os
 from pathlib import Path
-
 
 HEADER_LINES = [
     "# © 2025 Aurora Analytics — Proprietary",
@@ -37,10 +35,7 @@ def should_skip(path: Path) -> bool:
 
 
 def has_header(text: str) -> bool:
-    return (
-        "AUR-NOTICE-2025-01" in text
-        or "© 2025 Aurora Analytics — Proprietary" in text
-    )
+    return "AUR-NOTICE-2025-01" in text or "© 2025 Aurora Analytics — Proprietary" in text
 
 
 def insert_header(text: str) -> str:
@@ -87,5 +82,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
-

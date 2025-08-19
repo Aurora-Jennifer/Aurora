@@ -14,15 +14,15 @@ def test_window_boundaries_strictly_increasing():
     folds = list(gen_walkforward(n=100, train_len=20, test_len=10, stride=5))
 
     for fold in folds:
-        assert (
-            fold.train_hi < fold.test_lo
-        ), f"WF_BOUNDARY: train_hi ({fold.train_hi}) must be < test_lo ({fold.test_lo})"
-        assert (
-            fold.train_lo <= fold.train_hi
-        ), f"WF_BOUNDARY: train_lo ({fold.train_lo}) must be <= train_hi ({fold.train_hi})"
-        assert (
-            fold.test_lo <= fold.test_hi
-        ), f"WF_BOUNDARY: test_lo ({fold.test_lo}) must be <= test_hi ({fold.test_hi})"
+        assert fold.train_hi < fold.test_lo, (
+            f"WF_BOUNDARY: train_hi ({fold.train_hi}) must be < test_lo ({fold.test_lo})"
+        )
+        assert fold.train_lo <= fold.train_hi, (
+            f"WF_BOUNDARY: train_lo ({fold.train_lo}) must be <= train_hi ({fold.train_hi})"
+        )
+        assert fold.test_lo <= fold.test_hi, (
+            f"WF_BOUNDARY: test_lo ({fold.test_lo}) must be <= test_hi ({fold.test_hi})"
+        )
 
 
 def test_correct_fold_count_for_known_input():
@@ -45,9 +45,7 @@ def test_full_coverage_of_eval_range():
     test_len = 10
     stride = 5
 
-    folds = list(
-        gen_walkforward(n=n, train_len=train_len, test_len=test_len, stride=stride)
-    )
+    folds = list(gen_walkforward(n=n, train_len=train_len, test_len=test_len, stride=stride))
 
     # Collect all test indices
     test_indices = set()
@@ -59,9 +57,9 @@ def test_full_coverage_of_eval_range():
 
     # Check coverage (allow for partial final window)
     missing_indices = expected_test_range - test_indices
-    assert (
-        len(missing_indices) <= test_len
-    ), f"WF_COVERAGE: Too many missing indices: {missing_indices}"
+    assert len(missing_indices) <= test_len, (
+        f"WF_COVERAGE: Too many missing indices: {missing_indices}"
+    )
 
 
 def test_no_overlap_between_train_test():
@@ -78,41 +76,33 @@ def test_no_overlap_between_train_test():
 
 def test_anchored_mode_boundaries():
     """Test anchored mode (fixed train start)."""
-    folds = list(
-        gen_walkforward(n=100, train_len=20, test_len=10, stride=5, anchored=True)
-    )
+    folds = list(gen_walkforward(n=100, train_len=20, test_len=10, stride=5, anchored=True))
 
     for fold in folds:
         # In anchored mode, train_lo should always be 0 (or warmup)
-        assert (
-            fold.train_lo == 0
-        ), f"WF_ANCHORED: train_lo should be 0, got {fold.train_lo}"
-        assert (
-            fold.train_hi < fold.test_lo
-        ), f"WF_ANCHORED: train_hi ({fold.train_hi}) must be < test_lo ({fold.test_lo})"
+        assert fold.train_lo == 0, f"WF_ANCHORED: train_lo should be 0, got {fold.train_lo}"
+        assert fold.train_hi < fold.test_lo, (
+            f"WF_ANCHORED: train_hi ({fold.train_hi}) must be < test_lo ({fold.test_lo})"
+        )
 
 
 def test_warmup_handling():
     """Test warmup period handling."""
     warmup = 10
-    folds = list(
-        gen_walkforward(n=100, train_len=20, test_len=10, stride=5, warmup=warmup)
-    )
+    folds = list(gen_walkforward(n=100, train_len=20, test_len=10, stride=5, warmup=warmup))
 
     for fold in folds:
         # Train should not start before warmup
-        assert (
-            fold.train_lo >= warmup
-        ), f"WF_WARMUP: train_lo ({fold.train_lo}) should be >= warmup ({warmup})"
+        assert fold.train_lo >= warmup, (
+            f"WF_WARMUP: train_lo ({fold.train_lo}) should be >= warmup ({warmup})"
+        )
 
 
 def test_edge_cases():
     """Test edge cases for fold generation."""
     # Very small dataset
     folds = list(gen_walkforward(n=10, train_len=5, test_len=3, stride=2))
-    assert (
-        len(folds) > 0
-    ), "WF_EDGE: Should generate at least one fold for small dataset"
+    assert len(folds) > 0, "WF_EDGE: Should generate at least one fold for small dataset"
 
     # Equal train and test length
     folds = list(gen_walkforward(n=50, train_len=10, test_len=10, stride=10))
@@ -124,15 +114,11 @@ def test_stride_effects():
     """Test different stride values."""
     # Non-overlapping test windows
     folds = list(gen_walkforward(n=100, train_len=20, test_len=10, stride=10))
-    assert (
-        len(folds) == 8
-    ), f"WF_STRIDE: Expected 8 folds with stride=10, got {len(folds)}"
+    assert len(folds) == 8, f"WF_STRIDE: Expected 8 folds with stride=10, got {len(folds)}"
 
     # Overlapping test windows
     folds = list(gen_walkforward(n=100, train_len=20, test_len=10, stride=5))
-    assert (
-        len(folds) == 16
-    ), f"WF_STRIDE: Expected 16 folds with stride=5, got {len(folds)}"
+    assert len(folds) == 16, f"WF_STRIDE: Expected 16 folds with stride=5, got {len(folds)}"
 
 
 def test_fold_properties():
@@ -159,22 +145,20 @@ def test_fold_properties():
 )
 def test_off_by_one_edges(n, train_len, test_len, stride):
     """Test off-by-one edge cases with parametrized inputs."""
-    folds = list(
-        gen_walkforward(n=n, train_len=train_len, test_len=test_len, stride=stride)
-    )
+    folds = list(gen_walkforward(n=n, train_len=train_len, test_len=test_len, stride=stride))
 
     # Should generate at least one fold
-    assert (
-        len(folds) > 0
-    ), f"WF_OFFBYONE: No folds generated for n={n}, train={train_len}, test={test_len}, stride={stride}"
+    assert len(folds) > 0, (
+        f"WF_OFFBYONE: No folds generated for n={n}, train={train_len}, test={test_len}, stride={stride}"
+    )
 
     # All folds should have valid boundaries
     for fold in folds:
         assert fold.train_lo >= 0, f"WF_OFFBYONE: train_lo negative: {fold.train_lo}"
         assert fold.test_hi < n, f"WF_OFFBYONE: test_hi >= n: {fold.test_hi} >= {n}"
-        assert (
-            fold.train_hi < fold.test_lo
-        ), f"WF_OFFBYONE: train_hi >= test_lo: {fold.train_hi} >= {fold.test_lo}"
+        assert fold.train_hi < fold.test_lo, (
+            f"WF_OFFBYONE: train_hi >= test_lo: {fold.train_hi} >= {fold.test_lo}"
+        )
 
 
 def test_fold_sequence_consistency():
@@ -191,17 +175,9 @@ def test_fold_sequence_consistency():
         curr_fold = folds[i]
 
         # Train windows should advance
-        assert (
-            curr_fold.train_lo >= prev_fold.train_lo
-        ), "WF_SEQ: train_lo should not decrease"
-        assert (
-            curr_fold.train_hi >= prev_fold.train_hi
-        ), "WF_SEQ: train_hi should not decrease"
+        assert curr_fold.train_lo >= prev_fold.train_lo, "WF_SEQ: train_lo should not decrease"
+        assert curr_fold.train_hi >= prev_fold.train_hi, "WF_SEQ: train_hi should not decrease"
 
         # Test windows should advance
-        assert (
-            curr_fold.test_lo >= prev_fold.test_lo
-        ), "WF_SEQ: test_lo should not decrease"
-        assert (
-            curr_fold.test_hi >= prev_fold.test_hi
-        ), "WF_SEQ: test_hi should not decrease"
+        assert curr_fold.test_lo >= prev_fold.test_lo, "WF_SEQ: test_lo should not decrease"
+        assert curr_fold.test_hi >= prev_fold.test_hi, "WF_SEQ: test_hi should not decrease"

@@ -6,7 +6,6 @@ Common functionality and utilities for all visualization components.
 
 import warnings
 from pathlib import Path
-from typing import Dict, Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -78,15 +77,11 @@ class BaseVisualizer:
             Path to saved file
         """
         plot_path = self.output_dir / filename
-        fig.savefig(
-            plot_path, dpi=dpi, bbox_inches="tight", facecolor="white", edgecolor="none"
-        )
+        fig.savefig(plot_path, dpi=dpi, bbox_inches="tight", facecolor="white", edgecolor="none")
         self.logger.info(f"Saved plot: {plot_path}")
         return str(plot_path)
 
-    def create_subplot_grid(
-        self, rows: int, cols: int, figsize: tuple = (16, 12)
-    ) -> tuple:
+    def create_subplot_grid(self, rows: int, cols: int, figsize: tuple = (16, 12)) -> tuple:
         """
         Create a subplot grid with consistent styling.
 
@@ -108,9 +103,7 @@ class BaseVisualizer:
 
         return fig, axes
 
-    def style_axis(
-        self, ax: plt.Axes, title: str = "", xlabel: str = "", ylabel: str = ""
-    ):
+    def style_axis(self, ax: plt.Axes, title: str = "", xlabel: str = "", ylabel: str = ""):
         """
         Apply consistent styling to an axis.
 
@@ -131,7 +124,7 @@ class BaseVisualizer:
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
 
-    def load_json_data(self, file_path: str) -> Optional[Dict]:
+    def load_json_data(self, file_path: str) -> dict | None:
         """
         Load JSON data from file.
 
@@ -157,7 +150,7 @@ class BaseVisualizer:
             self.logger.error(f"Error loading JSON data from {file_path}: {e}")
             return None
 
-    def load_csv_data(self, file_path: str) -> Optional[pd.DataFrame]:
+    def load_csv_data(self, file_path: str) -> pd.DataFrame | None:
         """
         Load CSV data from file.
 
@@ -180,7 +173,7 @@ class BaseVisualizer:
             self.logger.error(f"Error loading CSV data from {file_path}: {e}")
             return None
 
-    def generate_simulation_data(self, n_points: int = 100) -> Dict[str, np.ndarray]:
+    def generate_simulation_data(self, n_points: int = 100) -> dict[str, np.ndarray]:
         """
         Generate realistic simulation data for testing.
 

@@ -5,7 +5,6 @@ Handles trade records with partial closes and proper PnL calculation.
 
 import logging
 from dataclasses import dataclass
-from typing import Dict, List, Optional
 
 import pandas as pd
 
@@ -22,7 +21,7 @@ class TradeRecord:
     entry_vwap: float = 0.0
     cum_entry_notional: float = 0.0
     cum_entry_qty: float = 0.0
-    exit_date: Optional[str] = None
+    exit_date: str | None = None
     exit_qty: float = 0.0
     exit_vwap: float = 0.0
     cum_exit_notional: float = 0.0
@@ -41,8 +40,8 @@ class TradeBook:
     """Trade book managing open and closed trades."""
 
     def __init__(self):
-        self.open: Dict[str, TradeRecord] = {}
-        self.closed: List[TradeRecord] = []
+        self.open: dict[str, TradeRecord] = {}
+        self.closed: list[TradeRecord] = []
         self.logger = logging.getLogger(__name__)
 
     def on_buy(self, date: str, symbol: str, qty: float, price: float, fees: float):
@@ -59,9 +58,7 @@ class TradeBook:
         tr.entry_vwap = tr.cum_entry_notional / max(tr.cum_entry_qty, 1e-12)
         tr.cum_fees += fees
 
-        self.logger.info(
-            f"BUY: {symbol} {qty} @ ${price:.2f}, VWAP: ${tr.entry_vwap:.2f}"
-        )
+        self.logger.info(f"BUY: {symbol} {qty} @ ${price:.2f}, VWAP: ${tr.entry_vwap:.2f}")
 
     def on_sell(
         self,
@@ -100,9 +97,7 @@ class TradeBook:
             self.closed.append(tr)
             self.open.pop(symbol, None)
 
-            self.logger.info(
-                f"CLOSED: {symbol} trade, Total PnL: ${tr.realized_pnl:.2f}"
-            )
+            self.logger.info(f"CLOSED: {symbol} trade, Total PnL: ${tr.realized_pnl:.2f}")
 
     def reset(self):
         """Reset the trade book (clear all trades)."""
@@ -116,11 +111,11 @@ class TradeBook:
         if tr:
             tr.max_drawdown_pct = min(tr.max_drawdown_pct, mtm_pnl_pct)
 
-    def get_open_positions(self) -> Dict[str, TradeRecord]:
+    def get_open_positions(self) -> dict[str, TradeRecord]:
         """Get all open positions."""
         return self.open.copy()
 
-    def get_closed_trades(self) -> List[TradeRecord]:
+    def get_closed_trades(self) -> list[TradeRecord]:
         """Get all closed trades."""
         return self.closed.copy()
 
@@ -131,11 +126,11 @@ class TradeBook:
             return pd.DataFrame()
         return pd.DataFrame(trades_data)
 
-    def get_trades(self) -> List[Dict]:
+    def get_trades(self) -> list[dict]:
         """Get all trades as list of dictionaries."""
         return self.export_trades_csv()
 
-    def get_trade_summary(self) -> Dict:
+    def get_trade_summary(self) -> dict:
         """Get summary statistics of all trades."""
         total_trades = len(self.closed)
         if total_trades == 0:
@@ -176,7 +171,7 @@ class TradeBook:
             "open_positions": len(self.open),
         }
 
-    def export_trades_csv(self) -> List[Dict]:
+    def export_trades_csv(self) -> list[dict]:
         """Export trades for CSV output."""
         trades_data = []
 

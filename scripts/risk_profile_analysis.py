@@ -180,9 +180,7 @@ def main():
             )
 
             if metrics:
-                cagr = calculate_cagr(
-                    metrics.get("total_return", 0), start_date, end_date
-                )
+                cagr = calculate_cagr(metrics.get("total_return", 0), start_date, end_date)
                 positive_fold_pct = (
                     metrics.get("positive_folds", 0) / metrics.get("total_folds", 1)
                 ) * 100
@@ -297,22 +295,16 @@ def main():
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     # Save profile shootout results
-    df_results.to_csv(
-        f"results/risk_analysis/profile_shootout_{timestamp}.csv", index=False
-    )
+    df_results.to_csv(f"results/risk_analysis/profile_shootout_{timestamp}.csv", index=False)
 
     # Save trade duration results
     if trade_duration_results:
-        df_trades.to_csv(
-            f"results/risk_analysis/trade_duration_{timestamp}.csv", index=False
-        )
+        df_trades.to_csv(f"results/risk_analysis/trade_duration_{timestamp}.csv", index=False)
 
     # Save sensitivity results
     if sensitivity_results:
         df_sensitivity = pd.DataFrame(sensitivity_results)
-        df_sensitivity.to_csv(
-            f"results/risk_analysis/sensitivity_{timestamp}.csv", index=False
-        )
+        df_sensitivity.to_csv(f"results/risk_analysis/sensitivity_{timestamp}.csv", index=False)
 
     print("\n✅ Analysis complete! Results saved to results/risk_analysis/")
     print("📁 Files created:")

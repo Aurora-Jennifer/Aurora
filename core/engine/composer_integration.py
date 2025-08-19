@@ -6,7 +6,7 @@ Integrates the composer system into walkforward and backtest engines.
 
 import logging
 from datetime import datetime
-from typing import Any, Dict, Optional, Tuple
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -24,7 +24,7 @@ class ComposerIntegration:
     Integration layer for composer system in trading engines.
     """
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         """
         Initialize composer integration.
 
@@ -48,9 +48,7 @@ class ComposerIntegration:
                 self.regime_extractor,
                 self.composer,
             ) = build_composer_system(config)
-            logger.info(
-                f"Composer system initialized with {len(self.strategies)} strategies"
-            )
+            logger.info(f"Composer system initialized with {len(self.strategies)} strategies")
             logger.info(f"Regime extractor: {self.regime_extractor.name}")
             logger.info(f"Composer: {self.composer.name}")
 
@@ -150,8 +148,8 @@ class ComposerIntegration:
         data: pd.DataFrame,
         symbol: str,
         current_idx: int,
-        asset_class: Optional[str] = None,
-    ) -> Tuple[float, Dict[str, Any]]:
+        asset_class: str | None = None,
+    ) -> tuple[float, dict[str, Any]]:
         """
         Get trading decision from composer system.
 
@@ -206,9 +204,7 @@ class ComposerIntegration:
                 self._first_composer_call_logged = True
 
                 # Calculate feature size and NaN counts
-                feature_size = (
-                    len(market_state.prices) if market_state.prices is not None else 0
-                )
+                feature_size = len(market_state.prices) if market_state.prices is not None else 0
                 nan_counts = {}
                 if data is not None:
                     for col in data.columns:
@@ -221,9 +217,7 @@ class ComposerIntegration:
                 )
 
             # Get composer decision
-            result = temp_composer.compose(
-                market_state, self.strategies, self.regime_extractor
-            )
+            result = temp_composer.compose(market_state, self.strategies, self.regime_extractor)
 
             # Validate weight vector length and finiteness
             if hasattr(temp_composer, "strategies"):
@@ -234,9 +228,7 @@ class ComposerIntegration:
                     )
 
                 if not all(np.isfinite(w) for w in result.strategy_weights):
-                    raise ValueError(
-                        f"Non-finite weights detected: {result.strategy_weights}"
-                    )
+                    raise ValueError(f"Non-finite weights detected: {result.strategy_weights}")
 
             # Prepare metadata
             metadata = {
@@ -259,7 +251,11 @@ class ComposerIntegration:
                     fam = None
                     elig = None
                     if asset_class and asset_class in self.config.get("assets", {}):
-                        fam = self.config["assets"][asset_class].get("composer_params", {}).get("family")
+                        fam = (
+                            self.config["assets"][asset_class]
+                            .get("composer_params", {})
+                            .get("family")
+                        )
                         elig = self.config["assets"][asset_class].get("eligible_strategies")
                     logger.info(
                         "composer: asset_class=%s family=%s elig=%s conf=%.3f signal=%.3f regime=%s",
@@ -306,8 +302,8 @@ class ComposerIntegration:
             }
 
     def evaluate_strategy_performance(
-        self, metrics: Dict[str, float], symbol: str, asset_class: Optional[str] = None
-    ) -> Dict[str, Any]:
+        self, metrics: dict[str, float], symbol: str, asset_class: str | None = None
+    ) -> dict[str, Any]:
         """
         Evaluate strategy performance using composite scoring.
 
@@ -364,16 +360,11 @@ class ComposerIntegration:
         symbol_upper = symbol.upper()
 
         # Crypto detection
-        if any(
-            crypto in symbol_upper
-            for crypto in ["BTC", "ETH", "ADA", "DOT", "LINK", "UNI"]
-        ):
+        if any(crypto in symbol_upper for crypto in ["BTC", "ETH", "ADA", "DOT", "LINK", "UNI"]):
             return "crypto"
 
         # ETF detection
-        if any(
-            etf in symbol_upper for etf in ["SPY", "QQQ", "IWM", "TLT", "GLD", "SLV"]
-        ):
+        if any(etf in symbol_upper for etf in ["SPY", "QQQ", "IWM", "TLT", "GLD", "SLV"]):
             return "etf"
 
         # Stock detection (common patterns)
@@ -383,9 +374,7 @@ class ComposerIntegration:
         # Default
         return "unknown"
 
-    def should_use_composer(
-        self, symbol: str, asset_class: Optional[str] = None
-    ) -> bool:
+    def should_use_composer(self, symbol: str, asset_class: str | None = None) -> bool:
         """
         Determine if composer should be used for this symbol/asset class.
 
@@ -414,8 +403,8 @@ class ComposerIntegration:
 
 
 def integrate_composer_into_walkforward(
-    data: pd.DataFrame, symbol: str, current_idx: int, config: Dict[str, Any]
-) -> Tuple[float, Dict[str, Any]]:
+    data: pd.DataFrame, symbol: str, current_idx: int, config: dict[str, Any]
+) -> tuple[float, dict[str, Any]]:
     """
     Integration function for walkforward framework.
 
@@ -438,8 +427,8 @@ def integrate_composer_into_walkforward(
 
 
 def integrate_composer_into_backtest(
-    data: pd.DataFrame, symbol: str, current_date: str, config: Dict[str, Any]
-) -> Tuple[float, Dict[str, Any]]:
+    data: pd.DataFrame, symbol: str, current_date: str, config: dict[str, Any]
+) -> tuple[float, dict[str, Any]]:
     """
     Integration function for backtest engine.
 

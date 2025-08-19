@@ -77,9 +77,7 @@ def analyze_results(data, symbol, profile_name, start_date, end_date):
 
     # Calculate trade statistics
     total_trades = sum(fold.get("n_trades", 0) for fold in fold_results)
-    avg_duration = np.mean(
-        [fold.get("metrics", {}).get("median_hold", 1) for fold in fold_results]
-    )
+    avg_duration = np.mean([fold.get("metrics", {}).get("median_hold", 1) for fold in fold_results])
 
     # Calculate positive fold percentage
     positive_folds = aggregate.get("positive_sharpe_folds", 0)
@@ -241,9 +239,7 @@ def main():
         os.makedirs("results/risk_analysis", exist_ok=True)
 
         # Save profile shootout results
-        df_results.to_csv(
-            f"results/risk_analysis/profile_shootout_{timestamp}.csv", index=False
-        )
+        df_results.to_csv(f"results/risk_analysis/profile_shootout_{timestamp}.csv", index=False)
 
         print(
             f"\n✅ Analysis complete! Results saved to results/risk_analysis/profile_shootout_{timestamp}.csv"

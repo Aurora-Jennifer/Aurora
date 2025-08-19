@@ -10,7 +10,7 @@ import json
 import logging
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 class SignalTemplateGenerator:
     """Generate signal templates using walk-forward analysis."""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         """
         Initialize the signal template generator.
 
@@ -52,9 +52,7 @@ class SignalTemplateGenerator:
         self.performance_metrics = {}
         self.fold_results = {}
 
-    def fetch_historical_data(
-        self, symbol: str, start_date: str, end_date: str
-    ) -> pd.DataFrame:
+    def fetch_historical_data(self, symbol: str, start_date: str, end_date: str) -> pd.DataFrame:
         """
         Fetch historical data for a symbol.
 
@@ -78,9 +76,7 @@ class SignalTemplateGenerator:
 
             # Ensure we have all required columns
             required_columns = ["Open", "High", "Low", "Close", "Volume"]
-            missing_columns = [
-                col for col in required_columns if col not in data.columns
-            ]
+            missing_columns = [col for col in required_columns if col not in data.columns]
 
             if missing_columns:
                 logger.error(f"Missing columns for {symbol}: {missing_columns}")
@@ -93,9 +89,7 @@ class SignalTemplateGenerator:
             logger.error(f"Error fetching data for {symbol}: {e}")
             return pd.DataFrame()
 
-    def generate_features(
-        self, data: pd.DataFrame
-    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    def generate_features(self, data: pd.DataFrame) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
         """
         Generate features from price data.
 
@@ -109,20 +103,16 @@ class SignalTemplateGenerator:
 
         try:
             # Build feature table using the framework
-            features, targets, prices = build_feature_table(
-                data, warmup_days=self.warmup_days
-            )
+            features, targets, prices = build_feature_table(data, warmup_days=self.warmup_days)
 
-            logger.info(
-                f"Generated {features.shape[1]} features for {len(features)} data points"
-            )
+            logger.info(f"Generated {features.shape[1]} features for {len(features)} data points")
             return features, targets, prices
 
         except Exception as e:
             logger.error(f"Error generating features: {e}")
             return np.array([]), np.array([]), np.array([])
 
-    def run_walkforward_analysis(self, symbol: str) -> Dict[str, Any]:
+    def run_walkforward_analysis(self, symbol: str) -> dict[str, Any]:
         """
         Run walk-forward analysis for a symbol.
 
@@ -177,9 +167,7 @@ class SignalTemplateGenerator:
 
         # Run walk-forward analysis
         try:
-            results = walkforward_run(
-                pipeline=pipeline, folds=folds, prices=prices, model_seed=42
-            )
+            results = walkforward_run(pipeline=pipeline, folds=folds, prices=prices, model_seed=42)
 
             logger.info(f"Walk-forward analysis completed for {symbol}")
             return self._process_results(symbol, results, folds, data)
@@ -189,8 +177,8 @@ class SignalTemplateGenerator:
             return {}
 
     def _process_results(
-        self, symbol: str, results: List, folds: List, data: pd.DataFrame
-    ) -> Dict[str, Any]:
+        self, symbol: str, results: list, folds: list, data: pd.DataFrame
+    ) -> dict[str, Any]:
         """
         Process walk-forward results into signal templates.
 
@@ -266,7 +254,7 @@ class SignalTemplateGenerator:
             "fold_details": fold_metrics,
         }
 
-    def _extract_signal_patterns(self, trades: List) -> List[Dict]:
+    def _extract_signal_patterns(self, trades: list) -> list[dict]:
         """
         Extract signal patterns from trades.
 
@@ -292,8 +280,8 @@ class SignalTemplateGenerator:
         return patterns
 
     def _generate_signal_template(
-        self, signal_patterns: List, fold_metrics: List
-    ) -> Dict[str, Any]:
+        self, signal_patterns: list, fold_metrics: list
+    ) -> dict[str, Any]:
         """
         Generate signal template from patterns and metrics.
 
@@ -317,20 +305,12 @@ class SignalTemplateGenerator:
         sell_ratio = len(sell_signals) / total_signals if total_signals > 0 else 0.5
 
         # Calculate average position sizes
-        avg_buy_size = (
-            np.mean([s.get("size", 0) for s in buy_signals]) if buy_signals else 0
-        )
-        avg_sell_size = (
-            np.mean([s.get("size", 0) for s in sell_signals]) if sell_signals else 0
-        )
+        avg_buy_size = np.mean([s.get("size", 0) for s in buy_signals]) if buy_signals else 0
+        avg_sell_size = np.mean([s.get("size", 0) for s in sell_signals]) if sell_signals else 0
 
         # Determine signal type based on performance
-        avg_sharpe = (
-            np.mean([m["sharpe_ratio"] for m in fold_metrics]) if fold_metrics else 0
-        )
-        avg_win_rate = (
-            np.mean([m["win_rate"] for m in fold_metrics]) if fold_metrics else 0
-        )
+        avg_sharpe = np.mean([m["sharpe_ratio"] for m in fold_metrics]) if fold_metrics else 0
+        avg_win_rate = np.mean([m["win_rate"] for m in fold_metrics]) if fold_metrics else 0
 
         # Generate template
         template = {
@@ -348,9 +328,7 @@ class SignalTemplateGenerator:
             "performance_thresholds": {
                 "min_sharpe": float(avg_sharpe * 0.8),
                 "min_win_rate": float(avg_win_rate * 0.9),
-                "max_drawdown": float(
-                    np.mean([m["max_drawdown"] for m in fold_metrics]) * 1.2
-                )
+                "max_drawdown": float(np.mean([m["max_drawdown"] for m in fold_metrics]) * 1.2)
                 if fold_metrics
                 else 0.1,
             },
@@ -362,7 +340,7 @@ class SignalTemplateGenerator:
 
         return template
 
-    def generate_all_templates(self) -> Dict[str, Any]:
+    def generate_all_templates(self) -> dict[str, Any]:
         """
         Generate signal templates for all symbols.
 
@@ -413,18 +391,14 @@ class SignalTemplateGenerator:
                     "avg_win_rate_across_symbols": float(np.mean(all_win_rates)),
                     "best_performing_symbol": max(
                         all_results.keys(),
-                        key=lambda x: all_results[x]["performance_metrics"][
-                            "avg_sharpe_ratio"
-                        ],
+                        key=lambda x: all_results[x]["performance_metrics"]["avg_sharpe_ratio"],
                     ),
                 }
             )
 
         return {"summary": summary_stats, "templates": all_results}
 
-    def save_templates(
-        self, results: Dict[str, Any], output_dir: str = "results/signal_templates"
-    ):
+    def save_templates(self, results: dict[str, Any], output_dir: str = "results/signal_templates"):
         """
         Save signal templates to files.
 

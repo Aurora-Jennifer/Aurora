@@ -209,9 +209,7 @@ def test_composer_system():
     regime_extractor = BasicRegimeExtractor(lookback=20)
 
     # Create composer
-    composer = SoftmaxSelector(
-        temperature=1.0, trend_bias=1.2, chop_bias=1.1, min_confidence=0.1
-    )
+    composer = SoftmaxSelector(temperature=1.0, trend_bias=1.2, chop_bias=1.1, min_confidence=0.1)
 
     # Test composition
     result = composer.compose(market_state, strategies, regime_extractor)

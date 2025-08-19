@@ -1,6 +1,7 @@
-import sys
 import json
+import sys
 from pathlib import Path
+
 from jsonschema import validate
 
 
@@ -20,7 +21,9 @@ def main():
     for feat, st in data.get("stats", {}).items():
         miss = float(st.get("missing_pct", 0))
         if miss > max_missing:
-            print(f"[MODEL EVAL FAIL] missing rate too high: {feat} = {miss:.4f} > {max_missing:.4f}")
+            print(
+                f"[MODEL EVAL FAIL] missing rate too high: {feat} = {miss:.4f} > {max_missing:.4f}"
+            )
             sys.exit(1)
 
     if not (psi_global <= psi_fail):
@@ -32,5 +35,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-

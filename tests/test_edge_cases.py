@@ -2,7 +2,7 @@
 Test edge cases - verify graceful handling of missing columns and mixed timezones.
 """
 
-from datetime import timezone
+from datetime import UTC
 
 import numpy as np
 import pandas as pd
@@ -20,9 +20,7 @@ def test_missing_required_columns(strict_validator, mk_ts):
     data = data.drop("Close", axis=1)
 
     # Should fail with clear error message
-    with pytest.raises(
-        DataSanityError, match="missing.*Close|required.*Close|Close.*missing"
-    ):
+    with pytest.raises(DataSanityError, match="missing.*Close|required.*Close|Close.*missing"):
         strict_validator.validate_and_repair(data, "MISSING_CLOSE_TEST")
 
 
@@ -51,16 +49,14 @@ def test_missing_ohlc_columns(strict_validator, mk_ts):
     data = data.drop(["Open", "High", "Low"], axis=1)
 
     # Should fail with clear error message
-    with pytest.raises(
-        DataSanityError, match="missing.*Open.*High.*Low|required.*Open.*High.*Low"
-    ):
+    with pytest.raises(DataSanityError, match="missing.*Open.*High.*Low|required.*Open.*High.*Low"):
         strict_validator.validate_and_repair(data, "MISSING_OHLC_TEST")
 
 
 def test_mixed_timezone_handling(strict_validator, mk_ts):
     """Test handling of mixed timezone data."""
     # Create data with mixed timezones
-    dates_utc = pd.date_range("2023-01-01", periods=5, freq="1min", tz=timezone.utc)
+    dates_utc = pd.date_range("2023-01-01", periods=5, freq="1min", tz=UTC)
     dates_eastern = pd.date_range("2023-01-01", periods=5, freq="1min", tz="US/Eastern")
 
     # Create mixed timezone data
@@ -88,9 +84,7 @@ def test_naive_timezone_handling(strict_validator, mk_ts):
     data.index = data.index.tz_localize(None)  # Remove timezone
 
     # Should fail with clear error message about missing timezone
-    with pytest.raises(
-        DataSanityError, match="timezone|UTC|timezone.*UTC|Lookahead contamination"
-    ):
+    with pytest.raises(DataSanityError, match="timezone|UTC|timezone.*UTC|Lookahead contamination"):
         strict_validator.validate_and_repair(data, "NAIVE_TIMEZONE_TEST")
 
 
@@ -100,9 +94,7 @@ def test_empty_dataframe_handling(strict_validator):
     empty_df = pd.DataFrame(columns=["Open", "High", "Low", "Close", "Volume"])
 
     # Should fail with clear error message about insufficient data
-    with pytest.raises(
-        DataSanityError, match="Empty data not allowed|insufficient|empty|no.*data"
-    ):
+    with pytest.raises(DataSanityError, match="Empty data not allowed|insufficient|empty|no.*data"):
         strict_validator.validate_and_repair(empty_df, "EMPTY_DF_TEST")
 
 
@@ -113,15 +105,13 @@ def test_single_row_handling(strict_validator, mk_ts):
 
     # Should pass (single row is valid)
     try:
-        clean_data, result = strict_validator.validate_and_repair(
-            data, "SINGLE_ROW_TEST"
-        )
+        clean_data, result = strict_validator.validate_and_repair(data, "SINGLE_ROW_TEST")
         assert len(clean_data) == 1, "Should preserve single row"
     except DataSanityError as e:
         # If single row is not allowed, error should be clear
-        assert (
-            "insufficient" in str(e).lower() or "minimum" in str(e).lower()
-        ), f"Unexpected error for single row: {e}"
+        assert "insufficient" in str(e).lower() or "minimum" in str(e).lower(), (
+            f"Unexpected error for single row: {e}"
+        )
 
 
 def test_duplicate_timestamps_handling(strict_validator, mk_ts):
@@ -151,9 +141,7 @@ def test_non_monotonic_index_handling(strict_validator, mk_ts):
     data.index = data.index[::-1]
 
     # Should fail with clear error message
-    with pytest.raises(
-        DataSanityError, match="monotonic|non-monotonic|timestamp.*order"
-    ):
+    with pytest.raises(DataSanityError, match="monotonic|non-monotonic|timestamp.*order"):
         strict_validator.validate_and_repair(data, "NON_MONOTONIC_TEST")
 
 
@@ -167,9 +155,7 @@ def test_missing_values_handling(strict_validator, mk_ts):
     data.loc[data.index[6], "Volume"] = np.nan
 
     # Should fail with clear error message about missing values
-    with pytest.raises(
-        DataSanityError, match="Non-finite values|NaN|missing.*values|non-finite"
-    ):
+    with pytest.raises(DataSanityError, match="Non-finite values|NaN|missing.*values|non-finite"):
         strict_validator.validate_and_repair(data, "MISSING_VALUES_TEST")
 
 

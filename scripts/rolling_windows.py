@@ -18,9 +18,7 @@ WINDOW_DAYS = 30
 STEP_DAYS = 5
 
 
-def trading_days_between(
-    dates: pd.DatetimeIndex, start: str, end: str
-) -> pd.DatetimeIndex:
+def trading_days_between(dates: pd.DatetimeIndex, start: str, end: str) -> pd.DatetimeIndex:
     # Inclusive start, inclusive end
     s = dates.searchsorted(pd.Timestamp(start))
     e = dates.searchsorted(pd.Timestamp(end), side="right")

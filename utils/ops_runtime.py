@@ -35,5 +35,3 @@ def notify_ntfy(title: str, msg):
         urllib.request.urlopen(req, timeout=5)
     except Exception:
         pass
-
-

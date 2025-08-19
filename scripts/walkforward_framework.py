@@ -9,9 +9,9 @@ import logging
 import os
 import sys
 import time
+from collections.abc import Iterator
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, Iterator, List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -103,15 +103,15 @@ def gen_walkforward(
 
         # Validate boundaries if requested
         if validate_boundaries:
-            assert (
-                train_lo <= train_hi
-            ), f"WF_BOUNDARY: train_lo ({train_lo}) must be <= train_hi ({train_hi})"
-            assert (
-                test_lo <= test_hi
-            ), f"WF_BOUNDARY: test_lo ({test_lo}) must be <= test_hi ({test_hi})"
-            assert (
-                train_hi < test_lo
-            ), f"WF_BOUNDARY: train_hi ({train_hi}) must be < test_lo ({test_lo})"
+            assert train_lo <= train_hi, (
+                f"WF_BOUNDARY: train_lo ({train_lo}) must be <= train_hi ({train_hi})"
+            )
+            assert test_lo <= test_hi, (
+                f"WF_BOUNDARY: test_lo ({test_lo}) must be <= test_hi ({test_hi})"
+            )
+            assert train_hi < test_lo, (
+                f"WF_BOUNDARY: train_hi ({train_hi}) must be < test_lo ({test_lo})"
+            )
             assert train_lo >= 0, f"WF_BOUNDARY: train_lo ({train_lo}) must be >= 0"
             assert test_hi < n, f"WF_BOUNDARY: test_hi ({test_hi}) must be < n ({n})"
 
@@ -123,9 +123,7 @@ def gen_walkforward(
 class LeakageProofPipeline:
     """Pipeline that prevents data leakage by fitting transforms on train only."""
 
-    def __init__(
-        self, X: np.ndarray, y: np.ndarray, scalers: Dict[str, callable] = None
-    ):
+    def __init__(self, X: np.ndarray, y: np.ndarray, scalers: dict[str, callable] = None):
         """
         Args:
             X: 2D numpy array of precomputed global features
@@ -227,9 +225,7 @@ class SimpleLinearModel:
 from core.sim.simulate import simulate_orders_numba
 
 
-def compute_metrics_from_pnl(
-    pnl_series: np.ndarray, trades: List[Dict]
-) -> Dict[str, float]:
+def compute_metrics_from_pnl(pnl_series: np.ndarray, trades: list[dict]) -> dict[str, float]:
     """Compute allocator-grade metrics from PnL series."""
     # Handle empty or NaN equity curves
     if len(pnl_series) == 0 or np.all(np.isnan(pnl_series)):
@@ -269,9 +265,7 @@ def compute_metrics_from_pnl(
         returns = np.array([0.0])
 
     # Basic metrics
-    total_return = (
-        (pnl_series[-1] - pnl_series[0]) / pnl_series[0] if pnl_series[0] != 0 else 0.0
-    )
+    total_return = (pnl_series[-1] - pnl_series[0]) / pnl_series[0] if pnl_series[0] != 0 else 0.0
     volatility = np.std(returns) * np.sqrt(252) if len(returns) > 1 else 0.0
 
     # Sharpe ratio (Newey-West adjusted)
@@ -322,12 +316,12 @@ def compute_metrics_from_pnl(
 
 def walkforward_run(
     pipeline: LeakageProofPipeline,
-    folds: List[Fold],
+    folds: list[Fold],
     prices: np.ndarray,
     model_seed: int = 0,
     validate_data: bool = False,  # Changed default to False for performance
     performance_mode: str = "RELAXED",
-) -> List[Tuple[int, Dict, List]]:
+) -> list[tuple[int, dict, list]]:
     """
     Run walk-forward analysis with warm-start.
 
@@ -395,9 +389,7 @@ def walkforward_run(
                 # Use proper dates based on fold indices to avoid lookahead contamination
                 base_date = pd.Timestamp("2020-01-01", tz="UTC")
                 train_start = base_date + pd.Timedelta(days=fold.train_lo)
-                train_dates = pd.date_range(
-                    start=train_start, periods=len(tr), freq="D", tz="UTC"
-                )
+                train_dates = pd.date_range(start=train_start, periods=len(tr), freq="D", tz="UTC")
                 train_data = pd.DataFrame(
                     {
                         "Open": prices[tr] * 0.99,  # Approximate OHLC from close
@@ -409,15 +401,11 @@ def walkforward_run(
                     index=train_dates,
                 )
                 validator.validate_and_repair(train_data, f"TRAIN_FOLD_{fold.fold_id}")
-                logger.debug(
-                    f"DataSanity validation passed for train fold {fold.fold_id}"
-                )
+                logger.debug(f"DataSanity validation passed for train fold {fold.fold_id}")
 
                 # Create test data slice for validation with timezone-aware datetime index
                 test_start = base_date + pd.Timedelta(days=fold.test_lo)
-                test_dates = pd.date_range(
-                    start=test_start, periods=len(te), freq="D", tz="UTC"
-                )
+                test_dates = pd.date_range(start=test_start, periods=len(te), freq="D", tz="UTC")
                 test_data = pd.DataFrame(
                     {
                         "Open": prices[te] * 0.99,
@@ -429,13 +417,9 @@ def walkforward_run(
                     index=test_dates,
                 )
                 validator.validate_and_repair(test_data, f"TEST_FOLD_{fold.fold_id}")
-                logger.debug(
-                    f"DataSanity validation passed for test fold {fold.fold_id}"
-                )
+                logger.debug(f"DataSanity validation passed for test fold {fold.fold_id}")
             except Exception as e:
-                logger.error(
-                    f"DataSanity validation failed for fold {fold.fold_id}: {str(e)}"
-                )
+                logger.error(f"DataSanity validation failed for fold {fold.fold_id}: {str(e)}")
                 raise Exception(
                     f"RULE:DATASANITY_VALIDATION_FAILED - Fold {fold.fold_id}: {str(e)}"
                 )
@@ -487,16 +471,14 @@ def walkforward_run(
     # Performance validation
     if performance_mode == "STRICT":
         if avg_fold_time > 0.6:  # 10k rows baseline
-            logger.warning(
-                f"Fold time {avg_fold_time:.3f}s exceeds STRICT threshold of 0.6s"
-            )
+            logger.warning(f"Fold time {avg_fold_time:.3f}s exceeds STRICT threshold of 0.6s")
 
     return results
 
 
 def build_feature_table(
     data: pd.DataFrame, warmup_days: int = 252
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Build global feature table from price data.
 
@@ -540,9 +522,7 @@ def build_feature_table(
     # Volatility features
     for window in [5, 10, 20]:
         vol = pd.Series(returns).rolling(window).std().values
-        vol_ratio = (
-            vol / pd.Series(vol).rolling(50).mean().values
-        )  # relative volatility
+        vol_ratio = vol / pd.Series(vol).rolling(50).mean().values  # relative volatility
         features.extend([vol, vol_ratio])
 
     # RSI with multiple timeframes
@@ -587,10 +567,7 @@ def build_feature_table(
     # Regime detection features
     # Trend strength
     trend_strength = (
-        pd.Series(close)
-        .rolling(50)
-        .apply(lambda x: (x.iloc[-1] - x.iloc[0]) / x.iloc[0])
-        .values
+        pd.Series(close).rolling(50).apply(lambda x: (x.iloc[-1] - x.iloc[0]) / x.iloc[0]).values
     )
     features.append(trend_strength)
 
@@ -637,9 +614,7 @@ def main():
         logger.info(f"Date range: {args.start_date} to {args.end_date}")
 
         # Add progress indicator for long data loads
-        data = yf.download(
-            args.symbol, start=args.start_date, end=args.end_date, progress=True
-        )
+        data = yf.download(args.symbol, start=args.start_date, end=args.end_date, progress=True)
         logger.info(f"Loaded {len(data)} days of data")
 
         if len(data) < 100:
@@ -769,13 +744,9 @@ def main():
                     "total_folds": len(folds),
                     "total_closed_trades": len(all_trade_pnls),
                     "winning_trades": (
-                        sum(1 for pnl in all_trade_pnls if pnl > 0)
-                        if all_trade_pnls
-                        else 0
+                        sum(1 for pnl in all_trade_pnls if pnl > 0) if all_trade_pnls else 0
                     ),
-                    "avg_trade_pnl": (
-                        float(np.mean(all_trade_pnls)) if all_trade_pnls else 0.0
-                    ),
+                    "avg_trade_pnl": (float(np.mean(all_trade_pnls)) if all_trade_pnls else 0.0),
                 },
             },
             f,
@@ -792,15 +763,9 @@ if __name__ == "__main__":
         description="Walk-forward framework for trading system backtesting"
     )
     parser.add_argument("--symbol", help="Trading symbol to analyze (overrides config)")
-    parser.add_argument(
-        "--start-date", default="2020-01-01", help="Start date for analysis"
-    )
-    parser.add_argument(
-        "--end-date", default="2024-12-31", help="End date for analysis"
-    )
-    parser.add_argument(
-        "--config", default="config/base.json", help="Base configuration file path"
-    )
+    parser.add_argument("--start-date", default="2020-01-01", help="Start date for analysis")
+    parser.add_argument("--end-date", default="2024-12-31", help="End date for analysis")
+    parser.add_argument("--config", default="config/base.json", help="Base configuration file path")
     parser.add_argument(
         "--profile",
         choices=["risk_low", "risk_balanced", "risk_strict"],
@@ -810,21 +775,15 @@ if __name__ == "__main__":
     parser.add_argument(
         "--train-len", type=int, help="Training window length (days, overrides config)"
     )
-    parser.add_argument(
-        "--test-len", type=int, help="Test window length (days, overrides config)"
-    )
-    parser.add_argument(
-        "--stride", type=int, help="Stride between folds (days, overrides config)"
-    )
+    parser.add_argument("--test-len", type=int, help="Test window length (days, overrides config)")
+    parser.add_argument("--stride", type=int, help="Stride between folds (days, overrides config)")
     parser.add_argument(
         "--perf-mode",
         choices=["RELAXED", "STRICT"],
         default="RELAXED",
         help="Performance validation mode",
     )
-    parser.add_argument(
-        "--validate-data", action="store_true", help="Enable DataSanity validation"
-    )
+    parser.add_argument("--validate-data", action="store_true", help="Enable DataSanity validation")
     parser.add_argument("--output-dir", help="Output directory (overrides config)")
 
     args = parser.parse_args()

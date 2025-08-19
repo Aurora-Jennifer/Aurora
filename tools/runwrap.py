@@ -16,6 +16,7 @@ if str(REPO_ROOT) not in sys.path:
 
 from core.telemetry.runlog import create_run_logger  # noqa: E402, I001
 
+
 def main():
     parser = argparse.ArgumentParser(description="Wrap a command with telemetry")
     parser.add_argument("command", nargs="+", help="Command to run")
@@ -27,20 +28,26 @@ def main():
 
     try:
         # Log command start
-        logger.log_event("command_start", {
-            "command": " ".join(args.command),
-            "cwd": str(Path.cwd())
-        })
+        logger.log_event(
+            "command_start", {"command": " ".join(args.command), "cwd": str(Path.cwd())}
+        )
 
         # Run command
         result = subprocess.run(args.command, check=False)
 
         # Log command completion
-        logger.log_event("command_completed", {
-            "exit_code": result.returncode,
-            "stdout_length": len(getattr(result, "stdout", b"") or b"") if hasattr(result, "stdout") else 0,
-            "stderr_length": len(getattr(result, "stderr", b"") or b"") if hasattr(result, "stderr") else 0
-        })
+        logger.log_event(
+            "command_completed",
+            {
+                "exit_code": result.returncode,
+                "stdout_length": len(getattr(result, "stdout", b"") or b"")
+                if hasattr(result, "stdout")
+                else 0,
+                "stderr_length": len(getattr(result, "stderr", b"") or b"")
+                if hasattr(result, "stderr")
+                else 0,
+            },
+        )
 
         # Finish logging
         logger.finish(result.returncode)
@@ -50,12 +57,10 @@ def main():
 
     except Exception as e:
         # Log error
-        logger.log_event("command_error", {
-            "error": str(e),
-            "error_type": type(e).__name__
-        })
+        logger.log_event("command_error", {"error": str(e), "error_type": type(e).__name__})
         logger.finish(1)
         raise
+
 
 if __name__ == "__main__":
     main()

@@ -5,7 +5,6 @@ Identifies market regimes (trend vs chop) and provides regime-specific parameter
 
 import logging
 from dataclasses import dataclass
-from typing import Dict, Tuple
 
 import numpy as np
 import pandas as pd
@@ -23,7 +22,7 @@ class RegimeParams:
     stop_loss_multiplier: float
     take_profit_multiplier: float
     feature_lookback_adjustment: float
-    ensemble_weights: Dict[str, float]
+    ensemble_weights: dict[str, float]
     trend_strength: float = 0.0
 
 
@@ -43,7 +42,7 @@ class RegimeDetector:
         self.regime_params = self._initialize_regime_params()
         logger.info(f"Initialized RegimeDetector with {lookback_period} day lookback")
 
-    def _initialize_regime_params(self) -> Dict[str, RegimeParams]:
+    def _initialize_regime_params(self) -> dict[str, RegimeParams]:
         """Initialize regime-specific parameters."""
         return {
             "trend": RegimeParams(
@@ -90,7 +89,7 @@ class RegimeDetector:
             ),
         }
 
-    def detect_regime(self, data: pd.DataFrame) -> Tuple[str, float, RegimeParams]:
+    def detect_regime(self, data: pd.DataFrame) -> tuple[str, float, RegimeParams]:
         """
         Detect market regime using multiple indicators.
 
@@ -133,9 +132,7 @@ class RegimeDetector:
 
         # Calculate trend strength for the current data
         close = data["Close"]
-        trend_strength = (
-            self._calculate_trend_strength(close).iloc[-1] if len(close) > 0 else 0.0
-        )
+        trend_strength = self._calculate_trend_strength(close).iloc[-1] if len(close) > 0 else 0.0
 
         # Create updated regime params with trend strength
         updated_regime_params = RegimeParams(
@@ -166,7 +163,7 @@ class RegimeDetector:
 
         return trend_strength / len(periods)
 
-    def _calculate_regime_indicators(self, data: pd.DataFrame) -> Dict[str, float]:
+    def _calculate_regime_indicators(self, data: pd.DataFrame) -> dict[str, float]:
         """Calculate regime detection indicators."""
         close = data["Close"]
         high = data["High"]
@@ -209,7 +206,7 @@ class RegimeDetector:
             "price_efficiency": price_efficiency,
         }
 
-    def _classify_regime(self, indicators: Dict[str, float]) -> Tuple[str, float]:
+    def _classify_regime(self, indicators: dict[str, float]) -> tuple[str, float]:
         """Classify regime based on indicators."""
         adx = indicators["adx"]
         vol_ratio = indicators["vol_ratio"]
@@ -349,9 +346,9 @@ class RegimeDetector:
     def get_regime_adapted_features(
         self,
         data: pd.DataFrame,
-        base_features: Dict[str, pd.Series],
+        base_features: dict[str, pd.Series],
         regime_params: RegimeParams,
-    ) -> Dict[str, pd.Series]:
+    ) -> dict[str, pd.Series]:
         """
         Adapt features based on regime parameters.
 
@@ -368,8 +365,7 @@ class RegimeDetector:
         for feature_name, feature_series in base_features.items():
             # Adjust lookback periods based on regime
             if "lookback" in feature_name.lower() or any(
-                period in feature_name
-                for period in ["5", "10", "20", "50", "100", "200"]
+                period in feature_name for period in ["5", "10", "20", "50", "100", "200"]
             ):
                 # Extract period from feature name and adjust
                 adjusted_feature = self._adjust_feature_lookback(
@@ -389,9 +385,7 @@ class RegimeDetector:
         # In a more sophisticated implementation, we would recalculate features with different periods
         return feature
 
-    def get_regime_ensemble_weights(
-        self, regime_params: RegimeParams
-    ) -> Dict[str, float]:
+    def get_regime_ensemble_weights(self, regime_params: RegimeParams) -> dict[str, float]:
         """Get ensemble weights for the current regime."""
         return regime_params.ensemble_weights.copy()
 
@@ -413,7 +407,7 @@ class RegimeAwareFeatureEngine:
 
     def generate_regime_adapted_features(
         self, data: pd.DataFrame
-    ) -> Tuple[Dict[str, pd.Series], RegimeParams]:
+    ) -> tuple[dict[str, pd.Series], RegimeParams]:
         """
         Generate features adapted to the current market regime.
 
@@ -424,9 +418,7 @@ class RegimeAwareFeatureEngine:
             Tuple of (adapted_features, regime_params)
         """
         # Detect regime
-        regime_name, confidence, regime_params = self.regime_detector.detect_regime(
-            data
-        )
+        regime_name, confidence, regime_params = self.regime_detector.detect_regime(data)
 
         # Generate base features
         base_features = self._generate_base_features(data)
@@ -446,7 +438,7 @@ class RegimeAwareFeatureEngine:
 
         return adapted_features, regime_params
 
-    def _generate_base_features(self, data: pd.DataFrame) -> Dict[str, pd.Series]:
+    def _generate_base_features(self, data: pd.DataFrame) -> dict[str, pd.Series]:
         """Generate base feature set."""
         # This would integrate with your existing feature engine
         # For now, return empty dict - will be implemented in integration
@@ -454,7 +446,7 @@ class RegimeAwareFeatureEngine:
 
     def _generate_regime_specific_features(
         self, data: pd.DataFrame, regime_name: str
-    ) -> Dict[str, pd.Series]:
+    ) -> dict[str, pd.Series]:
         """Generate regime-specific features."""
         close = data["Close"]
         features = {}
@@ -467,16 +459,12 @@ class RegimeAwareFeatureEngine:
         elif regime_name == "chop":
             # Chop-specific features
             features["chop_oscillation"] = self._calculate_chop_oscillation(close)
-            features[
-                "mean_reversion_strength"
-            ] = self._calculate_mean_reversion_strength(close)
+            features["mean_reversion_strength"] = self._calculate_mean_reversion_strength(close)
 
         elif regime_name == "volatile":
             # Volatile-specific features
             features["volatility_regime"] = self._calculate_volatility_regime(close)
-            features["volatility_persistence"] = self._calculate_volatility_persistence(
-                close
-            )
+            features["volatility_persistence"] = self._calculate_volatility_persistence(close)
 
         return features
 

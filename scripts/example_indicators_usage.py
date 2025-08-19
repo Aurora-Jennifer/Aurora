@@ -222,12 +222,8 @@ def create_comparison_plot(data: pd.DataFrame):
     axes[0, 0].grid(True, alpha=0.3)
 
     # RSI Comparison
-    axes[0, 1].plot(
-        rsi_centralized.index, rsi_centralized, label="Centralized RSI", alpha=0.7
-    )
-    axes[0, 1].plot(
-        rsi_inline.index, rsi_inline, label="Inline RSI", alpha=0.7, linestyle="--"
-    )
+    axes[0, 1].plot(rsi_centralized.index, rsi_centralized, label="Centralized RSI", alpha=0.7)
+    axes[0, 1].plot(rsi_inline.index, rsi_inline, label="Inline RSI", alpha=0.7, linestyle="--")
     axes[0, 1].axhline(y=70, color="r", linestyle=":", alpha=0.5, label="Overbought")
     axes[0, 1].axhline(y=30, color="g", linestyle=":", alpha=0.5, label="Oversold")
     axes[0, 1].set_title("RSI Comparison")

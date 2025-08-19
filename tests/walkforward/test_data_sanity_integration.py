@@ -85,9 +85,9 @@ def test_corruption_in_training_fold_trips_validator():
         validator.validate_and_repair(corrupted_data, "CORRUPTED_DATA")
 
     error_msg = str(exc_info.value)
-    assert (
-        "Non-finite values" in error_msg or "NaN" in error_msg
-    ), f"WF_CORRUPTION: Expected NaN error, got: {error_msg}"
+    assert "Non-finite values" in error_msg or "NaN" in error_msg, (
+        f"WF_CORRUPTION: Expected NaN error, got: {error_msg}"
+    )
 
 
 def create_valid_ohlc_data(n_periods=100, base_price=100.0):
@@ -152,12 +152,10 @@ def test_clean_data_passes_without_errors():
     validator = DataSanityValidator(profile="strict")
 
     try:
-        clean_data_validated, result = validator.validate_and_repair(
-            clean_data, "CLEAN_DATA"
+        clean_data_validated, result = validator.validate_and_repair(clean_data, "CLEAN_DATA")
+        assert len(clean_data_validated) == len(clean_data), (
+            "WF_CLEAN: Data length should be preserved"
         )
-        assert len(clean_data_validated) == len(
-            clean_data
-        ), "WF_CLEAN: Data length should be preserved"
     except Exception as e:
         if "Lookahead contamination" in str(e):
             # Expected due to Returns column addition
@@ -182,9 +180,9 @@ def test_negative_prices_detection():
         validator.validate_and_repair(corrupted_data, "NEGATIVE_PRICES")
 
     error_msg = str(exc_info.value)
-    assert (
-        "Negative prices" in error_msg
-    ), f"WF_NEGATIVE: Expected negative price error, got: {error_msg}"
+    assert "Negative prices" in error_msg, (
+        f"WF_NEGATIVE: Expected negative price error, got: {error_msg}"
+    )
 
 
 def test_duplicate_timestamps_detection():
@@ -203,9 +201,9 @@ def test_duplicate_timestamps_detection():
         validator.validate_and_repair(corrupted_data, "DUPLICATE_TIMESTAMPS")
 
     error_msg = str(exc_info.value)
-    assert (
-        "Index is not monotonic" in error_msg
-    ), f"WF_DUPLICATE: Expected duplicate timestamp error, got: {error_msg}"
+    assert "Index is not monotonic" in error_msg, (
+        f"WF_DUPLICATE: Expected duplicate timestamp error, got: {error_msg}"
+    )
 
 
 def test_lookahead_contamination_detection():
@@ -225,10 +223,9 @@ def test_lookahead_contamination_detection():
 
     error_msg = str(exc_info.value)
     # The lookahead test might fail on OHLC violations first, which is acceptable
-    assert (
-        "Lookahead contamination" in error_msg
-        or "OHLC invariant violation" in error_msg
-    ), f"WF_LOOKAHEAD: Expected lookahead or OHLC error, got: {error_msg}"
+    assert "Lookahead contamination" in error_msg or "OHLC invariant violation" in error_msg, (
+        f"WF_LOOKAHEAD: Expected lookahead or OHLC error, got: {error_msg}"
+    )
 
 
 def test_data_sanity_in_walkforward_pipeline():
@@ -258,9 +255,7 @@ def test_data_sanity_in_walkforward_pipeline():
     # Run walkforward (this should work with clean data)
     try:
         results = walkforward_run(pipeline, folds, prices, model_seed=42)
-        assert len(results) == len(
-            folds
-        ), "WF_PIPELINE: Should have results for all folds"
+        assert len(results) == len(folds), "WF_PIPELINE: Should have results for all folds"
 
         # Check that each result has the expected structure
         for fold_id, metrics, trades in results:
@@ -301,34 +296,30 @@ def test_data_sanity_validation_per_fold():
             train_validated, train_result = validator.validate_and_repair(
                 train_data, f"TRAIN_FOLD_{fold.fold_id}"
             )
-            assert len(train_validated) == len(
-                train_data
-            ), f"WF_FOLD: Train data length preserved for fold {fold.fold_id}"
+            assert len(train_validated) == len(train_data), (
+                f"WF_FOLD: Train data length preserved for fold {fold.fold_id}"
+            )
         except Exception as e:
             if "Lookahead contamination" in str(e):
                 # Expected due to Returns column addition
                 pass
             else:
-                pytest.fail(
-                    f"WF_FOLD: Train data validation failed for fold {fold.fold_id}: {e}"
-                )
+                pytest.fail(f"WF_FOLD: Train data validation failed for fold {fold.fold_id}: {e}")
 
         # Validate test data
         try:
             test_validated, test_result = validator.validate_and_repair(
                 test_data, f"TEST_FOLD_{fold.fold_id}"
             )
-            assert len(test_validated) == len(
-                test_data
-            ), f"WF_FOLD: Test data length preserved for fold {fold.fold_id}"
+            assert len(test_validated) == len(test_data), (
+                f"WF_FOLD: Test data length preserved for fold {fold.fold_id}"
+            )
         except Exception as e:
             if "Lookahead contamination" in str(e):
                 # Expected due to Returns column addition
                 pass
             else:
-                pytest.fail(
-                    f"WF_FOLD: Test data validation failed for fold {fold.fold_id}: {e}"
-                )
+                pytest.fail(f"WF_FOLD: Test data validation failed for fold {fold.fold_id}: {e}")
 
 
 def test_corruption_detection_in_feature_pipeline():
@@ -350,9 +341,9 @@ def test_corruption_detection_in_feature_pipeline():
 
     # The error should be related to NaN values
     error_msg = str(exc_info.value)
-    assert (
-        "Non-finite values" in error_msg or "NaN" in error_msg
-    ), f"WF_FEATURE_CORRUPTION: Expected NaN error, got: {error_msg}"
+    assert "Non-finite values" in error_msg or "NaN" in error_msg, (
+        f"WF_FEATURE_CORRUPTION: Expected NaN error, got: {error_msg}"
+    )
 
 
 def test_data_sanity_error_messages():
@@ -380,6 +371,6 @@ def test_data_sanity_error_messages():
             validator.validate_and_repair(corrupted_data, f"TEST_{expected_error}")
 
         error_msg = str(exc_info.value)
-        assert (
-            expected_error in error_msg
-        ), f"WF_ERROR_MSG: Expected '{expected_error}' in error, got: {error_msg}"
+        assert expected_error in error_msg, (
+            f"WF_ERROR_MSG: Expected '{expected_error}' in error, got: {error_msg}"
+        )

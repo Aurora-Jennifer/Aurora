@@ -1,9 +1,13 @@
-import json, glob, argparse, sys
+import argparse
+import glob
+import json
+import sys
+from datetime import UTC, datetime
 from pathlib import Path
-from datetime import datetime, timezone
+
 import pandas as pd
 
-REQ_COLS = ["ts","symbol","px_theory","px_fill","notional"]
+REQ_COLS = ["ts", "symbol", "px_theory", "px_fill", "notional"]
 
 
 def info(msg):
@@ -15,7 +19,7 @@ def load_trades(pattern: str, max_files: int) -> pd.DataFrame:
     info(f"found {len(files)} files: {files[-3:] if files else files}")
     rows = []
     for fp in files:
-        with open(fp, "r") as f:
+        with open(fp) as f:
             for i, line in enumerate(f, 1):
                 try:
                     rows.append(json.loads(line))
@@ -34,7 +38,7 @@ def rollup(df: pd.DataFrame) -> dict:
         return {"trades": int(len(df)), "reason": f"missing_cols:{','.join(missing)}"}
 
     df["dt"] = pd.to_datetime(df["ts"], utc=True, errors="coerce")
-    df = df.dropna(subset=["dt","px_theory","px_fill","notional"])
+    df = df.dropna(subset=["dt", "px_theory", "px_fill", "notional"])
     if df.empty:
         return {"trades": 0, "reason": "all_rows_invalid"}
 
@@ -53,21 +57,21 @@ def rollup(df: pd.DataFrame) -> dict:
 
 
 def write_reports(summary: dict, out_prefix: str):
-    ts = datetime.now(timezone.utc).strftime("%Y%m%d")
+    ts = datetime.now(UTC).strftime("%Y%m%d")
     Path("reports").mkdir(exist_ok=True)
     Path("docs/analysis").mkdir(parents=True, exist_ok=True)
-    (Path("reports")/f"{out_prefix}_{ts}.json").write_text(json.dumps(summary, indent=2))
+    (Path("reports") / f"{out_prefix}_{ts}.json").write_text(json.dumps(summary, indent=2))
     md = [
-        f"# {out_prefix.replace('_',' ').title()} {ts}",
-        f"- trades: {summary.get('trades',0)}",
-        f"- symbols: {', '.join(summary.get('symbols',[]))}",
-        f"- slippage (bps): median {summary.get('slippage_bps_median','n/a')}, p95 {summary.get('slippage_bps_p95','n/a')}",
-        f"- turnover notional: {summary.get('turnover_notional',0):,.2f}",
-        f"- window: {summary.get('start','?')} → {summary.get('end','?')}",
-        f"- reason: {summary.get('reason','')}" if "reason" in summary else "",
+        f"# {out_prefix.replace('_', ' ').title()} {ts}",
+        f"- trades: {summary.get('trades', 0)}",
+        f"- symbols: {', '.join(summary.get('symbols', []))}",
+        f"- slippage (bps): median {summary.get('slippage_bps_median', 'n/a')}, p95 {summary.get('slippage_bps_p95', 'n/a')}",
+        f"- turnover notional: {summary.get('turnover_notional', 0):,.2f}",
+        f"- window: {summary.get('start', '?')} → {summary.get('end', '?')}",
+        f"- reason: {summary.get('reason', '')}" if "reason" in summary else "",
         "",
     ]
-    (Path("docs/analysis")/f"{out_prefix}_{ts}.md").write_text("\n".join(md))
+    (Path("docs/analysis") / f"{out_prefix}_{ts}.md").write_text("\n".join(md))
 
 
 if __name__ == "__main__":
@@ -81,5 +85,3 @@ if __name__ == "__main__":
     summary = rollup(df)
     write_reports(summary, args.out_prefix)
     print(json.dumps(summary, indent=2))
-
-

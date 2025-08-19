@@ -1,33 +1,35 @@
 # brokers/ibkr.py
 from __future__ import annotations
-from dataclasses import dataclass
-from datetime import datetime, timezone
-from typing import Optional, Dict, Any, Tuple
 
-import os
 import time
+from dataclasses import dataclass
+from datetime import UTC, datetime
+from typing import Any
 
 try:
     # Optional at runtime; tests will mock this out
-    from ib_insync import IB, Stock, MarketOrder, LimitOrder, Order, Contract
+    from ib_insync import IB, MarketOrder, Stock
 except Exception:  # pragma: no cover
     IB = None  # type: ignore
 
 # ---- Config ----
 
+
 @dataclass
 class IBKRConfig:
     host: str = "127.0.0.1"
-    port: int = 7497             # 7497 = paper, 7496 = live
+    port: int = 7497  # 7497 = paper, 7496 = live
     client_id: int = 123
-    account: Optional[str] = None
+    account: str | None = None
     route: str = "SMART"
     currency: str = "USD"
     allow_fractional: bool = False
     px_tick: float = 0.01
     qty_min: float = 1.0
 
+
 # ---- Adapter ----
+
 
 class IBKRBroker:
     """
@@ -45,7 +47,9 @@ class IBKRBroker:
     # --- lifecycle ---
     def connect(self):
         if not self._connected:
-            self.ib.connect(self.cfg.host, self.cfg.port, clientId=self.cfg.client_id, readonly=False)
+            self.ib.connect(
+                self.cfg.host, self.cfg.port, clientId=self.cfg.client_id, readonly=False
+            )
             self._connected = True
         return self
 
@@ -57,7 +61,7 @@ class IBKRBroker:
     # --- helpers ---
     @staticmethod
     def _utc_now() -> str:
-        return datetime.now(timezone.utc).isoformat()
+        return datetime.now(UTC).isoformat()
 
     def _mk_contract(self, symbol: str) -> Any:
         # Contract by symbol; for production, prefer conid or set primaryExchange.
@@ -71,17 +75,24 @@ class IBKRBroker:
 
     # --- Broker API ---
 
-    def submit_order(self, symbol: str, side: str, qty: float, order_type: str = "market", client_order_id: str = None) -> Dict[str, Any]:
+    def submit_order(
+        self,
+        symbol: str,
+        side: str,
+        qty: float,
+        order_type: str = "market",
+        client_order_id: str = None,
+    ) -> dict[str, Any]:
         """
         Submit order to IBKR.
-        
+
         Args:
             symbol: Trading symbol
             side: BUY or SELL
             qty: Quantity to trade
             order_type: MKT or LMT
             client_order_id: Optional client order ID for idempotency
-            
+
         Returns:
             Dict with status, broker_order_id, ack_ms, etc.
         """
@@ -115,7 +126,9 @@ class IBKRBroker:
         # Derive identifiers
         broker_order_id = getattr(trade.order, "orderId", None)
         perm_id = getattr(trade.order, "permId", None)
-        actual_client_order_id = getattr(trade.order, "orderRef", None) or client_order_id or str(broker_order_id)
+        actual_client_order_id = (
+            getattr(trade.order, "orderRef", None) or client_order_id or str(broker_order_id)
+        )
 
         return {
             "order_id": broker_order_id,
@@ -127,21 +140,29 @@ class IBKRBroker:
             "timestamp": self._utc_now(),
         }
 
-    def cancel_order(self, order_id: str) -> Dict[str, Any]:
+    def cancel_order(self, order_id: str) -> dict[str, Any]:
         """Cancel order by broker order ID."""
         self.connect()
         # Find Trade by orderId
-        trade = next((t for t in self.ib.trades() if getattr(t.order, "orderId", None) == order_id), None)
+        trade = next(
+            (t for t in self.ib.trades() if getattr(t.order, "orderId", None) == order_id), None
+        )
         if not trade:
-            return {"status": "NOT_FOUND", "broker_order_id": order_id, "timestamp": self._utc_now()}
+            return {
+                "status": "NOT_FOUND",
+                "broker_order_id": order_id,
+                "timestamp": self._utc_now(),
+            }
         self.ib.cancelOrder(trade.order)
         return {"status": "CANCEL_SENT", "broker_order_id": order_id, "timestamp": self._utc_now()}
 
-    def get_positions(self) -> Dict[str, float]:
+    def get_positions(self) -> dict[str, float]:
         """Get current positions by symbol."""
         self.connect()
-        pos = self.ib.positions(account=self.cfg.account) if self.cfg.account else self.ib.positions()
-        out: Dict[str, float] = {}
+        pos = (
+            self.ib.positions(account=self.cfg.account) if self.cfg.account else self.ib.positions()
+        )
+        out: dict[str, float] = {}
         for p in pos:
             sym = getattr(p.contract, "symbol", None) or getattr(p.contract, "localSymbol", None)
             out[sym] = out.get(sym, 0.0) + float(p.position)
@@ -151,7 +172,11 @@ class IBKRBroker:
         """Get available cash balance."""
         self.connect()
         # Account summary tags: https://interactivebrokers.github.io/tws-api/account_updates.html
-        summary = self.ib.accountSummary(self.cfg.account) if self.cfg.account else self.ib.accountSummary()
+        summary = (
+            self.ib.accountSummary(self.cfg.account)
+            if self.cfg.account
+            else self.ib.accountSummary()
+        )
         total_cash = 0.0
         for s in summary:
             if s.tag == "TotalCashValue" and s.currency == self.cfg.currency:
@@ -159,7 +184,7 @@ class IBKRBroker:
                 break
         return total_cash
 
-    def get_fills(self, since: Optional[datetime] = None) -> list[Dict[str, Any]]:
+    def get_fills(self, since: datetime | None = None) -> list[dict[str, Any]]:
         """Get recent fills."""
         self.connect()
         fills = []
@@ -174,17 +199,19 @@ class IBKRBroker:
                             continue
                     except ValueError:
                         pass
-                
-                fills.append({
-                    "symbol": getattr(trade.contract, "symbol", ""),
-                    "side": getattr(trade.order, "action", ""),
-                    "qty": float(getattr(trade.orderStatus, "filled", 0)),
-                    "price": float(getattr(trade.orderStatus, "avgFillPrice", 0)),
-                    "timestamp": fill_time,
-                    "order_id": getattr(trade.order, "orderId", "")
-                })
+
+                fills.append(
+                    {
+                        "symbol": getattr(trade.contract, "symbol", ""),
+                        "side": getattr(trade.order, "action", ""),
+                        "qty": float(getattr(trade.orderStatus, "filled", 0)),
+                        "price": float(getattr(trade.orderStatus, "avgFillPrice", 0)),
+                        "timestamp": fill_time,
+                        "order_id": getattr(trade.order, "orderId", ""),
+                    }
+                )
         return fills
 
     def now(self) -> datetime:
         """Get current broker time."""
-        return datetime.now(timezone.utc)
+        return datetime.now(UTC)

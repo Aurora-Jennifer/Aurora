@@ -8,7 +8,7 @@ All loggers use the same formatter and configuration.
 import logging
 import sys
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 # Global logger configuration
 _logger_config = {
@@ -23,9 +23,9 @@ _logger_config = {
 
 def setup_logging(
     level: int = logging.INFO,
-    log_file: Optional[str] = None,
-    format_string: Optional[str] = None,
-    date_format: Optional[str] = None,
+    log_file: str | None = None,
+    format_string: str | None = None,
+    date_format: str | None = None,
     force: bool = False,
 ) -> None:
     """
@@ -69,9 +69,7 @@ def setup_logging(
         _logger_config["file_handler"].setLevel(level)
 
 
-def get_logger(
-    name: str, level: Optional[int] = None, propagate: bool = True
-) -> logging.Logger:
+def get_logger(name: str, level: int | None = None, propagate: bool = True) -> logging.Logger:
     """
     Get a logger with consistent configuration.
 
@@ -131,7 +129,7 @@ def set_log_level(level: int) -> None:
     logging.getLogger().setLevel(level)
 
 
-def add_file_handler(log_file: str, level: Optional[int] = None) -> None:
+def add_file_handler(log_file: str, level: int | None = None) -> None:
     """
     Add a file handler to existing loggers.
 
@@ -173,17 +171,14 @@ def remove_file_handler(log_file: str) -> None:
     # Find and remove handlers for this file
     handlers_to_remove = []
     for handler in root_logger.handlers:
-        if (
-            isinstance(handler, logging.FileHandler)
-            and handler.baseFilename == log_file
-        ):
+        if isinstance(handler, logging.FileHandler) and handler.baseFilename == log_file:
             handlers_to_remove.append(handler)
 
     for handler in handlers_to_remove:
         root_logger.removeHandler(handler)
 
 
-def get_log_config() -> Dict[str, Any]:
+def get_log_config() -> dict[str, Any]:
     """
     Get current logging configuration.
 
@@ -269,7 +264,7 @@ def log_data_info(
     logger: logging.Logger,
     data_name: str,
     shape: tuple,
-    memory_usage: Optional[int] = None,
+    memory_usage: int | None = None,
     level: int = logging.INFO,
 ) -> None:
     """

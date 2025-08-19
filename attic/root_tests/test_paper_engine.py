@@ -7,7 +7,7 @@ Modified version that accepts config dicts for testing purposes.
 import logging
 import sys
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -28,7 +28,7 @@ class TestPaperTradingEngine:
     Test-specific paper trading engine that accepts config dicts.
     """
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         """
         Initialize with config dict for testing.
 
@@ -72,7 +72,7 @@ class TestPaperTradingEngine:
 
         self.logger.info("Initialized TestPaperTradingEngine")
 
-    def run_trading_cycle(self, market_data: pd.DataFrame) -> Dict[str, Any]:
+    def run_trading_cycle(self, market_data: pd.DataFrame) -> dict[str, Any]:
         """
         Run a single trading cycle.
 
@@ -101,14 +101,10 @@ class TestPaperTradingEngine:
 
             # Create strategy instance
             try:
-                strategy = strategy_factory.create_strategy(
-                    factory_name, strategy_params
-                )
+                strategy = strategy_factory.create_strategy(factory_name, strategy_params)
             except ValueError as e:
                 # Fallback to a known strategy
-                self.logger.warning(
-                    f"Strategy {strategy_name} not found, using fallback: {e}"
-                )
+                self.logger.warning(f"Strategy {strategy_name} not found, using fallback: {e}")
                 strategy = strategy_factory.create_strategy("sma", {})
 
             # Generate signals
@@ -118,9 +114,7 @@ class TestPaperTradingEngine:
             trades_executed = 0
             if signals is not None and len(signals) > 0:
                 # Get the latest signal (strategies return pandas Series)
-                latest_signal = (
-                    signals.iloc[-1] if hasattr(signals, "iloc") else signals[-1]
-                )
+                latest_signal = signals.iloc[-1] if hasattr(signals, "iloc") else signals[-1]
 
                 # Execute trade if signal is non-zero
                 if latest_signal != 0:
@@ -141,9 +135,7 @@ class TestPaperTradingEngine:
 
                     # Apply position size limits and ensure meaningful size
                     max_position = self.config.get("max_position_size", 0.15)
-                    min_position = (
-                        0.05  # Ensure at least 5% position size for meaningful impact
-                    )
+                    min_position = 0.05  # Ensure at least 5% position size for meaningful impact
                     position_size = max(min_position, min(position_size, max_position))
 
                     # Update portfolio based on signal direction
@@ -172,9 +164,7 @@ class TestPaperTradingEngine:
                 self.portfolio_value = self.portfolio_value + portfolio_return
 
                 # Update performance calculator
-                self.performance_calc.update_performance(
-                    portfolio_return, self.portfolio_value
-                )
+                self.performance_calc.update_performance(portfolio_return, self.portfolio_value)
 
             # Return cycle results
             result = {
@@ -206,6 +196,6 @@ class TestPaperTradingEngine:
                 "error": str(e),
             }
 
-    def get_performance_metrics(self) -> Dict[str, Any]:
+    def get_performance_metrics(self) -> dict[str, Any]:
         """Get current performance metrics."""
         return self.performance_calc.get_metrics()

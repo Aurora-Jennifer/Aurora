@@ -5,7 +5,6 @@ Blends trend-following and mean-reversion signals with regime-specific weighting
 
 import logging
 from dataclasses import dataclass
-from typing import Dict, Tuple
 
 import numpy as np
 import pandas as pd
@@ -92,9 +91,7 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
             return pd.Series(0.0, index=data.index)
 
         # Detect current regime
-        regime_name, confidence, regime_params = self.regime_detector.detect_regime(
-            data
-        )
+        regime_name, confidence, regime_params = self.regime_detector.detect_regime(data)
         self.regime_history.append(
             {"date": data.index[-1], "regime": regime_name, "confidence": confidence}
         )
@@ -126,7 +123,7 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
 
     def _generate_regime_adapted_features(
         self, data: pd.DataFrame, regime_params: RegimeParams
-    ) -> Dict[str, pd.Series]:
+    ) -> dict[str, pd.Series]:
         """Generate features adapted to the current regime."""
         close = data["Close"]
         high = data["High"]
@@ -142,30 +139,22 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
         features.update(self._generate_trend_features(close, lookback_adjustment))
 
         # Mean reversion features
-        features.update(
-            self._generate_mean_reversion_features(close, lookback_adjustment)
-        )
+        features.update(self._generate_mean_reversion_features(close, lookback_adjustment))
 
         # Breakout features
-        features.update(
-            self._generate_breakout_features(high, low, close, lookback_adjustment)
-        )
+        features.update(self._generate_breakout_features(high, low, close, lookback_adjustment))
 
         # Volatility features
-        features.update(
-            self._generate_volatility_features(close, volume, lookback_adjustment)
-        )
+        features.update(self._generate_volatility_features(close, volume, lookback_adjustment))
 
         # Regime-specific features
-        features.update(
-            self._generate_regime_specific_features(data, regime_params.regime_name)
-        )
+        features.update(self._generate_regime_specific_features(data, regime_params.regime_name))
 
         return features
 
     def _generate_trend_features(
         self, close: pd.Series, lookback_adjustment: float
-    ) -> Dict[str, pd.Series]:
+    ) -> dict[str, pd.Series]:
         """Generate trend-following features."""
         features = {}
 
@@ -194,7 +183,7 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
 
     def _generate_mean_reversion_features(
         self, close: pd.Series, lookback_adjustment: float
-    ) -> Dict[str, pd.Series]:
+    ) -> dict[str, pd.Series]:
         """Generate mean reversion features."""
         features = {}
 
@@ -223,7 +212,7 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
         low: pd.Series,
         close: pd.Series,
         lookback_adjustment: float,
-    ) -> Dict[str, pd.Series]:
+    ) -> dict[str, pd.Series]:
         """Generate breakout features."""
         features = {}
 
@@ -234,9 +223,7 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
         upper_channel = high.rolling(period).max()
         lower_channel = low.rolling(period).min()
 
-        features["donchian_position"] = (close - lower_channel) / (
-            upper_channel - lower_channel
-        )
+        features["donchian_position"] = (close - lower_channel) / (upper_channel - lower_channel)
         features["breakout_strength"] = (close - upper_channel) / close
 
         # Support/resistance levels
@@ -247,7 +234,7 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
 
     def _generate_volatility_features(
         self, close: pd.Series, volume: pd.Series, lookback_adjustment: float
-    ) -> Dict[str, pd.Series]:
+    ) -> dict[str, pd.Series]:
         """Generate volatility features."""
         features = {}
 
@@ -268,7 +255,7 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
 
     def _generate_regime_specific_features(
         self, data: pd.DataFrame, regime_name: str
-    ) -> Dict[str, pd.Series]:
+    ) -> dict[str, pd.Series]:
         """Generate regime-specific features."""
         close = data["Close"]
         features = {}
@@ -278,23 +265,17 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
             features["trend_persistence"] = self._calculate_trend_persistence(close)
 
         elif regime_name == "chop":
-            features["oscillation_frequency"] = self._calculate_oscillation_frequency(
-                close
-            )
-            features[
-                "mean_reversion_strength"
-            ] = self._calculate_mean_reversion_strength(close)
+            features["oscillation_frequency"] = self._calculate_oscillation_frequency(close)
+            features["mean_reversion_strength"] = self._calculate_mean_reversion_strength(close)
 
         elif regime_name == "volatile":
             features["volatility_regime"] = self._calculate_volatility_regime(close)
-            features["volatility_persistence"] = self._calculate_volatility_persistence(
-                close
-            )
+            features["volatility_persistence"] = self._calculate_volatility_persistence(close)
 
         return features
 
     def _generate_trend_following_signals(
-        self, data: pd.DataFrame, features: Dict[str, pd.Series]
+        self, data: pd.DataFrame, features: dict[str, pd.Series]
     ) -> pd.Series:
         """Generate trend-following signals."""
         # Initialize combiner if needed
@@ -302,16 +283,10 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
             self.trend_combiner = SignalCombiner(data["Close"])
 
         trend_features = {
-            "ma_crossover": features.get(
-                "ma_crossover", pd.Series(0.0, index=data.index)
-            ),
+            "ma_crossover": features.get("ma_crossover", pd.Series(0.0, index=data.index)),
             "momentum_5": features.get("momentum_5", pd.Series(0.0, index=data.index)),
-            "momentum_10": features.get(
-                "momentum_10", pd.Series(0.0, index=data.index)
-            ),
-            "trend_strength": features.get(
-                "trend_strength", pd.Series(0.0, index=data.index)
-            ),
+            "momentum_10": features.get("momentum_10", pd.Series(0.0, index=data.index)),
+            "trend_strength": features.get("trend_strength", pd.Series(0.0, index=data.index)),
             "trend_consistency": features.get(
                 "trend_consistency", pd.Series(0.0, index=data.index)
             ),
@@ -328,7 +303,7 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
         return trend_signals
 
     def _generate_mean_reversion_signals(
-        self, data: pd.DataFrame, features: Dict[str, pd.Series]
+        self, data: pd.DataFrame, features: dict[str, pd.Series]
     ) -> pd.Series:
         """Generate mean reversion signals."""
         # Initialize combiner if needed
@@ -336,13 +311,9 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
             self.mean_reversion_combiner = SignalCombiner(data["Close"])
 
         mean_reversion_features = {
-            "ma_distance": features.get(
-                "ma_distance", pd.Series(0.0, index=data.index)
-            ),
+            "ma_distance": features.get("ma_distance", pd.Series(0.0, index=data.index)),
             "rsi": features.get("rsi", pd.Series(50.0, index=data.index)),
-            "bb_position": features.get(
-                "bb_position", pd.Series(0.5, index=data.index)
-            ),
+            "bb_position": features.get("bb_position", pd.Series(0.5, index=data.index)),
             "zscore": features.get("zscore", pd.Series(0.0, index=data.index)),
             "mean_reversion_strength": features.get(
                 "mean_reversion_strength", pd.Series(0.0, index=data.index)
@@ -360,7 +331,7 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
         return mean_reversion_signals
 
     def _generate_breakout_signals(
-        self, data: pd.DataFrame, features: Dict[str, pd.Series]
+        self, data: pd.DataFrame, features: dict[str, pd.Series]
     ) -> pd.Series:
         """Generate breakout signals."""
         # Initialize combiner if needed
@@ -374,12 +345,8 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
             "breakout_strength": features.get(
                 "breakout_strength", pd.Series(0.0, index=data.index)
             ),
-            "resistance_break": features.get(
-                "resistance_break", pd.Series(0.0, index=data.index)
-            ),
-            "support_break": features.get(
-                "support_break", pd.Series(0.0, index=data.index)
-            ),
+            "resistance_break": features.get("resistance_break", pd.Series(0.0, index=data.index)),
+            "support_break": features.get("support_break", pd.Series(0.0, index=data.index)),
         }
 
         # Add features to combiner
@@ -409,9 +376,7 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
         ensemble_weight = weights.get("ensemble_basic", 0.2)
 
         # Normalize weights
-        total_weight = (
-            trend_weight + mean_reversion_weight + breakout_weight + ensemble_weight
-        )
+        total_weight = trend_weight + mean_reversion_weight + breakout_weight + ensemble_weight
         if total_weight > 0:
             trend_weight /= total_weight
             mean_reversion_weight /= total_weight
@@ -459,9 +424,7 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
 
         self.rolling_performance = {
             "rolling_mean": rolling_perf.iloc[-1] if not rolling_perf.empty else 0.0,
-            "rolling_std": signal_returns.rolling(self.params.rolling_window)
-            .std()
-            .iloc[-1]
+            "rolling_std": signal_returns.rolling(self.params.rolling_window).std().iloc[-1]
             if not signal_returns.empty
             else 0.0,
             "rolling_sharpe": rolling_perf.iloc[-1]
@@ -482,7 +445,7 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
 
     def _calculate_bollinger_bands(
         self, close: pd.Series, period: int = 20
-    ) -> Tuple[pd.Series, pd.Series]:
+    ) -> tuple[pd.Series, pd.Series]:
         """Calculate Bollinger Bands."""
         ma = close.rolling(period).mean()
         std = close.rolling(period).std()
@@ -501,9 +464,7 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
         atr = tr.rolling(period).mean()
         return atr
 
-    def _calculate_trend_strength(
-        self, close: pd.Series, period: int = 20
-    ) -> pd.Series:
+    def _calculate_trend_strength(self, close: pd.Series, period: int = 20) -> pd.Series:
         """Calculate trend strength using linear regression slope."""
 
         def slope(x):
@@ -516,9 +477,7 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
     def _calculate_trend_consistency(self, close: pd.Series) -> pd.Series:
         """Calculate trend consistency."""
         returns = close.pct_change()
-        return returns.rolling(20).apply(
-            lambda x: (x > 0).sum() / len(x) if len(x) > 0 else 0.5
-        )
+        return returns.rolling(20).apply(lambda x: (x > 0).sum() / len(x) if len(x) > 0 else 0.5)
 
     def _calculate_trend_persistence(self, close: pd.Series) -> pd.Series:
         """Calculate trend persistence."""
@@ -554,7 +513,7 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
         persistence = (vol > vol_threshold).rolling(10).sum() / 10
         return persistence
 
-    def get_regime_info(self) -> Dict:
+    def get_regime_info(self) -> dict:
         """Get current regime information."""
         if not self.regime_history:
             return {"regime": "unknown", "confidence": 0.0}
@@ -570,7 +529,7 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
         """Get default parameters for the strategy."""
         return RegimeAwareEnsembleParams()
 
-    def get_param_ranges(self) -> Dict[str, Tuple]:
+    def get_param_ranges(self) -> dict[str, tuple]:
         """Get parameter ranges for optimization."""
         return {
             "confidence_threshold": (0.1, 0.8),

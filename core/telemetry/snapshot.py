@@ -8,7 +8,6 @@ import logging
 from datetime import date as date_class
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
 
 import pandas as pd
 
@@ -34,13 +33,13 @@ class TelemetrySnapshot:
     def capture_system_state(
         self,
         capital: float,
-        positions: Dict,
-        trade_history: List[Dict],
-        daily_returns: List[Dict],
-        regime_history: List[Dict],
-        performance_metrics: Dict,
-        config: Dict,
-    ) -> Dict:
+        positions: dict,
+        trade_history: list[dict],
+        daily_returns: list[dict],
+        regime_history: list[dict],
+        performance_metrics: dict,
+        config: dict,
+    ) -> dict:
         """
         Capture current system state.
 
@@ -113,7 +112,7 @@ class TelemetrySnapshot:
 
         return snapshot
 
-    def save_snapshot(self, snapshot: Dict, filename: Optional[str] = None) -> str:
+    def save_snapshot(self, snapshot: dict, filename: str | None = None) -> str:
         """
         Save system snapshot to file.
 
@@ -139,11 +138,11 @@ class TelemetrySnapshot:
     def generate_daily_report(
         self,
         capital: float,
-        positions: Dict,
-        trade_history: List[Dict],
-        daily_returns: List[Dict],
-        regime_history: List[Dict],
-        config: Dict,
+        positions: dict,
+        trade_history: list[dict],
+        daily_returns: list[dict],
+        regime_history: list[dict],
+        config: dict,
     ) -> str:
         """
         Generate daily trading report.
@@ -169,12 +168,8 @@ class TelemetrySnapshot:
         # Calculate today's metrics
         today_volume = sum([t.get("value", 0) for t in today_trades])
         today_pnl = today_returns[-1].get("pnl", 0) if today_returns else 0
-        current_regime = (
-            today_regime[-1].get("regime", "unknown") if today_regime else "unknown"
-        )
-        regime_confidence = (
-            today_regime[-1].get("confidence", 0.0) if today_regime else 0.0
-        )
+        current_regime = today_regime[-1].get("regime", "unknown") if today_regime else "unknown"
+        regime_confidence = today_regime[-1].get("confidence", 0.0) if today_regime else 0.0
 
         # Generate report
         report = {
@@ -197,10 +192,10 @@ class TelemetrySnapshot:
 
     def generate_performance_report(
         self,
-        daily_returns: List[Dict],
-        trade_history: List[Dict],
-        regime_history: List[Dict],
-        config: Dict,
+        daily_returns: list[dict],
+        trade_history: list[dict],
+        regime_history: list[dict],
+        config: dict,
     ) -> str:
         """
         Generate comprehensive performance report.
@@ -215,9 +210,7 @@ class TelemetrySnapshot:
             Path to generated report
         """
         if not daily_returns:
-            self.logger.warning(
-                "No daily returns data available for performance report"
-            )
+            self.logger.warning("No daily returns data available for performance report")
             return ""
 
         # Calculate performance metrics
@@ -232,17 +225,13 @@ class TelemetrySnapshot:
                 daily_return_pct = 0
             else:
                 prev_value = daily_returns[i - 1]["portfolio_value"]
-                daily_return_pct = (
-                    (daily["portfolio_value"] - prev_value) / prev_value
-                ) * 100
+                daily_return_pct = ((daily["portfolio_value"] - prev_value) / prev_value) * 100
             daily_returns_list.append(daily_return_pct)
 
         # Calculate statistics
         returns_array = pd.Series(daily_returns_list)
         volatility = returns_array.std() * (252**0.5)  # Annualized
-        sharpe_ratio = (
-            (returns_array.mean() * 252) / volatility if volatility > 0 else 0
-        )
+        sharpe_ratio = (returns_array.mean() * 252) / volatility if volatility > 0 else 0
 
         # Calculate drawdown
         peak = initial_capital
@@ -266,8 +255,7 @@ class TelemetrySnapshot:
             regime_counts[regime] = regime_counts.get(regime, 0) + 1
 
         regime_distribution = {
-            regime: (count / len(regime_history) * 100)
-            for regime, count in regime_counts.items()
+            regime: (count / len(regime_history) * 100) for regime, count in regime_counts.items()
         }
 
         # Generate report
@@ -301,10 +289,10 @@ class TelemetrySnapshot:
     def log_system_health(
         self,
         capital: float,
-        positions: Dict,
-        daily_returns: List[Dict],
-        config: Dict,
-    ) -> Dict:
+        positions: dict,
+        daily_returns: list[dict],
+        config: dict,
+    ) -> dict:
         """
         Log system health metrics.
 
@@ -356,9 +344,7 @@ class TelemetrySnapshot:
 
         return health_metrics
 
-    def export_to_csv(
-        self, data: List[Dict], filename: str, index: bool = False
-    ) -> str:
+    def export_to_csv(self, data: list[dict], filename: str, index: bool = False) -> str:
         """
         Export data to CSV format.
 
@@ -385,11 +371,11 @@ class TelemetrySnapshot:
     def create_summary_dashboard(
         self,
         capital: float,
-        positions: Dict,
-        daily_returns: List[Dict],
-        trade_history: List[Dict],
-        regime_history: List[Dict],
-        config: Dict,
+        positions: dict,
+        daily_returns: list[dict],
+        trade_history: list[dict],
+        regime_history: list[dict],
+        config: dict,
     ) -> str:
         """
         Create summary dashboard data.
@@ -410,21 +396,13 @@ class TelemetrySnapshot:
         total_return = ((capital - initial_capital) / initial_capital) * 100
 
         # Recent performance
-        recent_returns = (
-            daily_returns[-30:] if len(daily_returns) >= 30 else daily_returns
-        )
+        recent_returns = daily_returns[-30:] if len(daily_returns) >= 30 else daily_returns
         recent_pnl = sum([r.get("pnl", 0) for r in recent_returns])
 
         # Trading activity
-        today_trades = len(
-            [t for t in trade_history if t.get("date") == date_class.today()]
-        )
+        today_trades = len([t for t in trade_history if t.get("date") == date_class.today()])
         week_trades = len(
-            [
-                t
-                for t in trade_history
-                if t.get("date") >= date_class.today() - pd.Timedelta(days=7)
-            ]
+            [t for t in trade_history if t.get("date") >= date_class.today() - pd.Timedelta(days=7)]
         )
 
         # Current regime

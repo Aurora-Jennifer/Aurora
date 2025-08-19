@@ -9,9 +9,10 @@ import logging
 import os
 import sys
 import time
+from collections.abc import Iterator
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Iterator, List, Tuple
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -117,7 +118,7 @@ def gen_walkforward(
 
 def simulate_orders_python(
     predictions: np.ndarray, prices: np.ndarray
-) -> Tuple[np.ndarray, int, int, int, int]:
+) -> tuple[np.ndarray, int, int, int, int]:
     """
     Simulate trading orders using pure Python (fallback for numba issues).
     """
@@ -192,15 +193,11 @@ def simulate_orders_python(
         trades_count += 1
 
     median_hold = int(np.median(hold_times)) if hold_times else 0
-    logger.debug(
-        f"Simulation completed: {trades_count} trades, {wins} wins, {losses} losses"
-    )
+    logger.debug(f"Simulation completed: {trades_count} trades, {wins} wins, {losses} losses")
     return pnl_series, trades_count, wins, losses, median_hold
 
 
-def compute_metrics_from_pnl(
-    pnl_series: np.ndarray, trades: List[Dict]
-) -> Dict[str, float]:
+def compute_metrics_from_pnl(pnl_series: np.ndarray, trades: list[dict]) -> dict[str, float]:
     """Compute performance metrics from PnL series."""
     # Handle empty or NaN equity curves
     if len(pnl_series) == 0 or np.all(np.isnan(pnl_series)):
@@ -276,13 +273,13 @@ def compute_metrics_from_pnl(
 def run_walkforward_with_composer(
     data: pd.DataFrame,
     symbol: str,
-    config: Dict[str, Any],
+    config: dict[str, Any],
     train_len: int = 252,
     test_len: int = 126,
     stride: int = 63,
     performance_mode: str = "RELAXED",
     validate_data: bool = True,
-) -> List[Tuple[int, Dict[str, float], List[Dict]]]:
+) -> list[tuple[int, dict[str, float], list[dict]]]:
     """
     Run walk-forward analysis with composer integration.
 
@@ -301,9 +298,7 @@ def run_walkforward_with_composer(
     """
     logger.info(f"Starting walk-forward analysis for {symbol}")
     logger.info(f"Data shape: {data.shape}")
-    logger.info(
-        f"Composer enabled: {config.get('composer', {}).get('use_composer', False)}"
-    )
+    logger.info(f"Composer enabled: {config.get('composer', {}).get('use_composer', False)}")
 
     # Data validation
     if validate_data and DATASANITY_AVAILABLE:
@@ -312,9 +307,7 @@ def run_walkforward_with_composer(
             data = validator.validate_dataframe(data, symbol)
             logger.info("Data validation completed")
         except Exception as e:
-            logger.warning(
-                f"Data validation failed: {e}, continuing without validation"
-            )
+            logger.warning(f"Data validation failed: {e}, continuing without validation")
     else:
         logger.info("Data validation skipped")
 
@@ -364,7 +357,9 @@ def run_walkforward_with_composer(
             # Get composer decision (composer_integration handles min_history_bars internally)
             try:
                 signal, metadata = composer_integration.get_composer_decision(
-                    data, symbol, current_idx  # Pass full data, not sliced
+                    data,
+                    symbol,
+                    current_idx,  # Pass full data, not sliced
                 )
                 if metadata.get("composer_used", False):
                     fold_stats["composer_used"] += 1
@@ -456,14 +451,12 @@ def run_walkforward_with_composer(
     # Performance validation
     if performance_mode == "STRICT":
         if avg_fold_time > 0.6:  # 10k rows baseline
-            logger.warning(
-                f"Fold time {avg_fold_time:.3f}s exceeds STRICT threshold of 0.6s"
-            )
+            logger.warning(f"Fold time {avg_fold_time:.3f}s exceeds STRICT threshold of 0.6s")
 
     return results
 
 
-def save_results(results: List[Tuple[int, Dict[str, float], List[Dict]]], symbol: str):
+def save_results(results: list[tuple[int, dict[str, float], list[dict]]], symbol: str):
     """Save walk-forward results to JSON."""
     # Convert results to serializable format
     serializable_results = []
@@ -487,15 +480,11 @@ def save_results(results: List[Tuple[int, Dict[str, float], List[Dict]]], symbol
             "mean_sharpe": np.mean([m["sharpe_nw"] for m in all_metrics]),
             "mean_max_dd": np.mean([m["max_dd"] for m in all_metrics]),
             "mean_win_rate": np.mean([m["win_rate"] for m in all_metrics]),
-            "mean_composite_score": np.mean(
-                [m.get("composite_score", 0.0) for m in all_metrics]
-            ),
+            "mean_composite_score": np.mean([m.get("composite_score", 0.0) for m in all_metrics]),
             "std_total_return": np.std([m["total_return"] for m in all_metrics]),
             "std_sharpe": np.std([m["sharpe_nw"] for m in all_metrics]),
             "total_trades": sum(m["trade_count"] for m in all_metrics),
-            "composer_usage_rate": np.mean(
-                [m.get("composer_used", False) for m in all_metrics]
-            ),
+            "composer_usage_rate": np.mean([m.get("composer_used", False) for m in all_metrics]),
         }
     else:
         aggregate = {}
@@ -524,15 +513,11 @@ def main():
     """Main function for walk-forward analysis with composer."""
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description="Walk-forward analysis with composer integration"
-    )
+    parser = argparse.ArgumentParser(description="Walk-forward analysis with composer integration")
     parser.add_argument("--symbol", required=True, help="Trading symbol")
     parser.add_argument("--start-date", required=True, help="Start date (YYYY-MM-DD)")
     parser.add_argument("--end-date", required=True, help="End date (YYYY-MM-DD)")
-    parser.add_argument(
-        "--train-len", type=int, default=252, help="Training window length"
-    )
+    parser.add_argument("--train-len", type=int, default=252, help="Training window length")
     parser.add_argument("--test-len", type=int, default=126, help="Test window length")
     parser.add_argument("--stride", type=int, default=63, help="Stride between folds")
     parser.add_argument(

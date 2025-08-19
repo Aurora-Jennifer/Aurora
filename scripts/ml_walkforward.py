@@ -14,7 +14,6 @@ import json
 import logging
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -62,11 +61,9 @@ class MLWalkforwardAnalyzer:
         fold_length: int = 252,
         step_size: int = 63,
         warm_start: bool = False,
-    ) -> Dict:
+    ) -> dict:
         """Run ML walkforward analysis with unified model support."""
-        self.logger.info(
-            f"Starting ML walkforward analysis: {start_date} to {end_date}"
-        )
+        self.logger.info(f"Starting ML walkforward analysis: {start_date} to {end_date}")
         self.logger.info(f"Unified model: {self.unified_model}")
         self.logger.info(f"Assets: {self.assets}")
 
@@ -83,7 +80,7 @@ class MLWalkforwardAnalyzer:
 
         # Run each fold
         for i, (train_start, train_end, test_start, test_end) in enumerate(folds):
-            self.logger.info(f"\n=== Fold {i+1}/{len(folds)} ===")
+            self.logger.info(f"\n=== Fold {i + 1}/{len(folds)} ===")
             self.logger.info(f"Train: {train_start} to {train_end}")
             self.logger.info(f"Test: {test_start} to {test_end}")
 
@@ -101,9 +98,7 @@ class MLWalkforwardAnalyzer:
             test_results = self._run_testing_fold(test_start, test_end, train_results)
 
             # Log feature importance
-            self._log_fold_feature_importance(
-                run_id, test_start, test_end, test_results
-            )
+            self._log_fold_feature_importance(run_id, test_start, test_end, test_results)
 
             # Save checkpoint if warm start enabled
             if warm_start:
@@ -190,9 +185,7 @@ class MLWalkforwardAnalyzer:
         }
 
         # Generate summary report
-        self._generate_summary_report(
-            summary, self.output_dir / "ml_walkforward_summary.md"
-        )
+        self._generate_summary_report(summary, self.output_dir / "ml_walkforward_summary.md")
 
         # Save results
         self._save_results(summary)
@@ -201,7 +194,7 @@ class MLWalkforwardAnalyzer:
 
     def _generate_folds(
         self, start_date: str, end_date: str, fold_length: int, step_size: int
-    ) -> List[Tuple]:
+    ) -> list[tuple]:
         """Generate fold dates for walkforward analysis."""
         start = datetime.strptime(start_date, "%Y-%m-%d")
         end = datetime.strptime(end_date, "%Y-%m-%d")
@@ -228,7 +221,7 @@ class MLWalkforwardAnalyzer:
 
         return folds
 
-    def _run_training_fold(self, start_date: str, end_date: str) -> Dict:
+    def _run_training_fold(self, start_date: str, end_date: str) -> dict:
         """Run training fold with unified model support."""
         self.logger.info(f"Running training fold: {start_date} to {end_date}")
 
@@ -239,7 +232,7 @@ class MLWalkforwardAnalyzer:
             # Train on single asset (current approach)
             return self._run_single_asset_training(start_date, end_date)
 
-    def _run_unified_training(self, start_date: str, end_date: str) -> Dict:
+    def _run_unified_training(self, start_date: str, end_date: str) -> dict:
         """Train unified model on multiple assets simultaneously."""
         self.logger.info(f"Training unified model on {len(self.assets)} assets")
 
@@ -256,9 +249,7 @@ class MLWalkforwardAnalyzer:
         )
 
         # Save config to temporary file
-        config_file = (
-            self.output_dir / f"temp_unified_config_{start_date}_{end_date}.json"
-        )
+        config_file = self.output_dir / f"temp_unified_config_{start_date}_{end_date}.json"
         with open(config_file, "w") as f:
             json.dump(unified_config, f, indent=2)
 
@@ -278,7 +269,7 @@ class MLWalkforwardAnalyzer:
         finally:
             config_file.unlink(missing_ok=True)
 
-    def _run_single_asset_training(self, start_date: str, end_date: str) -> Dict:
+    def _run_single_asset_training(self, start_date: str, end_date: str) -> dict:
         """Train model on single asset (current approach)."""
         # Create temporary config for training
         train_config = self.config.copy()
@@ -292,9 +283,7 @@ class MLWalkforwardAnalyzer:
         )
 
         # Save config to temporary file
-        config_file = (
-            self.output_dir / f"temp_train_config_{start_date}_{end_date}.json"
-        )
+        config_file = self.output_dir / f"temp_train_config_{start_date}_{end_date}.json"
         with open(config_file, "w") as f:
             json.dump(train_config, f, indent=2)
 
@@ -314,9 +303,7 @@ class MLWalkforwardAnalyzer:
         finally:
             config_file.unlink(missing_ok=True)
 
-    def _run_testing_fold(
-        self, start_date: str, end_date: str, train_results: Dict
-    ) -> Dict:
+    def _run_testing_fold(self, start_date: str, end_date: str, train_results: dict) -> dict:
         """Run testing fold with trained ML model."""
         self.logger.info(f"Running testing fold: {start_date} to {end_date}")
 
@@ -360,7 +347,7 @@ class MLWalkforwardAnalyzer:
             config_file.unlink(missing_ok=True)
 
     def _log_fold_feature_importance(
-        self, run_id: str, start_date: str, end_date: str, test_results: Dict
+        self, run_id: str, start_date: str, end_date: str, test_results: dict
     ):
         """Log feature importance for the current fold."""
         try:
@@ -396,7 +383,7 @@ class MLWalkforwardAnalyzer:
         except Exception as e:
             self.logger.error(f"Error logging feature importance: {e}")
 
-    def _get_current_feature_importance(self) -> Dict:
+    def _get_current_feature_importance(self) -> dict:
         """Get current feature importance from the profit learner."""
         try:
             if not self.profit_learner or not self.profit_learner.models:
@@ -411,7 +398,7 @@ class MLWalkforwardAnalyzer:
 
             # Get feature names and coefficients
             feature_names = self.profit_learner._get_feature_names()
-            coefficients = dict(zip(feature_names, model.coef_))
+            coefficients = dict(zip(feature_names, model.coef_, strict=False))
 
             # Return absolute coefficients as importance
             return {name: abs(coeff) for name, coeff in coefficients.items()}
@@ -420,7 +407,7 @@ class MLWalkforwardAnalyzer:
             self.logger.error(f"Error getting feature importance: {e}")
             return {}
 
-    def _analyze_feature_persistence(self) -> Dict:
+    def _analyze_feature_persistence(self) -> dict:
         """Analyze feature persistence across all folds."""
         try:
             # Run persistence analysis
@@ -428,19 +415,15 @@ class MLWalkforwardAnalyzer:
 
             return {
                 "top_alpha_features": persistence_results.get("top_alpha_features", []),
-                "most_stable_features": persistence_results.get(
-                    "most_stable_features", []
-                ),
+                "most_stable_features": persistence_results.get("most_stable_features", []),
                 "rank_stability": persistence_results.get("rank_stability", 0.0),
-                "importance_stability": persistence_results.get(
-                    "importance_stability", 0.0
-                ),
+                "importance_stability": persistence_results.get("importance_stability", 0.0),
             }
         except Exception as e:
             self.logger.error(f"Error analyzing feature persistence: {e}")
             return {}
 
-    def _update_learning_progress(self, fold_result: Dict):
+    def _update_learning_progress(self, fold_result: dict):
         """Update learning progress tracking."""
         progress = {
             "fold": fold_result["fold"],
@@ -455,17 +438,13 @@ class MLWalkforwardAnalyzer:
 
         self.learning_progress.append(progress)
 
-    def _calculate_overall_metrics(self) -> Dict:
+    def _calculate_overall_metrics(self) -> dict:
         """Calculate overall metrics across all folds."""
         if not self.fold_results:
             return {}
 
-        test_returns = [
-            fold["test_results"].get("total_return", 0.0) for fold in self.fold_results
-        ]
-        test_sharpes = [
-            fold["test_results"].get("sharpe_ratio", 0.0) for fold in self.fold_results
-        ]
+        test_returns = [fold["test_results"].get("total_return", 0.0) for fold in self.fold_results]
+        test_sharpes = [fold["test_results"].get("sharpe_ratio", 0.0) for fold in self.fold_results]
 
         return {
             "avg_test_return": np.mean(test_returns),
@@ -476,7 +455,7 @@ class MLWalkforwardAnalyzer:
             "win_rate": sum(1 for r in test_returns if r > 0) / len(test_returns),
         }
 
-    def _save_results(self, results: Dict):
+    def _save_results(self, results: dict):
         """Save analysis results to files."""
         # Save detailed results
         results_file = self.output_dir / "ml_walkforward_results.json"
@@ -498,7 +477,7 @@ class MLWalkforwardAnalyzer:
 
         self.logger.info(f"Results saved to {self.output_dir}")
 
-    def _generate_summary_report(self, results: Dict, output_file: Path):
+    def _generate_summary_report(self, results: dict, output_file: Path):
         """Generate a summary report of the ML walkforward analysis."""
         with open(output_file, "w") as f:
             f.write("# ML Walkforward Analysis Summary\n\n")
@@ -520,15 +499,9 @@ class MLWalkforwardAnalyzer:
 
             f.write("## Overall Performance\n\n")
             f.write(f"- **Total Folds**: {overall.get('total_folds', 0)}\n")
-            f.write(
-                f"- **Average Test Return**: {overall.get('avg_test_return', 0.0):.4f}\n"
-            )
-            f.write(
-                f"- **Test Return Std**: {overall.get('std_test_return', 0.0):.4f}\n"
-            )
-            f.write(
-                f"- **Average Test Sharpe**: {overall.get('avg_test_sharpe', 0.0):.4f}\n"
-            )
+            f.write(f"- **Average Test Return**: {overall.get('avg_test_return', 0.0):.4f}\n")
+            f.write(f"- **Test Return Std**: {overall.get('std_test_return', 0.0):.4f}\n")
+            f.write(f"- **Average Test Sharpe**: {overall.get('avg_test_sharpe', 0.0):.4f}\n")
             f.write(f"- **Win Rate**: {overall.get('win_rate', 0.0):.2%}\n\n")
 
             # Feature importance summary
@@ -543,20 +516,12 @@ class MLWalkforwardAnalyzer:
                 f.write("### Top Alpha Generation Features\n\n")
                 for feature in top_features[:10]:
                     try:
-                        if (
-                            isinstance(feature, dict)
-                            and "name" in feature
-                            and "score" in feature
-                        ):
-                            f.write(
-                                f"- **{feature['name']}**: {feature['score']:.4f}\n"
-                            )
+                        if isinstance(feature, dict) and "name" in feature and "score" in feature:
+                            f.write(f"- **{feature['name']}**: {feature['score']:.4f}\n")
                         elif isinstance(feature, (list, tuple)) and len(feature) >= 2:
                             name = str(feature[0])
                             score = (
-                                float(feature[1])
-                                if isinstance(feature[1], (int, float))
-                                else 0.0
+                                float(feature[1]) if isinstance(feature[1], (int, float)) else 0.0
                             )
                             f.write(f"- **{name}**: {score:.4f}\n")
                         else:
@@ -575,15 +540,11 @@ class MLWalkforwardAnalyzer:
                             and "name" in feature
                             and "stability" in feature
                         ):
-                            f.write(
-                                f"- **{feature['name']}**: {feature['stability']:.4f}\n"
-                            )
+                            f.write(f"- **{feature['name']}**: {feature['stability']:.4f}\n")
                         elif isinstance(feature, (list, tuple)) and len(feature) >= 2:
                             name = str(feature[0])
                             stability = (
-                                float(feature[1])
-                                if isinstance(feature[1], (int, float))
-                                else 0.0
+                                float(feature[1]) if isinstance(feature[1], (int, float)) else 0.0
                             )
                             f.write(f"- **{name}**: {stability:.4f}\n")
                         else:
@@ -609,7 +570,7 @@ class MLWalkforwardAnalyzer:
                     train_results = p.get("train_results", {})
                     test_results = p.get("test_results", {})
                     f.write(
-                        f"| {i+1} | {train_results.get('total_return', 0):.4f} | {test_results.get('total_return', 0):.4f} | "
+                        f"| {i + 1} | {train_results.get('total_return', 0):.4f} | {test_results.get('total_return', 0):.4f} | "
                         f"{train_results.get('sharpe_ratio', 0):.4f} | {test_results.get('sharpe_ratio', 0):.4f} | {test_results.get('total_trades', 0)} |\n"
                     )
                 f.write("\n")
@@ -631,19 +592,11 @@ def parse_args():
     parser = argparse.ArgumentParser(description="ML Walkforward Analysis")
     parser.add_argument("--start-date", required=True, help="Start date (YYYY-MM-DD)")
     parser.add_argument("--end-date", required=True, help="End date (YYYY-MM-DD)")
-    parser.add_argument(
-        "--fold-length", type=int, default=252, help="Fold length in days"
-    )
+    parser.add_argument("--fold-length", type=int, default=252, help="Fold length in days")
     parser.add_argument("--step-size", type=int, default=63, help="Step size in days")
-    parser.add_argument(
-        "--warm-start", action="store_true", help="Enable warm-start between folds"
-    )
-    parser.add_argument(
-        "--output-dir", default="results/ml_walkforward", help="Output directory"
-    )
-    parser.add_argument(
-        "--config", default="config/ml_backtest_config.json", help="Config file"
-    )
+    parser.add_argument("--warm-start", action="store_true", help="Enable warm-start between folds")
+    parser.add_argument("--output-dir", default="results/ml_walkforward", help="Output directory")
+    parser.add_argument("--config", default="config/ml_backtest_config.json", help="Config file")
 
     return parser.parse_args()
 

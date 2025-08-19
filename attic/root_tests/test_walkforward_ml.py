@@ -8,7 +8,6 @@ import json
 import logging
 import sys
 from pathlib import Path
-from typing import Dict, List
 
 import numpy as np
 import pandas as pd
@@ -112,8 +111,8 @@ def test_walkforward_with_real_data():
             break
 
         print(
-            f"\nFold {len(results) + 1}: Train {data.iloc[train_start]['Date']} - {data.iloc[train_end-1]['Date']}, "
-            f"Test {data.iloc[test_start]['Date']} - {data.iloc[test_end-1]['Date']}"
+            f"\nFold {len(results) + 1}: Train {data.iloc[train_start]['Date']} - {data.iloc[train_end - 1]['Date']}, "
+            f"Test {data.iloc[test_start]['Date']} - {data.iloc[test_end - 1]['Date']}"
         )
 
         # Train period data
@@ -156,15 +155,9 @@ def test_walkforward_with_real_data():
         # Calculate performance metrics
         returns = pd.Series(fold_results["returns"])
         if len(returns) > 0:
-            sharpe = (
-                returns.mean() / returns.std() * np.sqrt(252)
-                if returns.std() > 0
-                else 0
-            )
+            sharpe = returns.mean() / returns.std() * np.sqrt(252) if returns.std() > 0 else 0
             max_dd = calculate_max_drawdown(fold_results["equity_curve"])
-            total_return = (
-                fold_results["equity_curve"][-1] / fold_results["equity_curve"][0]
-            ) - 1
+            total_return = (fold_results["equity_curve"][-1] / fold_results["equity_curve"][0]) - 1
 
             fold_metrics = {
                 "fold": len(results) + 1,
@@ -174,9 +167,7 @@ def test_walkforward_with_real_data():
                 "total_return": total_return,
                 "max_drawdown": max_dd,
                 "trades": len(fold_results["trades"]),
-                "avg_trade_return": np.mean(
-                    [t["return"] for t in fold_results["trades"]]
-                )
+                "avg_trade_return": np.mean([t["return"] for t in fold_results["trades"]])
                 if fold_results["trades"]
                 else 0,
             }
@@ -281,8 +272,8 @@ def test_walkforward_synthetic():
             break
 
         print(
-            f"\nFold {len(results) + 1}: Train {data.iloc[train_start]['Date']} - {data.iloc[train_end-1]['Date']}, "
-            f"Test {data.iloc[test_start]['Date']} - {data.iloc[test_end-1]['Date']}"
+            f"\nFold {len(results) + 1}: Train {data.iloc[train_start]['Date']} - {data.iloc[train_end - 1]['Date']}, "
+            f"Test {data.iloc[test_start]['Date']} - {data.iloc[test_end - 1]['Date']}"
         )
 
         train_data = data.iloc[train_start:train_end]
@@ -318,15 +309,9 @@ def test_walkforward_synthetic():
 
         returns = pd.Series(fold_results["returns"])
         if len(returns) > 0:
-            sharpe = (
-                returns.mean() / returns.std() * np.sqrt(252)
-                if returns.std() > 0
-                else 0
-            )
+            sharpe = returns.mean() / returns.std() * np.sqrt(252) if returns.std() > 0 else 0
             max_dd = calculate_max_drawdown(fold_results["equity_curve"])
-            total_return = (
-                fold_results["equity_curve"][-1] / fold_results["equity_curve"][0]
-            ) - 1
+            total_return = (fold_results["equity_curve"][-1] / fold_results["equity_curve"][0]) - 1
 
             fold_metrics = {
                 "fold": len(results) + 1,
@@ -358,9 +343,7 @@ def test_walkforward_synthetic():
     return True
 
 
-def simulate_trading_period_real(
-    data: pd.DataFrame, config: Dict, strategy_name: str
-) -> Dict:
+def simulate_trading_period_real(data: pd.DataFrame, config: dict, strategy_name: str) -> dict:
     """Simulate trading over a period with real data."""
     capital = config["initial_capital"]
     equity_curve = [capital]
@@ -388,9 +371,7 @@ def simulate_trading_period_real(
             if len(current_data) >= 50:
                 ma_short = current_data["Close"].rolling(10).mean().iloc[-1]
                 ma_long = current_data["Close"].rolling(50).mean().iloc[-1]
-                signal = (
-                    0.5 if current_data["Close"].iloc[-1] < ma_short * 0.98 else -0.5
-                )
+                signal = 0.5 if current_data["Close"].iloc[-1] < ma_short * 0.98 else -0.5
             else:
                 signal = 0
         else:  # regime_aware_ensemble
@@ -434,9 +415,7 @@ def simulate_trading_period_real(
 
         equity_curve.append(capital)
         daily_return = (
-            (capital - equity_curve[-2]) / equity_curve[-2]
-            if len(equity_curve) > 1
-            else 0
+            (capital - equity_curve[-2]) / equity_curve[-2] if len(equity_curve) > 1 else 0
         )
         returns.append(daily_return)
 
@@ -451,7 +430,7 @@ def simulate_trading_period_real(
     }
 
 
-def calculate_max_drawdown(equity_curve: List[float]) -> float:
+def calculate_max_drawdown(equity_curve: list[float]) -> float:
     """Calculate maximum drawdown from equity curve."""
     peak = equity_curve[0]
     max_dd = 0

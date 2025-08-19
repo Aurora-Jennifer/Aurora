@@ -6,7 +6,7 @@ Consolidates common functionality to reduce code duplication.
 import json
 import logging
 import os
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -22,7 +22,7 @@ DEFAULT_LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 def setup_logging(
     log_file: str = "trading.log",
     level: int = logging.INFO,
-    format_string: Optional[str] = None,
+    format_string: str | None = None,
 ) -> logging.Logger:
     """
     Setup logging configuration with file and console handlers.
@@ -54,9 +54,7 @@ def setup_logging(
     return logging.getLogger(__name__)
 
 
-def normalize_prices(
-    prices: Union[pd.Series, np.ndarray]
-) -> Union[pd.Series, np.ndarray]:
+def normalize_prices(prices: pd.Series | np.ndarray) -> pd.Series | np.ndarray:
     """
     Normalize price data by handling NaN and infinite values.
 
@@ -74,9 +72,7 @@ def normalize_prices(
         # Forward fill then backward fill
         mask = np.isnan(prices)
         if mask.any():
-            prices = (
-                pd.Series(prices).fillna(method="ffill").fillna(method="bfill").values
-            )
+            prices = pd.Series(prices).fillna(method="ffill").fillna(method="bfill").values
         return prices
 
 
@@ -101,7 +97,7 @@ def apply_slippage(
         return price / slippage_multiplier
 
 
-def calculate_drawdown(equity_curve: Union[pd.Series, np.ndarray]) -> float:
+def calculate_drawdown(equity_curve: pd.Series | np.ndarray) -> float:
     """
     Calculate maximum drawdown from equity curve.
 
@@ -124,10 +120,10 @@ def validate_trade(
     quantity: float,
     price: float,
     cash: float,
-    action: Optional[str] = None,
-    positions: Optional[Dict[str, float]] = None,
-    risk_limits: Optional[Dict[str, float]] = None,
-) -> Tuple[bool, str]:
+    action: str | None = None,
+    positions: dict[str, float] | None = None,
+    risk_limits: dict[str, float] | None = None,
+) -> tuple[bool, str]:
     """
     Comprehensive trade validation function.
 
@@ -196,7 +192,7 @@ def calculate_returns(close: pd.Series, shift: int = -1) -> pd.Series:
 
 def calculate_performance_metrics(
     equity: pd.Series, start_date: str, end_date: str
-) -> Dict[str, float]:
+) -> dict[str, float]:
     """
     Calculate comprehensive performance metrics.
 
@@ -324,9 +320,7 @@ def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def validate_strategy_params(
-    params: Dict[str, Any], required_params: List[str]
-) -> bool:
+def validate_strategy_params(params: dict[str, Any], required_params: list[str]) -> bool:
     """
     Validate strategy parameters.
 
@@ -371,7 +365,7 @@ def format_currency(value: float, decimals: int = 2) -> str:
     return f"${value:.{decimals}f}"
 
 
-def load_config(config_file: str) -> Dict[str, Any]:
+def load_config(config_file: str) -> dict[str, Any]:
     """
     Load configuration from JSON file with error handling.
 
@@ -393,7 +387,7 @@ def load_config(config_file: str) -> Dict[str, Any]:
         return {}
 
 
-def validate_dataframe(df: pd.DataFrame, required_columns: List[str]) -> bool:
+def validate_dataframe(df: pd.DataFrame, required_columns: list[str]) -> bool:
     """
     Validate DataFrame has required columns.
 
@@ -411,9 +405,7 @@ def validate_dataframe(df: pd.DataFrame, required_columns: List[str]) -> bool:
     return True
 
 
-def validate_numeric_range(
-    value: float, min_val: float, max_val: float, name: str
-) -> bool:
+def validate_numeric_range(value: float, min_val: float, max_val: float, name: str) -> bool:
     """
     Validate numeric value is within range.
 

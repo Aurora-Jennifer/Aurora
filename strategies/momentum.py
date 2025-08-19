@@ -3,7 +3,7 @@ Momentum Strategy
 """
 
 from dataclasses import dataclass
-from typing import Any, Dict
+from typing import Any
 
 import pandas as pd
 
@@ -47,7 +47,7 @@ class Momentum(BaseStrategy):
         """Return default momentum parameters."""
         return MomentumParams(lookback_period=20, threshold=0.02)
 
-    def get_param_ranges(self) -> Dict[str, Any]:
+    def get_param_ranges(self) -> dict[str, Any]:
         """Return parameter ranges for optimization."""
         return {
             "lookback_period": range(10, 51, 5),

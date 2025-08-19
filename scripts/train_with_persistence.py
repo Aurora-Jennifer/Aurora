@@ -93,9 +93,7 @@ def parse_args():
         default="results/persistence_training",
         help="Output directory for results",
     )
-    parser.add_argument(
-        "--run-id", type=str, help="Custom run ID (auto-generated if not provided)"
-    )
+    parser.add_argument("--run-id", type=str, help="Custom run ID (auto-generated if not provided)")
 
     return parser.parse_args()
 
@@ -239,9 +237,7 @@ def analyze_persistence_results(args):
         print(
             f"Avg Importance Stability: {persistence_data.get('avg_importance_stability', 0):.4f}"
         )
-        print(
-            f"Avg Rank Stability: {persistence_data.get('avg_rank_stability', 0):.4f}"
-        )
+        print(f"Avg Rank Stability: {persistence_data.get('avg_rank_stability', 0):.4f}")
 
         if persistence_data.get("top_alpha_features"):
             print("\nTop Alpha Generation Features:")

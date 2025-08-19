@@ -7,5 +7,3 @@ def test_clamp_weights_caps_per_pos_and_gross():
     assert max(abs(v) for v in clamped.values()) <= 0.5 + 1e-9
     assert sum(abs(v) for v in clamped.values()) <= 1.0 + 1e-9
     assert stats["clamped"] is True
-
-

@@ -5,7 +5,7 @@ Defines protocols for strategies, regime extractors, and composers.
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Any, Dict, List
+from typing import Any
 
 import numpy as np
 
@@ -16,7 +16,7 @@ class MarketState:
 
     prices: np.ndarray
     volumes: np.ndarray
-    features: Dict[str, float]
+    features: dict[str, float]
     timestamp: str
     symbol: str
 
@@ -39,7 +39,7 @@ class StrategyPrediction:
     signal: float  # -1 to 1
     confidence: float  # 0 to 1
     strategy_name: str
-    metadata: Dict[str, Any]
+    metadata: dict[str, Any]
 
 
 @dataclass
@@ -47,10 +47,10 @@ class ComposerOutput:
     """Composer output with blended predictions."""
 
     final_signal: float  # -1 to 1
-    strategy_weights: Dict[str, float]
+    strategy_weights: dict[str, float]
     regime_features: RegimeFeatures
     confidence: float
-    metadata: Dict[str, Any]
+    metadata: dict[str, Any]
 
 
 class Strategy(ABC):
@@ -96,7 +96,7 @@ class Composer(ABC):
     def compose(
         self,
         market_state: MarketState,
-        strategies: List[Strategy],
+        strategies: list[Strategy],
         regime_extractor: RegimeExtractor,
     ) -> ComposerOutput:
         """Compose strategy predictions into final signal."""
@@ -186,16 +186,12 @@ class BasicRegimeExtractor(RegimeExtractor):
         trend_strength = np.tanh(slope / mean_price) if mean_price > 0 else 0.0
 
         # Choppiness (ADX-like measure)
-        high_low_range = np.max(prices[-self.lookback :]) - np.min(
-            prices[-self.lookback :]
-        )
+        high_low_range = np.max(prices[-self.lookback :]) - np.min(prices[-self.lookback :])
         path_length = np.sum(np.abs(np.diff(prices[-self.lookback :])))
         choppiness = 1.0 - (high_low_range / path_length) if path_length > 0 else 0.0
 
         # Momentum with safe access
-        start_price = (
-            prices[-self.lookback] if _safe_len(prices) > self.lookback else None
-        )
+        start_price = prices[-self.lookback] if _safe_len(prices) > self.lookback else None
         end_price = _last(prices)
         if start_price is not None and end_price is not None and start_price > 0:
             momentum = (end_price - start_price) / start_price
@@ -243,7 +239,7 @@ class SoftmaxComposer(Composer):
     def compose(
         self,
         market_state: MarketState,
-        strategies: List[Strategy],
+        strategies: list[Strategy],
         regime_extractor: RegimeExtractor,
     ) -> ComposerOutput:
         """Compose predictions using softmax weighting."""
@@ -283,8 +279,8 @@ class SoftmaxComposer(Composer):
         )
 
     def _calculate_weights(
-        self, predictions: List[StrategyPrediction], regime_features: RegimeFeatures
-    ) -> List[float]:
+        self, predictions: list[StrategyPrediction], regime_features: RegimeFeatures
+    ) -> list[float]:
         """Calculate softmax weights for strategies."""
         # Base scores on confidence and regime alignment
         scores = []

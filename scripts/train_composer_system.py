@@ -8,7 +8,7 @@ import argparse
 import logging
 import sys
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 import numpy as np
 
@@ -33,7 +33,7 @@ def setup_logging():
     return logging.getLogger(__name__)
 
 
-def generate_composer_trials() -> List[Dict[str, Any]]:
+def generate_composer_trials() -> list[dict[str, Any]]:
     """Generate different composer parameter combinations to test."""
     trials = []
 
@@ -74,7 +74,7 @@ def generate_composer_trials() -> List[Dict[str, Any]]:
     for i, strategies in enumerate(strategy_combinations):
         trials.append(
             {
-                "name": f"strategies_{i+1}",
+                "name": f"strategies_{i + 1}",
                 "eligible_strategies": strategies,
                 "composer_params": base_params,
             }
@@ -93,15 +93,13 @@ def generate_composer_trials() -> List[Dict[str, Any]]:
     return trials
 
 
-def generate_weight_trials() -> List[Dict[str, Any]]:
+def generate_weight_trials() -> list[dict[str, Any]]:
     """Generate different metric weight combinations to test."""
     trials = []
 
     # CAGR-focused weights
     for alpha in [0.5, 0.6, 0.7, 0.8]:
-        weights = CompositeWeights(
-            alpha=alpha, beta=0.3, gamma=0.2, delta=1.0 - alpha - 0.3 - 0.2
-        )
+        weights = CompositeWeights(alpha=alpha, beta=0.3, gamma=0.2, delta=1.0 - alpha - 0.3 - 0.2)
         trials.append(
             {
                 "name": f"cagr_focused_{alpha}",
@@ -116,9 +114,7 @@ def generate_weight_trials() -> List[Dict[str, Any]]:
 
     # Sharpe-focused weights
     for beta in [0.5, 0.6, 0.7, 0.8]:
-        weights = CompositeWeights(
-            alpha=0.2, beta=beta, gamma=0.2, delta=1.0 - 0.2 - beta - 0.2
-        )
+        weights = CompositeWeights(alpha=0.2, beta=beta, gamma=0.2, delta=1.0 - 0.2 - beta - 0.2)
         trials.append(
             {
                 "name": f"sharpe_focused_{beta}",
@@ -142,7 +138,7 @@ def generate_weight_trials() -> List[Dict[str, Any]]:
     for i, (alpha, beta, gamma, delta) in enumerate(balanced_weights):
         trials.append(
             {
-                "name": f"balanced_{i+1}",
+                "name": f"balanced_{i + 1}",
                 "metric_weights": {
                     "alpha": alpha,
                     "beta": beta,
@@ -156,12 +152,12 @@ def generate_weight_trials() -> List[Dict[str, Any]]:
 
 
 def evaluate_trial(
-    trial_config: Dict[str, Any],
-    symbols: List[str],
+    trial_config: dict[str, Any],
+    symbols: list[str],
     start_date: str,
     end_date: str,
-    base_config: Dict[str, Any],
-) -> Dict[str, Any]:
+    base_config: dict[str, Any],
+) -> dict[str, Any]:
     """Evaluate a single trial configuration."""
     logger = logging.getLogger(__name__)
 
@@ -217,9 +213,7 @@ def evaluate_trial(
             data["Returns"] = data["Close"].pct_change()
             data["Symbol"] = symbol
 
-            results = run_walkforward_with_composer(
-                data=data, symbol=symbol, config=config
-            )
+            results = run_walkforward_with_composer(data=data, symbol=symbol, config=config)
 
             if results:
                 all_results.append(results)
@@ -258,7 +252,7 @@ def evaluate_trial(
         }
 
 
-def aggregate_results(results: List[Dict[str, Any]]) -> Dict[str, Any]:
+def aggregate_results(results: list[dict[str, Any]]) -> dict[str, Any]:
     """Aggregate results across multiple symbols."""
     if not results:
         return {}
@@ -285,20 +279,19 @@ def aggregate_results(results: List[Dict[str, Any]]) -> Dict[str, Any]:
         "cagr": avg_metrics.get("mean_total_return", 0.0),
         "sharpe": avg_metrics.get("mean_sharpe", 0.0),
         "win_rate": avg_metrics.get("mean_hit_rate", 0.0),
-        "avg_trade_return": avg_metrics.get("mean_total_return", 0.0)
-        / 100,  # Rough estimate
+        "avg_trade_return": avg_metrics.get("mean_total_return", 0.0) / 100,  # Rough estimate
         "max_dd": abs(avg_metrics.get("mean_max_dd", 0.0)),
         "trade_count": sum(m.get("total_closed_trades", 0) for m in all_metrics),
     }
 
 
 def train_composer_system(
-    symbols: List[str],
+    symbols: list[str],
     start_date: str,
     end_date: str,
-    base_config: Dict[str, Any],
+    base_config: dict[str, Any],
     max_trials: int = 20,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Train the composer system to maximize returns."""
     logger = logging.getLogger(__name__)
 
@@ -331,7 +324,7 @@ def train_composer_system(
     # Evaluate each trial
     results = []
     for i, trial in enumerate(all_trials):
-        logger.info(f"Evaluating trial {i+1}/{len(all_trials)}: {trial['name']}")
+        logger.info(f"Evaluating trial {i + 1}/{len(all_trials)}: {trial['name']}")
 
         result = evaluate_trial(
             trial_config=trial,
@@ -369,25 +362,17 @@ def train_composer_system(
 
     # Apply best composer settings
     if "composer_params" in best_trial_config:
-        best_config["composer"]["composer_params"] = best_trial_config[
-            "composer_params"
-        ]
+        best_config["composer"]["composer_params"] = best_trial_config["composer_params"]
 
     if "eligible_strategies" in best_trial_config:
-        best_config["composer"]["eligible_strategies"] = best_trial_config[
-            "eligible_strategies"
-        ]
+        best_config["composer"]["eligible_strategies"] = best_trial_config["eligible_strategies"]
 
     if "regime_extractor" in best_trial_config:
-        best_config["composer"]["regime_extractor"] = best_trial_config[
-            "regime_extractor"
-        ]
+        best_config["composer"]["regime_extractor"] = best_trial_config["regime_extractor"]
 
     # Apply best metric weights
     if "metric_weights" in best_trial_config:
-        best_config["optimization"]["metric_weights"] = best_trial_config[
-            "metric_weights"
-        ]
+        best_config["optimization"]["metric_weights"] = best_trial_config["metric_weights"]
 
     # Save optimized config
     save_config(best_config, "config/optimized_composer.json")
@@ -406,36 +391,24 @@ def train_composer_system(
 
     save_config(training_results, "results/composer_training_results.json")
 
-    logger.info(
-        "✅ Training completed! Best config saved to config/optimized_composer.json"
-    )
+    logger.info("✅ Training completed! Best config saved to config/optimized_composer.json")
 
     return best_result
 
 
 def main():
     """Main training function."""
-    parser = argparse.ArgumentParser(
-        description="Train Composer System to Maximize Returns"
-    )
-    parser.add_argument(
-        "--symbols", nargs="+", help="Symbols to train on (overrides config)"
-    )
-    parser.add_argument(
-        "--start-date", default="2020-01-01", help="Training start date"
-    )
+    parser = argparse.ArgumentParser(description="Train Composer System to Maximize Returns")
+    parser.add_argument("--symbols", nargs="+", help="Symbols to train on (overrides config)")
+    parser.add_argument("--start-date", default="2020-01-01", help="Training start date")
     parser.add_argument("--end-date", default="2023-12-31", help="Training end date")
-    parser.add_argument(
-        "--config", default="config/base.json", help="Base configuration file"
-    )
+    parser.add_argument("--config", default="config/base.json", help="Base configuration file")
     parser.add_argument(
         "--profile",
         choices=["risk_low", "risk_balanced", "risk_strict"],
         help="Risk profile to apply",
     )
-    parser.add_argument(
-        "--max-trials", type=int, default=20, help="Maximum trials to run"
-    )
+    parser.add_argument("--max-trials", type=int, default=20, help="Maximum trials to run")
 
     args = parser.parse_args()
 

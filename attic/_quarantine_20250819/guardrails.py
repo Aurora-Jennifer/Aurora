@@ -8,7 +8,6 @@ import logging
 import os
 import sys
 from datetime import datetime, timedelta
-from typing import Dict
 
 logger = logging.getLogger(__name__)
 
@@ -16,16 +15,14 @@ logger = logging.getLogger(__name__)
 class TradingGuardrails:
     """Guardrails to prevent invalid trading operations."""
 
-    def __init__(self, config: Dict):
+    def __init__(self, config: dict):
         self.config = config
         self.max_trades_per_symbol = 1  # One order per symbol per bar
         self.cooldown_minutes = 30  # Cooldown on reversals
         self.last_trade_time = {}  # Track last trade time per symbol
         self.trade_count = {}  # Track trades per symbol per day
 
-    def validate_trade(
-        self, symbol: str, action: str, size: float, price: float
-    ) -> bool:
+    def validate_trade(self, symbol: str, action: str, size: float, price: float) -> bool:
         """Validate if a trade should be executed."""
 
         # Check if we have enough data
@@ -140,7 +137,7 @@ class ConfigValidator:
     """Validate configuration files."""
 
     @staticmethod
-    def validate_trading_config(config: Dict) -> bool:
+    def validate_trading_config(config: dict) -> bool:
         """Validate trading configuration."""
         required_fields = ["initial_capital", "symbols"]
 
@@ -182,7 +179,7 @@ class ConfigValidator:
         return True
 
     @staticmethod
-    def validate_ibkr_config(config: Dict) -> bool:
+    def validate_ibkr_config(config: dict) -> bool:
         """Validate IBKR configuration."""
         if "ibkr_config" not in config:
             logger.error("Missing IBKR configuration")

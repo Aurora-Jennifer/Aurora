@@ -2,7 +2,7 @@
 Test corruption detection - verify detection and handling of corrupt data.
 """
 
-from datetime import timezone
+from datetime import UTC
 
 import numpy as np
 import pandas as pd
@@ -47,9 +47,7 @@ def test_duplicate_rows_detection(strict_validator, mk_ts):
     data = pd.concat([data, duplicate_row])
 
     # Should fail in strict mode
-    with pytest.raises(
-        DataSanityError, match="duplicate|duplicate.*row|Index is not monotonic"
-    ):
+    with pytest.raises(DataSanityError, match="duplicate|duplicate.*row|Index is not monotonic"):
         strict_validator.validate_and_repair(data, "DUPLICATE_ROW_TEST")
 
 
@@ -112,9 +110,7 @@ def test_lookahead_contamination_detection(strict_validator, mk_ts):
 
     # Add lookahead contamination (future data in current row)
     data["Returns"] = data["Close"].pct_change()
-    data.loc[data.index[10], "Returns"] = data.loc[
-        data.index[11], "Returns"
-    ]  # Lookahead
+    data.loc[data.index[10], "Returns"] = data.loc[data.index[11], "Returns"]  # Lookahead
 
     # Should fail in strict mode
     with pytest.raises(
@@ -133,9 +129,7 @@ def test_infinite_value_detection(strict_validator, mk_ts):
     data.loc[data.index[6], "Volume"] = -np.inf
 
     # Should fail in strict mode
-    with pytest.raises(
-        DataSanityError, match="infinite|non-finite|finite.*values|Prices >"
-    ):
+    with pytest.raises(DataSanityError, match="infinite|non-finite|finite.*values|Prices >"):
         strict_validator.validate_and_repair(data, "INFINITE_VALUES_TEST")
 
 
@@ -161,9 +155,7 @@ def test_missing_required_columns_detection(strict_validator, mk_ts):
     data = data.drop("Close", axis=1)
 
     # Should fail with clear error message
-    with pytest.raises(
-        DataSanityError, match="missing.*Close|required.*Close|Close.*missing"
-    ):
+    with pytest.raises(DataSanityError, match="missing.*Close|required.*Close|Close.*missing"):
         strict_validator.validate_and_repair(data, "MISSING_COLUMN_TEST")
 
 
@@ -176,9 +168,7 @@ def test_non_monotonic_index_detection(strict_validator, mk_ts):
     data.index = data.index[::-1]
 
     # Should fail in strict mode
-    with pytest.raises(
-        DataSanityError, match="monotonic|non-monotonic|timestamp.*order"
-    ):
+    with pytest.raises(DataSanityError, match="monotonic|non-monotonic|timestamp.*order"):
         strict_validator.validate_and_repair(data, "NON_MONOTONIC_TEST")
 
 
@@ -203,15 +193,13 @@ def test_duplicate_timestamp_detection(strict_validator, mk_ts):
 def test_wrong_timezone_detection(strict_validator, mk_ts):
     """Test that wrong timezone is detected."""
     # Create data with non-UTC timezone
-    data = mk_ts(n=10, tz=timezone.utc)
+    data = mk_ts(n=10, tz=UTC)
 
     # Change timezone to non-UTC
     data.index = data.index.tz_localize(None).tz_localize("US/Eastern")
 
     # Should fail in strict mode
-    with pytest.raises(
-        DataSanityError, match="timezone|UTC|timezone.*UTC|Lookahead contamination"
-    ):
+    with pytest.raises(DataSanityError, match="timezone|UTC|timezone.*UTC|Lookahead contamination"):
         strict_validator.validate_and_repair(data, "WRONG_TIMEZONE_TEST")
 
 
@@ -222,9 +210,7 @@ def test_clean_data_passes_corruption_detection(strict_validator, mk_ts):
 
     # Should pass corruption detection (but may have lookahead flag due to Returns column)
     try:
-        clean_data, result = strict_validator.validate_and_repair(
-            data, "CLEAN_DATA_TEST"
-        )
+        clean_data, result = strict_validator.validate_and_repair(data, "CLEAN_DATA_TEST")
         assert len(clean_data) == 20, "Should preserve all rows for clean data"
         assert result.repairs == [], "Should have no repairs for clean data"
         # Note: lookahead_detected flag may be present due to Returns column addition

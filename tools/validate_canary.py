@@ -1,9 +1,12 @@
-import sys
 import json
-from jsonschema import validate, ValidationError
+import sys
+
+from jsonschema import ValidationError, validate
 
 
-def main(meta_path: str = "reports/canary_run.meta.json", schema_path: str = "reports/canary.schema.json") -> int:
+def main(
+    meta_path: str = "reports/canary_run.meta.json", schema_path: str = "reports/canary.schema.json"
+) -> int:
     data = json.loads(open(meta_path).read())
     schema = json.loads(open(schema_path).read())
     validate(instance=data, schema=schema)
@@ -23,5 +26,3 @@ if __name__ == "__main__":
     except ValidationError as e:
         print("[CANARY FAIL]", e.message)
         sys.exit(1)
-
-

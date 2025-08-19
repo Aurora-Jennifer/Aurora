@@ -82,32 +82,24 @@ def test_seed_stability(seed):
     metrics2 = extract_metrics(results2)
 
     # Verify identical results
-    assert len(metrics1) == len(
-        metrics2
-    ), f"WF_SEED: Different number of folds for seed {seed}"
+    assert len(metrics1) == len(metrics2), f"WF_SEED: Different number of folds for seed {seed}"
 
-    for m1, m2 in zip(metrics1, metrics2):
-        assert (
-            m1["fold_id"] == m2["fold_id"]
-        ), f"WF_SEED: Fold ID mismatch for seed {seed}"
-        assert (
-            abs(m1["sharpe_nw"] - m2["sharpe_nw"]) < 1e-10
-        ), f"WF_SEED: Sharpe mismatch for seed {seed}"
-        assert (
-            abs(m1["sortino"] - m2["sortino"]) < 1e-10
-        ), f"WF_SEED: Sortino mismatch for seed {seed}"
-        assert (
-            abs(m1["max_dd"] - m2["max_dd"]) < 1e-10
-        ), f"WF_SEED: Max DD mismatch for seed {seed}"
-        assert (
-            abs(m1["hit_rate"] - m2["hit_rate"]) < 1e-10
-        ), f"WF_SEED: Hit rate mismatch for seed {seed}"
-        assert (
-            abs(m1["total_return"] - m2["total_return"]) < 1e-10
-        ), f"WF_SEED: Total return mismatch for seed {seed}"
-        assert (
-            m1["n_trades"] == m2["n_trades"]
-        ), f"WF_SEED: Trade count mismatch for seed {seed}"
+    for m1, m2 in zip(metrics1, metrics2, strict=False):
+        assert m1["fold_id"] == m2["fold_id"], f"WF_SEED: Fold ID mismatch for seed {seed}"
+        assert abs(m1["sharpe_nw"] - m2["sharpe_nw"]) < 1e-10, (
+            f"WF_SEED: Sharpe mismatch for seed {seed}"
+        )
+        assert abs(m1["sortino"] - m2["sortino"]) < 1e-10, (
+            f"WF_SEED: Sortino mismatch for seed {seed}"
+        )
+        assert abs(m1["max_dd"] - m2["max_dd"]) < 1e-10, f"WF_SEED: Max DD mismatch for seed {seed}"
+        assert abs(m1["hit_rate"] - m2["hit_rate"]) < 1e-10, (
+            f"WF_SEED: Hit rate mismatch for seed {seed}"
+        )
+        assert abs(m1["total_return"] - m2["total_return"]) < 1e-10, (
+            f"WF_SEED: Total return mismatch for seed {seed}"
+        )
+        assert m1["n_trades"] == m2["n_trades"], f"WF_SEED: Trade count mismatch for seed {seed}"
 
 
 def test_different_seeds_produce_different_results():
@@ -125,14 +117,12 @@ def test_different_seeds_produce_different_results():
 
     # Check that at least some metrics are different
     sharpe_diffs = [
-        abs(m1["sharpe_nw"] - m2["sharpe_nw"]) for m1, m2 in zip(metrics1, metrics2)
+        abs(m1["sharpe_nw"] - m2["sharpe_nw"]) for m1, m2 in zip(metrics1, metrics2, strict=False)
     ]
     max_sharpe_diff = max(sharpe_diffs)
 
     # Should have some variation (not all identical)
-    assert (
-        max_sharpe_diff > 1e-10
-    ), "WF_SEED_DIFF: All Sharpe ratios identical with different seeds"
+    assert max_sharpe_diff > 1e-10, "WF_SEED_DIFF: All Sharpe ratios identical with different seeds"
 
 
 def test_fold_generation_reproducibility():
@@ -148,7 +138,7 @@ def test_fold_generation_reproducibility():
     # Verify identical folds
     assert len(folds1) == len(folds2), "WF_FOLD_REPRO: Different number of folds"
 
-    for f1, f2 in zip(folds1, folds2):
+    for f1, f2 in zip(folds1, folds2, strict=False):
         assert f1.fold_id == f2.fold_id, "WF_FOLD_REPRO: Fold ID mismatch"
         assert f1.train_lo == f2.train_lo, "WF_FOLD_REPRO: Train lo mismatch"
         assert f1.train_hi == f2.train_hi, "WF_FOLD_REPRO: Train hi mismatch"
@@ -204,21 +194,15 @@ def test_parallel_equals_sequential():
     # Verify identical results
     assert len(metrics1) == len(metrics2), "WF_PARALLEL: Different number of results"
 
-    for m1, m2 in zip(metrics1, metrics2):
+    for m1, m2 in zip(metrics1, metrics2, strict=False):
         assert m1["fold_id"] == m2["fold_id"], "WF_PARALLEL: Fold ID mismatch"
-        assert (
-            abs(m1["sharpe_nw"] - m2["sharpe_nw"]) < 1e-10
-        ), "WF_PARALLEL: Sharpe mismatch"
-        assert (
-            abs(m1["sortino"] - m2["sortino"]) < 1e-10
-        ), "WF_PARALLEL: Sortino mismatch"
+        assert abs(m1["sharpe_nw"] - m2["sharpe_nw"]) < 1e-10, "WF_PARALLEL: Sharpe mismatch"
+        assert abs(m1["sortino"] - m2["sortino"]) < 1e-10, "WF_PARALLEL: Sortino mismatch"
         assert abs(m1["max_dd"] - m2["max_dd"]) < 1e-10, "WF_PARALLEL: Max DD mismatch"
-        assert (
-            abs(m1["hit_rate"] - m2["hit_rate"]) < 1e-10
-        ), "WF_PARALLEL: Hit rate mismatch"
-        assert (
-            abs(m1["total_return"] - m2["total_return"]) < 1e-10
-        ), "WF_PARALLEL: Total return mismatch"
+        assert abs(m1["hit_rate"] - m2["hit_rate"]) < 1e-10, "WF_PARALLEL: Hit rate mismatch"
+        assert abs(m1["total_return"] - m2["total_return"]) < 1e-10, (
+            "WF_PARALLEL: Total return mismatch"
+        )
         assert m1["n_trades"] == m2["n_trades"], "WF_PARALLEL: Trade count mismatch"
 
 
@@ -248,11 +232,9 @@ def test_model_warm_start_reproducibility():
     # Verify identical results
     assert len(metrics1) == len(metrics2), "WF_WARMSTART: Different number of results"
 
-    for m1, m2 in zip(metrics1, metrics2):
+    for m1, m2 in zip(metrics1, metrics2, strict=False):
         assert m1["fold_id"] == m2["fold_id"], "WF_WARMSTART: Fold ID mismatch"
-        assert (
-            abs(m1["sharpe_nw"] - m2["sharpe_nw"]) < 1e-10
-        ), "WF_WARMSTART: Sharpe mismatch"
+        assert abs(m1["sharpe_nw"] - m2["sharpe_nw"]) < 1e-10, "WF_WARMSTART: Sharpe mismatch"
 
 
 def test_data_loading_reproducibility():
@@ -330,21 +312,13 @@ def test_metric_aggregation_reproducibility():
     mean_total_return2 = np.mean(total_returns)
 
     # Verify identical aggregation
-    assert (
-        abs(mean_sharpe1 - mean_sharpe2) < 1e-10
-    ), "WF_AGGREGATE: Mean Sharpe mismatch"
-    assert (
-        abs(mean_sortino1 - mean_sortino2) < 1e-10
-    ), "WF_AGGREGATE: Mean Sortino mismatch"
-    assert (
-        abs(mean_max_dd1 - mean_max_dd2) < 1e-10
-    ), "WF_AGGREGATE: Mean Max DD mismatch"
-    assert (
-        abs(mean_hit_rate1 - mean_hit_rate2) < 1e-10
-    ), "WF_AGGREGATE: Mean Hit Rate mismatch"
-    assert (
-        abs(mean_total_return1 - mean_total_return2) < 1e-10
-    ), "WF_AGGREGATE: Mean Total Return mismatch"
+    assert abs(mean_sharpe1 - mean_sharpe2) < 1e-10, "WF_AGGREGATE: Mean Sharpe mismatch"
+    assert abs(mean_sortino1 - mean_sortino2) < 1e-10, "WF_AGGREGATE: Mean Sortino mismatch"
+    assert abs(mean_max_dd1 - mean_max_dd2) < 1e-10, "WF_AGGREGATE: Mean Max DD mismatch"
+    assert abs(mean_hit_rate1 - mean_hit_rate2) < 1e-10, "WF_AGGREGATE: Mean Hit Rate mismatch"
+    assert abs(mean_total_return1 - mean_total_return2) < 1e-10, (
+        "WF_AGGREGATE: Mean Total Return mismatch"
+    )
 
 
 @pytest.mark.slow
@@ -375,17 +349,13 @@ def test_large_dataset_reproducibility():
     # Verify identical results
     assert len(metrics1) == len(metrics2), "WF_LARGE: Different number of results"
 
-    for m1, m2 in zip(metrics1, metrics2):
+    for m1, m2 in zip(metrics1, metrics2, strict=False):
         assert m1["fold_id"] == m2["fold_id"], "WF_LARGE: Fold ID mismatch"
-        assert (
-            abs(m1["sharpe_nw"] - m2["sharpe_nw"]) < 1e-10
-        ), "WF_LARGE: Sharpe mismatch"
+        assert abs(m1["sharpe_nw"] - m2["sharpe_nw"]) < 1e-10, "WF_LARGE: Sharpe mismatch"
         assert abs(m1["sortino"] - m2["sortino"]) < 1e-10, "WF_LARGE: Sortino mismatch"
         assert abs(m1["max_dd"] - m2["max_dd"]) < 1e-10, "WF_LARGE: Max DD mismatch"
-        assert (
-            abs(m1["hit_rate"] - m2["hit_rate"]) < 1e-10
-        ), "WF_LARGE: Hit rate mismatch"
-        assert (
-            abs(m1["total_return"] - m2["total_return"]) < 1e-10
-        ), "WF_LARGE: Total return mismatch"
+        assert abs(m1["hit_rate"] - m2["hit_rate"]) < 1e-10, "WF_LARGE: Hit rate mismatch"
+        assert abs(m1["total_return"] - m2["total_return"]) < 1e-10, (
+            "WF_LARGE: Total return mismatch"
+        )
         assert m1["n_trades"] == m2["n_trades"], "WF_LARGE: Trade count mismatch"

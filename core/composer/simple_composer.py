@@ -4,7 +4,6 @@ MVP composer with softmax-based strategy selection.
 """
 
 import logging
-from typing import List, Optional
 
 import numpy as np
 
@@ -52,7 +51,7 @@ class SoftmaxSelector(Composer):
     def compose(
         self,
         market_state: MarketState,
-        strategies: List[Strategy],
+        strategies: list[Strategy],
         regime_extractor: RegimeExtractor,
     ) -> ComposerOutput:
         """
@@ -146,8 +145,8 @@ class SoftmaxSelector(Composer):
         )
 
     def _calculate_weights(
-        self, predictions: List[StrategyPrediction], regime_features: RegimeFeatures
-    ) -> List[float]:
+        self, predictions: list[StrategyPrediction], regime_features: RegimeFeatures
+    ) -> list[float]:
         """
         Calculate softmax weights for strategies based on regime.
 
@@ -241,7 +240,7 @@ class ThresholdSelector(Composer):
     def compose(
         self,
         market_state: MarketState,
-        strategies: List[Strategy],
+        strategies: list[Strategy],
         regime_extractor: RegimeExtractor,
     ) -> ComposerOutput:
         """
@@ -303,8 +302,8 @@ class ThresholdSelector(Composer):
         )
 
     def _select_strategy(
-        self, strategies: List[Strategy], regime_features: RegimeFeatures
-    ) -> Optional[Strategy]:
+        self, strategies: list[Strategy], regime_features: RegimeFeatures
+    ) -> Strategy | None:
         """
         Select the best strategy for the current regime.
 

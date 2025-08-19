@@ -7,7 +7,7 @@ import json
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Tuple
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -23,7 +23,7 @@ class StrategySelector:
     Market-adaptive strategy selection based on regime analysis and performance metrics.
     """
 
-    def __init__(self, config: Dict):
+    def __init__(self, config: dict):
         """
         Initialize strategy selector.
 
@@ -42,7 +42,7 @@ class StrategySelector:
 
         logger.info("Initialized StrategySelector")
 
-    def _load_available_strategies(self) -> Dict[str, Dict]:
+    def _load_available_strategies(self) -> dict[str, dict]:
         """Load available strategies and their configurations from config file."""
         from pathlib import Path
 
@@ -50,9 +50,7 @@ class StrategySelector:
 
         config_path = Path("config/strategies.yaml")
         if not config_path.exists():
-            logger.warning(
-                f"Strategy config not found at {config_path}, using defaults"
-            )
+            logger.warning(f"Strategy config not found at {config_path}, using defaults")
             return self._get_default_strategies()
 
         try:
@@ -71,7 +69,7 @@ class StrategySelector:
             logger.error(f"Failed to load strategy config: {e}, using defaults")
             return self._get_default_strategies()
 
-    def _get_default_strategies(self) -> Dict[str, Dict]:
+    def _get_default_strategies(self) -> dict[str, dict]:
         """Fallback default strategies if config loading fails."""
         return {
             "regime_aware_ensemble": {
@@ -117,9 +115,7 @@ class StrategySelector:
             },
         }
 
-    def select_best_strategy(
-        self, market_data: pd.DataFrame
-    ) -> Tuple[str, Dict, float]:
+    def select_best_strategy(self, market_data: pd.DataFrame) -> tuple[str, dict, float]:
         """
         Select the best strategy for current market conditions.
 
@@ -131,9 +127,7 @@ class StrategySelector:
         """
         try:
             # Detect current market regime
-            regime_name, confidence, regime_params = self.regime_detector.detect_regime(
-                market_data
-            )
+            regime_name, confidence, regime_params = self.regime_detector.detect_regime(market_data)
 
             # Get regime-specific performance metrics
             regime_metrics = self._get_regime_performance_metrics(regime_name)
@@ -146,16 +140,14 @@ class StrategySelector:
                 regime=regime_name,
                 vol_bin=int(np.digitize([volatility], [0.01, 0.02, 0.03, 0.05])[0]),
                 trend_strength=float(getattr(regime_params, "trend_strength", 0.0)),
-                liquidity=float(
-                    market_data.get("Volume", pd.Series([1])).tail(20).mean()
-                ),
+                liquidity=float(market_data.get("Volume", pd.Series([1])).tail(20).mean()),
                 spread_bps=10.0,
                 time_bucket=int(pd.Timestamp.now().hour),
                 corr_cluster=0,
             )
 
             # Score each strategy based on regime performance and current conditions
-            strategy_scores: Dict[str, float] = {}
+            strategy_scores: dict[str, float] = {}
             for strategy_name, _ in self.strategies.items():
                 score = self._calculate_strategy_score(
                     strategy_name,
@@ -176,9 +168,7 @@ class StrategySelector:
                 strategy_name, expected_sharpe = best_strategy
 
             # Get strategy parameters
-            strategy_params = self._get_optimized_params(
-                strategy_name, regime_name, volatility
-            )
+            strategy_params = self._get_optimized_params(strategy_name, regime_name, volatility)
 
             logger.info(
                 f"Selected strategy: {strategy_name} (expected Sharpe: {expected_sharpe:.3f}) for regime: {regime_name}"
@@ -195,7 +185,7 @@ class StrategySelector:
                 0.5,
             )
 
-    def _get_regime_performance_metrics(self, regime_name: str) -> Dict[str, float]:
+    def _get_regime_performance_metrics(self, regime_name: str) -> dict[str, float]:
         """
         Get performance metrics for each strategy in the given regime.
 
@@ -223,7 +213,7 @@ class StrategySelector:
             logger.error(f"Error loading regime performance metrics: {e}")
             return self._get_default_regime_metrics(regime_name)
 
-    def _get_default_regime_metrics(self, regime_name: str) -> Dict[str, float]:
+    def _get_default_regime_metrics(self, regime_name: str) -> dict[str, float]:
         """Get default performance metrics based on regime characteristics."""
         default_metrics = {
             "trend": {
@@ -268,7 +258,7 @@ class StrategySelector:
         self,
         strategy_name: str,
         regime_name: str,
-        regime_metrics: Dict[str, float],
+        regime_metrics: dict[str, float],
         volatility: float,
         confidence: float,
     ) -> float:
@@ -290,9 +280,7 @@ class StrategySelector:
             base_score = regime_metrics.get(strategy_name, 0.5)
 
             # Adjust for volatility
-            volatility_adjustment = self._calculate_volatility_adjustment(
-                strategy_name, volatility
-            )
+            volatility_adjustment = self._calculate_volatility_adjustment(strategy_name, volatility)
 
             # Adjust for regime confidence
             confidence_adjustment = 1.0 + (confidence - 0.5) * 0.2  # ±10% adjustment
@@ -304,10 +292,7 @@ class StrategySelector:
 
             # Calculate final score
             final_score = (
-                base_score
-                * volatility_adjustment
-                * confidence_adjustment
-                * strategy_adjustment
+                base_score * volatility_adjustment * confidence_adjustment * strategy_adjustment
             )
 
             # Ensure reasonable bounds
@@ -319,9 +304,7 @@ class StrategySelector:
             logger.error(f"Error calculating strategy score: {e}")
             return 0.5
 
-    def _calculate_volatility_adjustment(
-        self, strategy_name: str, volatility: float
-    ) -> float:
+    def _calculate_volatility_adjustment(self, strategy_name: str, volatility: float) -> float:
         """Calculate volatility adjustment for strategy."""
         # High volatility strategies perform better in volatile markets
         if strategy_name in ["mean_reversion", "regime_aware_ensemble"]:
@@ -347,7 +330,7 @@ class StrategySelector:
 
     def _get_optimized_params(
         self, strategy_name: str, regime_name: str, volatility: float
-    ) -> Dict:
+    ) -> dict:
         """Get optimized parameters for the selected strategy."""
         base_params = self.strategies[strategy_name]["default_params"].copy()
 
@@ -395,7 +378,7 @@ class StrategySelector:
         return base_params
 
     def update_performance_data(
-        self, strategy_name: str, regime_name: str, performance_metrics: Dict
+        self, strategy_name: str, regime_name: str, performance_metrics: dict
     ):
         """
         Update performance data for strategy selection.
@@ -427,31 +410,23 @@ class StrategySelector:
             with open(performance_file, "w") as f:
                 json.dump(performance_data, f, indent=2)
 
-            logger.info(
-                f"Updated performance data for {strategy_name} in {regime_name} regime"
-            )
+            logger.info(f"Updated performance data for {strategy_name} in {regime_name} regime")
 
         except Exception as e:
             logger.error(f"Error updating performance data: {e}")
 
-    def update_online(
-        self, market_data: pd.DataFrame, strategy_name: str, reward: float
-    ) -> None:
+    def update_online(self, market_data: pd.DataFrame, strategy_name: str, reward: float) -> None:
         """Update ML selector with realized reward if enabled."""
         if not self.ml_enabled or self.bandit is None:
             return
         try:
-            regime_name, confidence, regime_params = self.regime_detector.detect_regime(
-                market_data
-            )
+            regime_name, confidence, regime_params = self.regime_detector.detect_regime(market_data)
             volatility = self._calculate_market_volatility(market_data)
             context = StrategyContext(
                 regime=regime_name,
                 vol_bin=int(np.digitize([volatility], [0.01, 0.02, 0.03, 0.05])[0]),
                 trend_strength=float(getattr(regime_params, "trend_strength", 0.0)),
-                liquidity=float(
-                    market_data.get("Volume", pd.Series([1])).tail(20).mean()
-                ),
+                liquidity=float(market_data.get("Volume", pd.Series([1])).tail(20).mean()),
                 spread_bps=10.0,
                 time_bucket=int(pd.Timestamp.now().hour),
                 corr_cluster=0,
@@ -460,7 +435,7 @@ class StrategySelector:
         except Exception as e:
             logger.error(f"Error updating ML selector: {e}")
 
-    def get_strategy_summary(self) -> Dict[str, Any]:
+    def get_strategy_summary(self) -> dict[str, Any]:
         """Get summary of available strategies and their characteristics."""
         summary = {
             "available_strategies": list(self.strategies.keys()),

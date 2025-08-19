@@ -6,7 +6,6 @@ and model performance metrics.
 """
 
 from pathlib import Path
-from typing import Dict, Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -30,7 +29,7 @@ class MLVisualizer(BaseVisualizer):
         """Initialize ML visualizer."""
         super().__init__(output_dir)
 
-    def create_learning_plots(self, save_plots: bool = True) -> Dict[str, str]:
+    def create_learning_plots(self, save_plots: bool = True) -> dict[str, str]:
         """Create ML learning progress plots."""
         plots = {}
 
@@ -64,7 +63,7 @@ class MLVisualizer(BaseVisualizer):
         plt.show()
         return plots
 
-    def create_prediction_plots(self, save_plots: bool = True) -> Dict[str, str]:
+    def create_prediction_plots(self, save_plots: bool = True) -> dict[str, str]:
         """Create ML prediction analysis plots."""
         plots = {}
 
@@ -145,23 +144,15 @@ class MLVisualizer(BaseVisualizer):
         dates = sim_data["dates"]
 
         # Simulate different strategy returns
-        baseline_returns = (
-            np.cumprod(1 + np.random.normal(0.0005, 0.015, len(dates))) - 1
-        )
+        baseline_returns = np.cumprod(1 + np.random.normal(0.0005, 0.015, len(dates))) - 1
         ml_returns = np.cumprod(1 + np.random.normal(0.001, 0.02, len(dates))) - 1
-        enhanced_returns = (
-            np.cumprod(1 + np.random.normal(0.0015, 0.018, len(dates))) - 1
-        )
+        enhanced_returns = np.cumprod(1 + np.random.normal(0.0015, 0.018, len(dates))) - 1
 
         ax.plot(dates, baseline_returns, label="Baseline", color=self.colors["light"])
         ax.plot(dates, ml_returns, label="ML Strategy", color=self.colors["primary"])
-        ax.plot(
-            dates, enhanced_returns, label="Enhanced ML", color=self.colors["success"]
-        )
+        ax.plot(dates, enhanced_returns, label="Enhanced ML", color=self.colors["success"])
 
-        self.style_axis(
-            ax, "Strategy Performance Comparison", "Date", "Cumulative Return"
-        )
+        self.style_axis(ax, "Strategy Performance Comparison", "Date", "Cumulative Return")
         ax.legend()
 
     def _plot_learning_summary_simulation(self, ax: plt.Axes):
@@ -202,18 +193,14 @@ class MLVisualizer(BaseVisualizer):
         actual_profits = np.random.normal(0.02, 0.05, 100)
         predicted_profits = actual_profits + np.random.normal(0, 0.01, 100)
 
-        ax.scatter(
-            actual_profits, predicted_profits, alpha=0.6, color=self.colors["primary"]
-        )
+        ax.scatter(actual_profits, predicted_profits, alpha=0.6, color=self.colors["primary"])
 
         # Add perfect prediction line
         min_val = min(actual_profits.min(), predicted_profits.min())
         max_val = max(actual_profits.max(), predicted_profits.max())
         ax.plot([min_val, max_val], [min_val, max_val], "--", color=self.colors["dark"])
 
-        self.style_axis(
-            ax, "Predicted vs Actual Profits", "Actual Profit", "Predicted Profit"
-        )
+        self.style_axis(ax, "Predicted vs Actual Profits", "Actual Profit", "Predicted Profit")
 
         # Add correlation coefficient
         corr = np.corrcoef(actual_profits, predicted_profits)[0, 1]
@@ -231,9 +218,7 @@ class MLVisualizer(BaseVisualizer):
         confidence_scores = np.random.beta(2, 2, 1000)
 
         ax.hist(confidence_scores, bins=30, alpha=0.7, color=self.colors["primary"])
-        self.style_axis(
-            ax, "Prediction Confidence Distribution", "Confidence Score", "Frequency"
-        )
+        self.style_axis(ax, "Prediction Confidence Distribution", "Confidence Score", "Frequency")
 
         # Add mean line
         mean_conf = confidence_scores.mean()
@@ -274,7 +259,7 @@ class MLVisualizer(BaseVisualizer):
         bars = ax.bar(features_sorted, importance_sorted, color=self.colors["primary"])
 
         # Add value labels on bars
-        for bar, value in zip(bars, importance_sorted):
+        for bar, value in zip(bars, importance_sorted, strict=False):
             ax.text(
                 bar.get_x() + bar.get_width() / 2,
                 bar.get_height() + 0.001,
@@ -286,7 +271,7 @@ class MLVisualizer(BaseVisualizer):
         self.style_axis(ax, "Feature Importance", "Features", "Importance")
         plt.setp(ax.get_xticklabels(), rotation=45, ha="right")
 
-    def load_ml_data(self) -> Optional[Dict]:
+    def load_ml_data(self) -> dict | None:
         """Load ML analysis data from existing files."""
         try:
             # Try to load from various possible locations

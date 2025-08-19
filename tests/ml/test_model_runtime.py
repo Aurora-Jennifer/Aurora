@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from ml.runtime import set_seeds, build_features, infer_weights
+from ml.runtime import build_features, infer_weights, set_seeds
 
 
 class TinyModel:
@@ -16,8 +16,12 @@ def test_infer_weights_deterministic():
     close = np.linspace(100, 110, len(idx))
     df = pd.DataFrame({"Close": close}, index=idx)
     feats = build_features(df, ["ret_1d", "ret_5d", "vol_10d"])
-    w1 = infer_weights(TinyModel(), feats, ["ret_1d", "ret_5d", "vol_10d"], "tanh", 0.5, min_bars=60)
-    w2 = infer_weights(TinyModel(), feats, ["ret_1d", "ret_5d", "vol_10d"], "tanh", 0.5, min_bars=60)
+    w1 = infer_weights(
+        TinyModel(), feats, ["ret_1d", "ret_5d", "vol_10d"], "tanh", 0.5, min_bars=60
+    )
+    w2 = infer_weights(
+        TinyModel(), feats, ["ret_1d", "ret_5d", "vol_10d"], "tanh", 0.5, min_bars=60
+    )
     assert isinstance(w1, dict) and w1 == w2
 
 
@@ -31,5 +35,3 @@ def test_bad_model_fallback():
     feats = build_features(df, ["ret_1d", "ret_5d", "vol_10d"])
     w = infer_weights(BadModel(), feats, ["ret_1d", "ret_5d", "vol_10d"], "tanh", 0.5, min_bars=60)
     assert w.get("status") == "HOLD"
-
-

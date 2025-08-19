@@ -5,7 +5,7 @@ Uses feature engineering and signal combination for sophisticated trading signal
 
 import logging
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import pandas as pd
 
@@ -21,10 +21,10 @@ class EnsembleStrategyParams(StrategyParams):
     """Parameters for ensemble strategy."""
 
     # Feature selection
-    trend_features: List[str] = None
-    mean_reversion_features: List[str] = None
-    volatility_features: List[str] = None
-    volume_features: List[str] = None
+    trend_features: list[str] = None
+    mean_reversion_features: list[str] = None
+    volatility_features: list[str] = None
+    volume_features: list[str] = None
 
     # Signal combination
     combination_method: str = "rolling_ic"  # "rolling_ic", "sharpe", "ridge", "voting"
@@ -141,9 +141,7 @@ class EnsembleStrategy(BaseStrategy):
             signals = self._apply_confidence_filter(signals)
 
         # Apply position size limits
-        signals = signals.clip(
-            -self.params.max_position_size, self.params.max_position_size
-        )
+        signals = signals.clip(-self.params.max_position_size, self.params.max_position_size)
 
         logger.info(
             f"Generated ensemble signals with mean absolute value: {abs(signals).mean():.3f}"
@@ -163,13 +161,9 @@ class EnsembleStrategy(BaseStrategy):
 
         for feature_name in all_features:
             if feature_name in self.features:
-                self.signal_combiner.add_feature(
-                    feature_name, self.features[feature_name]
-                )
+                self.signal_combiner.add_feature(feature_name, self.features[feature_name])
             else:
-                logger.warning(
-                    f"Feature {feature_name} not found in generated features"
-                )
+                logger.warning(f"Feature {feature_name} not found in generated features")
 
         # Compute weights and combine
         self.signal_combiner.compute_weights(
@@ -213,9 +207,7 @@ class EnsembleStrategy(BaseStrategy):
                 # Add regime-specific features
                 for feature_name in regime_features:
                     if feature_name in self.features:
-                        regime_combiner.add_feature(
-                            feature_name, self.features[feature_name]
-                        )
+                        regime_combiner.add_feature(feature_name, self.features[feature_name])
 
                 if regime_combiner.features:
                     # Compute weights and combine for this regime
@@ -272,13 +264,11 @@ class EnsembleStrategy(BaseStrategy):
         filtered_signals = signals.copy()
         filtered_signals[low_confidence] = 0
 
-        logger.info(
-            f"Applied confidence filter: {low_confidence.sum()} signals filtered out"
-        )
+        logger.info(f"Applied confidence filter: {low_confidence.sum()} signals filtered out")
 
         return filtered_signals
 
-    def get_default_params(self) -> Dict[str, Any]:
+    def get_default_params(self) -> dict[str, Any]:
         """Get default parameters for the strategy."""
         return {
             "combination_method": "rolling_ic",
@@ -289,7 +279,7 @@ class EnsembleStrategy(BaseStrategy):
             "min_obs": 30,
         }
 
-    def get_param_ranges(self) -> Dict[str, List]:
+    def get_param_ranges(self) -> dict[str, list]:
         """Get parameter ranges for optimization."""
         return {
             "combination_method": ["rolling_ic", "sharpe", "ridge", "voting"],
@@ -326,9 +316,7 @@ class EnsembleStrategy(BaseStrategy):
 
         return pd.DataFrame(summary_data)
 
-    def plot_ensemble_analysis(
-        self, data: pd.DataFrame, save_path: Optional[str] = None
-    ) -> None:
+    def plot_ensemble_analysis(self, data: pd.DataFrame, save_path: str | None = None) -> None:
         """Plot ensemble analysis including feature weights and confidence."""
         try:
             import matplotlib.pyplot as plt
@@ -339,9 +327,7 @@ class EnsembleStrategy(BaseStrategy):
             if self.signal_combiner:
                 importance_df = self.get_feature_importance()
                 if not importance_df.empty:
-                    importance_df.plot(
-                        x="Feature", y="Weight", kind="bar", ax=axes[0, 0]
-                    )
+                    importance_df.plot(x="Feature", y="Weight", kind="bar", ax=axes[0, 0])
                     axes[0, 0].set_title("Feature Weights")
                     axes[0, 0].tick_params(axis="x", rotation=45)
 

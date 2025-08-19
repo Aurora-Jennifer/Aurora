@@ -7,7 +7,7 @@ import json
 import logging
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 from core.risk.guardrails import RiskGuardrails
 
@@ -62,7 +62,7 @@ class RealClock(Clock):
 class DataFeed:
     """Abstract data feed interface"""
 
-    def get_latest_data(self, symbols: list) -> Dict[str, Any]:
+    def get_latest_data(self, symbols: list) -> dict[str, Any]:
         raise NotImplementedError
 
     def is_connected(self) -> bool:
@@ -76,7 +76,7 @@ class CsvParquetFeed(DataFeed):
         self.data_dir = Path(data_dir)
         self.logger = logging.getLogger(__name__)
 
-    def get_latest_data(self, symbols: list) -> Dict[str, Any]:
+    def get_latest_data(self, symbols: list) -> dict[str, Any]:
         # Simplified - in real implementation would read from files
         data = {}
         for symbol in symbols:
@@ -94,12 +94,12 @@ class CsvParquetFeed(DataFeed):
 class IBMarketDataFeed(DataFeed):
     """Interactive Brokers market data feed"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         self.config = config
         self.logger = logging.getLogger(__name__)
         self.connected = False
 
-    def get_latest_data(self, symbols: list) -> Dict[str, Any]:
+    def get_latest_data(self, symbols: list) -> dict[str, Any]:
         # Simplified - would use IBKR API
         data = {}
         for symbol in symbols:
@@ -117,16 +117,16 @@ class IBMarketDataFeed(DataFeed):
 class Broker:
     """Abstract broker interface"""
 
-    def submit_order(self, order: Dict[str, Any]) -> str:
+    def submit_order(self, order: dict[str, Any]) -> str:
         raise NotImplementedError
 
     def cancel_order(self, order_id: str) -> bool:
         raise NotImplementedError
 
-    def get_order_status(self, order_id: str) -> Dict[str, Any]:
+    def get_order_status(self, order_id: str) -> dict[str, Any]:
         raise NotImplementedError
 
-    def get_positions(self) -> Dict[str, int]:
+    def get_positions(self) -> dict[str, int]:
         raise NotImplementedError
 
 
@@ -141,7 +141,7 @@ class SimBroker(Broker):
         self.order_id_counter = 0
         self.logger = logging.getLogger(__name__)
 
-    def submit_order(self, order: Dict[str, Any]) -> str:
+    def submit_order(self, order: dict[str, Any]) -> str:
         order_id = f"sim_{self.order_id_counter}"
         self.order_id_counter += 1
 
@@ -157,9 +157,7 @@ class SimBroker(Broker):
                 self.positions[symbol] = self.positions.get(symbol, 0) + quantity
                 self.logger.info(f"Simulated BUY {quantity} {symbol} @ ${price}")
             else:
-                self.logger.warning(
-                    f"Insufficient cash for order: {cost} > {self.cash}"
-                )
+                self.logger.warning(f"Insufficient cash for order: {cost} > {self.cash}")
         else:  # SELL
             if symbol in self.positions and self.positions[symbol] >= quantity:
                 self.positions[symbol] -= quantity
@@ -182,22 +180,22 @@ class SimBroker(Broker):
             return True
         return False
 
-    def get_order_status(self, order_id: str) -> Dict[str, Any]:
+    def get_order_status(self, order_id: str) -> dict[str, Any]:
         return self.orders.get(order_id, {"status": "NOT_FOUND"})
 
-    def get_positions(self) -> Dict[str, int]:
+    def get_positions(self) -> dict[str, int]:
         return dict(self.positions)
 
 
 class IBBroker(Broker):
     """Interactive Brokers broker for paper/live trading"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         self.config = config
         self.logger = logging.getLogger(__name__)
         self.connected = False
 
-    def submit_order(self, order: Dict[str, Any]) -> str:
+    def submit_order(self, order: dict[str, Any]) -> str:
         # Simplified - would use IBKR API
         order_id = f"ib_{datetime.now().timestamp()}"
         self.logger.info(f"IBKR order submitted: {order}")
@@ -207,11 +205,11 @@ class IBBroker(Broker):
         self.logger.info(f"IBKR order cancelled: {order_id}")
         return True
 
-    def get_order_status(self, order_id: str) -> Dict[str, Any]:
+    def get_order_status(self, order_id: str) -> dict[str, Any]:
         # Simplified - would query IBKR
         return {"status": "SUBMITTED"}
 
-    def get_positions(self) -> Dict[str, int]:
+    def get_positions(self) -> dict[str, int]:
         # Simplified - would query IBKR
         return {}
 
@@ -251,7 +249,7 @@ class Portfolio:
             }
         )
 
-    def get_total_value(self, prices: Dict[str, float]) -> float:
+    def get_total_value(self, prices: dict[str, float]) -> float:
         """Calculate total portfolio value"""
         total = self.cash
         for symbol, quantity in self.positions.items():
@@ -285,7 +283,7 @@ class Telemetry:
         self.log_file.parent.mkdir(parents=True, exist_ok=True)
         self.logger = logging.getLogger(__name__)
 
-    def log_event(self, event_type: str, data: Dict[str, Any]):
+    def log_event(self, event_type: str, data: dict[str, Any]):
         """Log an event to NDJSON file"""
         event = {
             "timestamp": datetime.now().isoformat(),
@@ -299,7 +297,7 @@ class Telemetry:
         self.logger.info(f"Logged {event_type}: {data}")
 
 
-def make_mvb_components(mode: str, config: Dict[str, Any]) -> Dict[str, Any]:
+def make_mvb_components(mode: str, config: dict[str, Any]) -> dict[str, Any]:
     """
     Factory function to create MVB components based on mode.
 
@@ -314,9 +312,7 @@ def make_mvb_components(mode: str, config: Dict[str, Any]) -> Dict[str, Any]:
 
     # Create clock based on mode
     if mode == "backtest":
-        start_date = datetime.strptime(
-            config.get("start_date", "2024-01-01"), "%Y-%m-%d"
-        )
+        start_date = datetime.strptime(config.get("start_date", "2024-01-01"), "%Y-%m-%d")
         end_date = datetime.strptime(config.get("end_date", "2024-12-31"), "%Y-%m-%d")
         components["clock"] = SimClock(start_date, end_date)
     else:

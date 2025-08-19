@@ -80,7 +80,9 @@ def aggregate_fold_metrics(results):
         "mean_total_return": np.mean(total_returns),
         "mean_volatility": np.mean(volatilities),
         "total_trades": sum(trade_counts),
-        "winning_trades": sum(int(hr * tc) for hr, tc in zip(hit_rates, trade_counts)),
+        "winning_trades": sum(
+            int(hr * tc) for hr, tc in zip(hit_rates, trade_counts, strict=False)
+        ),
         "positive_sharpe_folds": sum(1 for s in sharpe_scores if s > 0),
         "total_folds": len(results),
         "std_sharpe": np.std(sharpe_scores),
@@ -123,18 +125,14 @@ def test_fold_metrics_aggregate_to_summary():
 
     # Verify basic sanity checks
     assert summary["total_folds"] == len(results), "WF_AGGREGATE: Total folds mismatch"
-    assert (
-        summary["total_trades"] >= 0
-    ), "WF_AGGREGATE: Total trades should be non-negative"
-    assert (
-        summary["winning_trades"] >= 0
-    ), "WF_AGGREGATE: Winning trades should be non-negative"
-    assert (
-        summary["positive_sharpe_folds"] >= 0
-    ), "WF_AGGREGATE: Positive Sharpe folds should be non-negative"
-    assert (
-        summary["positive_sharpe_folds"] <= summary["total_folds"]
-    ), "WF_AGGREGATE: Positive Sharpe folds cannot exceed total folds"
+    assert summary["total_trades"] >= 0, "WF_AGGREGATE: Total trades should be non-negative"
+    assert summary["winning_trades"] >= 0, "WF_AGGREGATE: Winning trades should be non-negative"
+    assert summary["positive_sharpe_folds"] >= 0, (
+        "WF_AGGREGATE: Positive Sharpe folds should be non-negative"
+    )
+    assert summary["positive_sharpe_folds"] <= summary["total_folds"], (
+        "WF_AGGREGATE: Positive Sharpe folds cannot exceed total folds"
+    )
 
 
 def test_metric_calculation_consistency():
@@ -159,49 +157,47 @@ def test_metric_calculation_consistency():
 
     for fold_id, metrics, trades in results:
         for key in expected_metric_keys:
-            assert (
-                key in metrics
-            ), f"WF_METRIC: Missing metric '{key}' in fold {fold_id}"
+            assert key in metrics, f"WF_METRIC: Missing metric '{key}' in fold {fold_id}"
 
         # Verify metric value types
-        assert isinstance(
-            metrics["sharpe_nw"], (int, float)
-        ), f"WF_METRIC: Sharpe should be numeric in fold {fold_id}"
-        assert isinstance(
-            metrics["sortino"], (int, float)
-        ), f"WF_METRIC: Sortino should be numeric in fold {fold_id}"
-        assert isinstance(
-            metrics["max_dd"], (int, float)
-        ), f"WF_METRIC: Max DD should be numeric in fold {fold_id}"
-        assert isinstance(
-            metrics["hit_rate"], (int, float)
-        ), f"WF_METRIC: Hit rate should be numeric in fold {fold_id}"
-        assert isinstance(
-            metrics["total_return"], (int, float)
-        ), f"WF_METRIC: Total return should be numeric in fold {fold_id}"
-        assert isinstance(
-            metrics["volatility"], (int, float)
-        ), f"WF_METRIC: Volatility should be numeric in fold {fold_id}"
+        assert isinstance(metrics["sharpe_nw"], (int, float)), (
+            f"WF_METRIC: Sharpe should be numeric in fold {fold_id}"
+        )
+        assert isinstance(metrics["sortino"], (int, float)), (
+            f"WF_METRIC: Sortino should be numeric in fold {fold_id}"
+        )
+        assert isinstance(metrics["max_dd"], (int, float)), (
+            f"WF_METRIC: Max DD should be numeric in fold {fold_id}"
+        )
+        assert isinstance(metrics["hit_rate"], (int, float)), (
+            f"WF_METRIC: Hit rate should be numeric in fold {fold_id}"
+        )
+        assert isinstance(metrics["total_return"], (int, float)), (
+            f"WF_METRIC: Total return should be numeric in fold {fold_id}"
+        )
+        assert isinstance(metrics["volatility"], (int, float)), (
+            f"WF_METRIC: Volatility should be numeric in fold {fold_id}"
+        )
 
         # Verify metric value ranges
-        assert (
-            -np.inf < metrics["sharpe_nw"] < np.inf
-        ), f"WF_METRIC: Sharpe should be finite in fold {fold_id}"
-        assert (
-            -np.inf < metrics["sortino"] < np.inf
-        ), f"WF_METRIC: Sortino should be finite in fold {fold_id}"
-        assert (
-            -10 <= metrics["max_dd"] <= 0
-        ), f"WF_METRIC: Max DD should be in [-10, 0] in fold {fold_id}"
-        assert (
-            0 <= metrics["hit_rate"] <= 1
-        ), f"WF_METRIC: Hit rate should be in [0, 1] in fold {fold_id}"
-        assert (
-            -np.inf < metrics["total_return"] < np.inf
-        ), f"WF_METRIC: Total return should be finite in fold {fold_id}"
-        assert (
-            0 <= metrics["volatility"] < np.inf
-        ), f"WF_METRIC: Volatility should be non-negative in fold {fold_id}"
+        assert -np.inf < metrics["sharpe_nw"] < np.inf, (
+            f"WF_METRIC: Sharpe should be finite in fold {fold_id}"
+        )
+        assert -np.inf < metrics["sortino"] < np.inf, (
+            f"WF_METRIC: Sortino should be finite in fold {fold_id}"
+        )
+        assert -10 <= metrics["max_dd"] <= 0, (
+            f"WF_METRIC: Max DD should be in [-10, 0] in fold {fold_id}"
+        )
+        assert 0 <= metrics["hit_rate"] <= 1, (
+            f"WF_METRIC: Hit rate should be in [0, 1] in fold {fold_id}"
+        )
+        assert -np.inf < metrics["total_return"] < np.inf, (
+            f"WF_METRIC: Total return should be finite in fold {fold_id}"
+        )
+        assert 0 <= metrics["volatility"] < np.inf, (
+            f"WF_METRIC: Volatility should be non-negative in fold {fold_id}"
+        )
 
 
 def test_trade_consistency():
@@ -214,48 +210,38 @@ def test_trade_consistency():
 
     # Check trade consistency
     for fold_id, metrics, trades in results:
-        assert isinstance(
-            trades, list
-        ), f"WF_TRADE: Trades should be list in fold {fold_id}"
+        assert isinstance(trades, list), f"WF_TRADE: Trades should be list in fold {fold_id}"
 
         # Check trade structure (simplified format)
         for trade in trades:
             expected_trade_keys = ["count", "wins", "losses", "median_hold"]
             for key in expected_trade_keys:
-                assert (
-                    key in trade
-                ), f"WF_TRADE: Missing trade key '{key}' in fold {fold_id}"
+                assert key in trade, f"WF_TRADE: Missing trade key '{key}' in fold {fold_id}"
 
             # Verify trade value types
-            assert isinstance(
-                trade["count"], int
-            ), f"WF_TRADE: Count should be int in fold {fold_id}"
-            assert isinstance(
-                trade["wins"], int
-            ), f"WF_TRADE: Wins should be int in fold {fold_id}"
-            assert isinstance(
-                trade["losses"], int
-            ), f"WF_TRADE: Losses should be int in fold {fold_id}"
-            assert isinstance(
-                trade["median_hold"], int
-            ), f"WF_TRADE: Median hold should be int in fold {fold_id}"
+            assert isinstance(trade["count"], int), (
+                f"WF_TRADE: Count should be int in fold {fold_id}"
+            )
+            assert isinstance(trade["wins"], int), f"WF_TRADE: Wins should be int in fold {fold_id}"
+            assert isinstance(trade["losses"], int), (
+                f"WF_TRADE: Losses should be int in fold {fold_id}"
+            )
+            assert isinstance(trade["median_hold"], int), (
+                f"WF_TRADE: Median hold should be int in fold {fold_id}"
+            )
 
             # Verify trade value ranges
-            assert (
-                trade["count"] >= 0
-            ), f"WF_TRADE: Count should be non-negative in fold {fold_id}"
-            assert (
-                trade["wins"] >= 0
-            ), f"WF_TRADE: Wins should be non-negative in fold {fold_id}"
-            assert (
-                trade["losses"] >= 0
-            ), f"WF_TRADE: Losses should be non-negative in fold {fold_id}"
-            assert (
-                trade["median_hold"] >= 0
-            ), f"WF_TRADE: Median hold should be non-negative in fold {fold_id}"
-            assert (
-                trade["wins"] + trade["losses"] == trade["count"]
-            ), f"WF_TRADE: Wins + losses should equal count in fold {fold_id}"
+            assert trade["count"] >= 0, f"WF_TRADE: Count should be non-negative in fold {fold_id}"
+            assert trade["wins"] >= 0, f"WF_TRADE: Wins should be non-negative in fold {fold_id}"
+            assert trade["losses"] >= 0, (
+                f"WF_TRADE: Losses should be non-negative in fold {fold_id}"
+            )
+            assert trade["median_hold"] >= 0, (
+                f"WF_TRADE: Median hold should be non-negative in fold {fold_id}"
+            )
+            assert trade["wins"] + trade["losses"] == trade["count"], (
+                f"WF_TRADE: Wins + losses should equal count in fold {fold_id}"
+            )
 
 
 def test_metric_aggregation_accuracy():
@@ -279,30 +265,30 @@ def test_metric_aggregation_accuracy():
     trade_counts = [len(trades) for _, _, trades in results]
 
     # Verify aggregation accuracy
-    assert (
-        abs(summary["mean_sharpe"] - np.mean(sharpe_scores)) < 1e-10
-    ), "WF_ACCURACY: Mean Sharpe aggregation error"
-    assert (
-        abs(summary["mean_sortino"] - np.mean(sortino_scores)) < 1e-10
-    ), "WF_ACCURACY: Mean Sortino aggregation error"
-    assert (
-        abs(summary["mean_max_dd"] - np.mean(max_dds)) < 1e-10
-    ), "WF_ACCURACY: Mean Max DD aggregation error"
-    assert (
-        abs(summary["mean_hit_rate"] - np.mean(hit_rates)) < 1e-10
-    ), "WF_ACCURACY: Mean Hit Rate aggregation error"
-    assert (
-        abs(summary["mean_total_return"] - np.mean(total_returns)) < 1e-10
-    ), "WF_ACCURACY: Mean Total Return aggregation error"
-    assert (
-        abs(summary["mean_volatility"] - np.mean(volatilities)) < 1e-10
-    ), "WF_ACCURACY: Mean Volatility aggregation error"
-    assert summary["total_trades"] == sum(
-        trade_counts
-    ), "WF_ACCURACY: Total trades aggregation error"
-    assert summary["positive_sharpe_folds"] == sum(
-        1 for s in sharpe_scores if s > 0
-    ), "WF_ACCURACY: Positive Sharpe folds aggregation error"
+    assert abs(summary["mean_sharpe"] - np.mean(sharpe_scores)) < 1e-10, (
+        "WF_ACCURACY: Mean Sharpe aggregation error"
+    )
+    assert abs(summary["mean_sortino"] - np.mean(sortino_scores)) < 1e-10, (
+        "WF_ACCURACY: Mean Sortino aggregation error"
+    )
+    assert abs(summary["mean_max_dd"] - np.mean(max_dds)) < 1e-10, (
+        "WF_ACCURACY: Mean Max DD aggregation error"
+    )
+    assert abs(summary["mean_hit_rate"] - np.mean(hit_rates)) < 1e-10, (
+        "WF_ACCURACY: Mean Hit Rate aggregation error"
+    )
+    assert abs(summary["mean_total_return"] - np.mean(total_returns)) < 1e-10, (
+        "WF_ACCURACY: Mean Total Return aggregation error"
+    )
+    assert abs(summary["mean_volatility"] - np.mean(volatilities)) < 1e-10, (
+        "WF_ACCURACY: Mean Volatility aggregation error"
+    )
+    assert summary["total_trades"] == sum(trade_counts), (
+        "WF_ACCURACY: Total trades aggregation error"
+    )
+    assert summary["positive_sharpe_folds"] == sum(1 for s in sharpe_scores if s > 0), (
+        "WF_ACCURACY: Positive Sharpe folds aggregation error"
+    )
 
 
 def test_metric_statistics_consistency():
@@ -324,21 +310,21 @@ def test_metric_statistics_consistency():
     total_returns = [metrics["total_return"] for _, metrics, _ in results]
 
     # Verify standard deviation calculations
-    assert (
-        abs(summary["std_sharpe"] - np.std(sharpe_scores)) < 1e-10
-    ), "WF_STATS: Sharpe std aggregation error"
-    assert (
-        abs(summary["std_sortino"] - np.std(sortino_scores)) < 1e-10
-    ), "WF_STATS: Sortino std aggregation error"
-    assert (
-        abs(summary["std_max_dd"] - np.std(max_dds)) < 1e-10
-    ), "WF_STATS: Max DD std aggregation error"
-    assert (
-        abs(summary["std_hit_rate"] - np.std(hit_rates)) < 1e-10
-    ), "WF_STATS: Hit Rate std aggregation error"
-    assert (
-        abs(summary["std_total_return"] - np.std(total_returns)) < 1e-10
-    ), "WF_STATS: Total Return std aggregation error"
+    assert abs(summary["std_sharpe"] - np.std(sharpe_scores)) < 1e-10, (
+        "WF_STATS: Sharpe std aggregation error"
+    )
+    assert abs(summary["std_sortino"] - np.std(sortino_scores)) < 1e-10, (
+        "WF_STATS: Sortino std aggregation error"
+    )
+    assert abs(summary["std_max_dd"] - np.std(max_dds)) < 1e-10, (
+        "WF_STATS: Max DD std aggregation error"
+    )
+    assert abs(summary["std_hit_rate"] - np.std(hit_rates)) < 1e-10, (
+        "WF_STATS: Hit Rate std aggregation error"
+    )
+    assert abs(summary["std_total_return"] - np.std(total_returns)) < 1e-10, (
+        "WF_STATS: Total Return std aggregation error"
+    )
 
 
 def test_winning_trades_calculation():
@@ -359,9 +345,9 @@ def test_winning_trades_calculation():
         n_trades = len(trades)
         manual_winning_trades += int(hit_rate * n_trades)
 
-    assert (
-        summary["winning_trades"] == manual_winning_trades
-    ), "WF_WINNING: Winning trades calculation error"
+    assert summary["winning_trades"] == manual_winning_trades, (
+        "WF_WINNING: Winning trades calculation error"
+    )
 
 
 def test_metric_bounds():
@@ -376,33 +362,21 @@ def test_metric_bounds():
     summary = aggregate_fold_metrics(results)
 
     # Check metric bounds
-    assert (
-        -10 < summary["mean_sharpe"] < 10
-    ), "WF_BOUNDS: Mean Sharpe out of reasonable bounds"
-    assert (
-        -10 < summary["mean_sortino"] < 10
-    ), "WF_BOUNDS: Mean Sortino out of reasonable bounds"
-    assert (
-        -1 <= summary["mean_max_dd"] <= 0
-    ), "WF_BOUNDS: Mean Max DD out of reasonable bounds"
-    assert (
-        0 <= summary["mean_hit_rate"] <= 1
-    ), "WF_BOUNDS: Mean Hit Rate out of reasonable bounds"
-    assert (
-        -10 < summary["mean_total_return"] < 10
-    ), "WF_BOUNDS: Mean Total Return out of reasonable bounds"
-    assert (
-        0 <= summary["mean_volatility"] < 1000
-    ), "WF_BOUNDS: Mean Volatility out of reasonable bounds"
-    assert (
-        summary["total_trades"] >= 0
-    ), "WF_BOUNDS: Total trades should be non-negative"
-    assert (
-        summary["winning_trades"] >= 0
-    ), "WF_BOUNDS: Winning trades should be non-negative"
-    assert (
-        summary["positive_sharpe_folds"] >= 0
-    ), "WF_BOUNDS: Positive Sharpe folds should be non-negative"
+    assert -10 < summary["mean_sharpe"] < 10, "WF_BOUNDS: Mean Sharpe out of reasonable bounds"
+    assert -10 < summary["mean_sortino"] < 10, "WF_BOUNDS: Mean Sortino out of reasonable bounds"
+    assert -1 <= summary["mean_max_dd"] <= 0, "WF_BOUNDS: Mean Max DD out of reasonable bounds"
+    assert 0 <= summary["mean_hit_rate"] <= 1, "WF_BOUNDS: Mean Hit Rate out of reasonable bounds"
+    assert -10 < summary["mean_total_return"] < 10, (
+        "WF_BOUNDS: Mean Total Return out of reasonable bounds"
+    )
+    assert 0 <= summary["mean_volatility"] < 1000, (
+        "WF_BOUNDS: Mean Volatility out of reasonable bounds"
+    )
+    assert summary["total_trades"] >= 0, "WF_BOUNDS: Total trades should be non-negative"
+    assert summary["winning_trades"] >= 0, "WF_BOUNDS: Winning trades should be non-negative"
+    assert summary["positive_sharpe_folds"] >= 0, (
+        "WF_BOUNDS: Positive Sharpe folds should be non-negative"
+    )
 
 
 def test_empty_results_handling():
@@ -434,19 +408,13 @@ def test_single_fold_consistency():
 
     # Single fold metrics should match summary
     fold_id, metrics, trades = results[0]
-    assert (
-        abs(summary["mean_sharpe"] - metrics["sharpe_nw"]) < 1e-10
-    ), "WF_SINGLE: Sharpe mismatch"
-    assert (
-        abs(summary["mean_sortino"] - metrics["sortino"]) < 1e-10
-    ), "WF_SINGLE: Sortino mismatch"
-    assert (
-        abs(summary["mean_max_dd"] - metrics["max_dd"]) < 1e-10
-    ), "WF_SINGLE: Max DD mismatch"
-    assert (
-        abs(summary["mean_hit_rate"] - metrics["hit_rate"]) < 1e-10
-    ), "WF_SINGLE: Hit Rate mismatch"
-    assert (
-        abs(summary["mean_total_return"] - metrics["total_return"]) < 1e-10
-    ), "WF_SINGLE: Total Return mismatch"
+    assert abs(summary["mean_sharpe"] - metrics["sharpe_nw"]) < 1e-10, "WF_SINGLE: Sharpe mismatch"
+    assert abs(summary["mean_sortino"] - metrics["sortino"]) < 1e-10, "WF_SINGLE: Sortino mismatch"
+    assert abs(summary["mean_max_dd"] - metrics["max_dd"]) < 1e-10, "WF_SINGLE: Max DD mismatch"
+    assert abs(summary["mean_hit_rate"] - metrics["hit_rate"]) < 1e-10, (
+        "WF_SINGLE: Hit Rate mismatch"
+    )
+    assert abs(summary["mean_total_return"] - metrics["total_return"]) < 1e-10, (
+        "WF_SINGLE: Total Return mismatch"
+    )
     assert summary["total_trades"] == len(trades), "WF_SINGLE: Trade count mismatch"

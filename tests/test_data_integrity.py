@@ -9,7 +9,7 @@ import os
 import sys
 import tempfile
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from unittest.mock import patch
 
@@ -258,9 +258,7 @@ class TestDataSanity:
         if corruption_type == "lookahead_contamination":
             # Add lookahead contamination
             data["Returns"] = np.log(data["Close"] / data["Close"].shift(1))
-            data.loc[data.index[5], "Returns"] = data.loc[
-                data.index[6], "Returns"
-            ]  # Lookahead
+            data.loc[data.index[5], "Returns"] = data.loc[data.index[6], "Returns"]  # Lookahead
 
         # Set Date as index for validation
         data = data.set_index("Date")
@@ -271,13 +269,11 @@ class TestDataSanity:
         self, size: int = 100, freq: str = "D", clean: bool = True
     ) -> pd.DataFrame:
         """Create test data of specified size and frequency."""
-        dates = pd.date_range("2023-01-01", periods=size, freq=freq, tz=timezone.utc)
+        dates = pd.date_range("2023-01-01", periods=size, freq=freq, tz=UTC)
 
         # Generate realistic price data
         np.random.seed(42)
-        returns = np.random.normal(
-            0.0005, 0.015, size
-        )  # 0.05% daily return, 1.5% volatility
+        returns = np.random.normal(0.0005, 0.015, size)  # 0.05% daily return, 1.5% volatility
         prices = 100 * np.exp(np.cumsum(returns))
 
         data = pd.DataFrame(
@@ -325,30 +321,26 @@ class TestDataSanity:
         data = self.create_corrupt_data(corruption_type)
 
         # Test with warn mode
-        clean_data, result = self.validator.validate_and_repair(
-            data, f"TEST_{corruption_type}"
-        )
+        clean_data, result = self.validator.validate_and_repair(data, f"TEST_{corruption_type}")
 
         # Should have monotonic timestamps
-        assert (
-            clean_data.index.is_monotonic_increasing
-        ), f"Timestamps should be monotonic for {corruption_type}"
+        assert clean_data.index.is_monotonic_increasing, (
+            f"Timestamps should be monotonic for {corruption_type}"
+        )
 
         # Should be UTC
-        assert (
-            clean_data.index.tz == timezone.utc
-        ), f"Timestamps should be UTC for {corruption_type}"
+        assert clean_data.index.tz == UTC, f"Timestamps should be UTC for {corruption_type}"
 
         # Should have no duplicates
-        assert (
-            not clean_data.index.duplicated().any()
-        ), f"Should have no duplicate timestamps for {corruption_type}"
+        assert not clean_data.index.duplicated().any(), (
+            f"Should have no duplicate timestamps for {corruption_type}"
+        )
 
         # Should have fewer rows only if duplicates were present
         if corruption_type == "duplicate_timestamps":
-            assert len(clean_data) < len(
-                data
-            ), f"Should remove duplicate timestamps for {corruption_type}"
+            assert len(clean_data) < len(data), (
+                f"Should remove duplicate timestamps for {corruption_type}"
+            )
         else:
             # For non-monotonic and mixed_timezones, should preserve data but fix issues
             assert len(clean_data) > 0, f"Should have data for {corruption_type}"
@@ -360,17 +352,13 @@ class TestDataSanity:
         """Test time series validation with different data sizes."""
         data = self.create_test_data(size, clean=False)
 
-        clean_data, result = self.validator.validate_and_repair(
-            data, f"TEST_SIZE_{size}"
-        )
+        clean_data, result = self.validator.validate_and_repair(data, f"TEST_SIZE_{size}")
 
         # Basic validation should pass
-        assert (
-            clean_data.index.is_monotonic_increasing
-        ), f"Timestamps should be monotonic for size {size}"
-        assert (
-            clean_data.index.tz == timezone.utc
-        ), f"Timestamps should be UTC for size {size}"
+        assert clean_data.index.is_monotonic_increasing, (
+            f"Timestamps should be monotonic for size {size}"
+        )
+        assert clean_data.index.tz == UTC, f"Timestamps should be UTC for size {size}"
         assert len(clean_data) > 0, f"Should have data for size {size}"
 
     @pytest.mark.data_sanity
@@ -380,31 +368,27 @@ class TestDataSanity:
         """Test price validation and repair for different corruption types."""
         data = self.create_corrupt_data(corruption_type)
 
-        clean_data, result = self.validator.validate_and_repair(
-            data, f"TEST_{corruption_type}"
-        )
+        clean_data, result = self.validator.validate_and_repair(data, f"TEST_{corruption_type}")
 
         # Check price bounds (after validation, prices should be within bounds)
         finite_prices = clean_data["Close"].dropna()
-        assert (
-            finite_prices <= 1000000.0
-        ).all(), f"Prices should be within bounds for {corruption_type}"
-        assert (
-            finite_prices >= 0.01
-        ).all(), f"Prices should be positive for {corruption_type}"
+        assert (finite_prices <= 1000000.0).all(), (
+            f"Prices should be within bounds for {corruption_type}"
+        )
+        assert (finite_prices >= 0.01).all(), f"Prices should be positive for {corruption_type}"
 
         # Check for finite values (should be all finite after validation)
-        assert np.isfinite(
-            clean_data["Close"]
-        ).all(), f"All prices should be finite for {corruption_type}"
+        assert np.isfinite(clean_data["Close"]).all(), (
+            f"All prices should be finite for {corruption_type}"
+        )
 
         # Check that extreme prices were handled
-        assert (
-            clean_data["Close"].max() <= 1000000.0
-        ), f"Extreme prices should be capped for {corruption_type}"
-        assert (
-            clean_data["Close"].min() >= 0.01
-        ), f"Zero prices should be fixed for {corruption_type}"
+        assert clean_data["Close"].max() <= 1000000.0, (
+            f"Extreme prices should be capped for {corruption_type}"
+        )
+        assert clean_data["Close"].min() >= 0.01, (
+            f"Zero prices should be fixed for {corruption_type}"
+        )
 
     @pytest.mark.data_sanity
     @pytest.mark.validation
@@ -427,16 +411,10 @@ class TestDataSanity:
     @pytest.mark.property
     @pytest.mark.skipif(not HYPOTHESIS_AVAILABLE, reason="Hypothesis not available")
     @settings(verbosity=Verbosity.quiet, max_examples=50)
-    @given(
-        st.lists(
-            st.floats(min_value=0.01, max_value=1000000.0), min_size=5, max_size=20
-        )
-    )
+    @given(st.lists(st.floats(min_value=0.01, max_value=1000000.0), min_size=5, max_size=20))
     def test_property_based_price_validation(self, prices):
         """Property-based test for price validation with valid prices."""
-        dates = pd.date_range(
-            "2023-01-01", periods=len(prices), freq="D", tz=timezone.utc
-        )
+        dates = pd.date_range("2023-01-01", periods=len(prices), freq="D", tz=UTC)
 
         data = pd.DataFrame(
             {
@@ -461,9 +439,7 @@ class TestDataSanity:
     @given(st.lists(st.floats(min_value=1e10, max_value=1e12), min_size=1, max_size=5))
     def test_property_based_extreme_price_detection(self, extreme_prices):
         """Property-based test for extreme price detection."""
-        dates = pd.date_range(
-            "2023-01-01", periods=len(extreme_prices), freq="D", tz=timezone.utc
-        )
+        dates = pd.date_range("2023-01-01", periods=len(extreme_prices), freq="D", tz=UTC)
 
         data = pd.DataFrame(
             {
@@ -480,9 +456,7 @@ class TestDataSanity:
         try:
             clean_data = self.wrapper.validate_dataframe(data, "EXTREME_TEST")
             # If repair mode, should clip to bounds
-            assert (
-                clean_data["Close"].max() <= 1000000.0
-            ), "Extreme prices should be clipped"
+            assert clean_data["Close"].max() <= 1000000.0, "Extreme prices should be clipped"
         except DataSanityError:
             # If fail mode, should raise exception
             pass
@@ -494,30 +468,28 @@ class TestDataSanity:
         """Test OHLC consistency validation and repair."""
         data = self.create_corrupt_data(corruption_type)
 
-        clean_data, result = self.validator.validate_and_repair(
-            data, f"TEST_{corruption_type}"
-        )
+        clean_data, result = self.validator.validate_and_repair(data, f"TEST_{corruption_type}")
 
         # Check OHLC relationships (after repair, these should be consistent)
-        assert (
-            clean_data["High"] >= clean_data["Open"]
-        ).all(), f"High should be >= Open for {corruption_type}"
-        assert (
-            clean_data["High"] >= clean_data["Close"]
-        ).all(), f"High should be >= Close for {corruption_type}"
-        assert (
-            clean_data["Low"] <= clean_data["Open"]
-        ).all(), f"Low should be <= Open for {corruption_type}"
-        assert (
-            clean_data["Low"] <= clean_data["Close"]
-        ).all(), f"Low should be <= Close for {corruption_type}"
+        assert (clean_data["High"] >= clean_data["Open"]).all(), (
+            f"High should be >= Open for {corruption_type}"
+        )
+        assert (clean_data["High"] >= clean_data["Close"]).all(), (
+            f"High should be >= Close for {corruption_type}"
+        )
+        assert (clean_data["Low"] <= clean_data["Open"]).all(), (
+            f"Low should be <= Open for {corruption_type}"
+        )
+        assert (clean_data["Low"] <= clean_data["Close"]).all(), (
+            f"Low should be <= Close for {corruption_type}"
+        )
 
         # Check high-low spread (after repair, should be reasonable)
         spread = (clean_data["High"] - clean_data["Low"]) / clean_data["Close"]
         reasonable_spreads = spread <= 1.0  # Allow up to 100% spread
-        assert (
-            reasonable_spreads.sum() >= len(spread) * 0.95
-        ), f"At least 95% of spreads should be reasonable for {corruption_type}"
+        assert reasonable_spreads.sum() >= len(spread) * 0.95, (
+            f"At least 95% of spreads should be reasonable for {corruption_type}"
+        )
 
     @pytest.mark.data_sanity
     @pytest.mark.property
@@ -526,9 +498,7 @@ class TestDataSanity:
     @given(st.lists(st.floats(min_value=10, max_value=1000), min_size=5, max_size=15))
     def test_property_based_ohlc_validation(self, base_prices):
         """Property-based test for OHLC validation."""
-        dates = pd.date_range(
-            "2023-01-01", periods=len(base_prices), freq="D", tz=timezone.utc
-        )
+        dates = pd.date_range("2023-01-01", periods=len(base_prices), freq="D", tz=UTC)
 
         # Create OHLC data with some violations
         data = pd.DataFrame(
@@ -543,26 +513,20 @@ class TestDataSanity:
         )
 
         # Add some OHLC violations
-        data.loc[data.index[0], "High"] = (
-            data.loc[data.index[0], "Low"] - 1
-        )  # High < Low
-        data.loc[data.index[1], "Low"] = (
-            data.loc[data.index[1], "High"] + 1
-        )  # Low > High
+        data.loc[data.index[0], "High"] = data.loc[data.index[0], "Low"] - 1  # High < Low
+        data.loc[data.index[1], "Low"] = data.loc[data.index[1], "High"] + 1  # Low > High
 
         # Should repair OHLC violations
         clean_data = self.wrapper.validate_dataframe(data, "PROPERTY_OHLC_TEST")
 
         # Check OHLC relationships after repair
-        assert (
-            clean_data["High"] >= clean_data["Low"]
-        ).all(), "High should be >= Low after repair"
-        assert (
-            clean_data["High"] >= clean_data["Open"]
-        ).all(), "High should be >= Open after repair"
-        assert (
-            clean_data["High"] >= clean_data["Close"]
-        ).all(), "High should be >= Close after repair"
+        assert (clean_data["High"] >= clean_data["Low"]).all(), "High should be >= Low after repair"
+        assert (clean_data["High"] >= clean_data["Open"]).all(), (
+            "High should be >= Open after repair"
+        )
+        assert (clean_data["High"] >= clean_data["Close"]).all(), (
+            "High should be >= Close after repair"
+        )
 
     @pytest.mark.data_sanity
     @pytest.mark.perf
@@ -578,9 +542,7 @@ class TestDataSanity:
 
         # Measure validation time
         start_time = time.time()
-        clean_data, result = self.validator.validate_and_repair(
-            data, f"PERF_TEST_{size}"
-        )
+        clean_data, result = self.validator.validate_and_repair(data, f"PERF_TEST_{size}")
         validation_time = time.time() - start_time
 
         # Measure memory usage after
@@ -588,18 +550,16 @@ class TestDataSanity:
         memory_increase = memory_after - memory_before
 
         # Performance assertions
-        assert (
-            validation_time < 10.0
-        ), f"Validation took {validation_time:.2f}s for size {size}, expected < 10.0s"
-        assert (
-            memory_increase < 1000.0
-        ), f"Memory increase {memory_increase:.2f}MB for size {size}, expected < 1000MB"
+        assert validation_time < 10.0, (
+            f"Validation took {validation_time:.2f}s for size {size}, expected < 10.0s"
+        )
+        assert memory_increase < 1000.0, (
+            f"Memory increase {memory_increase:.2f}MB for size {size}, expected < 1000MB"
+        )
         assert len(clean_data) > 0, f"Should have data for size {size}"
 
         # Log performance metrics
-        print(
-            f"Size {size}: Time={validation_time:.3f}s, Memory={memory_increase:.2f}MB"
-        )
+        print(f"Size {size}: Time={validation_time:.3f}s, Memory={memory_increase:.2f}MB")
 
     @pytest.mark.data_sanity
     @pytest.mark.perf
@@ -621,9 +581,9 @@ class TestDataSanity:
         validation_time = time.time() - start_time
 
         # All modes should complete within reasonable time
-        assert (
-            validation_time < 5.0
-        ), f"Repair mode {repair_mode} took {validation_time:.2f}s, expected < 5.0s"
+        assert validation_time < 5.0, (
+            f"Repair mode {repair_mode} took {validation_time:.2f}s, expected < 5.0s"
+        )
         assert len(clean_data) > 0, f"Should have data for repair mode {repair_mode}"
 
     @pytest.mark.data_sanity
@@ -639,14 +599,12 @@ class TestDataSanity:
         validation_time = time.time() - start_time
 
         # Should handle large dataset
-        assert (
-            validation_time < 60.0
-        ), f"Large dataset validation took {validation_time:.2f}s, expected < 60.0s"
+        assert validation_time < 60.0, (
+            f"Large dataset validation took {validation_time:.2f}s, expected < 60.0s"
+        )
         assert len(clean_data) > 0, "Should have data after stress test"
         # Check that extreme prices were handled (either clipped or removed)
-        assert (
-            clean_data["Close"].max() <= 1000000.0
-        ), "Extreme prices should be handled"
+        assert clean_data["Close"].max() <= 1000000.0, "Extreme prices should be handled"
 
     @pytest.mark.data_sanity
     @pytest.mark.validation
@@ -655,27 +613,25 @@ class TestDataSanity:
         """Test volume validation and repair."""
         data = self.create_corrupt_data(corruption_type)
 
-        clean_data, result = self.validator.validate_and_repair(
-            data, f"TEST_{corruption_type}"
-        )
+        clean_data, result = self.validator.validate_and_repair(data, f"TEST_{corruption_type}")
 
         # Check volume bounds
-        assert (
-            clean_data["Volume"] >= 0
-        ).all(), f"Volume should be non-negative for {corruption_type}"
-        assert (
-            clean_data["Volume"] <= 1000000000000
-        ).all(), f"Volume should be within bounds for {corruption_type}"
+        assert (clean_data["Volume"] >= 0).all(), (
+            f"Volume should be non-negative for {corruption_type}"
+        )
+        assert (clean_data["Volume"] <= 1000000000000).all(), (
+            f"Volume should be within bounds for {corruption_type}"
+        )
 
         # Check for finite values
-        assert np.isfinite(
-            clean_data["Volume"]
-        ).all(), f"All volume should be finite for {corruption_type}"
+        assert np.isfinite(clean_data["Volume"]).all(), (
+            f"All volume should be finite for {corruption_type}"
+        )
 
         # Check that zero volume was handled
-        assert (
-            clean_data["Volume"] > 0
-        ).all(), f"Zero volume should be replaced for {corruption_type}"
+        assert (clean_data["Volume"] > 0).all(), (
+            f"Zero volume should be replaced for {corruption_type}"
+        )
 
     @pytest.mark.data_sanity
     @pytest.mark.edge_case
@@ -694,14 +650,10 @@ class TestDataSanity:
             data = self.create_test_data(size)
 
             # Should handle small data sizes
-            clean_data, result = self.validator.validate_and_repair(
-                data, f"SMALL_TEST_{size}"
-            )
+            clean_data, result = self.validator.validate_and_repair(data, f"SMALL_TEST_{size}")
             assert len(clean_data) > 0, f"Should have data for size {size}"
             if size >= 2:
-                assert (
-                    "Returns" in clean_data.columns
-                ), f"Should calculate returns for size {size}"
+                assert "Returns" in clean_data.columns, f"Should calculate returns for size {size}"
             else:
                 # For size 1, returns might not be calculated due to insufficient data
                 pass
@@ -721,7 +673,7 @@ class TestDataSanity:
         """Test falsification scenarios that should always fail."""
         if scenario == "extreme_negative_prices":
             # Create data with extreme negative prices
-            dates = pd.date_range("2023-01-01", periods=10, freq="D", tz=timezone.utc)
+            dates = pd.date_range("2023-01-01", periods=10, freq="D", tz=UTC)
             data = pd.DataFrame(
                 {
                     "Open": [
@@ -778,25 +730,21 @@ class TestDataSanity:
             )
 
             # Should handle negative prices by clipping them
-            clean_data, result = self.validator.validate_and_repair(
-                data, "FALSIFY_NEGATIVE"
+            clean_data, result = self.validator.validate_and_repair(data, "FALSIFY_NEGATIVE")
+            assert (clean_data["Close"] >= 0.01).all(), (
+                "Negative prices should be clipped to minimum"
             )
-            assert (
-                clean_data["Close"] >= 0.01
-            ).all(), "Negative prices should be clipped to minimum"
-            assert (
-                clean_data["Open"] >= 0.01
-            ).all(), "Negative prices should be clipped to minimum"
-            assert (
-                clean_data["High"] >= 0.01
-            ).all(), "Negative prices should be clipped to minimum"
-            assert (
-                clean_data["Low"] >= 0.01
-            ).all(), "Negative prices should be clipped to minimum"
+            assert (clean_data["Open"] >= 0.01).all(), (
+                "Negative prices should be clipped to minimum"
+            )
+            assert (clean_data["High"] >= 0.01).all(), (
+                "Negative prices should be clipped to minimum"
+            )
+            assert (clean_data["Low"] >= 0.01).all(), "Negative prices should be clipped to minimum"
 
         elif scenario == "impossible_ohlc":
             # Create data with impossible OHLC relationships
-            dates = pd.date_range("2023-01-01", periods=10, freq="D", tz=timezone.utc)
+            dates = pd.date_range("2023-01-01", periods=10, freq="D", tz=UTC)
             data = pd.DataFrame(
                 {
                     "Open": [100.0] * 10,
@@ -810,23 +758,21 @@ class TestDataSanity:
 
             # Should fail or repair OHLC violations
             try:
-                clean_data, result = self.validator.validate_and_repair(
-                    data, "FALSIFY_OHLC"
-                )
+                clean_data, result = self.validator.validate_and_repair(data, "FALSIFY_OHLC")
                 # If repair mode, check that violations were fixed
-                assert (
-                    clean_data["High"] >= clean_data["Open"]
-                ).all(), "OHLC violations should be repaired"
-                assert (
-                    clean_data["Low"] <= clean_data["Open"]
-                ).all(), "OHLC violations should be repaired"
+                assert (clean_data["High"] >= clean_data["Open"]).all(), (
+                    "OHLC violations should be repaired"
+                )
+                assert (clean_data["Low"] <= clean_data["Open"]).all(), (
+                    "OHLC violations should be repaired"
+                )
             except DataSanityError:
                 # If fail mode, exception is expected
                 pass
 
         elif scenario == "future_contamination":
             # Create data with future contamination
-            dates = pd.date_range("2023-01-01", periods=10, freq="D", tz=timezone.utc)
+            dates = pd.date_range("2023-01-01", periods=10, freq="D", tz=UTC)
             data = pd.DataFrame(
                 {
                     "Open": [100.0 + i for i in range(10)],
@@ -840,21 +786,15 @@ class TestDataSanity:
 
             # Add lookahead contamination
             data["Returns"] = np.log(data["Close"] / data["Close"].shift(1))
-            data.loc[data.index[5], "Returns"] = data.loc[
-                data.index[6], "Returns"
-            ]  # Lookahead
+            data.loc[data.index[5], "Returns"] = data.loc[data.index[6], "Returns"]  # Lookahead
 
             # Should detect or handle lookahead
-            clean_data, result = self.validator.validate_and_repair(
-                data, "FALSIFY_LOOKAHEAD"
-            )
-            assert (
-                "Returns" in clean_data.columns
-            ), "Should handle lookahead contamination"
+            clean_data, result = self.validator.validate_and_repair(data, "FALSIFY_LOOKAHEAD")
+            assert "Returns" in clean_data.columns, "Should handle lookahead contamination"
 
         elif scenario == "invalid_dtypes":
             # Create data with invalid data types
-            dates = pd.date_range("2023-01-01", periods=10, freq="D", tz=timezone.utc)
+            dates = pd.date_range("2023-01-01", periods=10, freq="D", tz=UTC)
             data = pd.DataFrame(
                 {
                     "Open": ["invalid"] * 10,  # String instead of float
@@ -868,13 +808,11 @@ class TestDataSanity:
 
             # Should handle invalid dtypes by converting or failing gracefully
             try:
-                clean_data, result = self.validator.validate_and_repair(
-                    data, "FALSIFY_DTYPE"
-                )
+                clean_data, result = self.validator.validate_and_repair(data, "FALSIFY_DTYPE")
                 # If it succeeds, check that data was converted
-                assert pd.api.types.is_numeric_dtype(
-                    clean_data["Open"]
-                ), "Invalid dtypes should be converted"
+                assert pd.api.types.is_numeric_dtype(clean_data["Open"]), (
+                    "Invalid dtypes should be converted"
+                )
             except (DataSanityError, TypeError, ValueError):
                 # If it fails, that's also acceptable for invalid dtypes
                 pass
@@ -973,16 +911,16 @@ class TestDataSanity:
 
         # Should convert to UTC
         clean_data = self.wrapper.validate_dataframe(data, "TZ_TEST")
-        assert clean_data.index.tz == timezone.utc
+        assert clean_data.index.tz == UTC
 
         # Test mixed timezones
-        mixed_dates = pd.date_range("2023-01-01", periods=10, freq="D", tz=timezone.utc)
+        mixed_dates = pd.date_range("2023-01-01", periods=10, freq="D", tz=UTC)
         mixed_dates = mixed_dates.tz_localize(None)  # Make some naive
         data.index = mixed_dates
 
         # Should handle mixed timezones
         clean_data = self.wrapper.validate_dataframe(data, "MIXED_TZ_TEST")
-        assert clean_data.index.tz == timezone.utc
+        assert clean_data.index.tz == UTC
 
     @pytest.mark.data_sanity
     @pytest.mark.edge_case
@@ -1024,9 +962,7 @@ class TestDataSanity:
         # Check that outliers were handled
         # The test data has 1000.0 and 0.001 as outliers
         # In warn mode, these should be clipped to bounds
-        assert (
-            clean_data["Close"].max() <= 1000000.0
-        ), "Outliers should be clipped to bounds"
+        assert clean_data["Close"].max() <= 1000000.0, "Outliers should be clipped to bounds"
         assert clean_data["Close"].min() >= 0.01, "Outliers should be clipped to bounds"
 
     def test_returns_calculation(self):
@@ -1046,9 +982,7 @@ class TestDataSanity:
         max_return = self.validator.config["price_limits"]["max_daily_return"]
         # Some returns may be winsorized, so check they're within bounds
         finite_returns = clean_data["Returns"].dropna()
-        assert (
-            np.abs(finite_returns) <= max_return
-        ).all(), "Returns should be within bounds"
+        assert (np.abs(finite_returns) <= max_return).all(), "Returns should be within bounds"
 
         # Check returns are log returns (skip first NaN and winsorized values)
         expected_returns = np.log(clean_data["Close"] / clean_data["Close"].shift(1))
@@ -1112,9 +1046,7 @@ class TestDataSanity:
         assert len(clean_data) <= len(data), "Should not add rows in winsorize mode"
 
         # Extreme values should be winsorized
-        assert (
-            clean_data["Close"].max() <= 1000000.0
-        ), "Extreme values should be winsorized"
+        assert clean_data["Close"].max() <= 1000000.0, "Extreme values should be winsorized"
 
     def test_file_loading(self):
         """Test loading and validating data from files."""
@@ -1128,9 +1060,7 @@ class TestDataSanity:
 
         # Should be cleaned
         assert len(clean_data) < len(data), "Should clean corrupt data"
-        assert (
-            clean_data.index.is_monotonic_increasing
-        ), "Should have monotonic timestamps"
+        assert clean_data.index.is_monotonic_increasing, "Should have monotonic timestamps"
 
     def test_validation_stats(self):
         """Test validation statistics tracking."""
@@ -1155,9 +1085,7 @@ class TestDataSanity:
 
         # Should be cleaned
         assert len(clean_data) < len(data), "Should clean corrupt data"
-        assert (
-            clean_data.index.is_monotonic_increasing
-        ), "Should have monotonic timestamps"
+        assert clean_data.index.is_monotonic_increasing, "Should have monotonic timestamps"
 
     def test_edge_cases(self):
         """Test edge cases and error handling."""
@@ -1238,9 +1166,7 @@ def test_integration_with_existing_data_loaders():
 
     # Create realistic price data with some noise
     np.random.seed(42)
-    returns = np.random.normal(
-        0.0005, 0.015, len(dates)
-    )  # 0.05% daily return, 1.5% volatility
+    returns = np.random.normal(0.0005, 0.015, len(dates))  # 0.05% daily return, 1.5% volatility
     prices = base_price * np.exp(np.cumsum(returns))
 
     realistic_data = pd.DataFrame(
@@ -1250,9 +1176,7 @@ def test_integration_with_existing_data_loaders():
             "High": prices * (1 + np.abs(np.random.normal(0, 0.005, len(dates)))),
             "Low": prices * (1 - np.abs(np.random.normal(0, 0.005, len(dates)))),
             "Close": prices,
-            "Volume": np.random.lognormal(
-                13, 0.5, len(dates)
-            ),  # Realistic volume distribution
+            "Volume": np.random.lognormal(13, 0.5, len(dates)),  # Realistic volume distribution
         }
     )
 
@@ -1264,9 +1188,7 @@ def test_integration_with_existing_data_loaders():
     clean_data = validate_market_data(realistic_data, "REALISTIC")
 
     # Should pass validation with minimal changes
-    assert len(clean_data) == len(
-        realistic_data
-    ), "Realistic data should pass validation"
+    assert len(clean_data) == len(realistic_data), "Realistic data should pass validation"
     assert "Returns" in clean_data.columns, "Should calculate returns"
 
     # Check returns are reasonable
@@ -1291,7 +1213,7 @@ def test_real_world_data_scenarios():
     assert len(clean_spy) > 0, "Should have data"
     assert "Returns" in clean_spy.columns, "Should calculate returns"
     assert clean_spy.index.is_monotonic_increasing, "Should have monotonic timestamps"
-    assert clean_spy.index.tz == timezone.utc, "Should be UTC"
+    assert clean_spy.index.tz == UTC, "Should be UTC"
 
     # Test 2: Data with gaps (weekends)
     print("Testing data with gaps...")
@@ -1306,14 +1228,10 @@ def test_real_world_data_scenarios():
     symbols = ["SPY", "QQQ", "IWM"]
     for symbol in symbols:
         try:
-            data = yf.download(
-                symbol, start="2024-01-01", end="2024-01-15", progress=False
-            )
+            data = yf.download(symbol, start="2024-01-01", end="2024-01-15", progress=False)
             clean_data = data_sanity.validate_dataframe(data, symbol)
             assert len(clean_data) > 0, f"Should validate {symbol}"
-            assert (
-                "Returns" in clean_data.columns
-            ), f"Should calculate returns for {symbol}"
+            assert "Returns" in clean_data.columns, f"Should calculate returns for {symbol}"
         except Exception as e:
             print(f"Warning: Could not test {symbol}: {e}")
 
@@ -1346,9 +1264,7 @@ def test_data_sanity_integration_with_engines():
                 clean_data = data_sanity.validate_dataframe(data, symbol)
                 clean_data["Symbol"] = symbol
                 all_data.append(clean_data)
-                print(
-                    f"✅ Loaded and validated {len(clean_data)} data points for {symbol}"
-                )
+                print(f"✅ Loaded and validated {len(clean_data)} data points for {symbol}")
             else:
                 print(f"⚠️  No data for {symbol}")
 

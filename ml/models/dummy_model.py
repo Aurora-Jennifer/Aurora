@@ -9,5 +9,3 @@ class DummyModel:
         X = np.asarray(X, dtype="float64")
         # simple linear projection on last row
         return X[-1].dot(self.w) * np.ones(1)
-
-

@@ -158,9 +158,7 @@ class TestStrategySelector(unittest.TestCase):
         """Test parameter optimization."""
         # Test different regimes
         for regime in ["trend", "chop", "volatile"]:
-            params = self.selector._get_optimized_params(
-                "regime_aware_ensemble", regime, 0.02
-            )
+            params = self.selector._get_optimized_params("regime_aware_ensemble", regime, 0.02)
             self.assertIn("confidence_threshold", params)
             self.assertIn("trend_following_weight", params)
             self.assertIn("mean_reversion_weight", params)
@@ -173,9 +171,7 @@ class TestStrategySelector(unittest.TestCase):
             "max_drawdown": -0.05,
         }
 
-        self.selector.update_performance_data(
-            "regime_aware_ensemble", "trend", performance_metrics
-        )
+        self.selector.update_performance_data("regime_aware_ensemble", "trend", performance_metrics)
 
         # Check if performance file was created
         performance_file = Path("results/strategy_performance.json")
@@ -329,16 +325,10 @@ def run_component_tests():
     test_suite = unittest.TestSuite()
 
     # Add test cases
-    test_suite.addTest(
-        unittest.TestLoader().loadTestsFromTestCase(TestGrowthTargetCalculator)
-    )
-    test_suite.addTest(
-        unittest.TestLoader().loadTestsFromTestCase(TestStrategySelector)
-    )
+    test_suite.addTest(unittest.TestLoader().loadTestsFromTestCase(TestGrowthTargetCalculator))
+    test_suite.addTest(unittest.TestLoader().loadTestsFromTestCase(TestStrategySelector))
     test_suite.addTest(unittest.TestLoader().loadTestsFromTestCase(TestRiskManagement))
-    test_suite.addTest(
-        unittest.TestLoader().loadTestsFromTestCase(TestPaperTradingEngine)
-    )
+    test_suite.addTest(unittest.TestLoader().loadTestsFromTestCase(TestPaperTradingEngine))
 
     # Run tests
     runner = unittest.TextTestRunner(verbosity=2)
@@ -356,9 +346,7 @@ def run_component_tests():
     print(f"Total Tests: {total_tests}")
     print(f"Failures: {failures}")
     print(f"Errors: {errors}")
-    print(
-        f"Success Rate: {((total_tests - failures - errors) / total_tests * 100):.1f}%"
-    )
+    print(f"Success Rate: {((total_tests - failures - errors) / total_tests * 100):.1f}%")
 
     if failures > 0:
         print("\n❌ FAILURES:")

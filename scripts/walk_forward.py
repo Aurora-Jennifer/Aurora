@@ -45,9 +45,9 @@ def main():
     for start_date, end_date in QUARTERS:
         for symbols in SYMBOL_SETS:
             symbol_str = " ".join(symbols)
-            print(f"\n{'='*60}")
+            print(f"\n{'=' * 60}")
             print(f"Testing: {symbol_str} from {start_date} to {end_date}")
-            print(f"{'='*60}")
+            print(f"{'=' * 60}")
 
             success = run_backtest(start_date, end_date, symbols)
             results.append(
@@ -60,9 +60,9 @@ def main():
             )
 
     # Summary
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print("WALK-FORWARD SUMMARY")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
 
     successful = sum(1 for r in results if r["success"])
     total = len(results)

@@ -62,14 +62,10 @@ class DataIntegrityTest:
             self.log_error(f"{message} (got {value1}, expected != {value2})")
         return value1 != value2
 
-    def assert_in_range(
-        self, value: float, min_val: float, max_val: float, message: str
-    ):
+    def assert_in_range(self, value: float, min_val: float, max_val: float, message: str):
         """Assert value is within range."""
         if value < min_val or value > max_val:
-            self.log_error(
-                f"{message} (got {value:.6f}, expected {min_val:.6f} to {max_val:.6f})"
-            )
+            self.log_error(f"{message} (got {value:.6f}, expected {min_val:.6f} to {max_val:.6f})")
         return min_val <= value <= max_val
 
 
@@ -253,7 +249,7 @@ def test_data_usage_in_trading_engine(test: DataIntegrityTest) -> bool:
             test.assert_not_equal(
                 result["portfolio_value"],
                 initial_value,
-                f"Portfolio should change when trades are executed (cycle {i//50})",
+                f"Portfolio should change when trades are executed (cycle {i // 50})",
             )
 
     # Validate meaningful trading activity
@@ -322,15 +318,21 @@ def test_data_usage_in_objective_functions(test: DataIntegrityTest) -> bool:
 
         # Test that objective responds to different return patterns
         risk_budget1, pos_mult1 = objective.derive_risk_budget(
-            returns_series[:5], equity_series[:5], {}  # Positive trend
+            returns_series[:5],
+            equity_series[:5],
+            {},  # Positive trend
         )
 
         risk_budget2, pos_mult2 = objective.derive_risk_budget(
-            returns_series[5:10], equity_series[5:10], {}  # Mixed pattern
+            returns_series[5:10],
+            equity_series[5:10],
+            {},  # Mixed pattern
         )
 
         risk_budget3, pos_mult3 = objective.derive_risk_budget(
-            returns_series[10:], equity_series[10:], {}  # Lower volatility
+            returns_series[10:],
+            equity_series[10:],
+            {},  # Lower volatility
         )
 
         # Validate that risk budgets are different for different return patterns
@@ -389,15 +391,11 @@ def test_data_integrity_validation(test: DataIntegrityTest) -> bool:
 
         # Validate data integrity
         test.assert_true(
-            np.allclose(
-                segment_data["Close"], original_close.iloc[i * 50 : (i + 1) * 50]
-            ),
+            np.allclose(segment_data["Close"], original_close.iloc[i * 50 : (i + 1) * 50]),
             f"Close prices should not be corrupted (iteration {i})",
         )
         test.assert_true(
-            np.allclose(
-                segment_data["Volume"], original_volume.iloc[i * 50 : (i + 1) * 50]
-            ),
+            np.allclose(segment_data["Volume"], original_volume.iloc[i * 50 : (i + 1) * 50]),
             f"Volume should not be corrupted (iteration {i})",
         )
 
@@ -413,7 +411,7 @@ def test_data_integrity_validation(test: DataIntegrityTest) -> bool:
         # Validate data integrity
         test.assert_true(
             np.allclose(segment_data["Close"], original_segment_close),
-            f"Close prices should not be corrupted by trading engine (cycle {i//50})",
+            f"Close prices should not be corrupted by trading engine (cycle {i // 50})",
         )
 
     logger.info("✅ Data Integrity: No data corruption detected")
@@ -465,8 +463,7 @@ def test_meaningful_correlation_analysis(test: DataIntegrityTest) -> bool:
             {
                 "volatility": segment_vol,
                 "trend": segment_trend,
-                "price_range": segment_data["Close"].max()
-                - segment_data["Close"].min(),
+                "price_range": segment_data["Close"].max() - segment_data["Close"].min(),
             }
         )
 
@@ -475,14 +472,12 @@ def test_meaningful_correlation_analysis(test: DataIntegrityTest) -> bool:
     high_vol_decisions = [
         d
         for i, d in enumerate(decisions)
-        if data_patterns[i]["volatility"]
-        > np.median([p["volatility"] for p in data_patterns])
+        if data_patterns[i]["volatility"] > np.median([p["volatility"] for p in data_patterns])
     ]
     low_vol_decisions = [
         d
         for i, d in enumerate(decisions)
-        if data_patterns[i]["volatility"]
-        <= np.median([p["volatility"] for p in data_patterns])
+        if data_patterns[i]["volatility"] <= np.median([p["volatility"] for p in data_patterns])
     ]
 
     if high_vol_decisions and low_vol_decisions:
@@ -537,7 +532,7 @@ def main():
     print("\n" + "=" * 60)
     print("📊 DATA INTEGRITY TEST SUMMARY")
     print(f"Passed: {passed}/{total}")
-    print(f"Success Rate: {passed/total*100:.1f}%")
+    print(f"Success Rate: {passed / total * 100:.1f}%")
 
     if test.errors:
         print(f"\n❌ ERRORS ({len(test.errors)}):")

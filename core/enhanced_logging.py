@@ -8,7 +8,6 @@ import logging
 import logging.handlers
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
 
 
 class ColoredFormatter(logging.Formatter):
@@ -28,9 +27,7 @@ class ColoredFormatter(logging.Formatter):
         # Add color to level name
         levelname = record.levelname
         if levelname in self.COLORS:
-            record.levelname = (
-                f"{self.COLORS[levelname]}{levelname}{self.COLORS['RESET']}"
-            )
+            record.levelname = f"{self.COLORS[levelname]}{levelname}{self.COLORS['RESET']}"
 
         # Add emoji based on level
         emoji_map = {
@@ -83,9 +80,7 @@ class TradingLogger:
         # Performance logger
         self.performance_logger = self._setup_logger(
             "performance",
-            self.log_dir
-            / "performance"
-            / f"performance_{datetime.now().strftime('%Y-%m')}.log",
+            self.log_dir / "performance" / f"performance_{datetime.now().strftime('%Y-%m')}.log",
             level=logging.INFO,
         )
 
@@ -103,9 +98,7 @@ class TradingLogger:
             level=logging.INFO,
         )
 
-    def _setup_logger(
-        self, name: str, log_file: Path, level: int = logging.INFO
-    ) -> logging.Logger:
+    def _setup_logger(self, name: str, log_file: Path, level: int = logging.INFO) -> logging.Logger:
         """Setup individual logger with file and console handlers."""
 
         logger = logging.getLogger(name)
@@ -116,7 +109,9 @@ class TradingLogger:
 
         # File handler with rotation
         file_handler = logging.handlers.RotatingFileHandler(
-            log_file, maxBytes=10 * 1024 * 1024, backupCount=5  # 10MB
+            log_file,
+            maxBytes=10 * 1024 * 1024,
+            backupCount=5,  # 10MB
         )
         file_handler.setLevel(level)
 
@@ -227,9 +222,7 @@ class TradingLogger:
             f"{signal_data.get('symbol')} (strength: {signal_data.get('signal_strength', 0):.3f})"
         )
 
-    def log_error(
-        self, error: str, context: str = "", exception: Optional[Exception] = None
-    ):
+    def log_error(self, error: str, context: str = "", exception: Exception | None = None):
         """Log errors with context."""
         error_info = {
             "timestamp": datetime.now().isoformat(),
@@ -289,7 +282,7 @@ class TradingLogger:
 
 ## 📊 Performance Overview
 - **Date**: {date}
-- **Generated**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+- **Generated**: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 
 ## 📈 Trading Activity
 - Check trade logs: `logs/trades/trades_{date[:7]}.log`

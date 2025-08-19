@@ -6,7 +6,6 @@ Discord Notification System for Trading Alerts
 import logging
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Dict, Optional
 
 import requests
 
@@ -30,7 +29,7 @@ class DiscordNotifier:
         self.config = config
         self.logger = logging.getLogger(__name__)
 
-    def send_message(self, content: str, embed: Optional[Dict] = None) -> bool:
+    def send_message(self, content: str, embed: dict | None = None) -> bool:
         """Send a message to Discord."""
         if not self.config.enabled:
             return True
@@ -51,16 +50,14 @@ class DiscordNotifier:
                 self.logger.info("Discord notification sent successfully")
                 return True
             else:
-                self.logger.error(
-                    f"Discord notification failed: {response.status_code}"
-                )
+                self.logger.error(f"Discord notification failed: {response.status_code}")
                 return False
 
         except Exception as e:
             self.logger.error(f"Discord notification error: {e}")
             return False
 
-    def send_startup_notification(self, system_info: Dict) -> bool:
+    def send_startup_notification(self, system_info: dict) -> bool:
         """Send startup notification."""
         embed = {
             "title": "🚀 Trading System Started",
@@ -84,7 +81,7 @@ class DiscordNotifier:
 
         return self.send_message("", embed)
 
-    def send_trade_notification(self, trade_info: Dict) -> bool:
+    def send_trade_notification(self, trade_info: dict) -> bool:
         """Send trade execution notification."""
         action_emoji = "🟢" if trade_info.get("action") == "BUY" else "🔴"
         color = 0x00FF00 if trade_info.get("action") == "BUY" else 0xFF0000
@@ -129,7 +126,7 @@ class DiscordNotifier:
 
         return self.send_message("", embed)
 
-    def send_daily_summary(self, summary: Dict) -> bool:
+    def send_daily_summary(self, summary: dict) -> bool:
         """Send daily performance summary."""
         total_return = summary.get("total_return", 0)
         color = 0x00FF00 if total_return >= 0 else 0xFF0000
@@ -171,9 +168,7 @@ class DiscordNotifier:
                 },
             ],
             "timestamp": datetime.utcnow().isoformat(),
-            "footer": {
-                "text": f"Daily Summary - {datetime.now().strftime('%Y-%m-%d')}"
-            },
+            "footer": {"text": f"Daily Summary - {datetime.now().strftime('%Y-%m-%d')}"},
         }
 
         return self.send_message("", embed)
@@ -198,9 +193,7 @@ class DiscordNotifier:
         }
 
         if details:
-            embed["fields"].append(
-                {"name": "Details", "value": details, "inline": False}
-            )
+            embed["fields"].append({"name": "Details", "value": details, "inline": False})
 
         return self.send_message("", embed)
 
@@ -220,8 +213,6 @@ class DiscordNotifier:
         }
 
         if context:
-            embed["fields"].append(
-                {"name": "Context", "value": context, "inline": False}
-            )
+            embed["fields"].append({"name": "Context", "value": context, "inline": False})
 
         return self.send_message("", embed)

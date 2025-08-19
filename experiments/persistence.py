@@ -17,7 +17,7 @@ import logging
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -36,12 +36,12 @@ class FeatureImportance:
     feature_name: str
     importance: float
     coefficient: float
-    shap_value: Optional[float] = None
-    rank: Optional[int] = None
-    regime: Optional[str] = None
-    performance_metric: Optional[float] = None
+    shap_value: float | None = None
+    rank: int | None = None
+    regime: str | None = None
+    performance_metric: float | None = None
     model_type: str = "ridge"
-    alpha_generation_score: Optional[float] = None
+    alpha_generation_score: float | None = None
 
 
 @dataclass
@@ -59,8 +59,8 @@ class RunMetadata:
     avg_profit: float
     win_rate: float
     sharpe_ratio: float
-    checkpoint_path: Optional[str] = None
-    importance_path: Optional[str] = None
+    checkpoint_path: str | None = None
+    importance_path: str | None = None
 
 
 class FeaturePersistenceAnalyzer:
@@ -123,11 +123,11 @@ class FeaturePersistenceAnalyzer:
     def log_feature_importance(
         self,
         run_id: str,
-        feature_importances: Dict[str, float],
-        coefficients: Dict[str, float],
+        feature_importances: dict[str, float],
+        coefficients: dict[str, float],
         metadata: RunMetadata,
-        shap_values: Optional[Dict[str, float]] = None,
-        regime: Optional[str] = None,
+        shap_values: dict[str, float] | None = None,
+        regime: str | None = None,
     ) -> None:
         """Log feature importance for a single run."""
         try:
@@ -135,9 +135,7 @@ class FeaturePersistenceAnalyzer:
             sorted_features = sorted(
                 feature_importances.items(), key=lambda x: abs(x[1]), reverse=True
             )
-            ranks = {
-                feature: rank + 1 for rank, (feature, _) in enumerate(sorted_features)
-            }
+            ranks = {feature: rank + 1 for rank, (feature, _) in enumerate(sorted_features)}
 
             # Calculate alpha generation scores
             alpha_scores = self._calculate_alpha_generation_scores(
@@ -184,23 +182,21 @@ class FeaturePersistenceAnalyzer:
             # Update checkpoints index
             self._update_checkpoints_index(metadata, importance_file)
 
-            logger.info(
-                f"Logged feature importance for run {run_id}: {len(records)} features"
-            )
+            logger.info(f"Logged feature importance for run {run_id}: {len(records)} features")
 
         except Exception as e:
             logger.error(f"Error logging feature importance: {e}")
 
     def _calculate_alpha_generation_scores(
         self,
-        feature_importances: Dict[str, float],
-        coefficients: Dict[str, float],
+        feature_importances: dict[str, float],
+        coefficients: dict[str, float],
         metadata: RunMetadata,
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         """Calculate alpha generation potential scores for features."""
         alpha_scores = {}
 
-        for feature_name in feature_importances.keys():
+        for feature_name in feature_importances:
             importance = abs(feature_importances.get(feature_name, 0.0))
             coefficient = abs(coefficients.get(feature_name, 0.0))
 
@@ -208,9 +204,7 @@ class FeaturePersistenceAnalyzer:
             base_score = (importance + coefficient) / 2
 
             # Performance multiplier: better performance = higher alpha potential
-            performance_multiplier = 1.0 + (
-                metadata.avg_profit * 10
-            )  # Scale profit impact
+            performance_multiplier = 1.0 + (metadata.avg_profit * 10)  # Scale profit impact
 
             # Stability bonus: higher win rate = more stable alpha
             stability_bonus = 1.0 + (metadata.win_rate * 0.5)
@@ -219,16 +213,12 @@ class FeaturePersistenceAnalyzer:
             risk_adjustment = 1.0 + max(0, metadata.sharpe_ratio * 0.2)
 
             # Final alpha score
-            alpha_score = (
-                base_score * performance_multiplier * stability_bonus * risk_adjustment
-            )
+            alpha_score = base_score * performance_multiplier * stability_bonus * risk_adjustment
             alpha_scores[feature_name] = alpha_score
 
         return alpha_scores
 
-    def _update_checkpoints_index(
-        self, metadata: RunMetadata, importance_path: Path
-    ) -> None:
+    def _update_checkpoints_index(self, metadata: RunMetadata, importance_path: Path) -> None:
         """Update the checkpoints index CSV."""
         try:
             # Read existing index
@@ -260,7 +250,7 @@ class FeaturePersistenceAnalyzer:
         except Exception as e:
             logger.error(f"Error updating checkpoints index: {e}")
 
-    def analyze_persistence(self) -> Dict[str, Any]:
+    def analyze_persistence(self) -> dict[str, Any]:
         """Analyze feature importance persistence across runs."""
         try:
             if not self.importance_csv.exists():
@@ -279,9 +269,7 @@ class FeaturePersistenceAnalyzer:
                 importance_mean = feature_data["importance"].mean()
                 importance_std = feature_data["importance"].std()
                 importance_cv = (
-                    importance_std / abs(importance_mean)
-                    if importance_mean != 0
-                    else float("inf")
+                    importance_std / abs(importance_mean) if importance_mean != 0 else float("inf")
                 )
 
                 # Rank stability
@@ -345,9 +333,7 @@ class FeaturePersistenceAnalyzer:
             logger.error(f"Error analyzing persistence: {e}")
             return {"error": str(e)}
 
-    def get_warm_start_data(
-        self, feature_names: List[str], n_runs: int = 5
-    ) -> Dict[str, Any]:
+    def get_warm_start_data(self, feature_names: list[str], n_runs: int = 5) -> dict[str, Any]:
         """Get warm-start data for model training."""
         try:
             if not self.importance_csv.exists():
@@ -364,15 +350,12 @@ class FeaturePersistenceAnalyzer:
             feature_priors = {}
             for feature_name in feature_names:
                 feature_data = df[
-                    (df["feature_name"] == feature_name)
-                    & (df["run_id"].isin(recent_runs))
+                    (df["feature_name"] == feature_name) & (df["run_id"].isin(recent_runs))
                 ]
 
                 if not feature_data.empty:
                     # EMA of coefficients
-                    ema_coefficient = (
-                        feature_data["coefficient"].ewm(span=3).mean().iloc[-1]
-                    )
+                    ema_coefficient = feature_data["coefficient"].ewm(span=3).mean().iloc[-1]
 
                     # Average importance
                     avg_importance = feature_data["importance"].mean()
@@ -408,9 +391,7 @@ class FeaturePersistenceAnalyzer:
             logger.error(f"Error getting warm start data: {e}")
             return {"error": str(e)}
 
-    def _get_curriculum_data(
-        self, df: pd.DataFrame, recent_runs: List[str]
-    ) -> Dict[str, Any]:
+    def _get_curriculum_data(self, df: pd.DataFrame, recent_runs: list[str]) -> dict[str, Any]:
         """Get curriculum learning data based on regime performance."""
         try:
             # Analyze performance by regime
@@ -463,9 +444,7 @@ class FeaturePersistenceAnalyzer:
             report.append(
                 f"- Avg Importance Stability: {persistence_data['avg_importance_stability']:.4f}"
             )
-            report.append(
-                f"- Avg Rank Stability: {persistence_data['avg_rank_stability']:.4f}"
-            )
+            report.append(f"- Avg Rank Stability: {persistence_data['avg_rank_stability']:.4f}")
             report.append("")
 
             # Top Alpha Features
@@ -491,16 +470,10 @@ class FeaturePersistenceAnalyzer:
                 report.append(
                     f"- Importance: {stats['importance_mean']:.4f} ± {stats['importance_std']:.4f}"
                 )
-                report.append(
-                    f"- Rank: {stats['rank_mean']:.1f} ± {stats['rank_std']:.1f}"
-                )
+                report.append(f"- Rank: {stats['rank_mean']:.1f} ± {stats['rank_std']:.1f}")
                 report.append(f"- Alpha Potential: {stats['alpha_mean']:.4f}")
-                report.append(
-                    f"- Performance Correlation: {stats['performance_correlation']:.4f}"
-                )
-                report.append(
-                    f"- Appearances: {stats['appearance_count']}/{stats['total_runs']}"
-                )
+                report.append(f"- Performance Correlation: {stats['performance_correlation']:.4f}")
+                report.append(f"- Appearances: {stats['appearance_count']}/{stats['total_runs']}")
                 report.append("")
 
             return "\n".join(report)
@@ -509,9 +482,7 @@ class FeaturePersistenceAnalyzer:
             logger.error(f"Error generating persistence report: {e}")
             return f"Error generating report: {e}"
 
-    def create_persistence_plots(
-        self, output_dir: str = "results/persistence"
-    ) -> List[str]:
+    def create_persistence_plots(self, output_dir: str = "results/persistence") -> list[str]:
         """Create persistence analysis plots."""
         try:
             output_path = Path(output_dir)
@@ -528,9 +499,7 @@ class FeaturePersistenceAnalyzer:
 
             # 1. Feature Importance Over Time
             plt.figure(figsize=(12, 8))
-            pivot_df = df.pivot(
-                index="run_id", columns="feature_name", values="importance"
-            )
+            pivot_df = df.pivot(index="run_id", columns="feature_name", values="importance")
             pivot_df.plot(kind="line", marker="o", alpha=0.7)
             plt.title("Feature Importance Persistence Over Time")
             plt.xlabel("Run ID")
@@ -548,16 +517,12 @@ class FeaturePersistenceAnalyzer:
             # 2. Rank Stability Heatmap
             plt.figure(figsize=(10, 8))
             rank_pivot = df.pivot(index="run_id", columns="feature_name", values="rank")
-            sns.heatmap(
-                rank_pivot, annot=True, cmap="RdYlBu_r", center=rank_pivot.mean().mean()
-            )
+            sns.heatmap(rank_pivot, annot=True, cmap="RdYlBu_r", center=rank_pivot.mean().mean())
             plt.title("Feature Rank Stability Heatmap")
             plt.xlabel("Feature Name")
             plt.ylabel("Run ID")
             plt.tight_layout()
-            plt.savefig(
-                output_path / "rank_stability_heatmap.png", dpi=300, bbox_inches="tight"
-            )
+            plt.savefig(output_path / "rank_stability_heatmap.png", dpi=300, bbox_inches="tight")
             plt.close()
             plots_created.append("rank_stability_heatmap.png")
 

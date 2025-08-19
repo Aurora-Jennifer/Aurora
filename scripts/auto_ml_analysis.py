@@ -49,9 +49,7 @@ def auto_analyze_ml():
 
         # Generate plots
         print("\n🎨 Generating analysis plots...")
-        plot_paths = visualizer.create_comprehensive_report(
-            profit_learner, save_plots=True
-        )
+        plot_paths = visualizer.create_comprehensive_report(profit_learner, save_plots=True)
 
         print(f"✅ Generated {len(plot_paths)} plots")
         print(f"📁 Saved to: {visualizer.output_dir}")

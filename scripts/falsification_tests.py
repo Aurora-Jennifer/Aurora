@@ -9,13 +9,13 @@ import re
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 # Add project root for imports
 sys.path.append(str(Path(__file__).parent.parent))
 
 
-def test_adversarial_replay() -> Dict[str, Any]:
+def test_adversarial_replay() -> dict[str, Any]:
     """Test adversarial replay by reversing timestamps."""
     print("Running adversarial replay test...")
 
@@ -114,7 +114,7 @@ def test_adversarial_replay() -> Dict[str, Any]:
         return {"test": "adversarial_replay", "passed": False, "error": str(e)}
 
 
-def test_zero_fee_guard() -> Dict[str, Any]:
+def test_zero_fee_guard() -> dict[str, Any]:
     """Test that zero fees/slippage improves performance."""
     print("Running zero fee guard test...")
 
@@ -149,9 +149,7 @@ def test_zero_fee_guard() -> Dict[str, Any]:
             "SPY",
         ]
 
-        p_realistic = subprocess.run(
-            cmd_realistic, capture_output=True, text=True, timeout=300
-        )
+        p_realistic = subprocess.run(cmd_realistic, capture_output=True, text=True, timeout=300)
 
         if p_realistic.returncode != 0:
             return {
@@ -190,9 +188,7 @@ def test_zero_fee_guard() -> Dict[str, Any]:
             "SPY",
         ]
 
-        p_zero_fee = subprocess.run(
-            cmd_zero_fee, capture_output=True, text=True, timeout=300
-        )
+        p_zero_fee = subprocess.run(cmd_zero_fee, capture_output=True, text=True, timeout=300)
 
         if p_zero_fee.returncode != 0:
             return {
@@ -245,7 +241,7 @@ def test_zero_fee_guard() -> Dict[str, Any]:
         return {"test": "zero_fee_guard", "passed": False, "error": str(e)}
 
 
-def test_consistency_audit() -> Dict[str, Any]:
+def test_consistency_audit() -> dict[str, Any]:
     """Audit consistency between different runs."""
     print("Running consistency audit...")
 
@@ -318,9 +314,7 @@ def test_consistency_audit() -> Dict[str, Any]:
             return_diff = abs(return1 - return2)
             sharpe_diff = abs(sharpe1 - sharpe2)
 
-            consistent = (
-                return_diff < 0.01 and sharpe_diff < 0.01
-            )  # 1 basis point tolerance
+            consistent = return_diff < 0.01 and sharpe_diff < 0.01  # 1 basis point tolerance
 
             return {
                 "test": "consistency_audit",
@@ -365,9 +359,7 @@ def main():
             status = "✅ PASS" if result["passed"] else "❌ FAIL"
             print(f"{status}: {result['test']}")
             if not result["passed"]:
-                print(
-                    f"  Error: {result.get('error', result.get('reason', 'Unknown error'))}"
-                )
+                print(f"  Error: {result.get('error', result.get('reason', 'Unknown error'))}")
         except Exception as e:
             error_result = {
                 "test": test_func.__name__,
@@ -405,9 +397,7 @@ def main():
         f"Overall Status: {'✅ SYSTEM INTEGRITY CONFIRMED' if passed else '❌ INTEGRITY ISSUES DETECTED'}"
     )
     print(f"Pass Rate: {report['summary']['pass_rate']:.1f}%")
-    print(
-        f"Passed: {report['summary']['passed_tests']}/{report['summary']['total_tests']}"
-    )
+    print(f"Passed: {report['summary']['passed_tests']}/{report['summary']['total_tests']}")
 
     if not passed:
         print("\nFailed Tests:")

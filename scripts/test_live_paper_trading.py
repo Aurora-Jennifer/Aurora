@@ -11,7 +11,7 @@ import logging
 import time
 from datetime import date, datetime, timedelta
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import pandas as pd
 
@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 class LivePaperTradingTester:
     """Test live paper trading with signal templates."""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         """
         Initialize the live paper trading tester.
 
@@ -50,7 +50,7 @@ class LivePaperTradingTester:
             "performance_metrics": {},
         }
 
-    def load_signal_templates(self) -> Dict[str, Any]:
+    def load_signal_templates(self) -> dict[str, Any]:
         """
         Load signal templates from the templates directory.
 
@@ -65,9 +65,7 @@ class LivePaperTradingTester:
             return templates
 
         # Look for the most recent templates
-        template_files = list(
-            templates_path.glob("individual_templates/*_template_*.json")
-        )
+        template_files = list(templates_path.glob("individual_templates/*_template_*.json"))
 
         if not template_files:
             logger.warning("No template files found")
@@ -95,7 +93,7 @@ class LivePaperTradingTester:
 
         return templates
 
-    def create_paper_trading_config(self, templates: Dict[str, Any]) -> Dict[str, Any]:
+    def create_paper_trading_config(self, templates: dict[str, Any]) -> dict[str, Any]:
         """
         Create paper trading configuration from signal templates.
 
@@ -145,16 +143,14 @@ class LivePaperTradingTester:
 
                 # Update risk parameters based on template
                 if "position_sizing" in template:
-                    max_size = template["position_sizing"].get(
-                        "max_position_size", 1000
-                    )
+                    max_size = template["position_sizing"].get("max_position_size", 1000)
                     config["risk_params"]["max_position_size_pct"] = min(
                         10.0, max_size / self.initial_capital * 100
                     )
 
         return config
 
-    def run_live_paper_trading_test(self) -> Dict[str, Any]:
+    def run_live_paper_trading_test(self) -> dict[str, Any]:
         """
         Run live paper trading test.
 
@@ -189,9 +185,7 @@ class LivePaperTradingTester:
         start_date = date.today()
         current_date = start_date
 
-        logger.info(
-            f"Running trading cycles from {start_date} for {self.test_duration_days} days"
-        )
+        logger.info(f"Running trading cycles from {start_date} for {self.test_duration_days} days")
 
         for day in range(self.test_duration_days):
             try:
@@ -215,7 +209,7 @@ class LivePaperTradingTester:
                     pnl = portfolio_value - self.initial_capital
                     pnl_pct = (pnl / self.initial_capital) * 100
                     logger.info(
-                        f"Day {day+1}/{self.test_duration_days}: Portfolio ${portfolio_value:,.2f} (PnL: {pnl:+,.2f}, {pnl_pct:+.2f}%)"
+                        f"Day {day + 1}/{self.test_duration_days}: Portfolio ${portfolio_value:,.2f} (PnL: {pnl:+,.2f}, {pnl_pct:+.2f}%)"
                     )
 
                 # Move to next trading day
@@ -242,17 +236,14 @@ class LivePaperTradingTester:
         for i in range(1, len(self.test_results["daily_results"])):
             prev_value = self.test_results["daily_results"][i - 1]["portfolio_value"]
             curr_value = self.test_results["daily_results"][i]["portfolio_value"]
-            daily_return = (
-                (curr_value - prev_value) / prev_value if prev_value > 0 else 0
-            )
+            daily_return = (curr_value - prev_value) / prev_value if prev_value > 0 else 0
             daily_returns.append(daily_return)
 
         # Calculate metrics
         if daily_returns:
             avg_daily_return = sum(daily_returns) / len(daily_returns)
             volatility = (
-                sum((r - avg_daily_return) ** 2 for r in daily_returns)
-                / len(daily_returns)
+                sum((r - avg_daily_return) ** 2 for r in daily_returns) / len(daily_returns)
             ) ** 0.5
             sharpe_ratio = avg_daily_return / volatility if volatility > 0 else 0
         else:
@@ -283,7 +274,7 @@ class LivePaperTradingTester:
         logger.info("Live paper trading test completed")
         return self.test_results
 
-    def save_test_results(self, results: Dict[str, Any]):
+    def save_test_results(self, results: dict[str, Any]):
         """
         Save test results to files.
 
@@ -329,7 +320,7 @@ class LivePaperTradingTester:
         if daily_results:
             logger.info(f"Daily results: {csv_file}")
 
-    def print_test_summary(self, results: Dict[str, Any]):
+    def print_test_summary(self, results: dict[str, Any]):
         """
         Print test summary to console.
 

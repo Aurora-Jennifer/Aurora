@@ -40,9 +40,7 @@ def parse_args():
         default="results/dashboard",
         help="Output directory for dashboard",
     )
-    parser.add_argument(
-        "--interactive", action="store_true", help="Show interactive plots"
-    )
+    parser.add_argument("--interactive", action="store_true", help="Show interactive plots")
     parser.add_argument(
         "--save-plots", action="store_true", default=True, help="Save dashboard plots"
     )
@@ -209,12 +207,9 @@ def create_alpha_generation_plot(persistence_data, ax):
         # Extract data
         features = [item[0] for item in persistence_data["top_alpha_features"][:10]]
         alpha_means = [
-            item[1]["alpha_mean"]
-            for item in persistence_data["top_alpha_features"][:10]
+            item[1]["alpha_mean"] for item in persistence_data["top_alpha_features"][:10]
         ]
-        alpha_stds = [
-            item[1]["alpha_std"] for item in persistence_data["top_alpha_features"][:10]
-        ]
+        alpha_stds = [item[1]["alpha_std"] for item in persistence_data["top_alpha_features"][:10]]
 
         # Create bar plot
         bars = ax.bar(
@@ -235,7 +230,7 @@ def create_alpha_generation_plot(persistence_data, ax):
         ax.grid(True, alpha=0.3)
 
         # Add value labels on bars
-        for bar, mean_val in zip(bars, alpha_means):
+        for bar, mean_val in zip(bars, alpha_means, strict=False):
             height = bar.get_height()
             ax.text(
                 bar.get_x() + bar.get_width() / 2.0,
@@ -290,7 +285,7 @@ def create_performance_correlation_plot(persistence_data, ax):
         ax.axhline(y=0, color="black", linestyle="-", alpha=0.5)
 
         # Add value labels
-        for bar, corr_val in zip(bars, top_corr.values):
+        for bar, corr_val in zip(bars, top_corr.values, strict=False):
             height = bar.get_height()
             ax.text(
                 bar.get_x() + bar.get_width() / 2.0,
@@ -415,9 +410,7 @@ def create_run_performance_summary(persistence_data, ax):
                     va="center",
                 )
         else:
-            ax.text(
-                0.5, 0.5, "No run performance data available", ha="center", va="center"
-            )
+            ax.text(0.5, 0.5, "No run performance data available", ha="center", va="center")
 
     except Exception as e:
         logger.error(f"Error creating run performance summary: {e}")
@@ -435,9 +428,7 @@ def create_dashboard_summary(persistence_data, output_dir):
         # Overall metrics
         summary.append("## Overall Metrics")
         summary.append(f"- **Total Runs**: {persistence_data.get('total_runs', 0)}")
-        summary.append(
-            f"- **Total Features**: {persistence_data.get('total_features', 0)}"
-        )
+        summary.append(f"- **Total Features**: {persistence_data.get('total_features', 0)}")
         summary.append(
             f"- **Avg Importance Stability**: {persistence_data.get('avg_importance_stability', 0):.4f}"
         )
@@ -459,9 +450,7 @@ def create_dashboard_summary(persistence_data, output_dir):
         if persistence_data.get("most_stable_features"):
             summary.append("## Most Stable Features")
             for feature_name, stats in persistence_data["most_stable_features"][:10]:
-                summary.append(
-                    f"- **{feature_name}**: Stability {stats['rank_stability']:.4f}"
-                )
+                summary.append(f"- **{feature_name}**: Stability {stats['rank_stability']:.4f}")
             summary.append("")
 
         # Recommendations
@@ -469,9 +458,7 @@ def create_dashboard_summary(persistence_data, output_dir):
         summary.append("### For Alpha Generation:")
         if persistence_data.get("top_alpha_features"):
             top_feature = persistence_data["top_alpha_features"][0]
-            summary.append(
-                f"- Focus on **{top_feature[0]}** for highest alpha potential"
-            )
+            summary.append(f"- Focus on **{top_feature[0]}** for highest alpha potential")
 
         summary.append("### For Model Stability:")
         if persistence_data.get("most_stable_features"):

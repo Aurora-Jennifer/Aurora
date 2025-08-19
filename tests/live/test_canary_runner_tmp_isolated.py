@@ -1,8 +1,9 @@
 import json
 import os
-import sys
 import subprocess
+import sys
 from pathlib import Path
+
 import pytest
 
 
@@ -16,7 +17,7 @@ def test_canary_runner_isolated(tmp_path, symbols, monkeypatch):
 
     # ensure prev_weights state starts clean in tmp
     (tmp_path / "reports").mkdir(parents=True, exist_ok=True)
-    
+
     # Create minimal config files needed by the runner
     (tmp_path / "config").mkdir(parents=True, exist_ok=True)
     (tmp_path / "config" / "base.yaml").write_text("""
@@ -42,12 +43,16 @@ registry:
     metadata:
       feature_order: [ret_1d, ret_5d, vol_10d]
 """)
-    
+
     # Create dummy model artifact
     (tmp_path / "artifacts/models").mkdir(parents=True, exist_ok=True)
     import pickle
+
     from ml.models.dummy_model import DummyModel
-    (tmp_path / "artifacts/models/dummy_v1.pkl").write_bytes(pickle.dumps(DummyModel([0.5, -0.2, 0.1])))
+
+    (tmp_path / "artifacts/models/dummy_v1.pkl").write_bytes(
+        pickle.dumps(DummyModel([0.5, -0.2, 0.1]))
+    )
 
     # Run the canary runner for 2 iterations in shadow mode with dummy quotes
     # Use absolute path to script from repo root
@@ -74,9 +79,7 @@ registry:
     # If your runner chooses provider by env/flag, set it here (example):
     # env["QUOTES_PROVIDER"] = "dummy"
 
-    res = subprocess.run(
-        cmd, cwd=tmp_path, env=env, capture_output=True, text=True, timeout=15
-    )
+    res = subprocess.run(cmd, cwd=tmp_path, env=env, capture_output=True, text=True, timeout=15)
     assert res.returncode == 0, f"stderr:\n{res.stderr}\nstdout:\n{res.stdout}"
 
     # Artifacts should be created under tmp_path

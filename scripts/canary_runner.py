@@ -3,22 +3,22 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import os as _os
+import sys as _sys
+from datetime import UTC, datetime
 from pathlib import Path
-from datetime import datetime, timezone
 
 import numpy as np
 import pandas as pd
 import yaml
 
-import sys as _sys, os as _os
 _sys.path.append(_os.path.dirname(_os.path.dirname(__file__)))
-from utils.ops_runtime import kill_switch, notify_ntfy
-from utils.quotes_provider import get_quote_provider, QuoteProvider
 from core.execution.canary_limits import CanaryConfig, check_caps
 from ml.model_interface import ModelSpec
 from ml.registry import load_model
-from ml.runtime import set_seeds, build_features, infer_weights
-
+from ml.runtime import build_features, infer_weights, set_seeds
+from utils.ops_runtime import kill_switch, notify_ntfy
+from utils.quotes_provider import QuoteProvider, get_quote_provider
 
 STATE = Path("reports/runner_state.json")
 
@@ -43,13 +43,15 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--shadow", action="store_true", default=True)
     ap.add_argument("--ntfy", action="store_true")
     ap.add_argument("--steps", type=int, default=0, help="Max loop iterations (0=unbounded)")
-    ap.add_argument("--quotes", type=str, default="dummy", choices=["dummy", "ibkr"], help="Quote provider type")
+    ap.add_argument(
+        "--quotes", type=str, default="dummy", choices=["dummy", "ibkr"], help="Quote provider type"
+    )
     args = ap.parse_args(argv)
 
-    run_id = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H%M%SZ")
+    run_id = datetime.now(UTC).strftime("%Y-%m-%dT%H%M%SZ")
     Path("logs/canary").mkdir(parents=True, exist_ok=True)
     Path("reports").mkdir(parents=True, exist_ok=True)
-    log_path = Path("logs/canary") / (datetime.now(timezone.utc).strftime("%Y-%m-%d") + ".jsonl")
+    log_path = Path("logs/canary") / (datetime.now(UTC).strftime("%Y-%m-%d") + ".jsonl")
 
     def _deep_merge(a: dict, b: dict) -> dict:
         out = dict(a)
@@ -66,10 +68,10 @@ def main(argv: list[str] | None = None) -> None:
     if overlay_path.exists():
         overlay_cfg = yaml.safe_load(overlay_path.read_text())
         cfg = _deep_merge(cfg, overlay_cfg)
-    models_cfg = (cfg.get("models") or {})
-    live = (cfg.get("live") or {})
-    paper = (cfg.get("paper") or {})
-    risk = (cfg.get("risk") or {})
+    models_cfg = cfg.get("models") or {}
+    live = cfg.get("live") or {}
+    paper = cfg.get("paper") or {}
+    risk = cfg.get("risk") or {}
 
     equity = float((cfg.get("live") or {}).get("equity", 100_000.0))
     cap_cfg = CanaryConfig(
@@ -82,7 +84,7 @@ def main(argv: list[str] | None = None) -> None:
 
     prev_weights = _load_prev_weights()
     qp: QuoteProvider = get_quote_provider(args.quotes)
-    
+
     # Quote heartbeat tracking
     quote_miss_count = 0
 
@@ -90,7 +92,9 @@ def main(argv: list[str] | None = None) -> None:
     reg = yaml.safe_load(Path("config/models.yaml").read_text())["registry"]
     m_id = models_cfg.get("selected", "dummy_v1")
     spec_cfg = reg[m_id]
-    spec = ModelSpec(kind=spec_cfg["kind"], path=spec_cfg["path"], metadata=spec_cfg.get("metadata", {}))
+    spec = ModelSpec(
+        kind=spec_cfg["kind"], path=spec_cfg["path"], metadata=spec_cfg.get("metadata", {})
+    )
     model, art_sha = load_model(spec)
     feats_list = models_cfg.get("input_features", [])
     feat_order = (spec.metadata or {}).get("feature_order", feats_list)
@@ -113,7 +117,7 @@ def main(argv: list[str] | None = None) -> None:
         step += 1
         if args.steps and step >= args.steps:
             break
-        
+
         # Check for session lockout
         if Path("runlocks/live.lock").exists():
             print("Session locked due to previous anomaly/fallback")
@@ -141,15 +145,15 @@ def main(argv: list[str] | None = None) -> None:
         for sym in symbols:
             try:
                 quote = qp.quote(sym)
-                now_ts = datetime.now(timezone.utc)
+                now_ts = datetime.now(UTC)
                 quote_ts = datetime.fromisoformat(quote["ts"].replace("Z", "+00:00"))
                 age_ms = int((now_ts - quote_ts).total_seconds() * 1000)
-                
+
                 # Stale quote tripwire
                 if age_ms > 1500:
                     anomalies.append(f"stale_quote:{sym}:{age_ms}ms")
                     continue
-                
+
                 # Wide spread tripwire
                 bid, ask, mid = quote["bid"], quote["ask"], quote["mid"]
                 if bid and ask and mid and bid == bid and ask == ask and mid == mid:
@@ -157,17 +161,18 @@ def main(argv: list[str] | None = None) -> None:
                     if spread_bps > 50:  # 50 bps = 0.5%
                         anomalies.append(f"wide_spread:{sym}:{spread_bps:.1f}bps")
                         continue
-                
+
                 # Market state tripwire (null/zero quotes)
                 if not bid or not ask or bid == 0 or ask == 0:
                     anomalies.append(f"market_closed:{sym}")
                     continue
-                    
+
             except Exception as e:
                 anomalies.append(f"quote_error:{sym}:{str(e)[:50]}")
-        
+
         # Quote heartbeat check
         import math
+
         all_quotes_valid = True
         for sym in symbols:
             try:
@@ -178,17 +183,25 @@ def main(argv: list[str] | None = None) -> None:
             except Exception:
                 all_quotes_valid = False
                 break
-        
+
         if not all_quotes_valid:
             quote_miss_count += 1
         else:
             quote_miss_count = 0
-            
+
         if quote_miss_count >= 5:
             anomalies.append("quote_heartbeat_lost")
 
-        spikes = [s for s in symbols if abs(weights_now.get(s, 0.0) - float(prev_weights.get(s, 0.0))) > spike_cap]
-        t_over = _turnover(prev_weights, weights_now) if prev_weights else sum(abs(v) for v in weights_now.values())
+        spikes = [
+            s
+            for s in symbols
+            if abs(weights_now.get(s, 0.0) - float(prev_weights.get(s, 0.0))) > spike_cap
+        ]
+        t_over = (
+            _turnover(prev_weights, weights_now)
+            if prev_weights
+            else sum(abs(v) for v in weights_now.values())
+        )
         if spikes:
             anomalies.append(f"weight_spike:{','.join(spikes)}")
         if t_over > turnover_cap:
@@ -217,7 +230,7 @@ def main(argv: list[str] | None = None) -> None:
                     reasons.append(decision.reason or "cap")
                     anomalies.append(decision.reason or "cap")
                 line = {
-                    "ts": datetime.now(timezone.utc).isoformat(),
+                    "ts": datetime.now(UTC).isoformat(),
                     "symbol": sym,
                     "side": side,
                     "qty": float(qty),
@@ -245,7 +258,10 @@ def main(argv: list[str] | None = None) -> None:
     }
     Path("reports/canary_run.meta.json").write_text(json.dumps(meta, indent=2))
     if args.ntfy and (fallbacks > 0 or anomalies):
-        notify_ntfy("Aurora: canary WARN", {"run_id": run_id, "fallbacks": fallbacks, "anomalies": anomalies})
+        notify_ntfy(
+            "Aurora: canary WARN",
+            {"run_id": run_id, "fallbacks": fallbacks, "anomalies": anomalies},
+        )
     # Auto-issue on anomalies if configured
     if fallbacks > 0 or anomalies:
         repo = os.getenv("GITHUB_REPOSITORY", "")
@@ -261,5 +277,3 @@ def main(argv: list[str] | None = None) -> None:
 
 if __name__ == "__main__":
     main()
-
-

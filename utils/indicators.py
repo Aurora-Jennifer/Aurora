@@ -8,7 +8,6 @@ Enhanced with comprehensive indicator coverage and performance optimizations.
 
 import logging
 import warnings
-from typing import Dict, Optional, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -22,8 +21,8 @@ warnings.filterwarnings("ignore", category=RuntimeWarning)
 
 
 def rolling_mean(
-    data: Union[pd.Series, pd.DataFrame], window: int, min_periods: Optional[int] = None
-) -> Union[pd.Series, pd.DataFrame]:
+    data: pd.Series | pd.DataFrame, window: int, min_periods: int | None = None
+) -> pd.Series | pd.DataFrame:
     """
     Compute rolling mean with configurable minimum periods.
 
@@ -41,8 +40,8 @@ def rolling_mean(
 
 
 def rolling_std(
-    data: Union[pd.Series, pd.DataFrame], window: int, min_periods: Optional[int] = None
-) -> Union[pd.Series, pd.DataFrame]:
+    data: pd.Series | pd.DataFrame, window: int, min_periods: int | None = None
+) -> pd.Series | pd.DataFrame:
     """
     Compute rolling standard deviation.
 
@@ -60,8 +59,8 @@ def rolling_std(
 
 
 def rolling_median(
-    data: Union[pd.Series, pd.DataFrame], window: int, min_periods: Optional[int] = None
-) -> Union[pd.Series, pd.DataFrame]:
+    data: pd.Series | pd.DataFrame, window: int, min_periods: int | None = None
+) -> pd.Series | pd.DataFrame:
     """
     Compute rolling median.
 
@@ -79,10 +78,10 @@ def rolling_median(
 
 
 def zscore(
-    data: Union[pd.Series, pd.DataFrame],
-    window: Optional[int] = None,
+    data: pd.Series | pd.DataFrame,
+    window: int | None = None,
     fill_method: str = "ffill",
-) -> Union[pd.Series, pd.DataFrame]:
+) -> pd.Series | pd.DataFrame:
     """
     Compute z-score (standardized values).
 
@@ -109,10 +108,10 @@ def zscore(
 
 
 def winsorize(
-    data: Union[pd.Series, pd.DataFrame],
-    limits: Tuple[float, float] = (0.05, 0.05),
-    axis: Optional[int] = None,
-) -> Union[pd.Series, pd.DataFrame]:
+    data: pd.Series | pd.DataFrame,
+    limits: tuple[float, float] = (0.05, 0.05),
+    axis: int | None = None,
+) -> pd.Series | pd.DataFrame:
     """
     Winsorize data by capping extreme values.
 
@@ -135,10 +134,10 @@ def winsorize(
 
 
 def normalize(
-    data: Union[pd.Series, pd.DataFrame],
+    data: pd.Series | pd.DataFrame,
     method: str = "minmax",
-    window: Optional[int] = None,
-) -> Union[pd.Series, pd.DataFrame]:
+    window: int | None = None,
+) -> pd.Series | pd.DataFrame:
     """
     Normalize data using various methods.
 
@@ -193,9 +192,7 @@ def rsi(prices: pd.Series, window: int = 14, fill_method: str = "ffill") -> pd.S
     """
     delta = prices.diff()
     gain = (delta.where(delta > 0, 0)).rolling(window=window, min_periods=window).mean()
-    loss = (
-        (-delta.where(delta < 0, 0)).rolling(window=window, min_periods=window).mean()
-    )
+    loss = (-delta.where(delta < 0, 0)).rolling(window=window, min_periods=window).mean()
 
     rs = gain / (loss + 1e-8)
     rsi = 100 - (100 / (1 + rs))
@@ -210,7 +207,7 @@ def rsi(prices: pd.Series, window: int = 14, fill_method: str = "ffill") -> pd.S
 
 def macd(
     prices: pd.Series, fast: int = 12, slow: int = 26, signal: int = 9
-) -> Dict[str, pd.Series]:
+) -> dict[str, pd.Series]:
     """
     Compute MACD (Moving Average Convergence Divergence).
 
@@ -233,9 +230,7 @@ def macd(
     return {"macd": macd_line, "signal": signal_line, "histogram": histogram}
 
 
-def atr(
-    high: pd.Series, low: pd.Series, close: pd.Series, window: int = 14
-) -> pd.Series:
+def atr(high: pd.Series, low: pd.Series, close: pd.Series, window: int = 14) -> pd.Series:
     """
     Compute Average True Range (ATR).
 
@@ -260,7 +255,7 @@ def atr(
 
 def bollinger_bands(
     prices: pd.Series, window: int = 20, num_std: float = 2.0
-) -> Dict[str, pd.Series]:
+) -> dict[str, pd.Series]:
     """
     Compute Bollinger Bands.
 
@@ -282,10 +277,10 @@ def bollinger_bands(
 
 
 def pct_change(
-    data: Union[pd.Series, pd.DataFrame],
+    data: pd.Series | pd.DataFrame,
     periods: int = 1,
-    fill_method: Optional[str] = None,
-) -> Union[pd.Series, pd.DataFrame]:
+    fill_method: str | None = None,
+) -> pd.Series | pd.DataFrame:
     """
     Compute percentage change with configurable fill method.
 
@@ -303,9 +298,7 @@ def pct_change(
     return pct
 
 
-def lag(
-    data: Union[pd.Series, pd.DataFrame], periods: int = 1
-) -> Union[pd.Series, pd.DataFrame]:
+def lag(data: pd.Series | pd.DataFrame, periods: int = 1) -> pd.Series | pd.DataFrame:
     """
     Lag data by specified number of periods.
 
@@ -319,9 +312,7 @@ def lag(
     return data.shift(periods)
 
 
-def lead(
-    data: Union[pd.Series, pd.DataFrame], periods: int = 1
-) -> Union[pd.Series, pd.DataFrame]:
+def lead(data: pd.Series | pd.DataFrame, periods: int = 1) -> pd.Series | pd.DataFrame:
     """
     Lead data by specified number of periods.
 
@@ -335,9 +326,7 @@ def lead(
     return data.shift(-periods)
 
 
-def diff(
-    data: Union[pd.Series, pd.DataFrame], periods: int = 1
-) -> Union[pd.Series, pd.DataFrame]:
+def diff(data: pd.Series | pd.DataFrame, periods: int = 1) -> pd.Series | pd.DataFrame:
     """
     Compute difference between current and lagged values.
 
@@ -365,9 +354,7 @@ def momentum(prices: pd.Series, periods: int = 10) -> pd.Series:
     return pct_change(prices, periods=periods)
 
 
-def volatility(
-    returns: pd.Series, window: int = 20, annualize: bool = True
-) -> pd.Series:
+def volatility(returns: pd.Series, window: int = 20, annualize: bool = True) -> pd.Series:
     """
     Compute rolling volatility.
 
@@ -388,9 +375,7 @@ def volatility(
 # NEW ENHANCED INDICATORS
 
 
-def adx(
-    high: pd.Series, low: pd.Series, close: pd.Series, period: int = 14
-) -> pd.Series:
+def adx(high: pd.Series, low: pd.Series, close: pd.Series, period: int = 14) -> pd.Series:
     """
     Compute Average Directional Index (ADX).
 
@@ -486,7 +471,7 @@ def stochastic(
     close: pd.Series,
     k_period: int = 14,
     d_period: int = 3,
-) -> Dict[str, pd.Series]:
+) -> dict[str, pd.Series]:
     """
     Compute Stochastic Oscillator.
 
@@ -509,9 +494,7 @@ def stochastic(
     return {"k": k_percent, "d": d_percent}
 
 
-def williams_r(
-    high: pd.Series, low: pd.Series, close: pd.Series, period: int = 14
-) -> pd.Series:
+def williams_r(high: pd.Series, low: pd.Series, close: pd.Series, period: int = 14) -> pd.Series:
     """
     Compute Williams %R.
 
@@ -532,9 +515,7 @@ def williams_r(
     return williams_r
 
 
-def cci(
-    high: pd.Series, low: pd.Series, close: pd.Series, period: int = 20
-) -> pd.Series:
+def cci(high: pd.Series, low: pd.Series, close: pd.Series, period: int = 20) -> pd.Series:
     """
     Compute Commodity Channel Index (CCI).
 
@@ -588,7 +569,7 @@ def vwap(
     low: pd.Series,
     close: pd.Series,
     volume: pd.Series,
-    window: Optional[int] = None,
+    window: int | None = None,
 ) -> pd.Series:
     """
     Compute Volume Weighted Average Price (VWAP).
@@ -628,7 +609,7 @@ def ichimoku(
     kijun_period: int = 26,
     senkou_span_b_period: int = 52,
     displacement: int = 26,
-) -> Dict[str, pd.Series]:
+) -> dict[str, pd.Series]:
     """
     Compute Ichimoku Cloud components.
 
@@ -646,14 +627,11 @@ def ichimoku(
     """
     # Tenkan-sen (Conversion Line)
     tenkan = (
-        high.rolling(window=tenkan_period).max()
-        + low.rolling(window=tenkan_period).min()
+        high.rolling(window=tenkan_period).max() + low.rolling(window=tenkan_period).min()
     ) / 2
 
     # Kijun-sen (Base Line)
-    kijun = (
-        high.rolling(window=kijun_period).max() + low.rolling(window=kijun_period).min()
-    ) / 2
+    kijun = (high.rolling(window=kijun_period).max() + low.rolling(window=kijun_period).min()) / 2
 
     # Senkou Span A (Leading Span A)
     senkou_span_a = ((tenkan + kijun) / 2).shift(displacement)
@@ -685,7 +663,7 @@ def calculate_all_indicators(
     high_col: str = "High",
     low_col: str = "Low",
     volume_col: str = "Volume",
-) -> Dict[str, Union[pd.Series, Dict[str, pd.Series]]]:
+) -> dict[str, pd.Series | dict[str, pd.Series]]:
     """
     Calculate all technical indicators for a given dataset.
 
@@ -736,9 +714,7 @@ def calculate_all_indicators(
     indicators["bb_upper"] = bb_data["upper"]
     indicators["bb_middle"] = bb_data["middle"]
     indicators["bb_lower"] = bb_data["lower"]
-    indicators["bb_position"] = (close - bb_data["lower"]) / (
-        bb_data["upper"] - bb_data["lower"]
-    )
+    indicators["bb_position"] = (close - bb_data["lower"]) / (bb_data["upper"] - bb_data["lower"])
 
     # ATR
     indicators["atr_14"] = atr(high, low, close, 14)

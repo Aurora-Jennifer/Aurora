@@ -3,7 +3,7 @@ Fixtures for DataSanity test suite.
 """
 
 import os
-from datetime import timezone
+from datetime import UTC
 
 import numpy as np
 import pandas as pd
@@ -31,14 +31,14 @@ def force_strict_mode():
 @pytest.fixture
 def tz_utc():
     """UTC timezone for consistent testing."""
-    return timezone.utc
+    return UTC
 
 
 @pytest.fixture
 def mk_ts():
     """Create clean time series DataFrame with OHLCV data."""
 
-    def _mk_ts(n=100, start="2023-01-01", freq="1min", tz=timezone.utc):
+    def _mk_ts(n=100, start="2023-01-01", freq="1min", tz=UTC):
         """Create a clean OHLCV DataFrame with realistic values.
 
         Args:

@@ -11,7 +11,6 @@ import sys
 import time
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Dict, Optional
 
 # Add project root for imports
 sys.path.append(str(Path(__file__).parent.parent))
@@ -24,11 +23,11 @@ class CheckResult:
     details: dict
 
 
-def ok(name: str, details: Optional[Dict] = None) -> CheckResult:
+def ok(name: str, details: dict | None = None) -> CheckResult:
     return CheckResult(name, True, details or {})
 
 
-def bad(name: str, details: Optional[Dict] = None) -> CheckResult:
+def bad(name: str, details: dict | None = None) -> CheckResult:
     return CheckResult(name, False, details or {})
 
 
@@ -106,11 +105,7 @@ def run_pytest() -> CheckResult:
             "stderr_tail": p.stderr.splitlines()[-10:] if p.stderr else [],
         }
 
-        return (
-            ok("unit_tests", details)
-            if p.returncode == 0
-            else bad("unit_tests", details)
-        )
+        return ok("unit_tests", details) if p.returncode == 0 else bad("unit_tests", details)
 
     except Exception as e:
         return bad("unit_tests", {"exception": str(e)})
@@ -257,9 +252,7 @@ def check_walk_forward_integrity() -> CheckResult:
         # Check artifacts for fold integrity
         artifacts_file = Path("artifacts/readiness_check/artifacts_walk.json")
         if not artifacts_file.exists():
-            return bad(
-                "walk_forward_integrity", {"error": "No artifacts file generated"}
-            )
+            return bad("walk_forward_integrity", {"error": "No artifacts file generated"})
 
         with open(artifacts_file) as f:
             data = json.load(f)
@@ -267,9 +260,7 @@ def check_walk_forward_integrity() -> CheckResult:
         folds = [item for item in data if isinstance(item, dict) and "fold_id" in item]
 
         if not folds:
-            return bad(
-                "walk_forward_integrity", {"error": "No folds found in artifacts"}
-            )
+            return bad("walk_forward_integrity", {"error": "No folds found in artifacts"})
 
         # Check that we have some trusted folds (relaxed criteria)
         trusted_count = sum(1 for fold in folds if fold.get("trusted", False))
@@ -422,9 +413,7 @@ def check_risk_invariants() -> CheckResult:
                 {"violations": violations, "clean": len(violations) == 0},
             )
             if len(violations) == 0
-            else bad(
-                "risk_invariants", {"violations": violations, "count": len(violations)}
-            )
+            else bad("risk_invariants", {"violations": violations, "count": len(violations)})
         )
 
     except Exception as e:
@@ -494,9 +483,7 @@ def check_benchmark_sanity() -> CheckResult:
 
             return ok("benchmark_sanity", {"bh_return": bh_return, "reasonable": True})
         else:
-            return bad(
-                "benchmark_sanity", {"error": "Could not parse buy-and-hold return"}
-            )
+            return bad("benchmark_sanity", {"error": "Could not parse buy-and-hold return"})
 
     except Exception as e:
         return bad("benchmark_sanity", {"exception": str(e)})
@@ -630,9 +617,7 @@ def main():
     print("=" * 80)
     print(f"Overall Status: {'✅ PRODUCTION READY' if passed else '❌ NOT READY'}")
     print(f"Pass Rate: {report['summary']['pass_rate']:.1f}%")
-    print(
-        f"Passed: {report['summary']['passed_checks']}/{report['summary']['total_checks']}"
-    )
+    print(f"Passed: {report['summary']['passed_checks']}/{report['summary']['total_checks']}")
 
     if not passed:
         print("\nFailed Checks:")

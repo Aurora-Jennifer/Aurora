@@ -42,5 +42,3 @@ def check_caps(symbol: str, qty: float, px: float, day_used: float, cfg: CanaryC
         return d1
     d2 = enforce_daily_notional(symbol, day_used, abs(qty * px), cfg)
     return d2
-
-

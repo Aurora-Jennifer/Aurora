@@ -1,10 +1,17 @@
 #!/usr/bin/env python3
-import numpy as np
-import pandas as pd
 from pathlib import Path
 
+import numpy as np
+import pandas as pd
 
-def synth(series_len: int = 80, start: float = 100.0, drift: float = -0.0005, vol: float = 0.01, seed: int = 7) -> pd.DataFrame:
+
+def synth(
+    series_len: int = 80,
+    start: float = 100.0,
+    drift: float = -0.0005,
+    vol: float = 0.01,
+    seed: int = 7,
+) -> pd.DataFrame:
     rng = np.random.default_rng(seed)
     r = rng.normal(drift, vol, series_len)
     px = start * np.exp(np.cumsum(r))
@@ -24,5 +31,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
-

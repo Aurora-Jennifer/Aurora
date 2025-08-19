@@ -7,7 +7,7 @@ drawdown limits, and daily loss limits to trading positions.
 """
 
 import logging
-from typing import Any, Dict
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -69,9 +69,7 @@ def apply_risk_overlay(
         raise ValueError(f"max_dd must be between 0 and 1, got {max_dd}")
 
     if daily_loss_limit <= 0 or daily_loss_limit >= 1:
-        raise ValueError(
-            f"daily_loss_limit must be between 0 and 1, got {daily_loss_limit}"
-        )
+        raise ValueError(f"daily_loss_limit must be between 0 and 1, got {daily_loss_limit}")
 
     # Ensure proper data types
     df = df.copy()
@@ -116,9 +114,7 @@ def apply_risk_overlay(
     # Sort final result
     result_df = result_df.sort_values([asset_col, ts_col]).reset_index(drop=True)
 
-    logger.info(
-        f"Applied risk overlay to {len(result_df)} rows across {len(risk_dfs)} assets"
-    )
+    logger.info(f"Applied risk overlay to {len(result_df)} rows across {len(risk_dfs)} assets")
 
     return result_df
 
@@ -196,9 +192,7 @@ def _apply_volatility_targeting(
     """
 
     # Calculate realized volatility
-    vol = returns.rolling(window=lookback, min_periods=lookback // 2).std() * np.sqrt(
-        252
-    )
+    vol = returns.rolling(window=lookback, min_periods=lookback // 2).std() * np.sqrt(252)
 
     # Volatility scaling factor
     vol_scale = target_annual_vol / (vol + 1e-8)
@@ -307,18 +301,16 @@ def _calculate_performance_metrics(
     df["dd_final"] = _calculate_drawdown(df["cum_ret_final"])
 
     # Calculate rolling volatility
-    df["vol_original"] = df["ret_original"].rolling(
-        window=252, min_periods=126
-    ).std() * np.sqrt(252)
+    df["vol_original"] = df["ret_original"].rolling(window=252, min_periods=126).std() * np.sqrt(
+        252
+    )
     df["vol_vol_targeted"] = df["ret_vol_targeted"].rolling(
         window=252, min_periods=126
     ).std() * np.sqrt(252)
     df["vol_dd_protected"] = df["ret_dd_protected"].rolling(
         window=252, min_periods=126
     ).std() * np.sqrt(252)
-    df["vol_final"] = df["ret_final"].rolling(
-        window=252, min_periods=126
-    ).std() * np.sqrt(252)
+    df["vol_final"] = df["ret_final"].rolling(window=252, min_periods=126).std() * np.sqrt(252)
 
     return df
 
@@ -346,7 +338,7 @@ def compute_risk_metrics(
     ret_col: str = "ret_1d",
     ts_col: str = "ts",
     asset_col: str = "asset",
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Compute comprehensive risk metrics.
 
@@ -365,9 +357,7 @@ def compute_risk_metrics(
         raise ValueError(f"Position column '{pos_col}' not found")
 
     if ret_col not in df.columns:
-        logger.warning(
-            f"Return column '{ret_col}' not found, skipping return-based metrics"
-        )
+        logger.warning(f"Return column '{ret_col}' not found, skipping return-based metrics")
         return _compute_basic_risk_metrics(df, pos_col, ts_col, asset_col)
 
     # Calculate position-weighted returns
@@ -378,9 +368,7 @@ def compute_risk_metrics(
     metrics = _compute_basic_risk_metrics(df, pos_col, ts_col, asset_col)
 
     # Return-based risk metrics
-    return_metrics = _compute_return_risk_metrics(
-        df, pos_col, ret_col, ts_col, asset_col
-    )
+    return_metrics = _compute_return_risk_metrics(df, pos_col, ret_col, ts_col, asset_col)
     metrics.update(return_metrics)
 
     return metrics
@@ -388,7 +376,7 @@ def compute_risk_metrics(
 
 def _compute_basic_risk_metrics(
     df: pd.DataFrame, pos_col: str, ts_col: str, asset_col: str
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Compute basic risk statistics.
 
@@ -423,7 +411,7 @@ def _compute_basic_risk_metrics(
 
 def _compute_return_risk_metrics(
     df: pd.DataFrame, pos_col: str, ret_col: str, ts_col: str, asset_col: str
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Compute return-based risk metrics.
 
@@ -543,9 +531,7 @@ def _calculate_max_consecutive_losses(returns: pd.Series) -> int:
     return max_consecutive
 
 
-def validate_risk_overlay(
-    df: pd.DataFrame, pos_col: str = "pos_final"
-) -> Dict[str, Any]:
+def validate_risk_overlay(df: pd.DataFrame, pos_col: str = "pos_final") -> dict[str, Any]:
     """
     Validate risk overlay application.
 
@@ -572,9 +558,7 @@ def validate_risk_overlay(
     # Check for extreme position values
     extreme_pos = df[df[pos_col].abs() > 2]
     if len(extreme_pos) > 0:
-        validation["warnings"].append(
-            f"Extreme position values: {len(extreme_pos)} rows"
-        )
+        validation["warnings"].append(f"Extreme position values: {len(extreme_pos)} rows")
 
     # Check for position consistency
     pos_changes = df[pos_col].diff().abs()
@@ -618,9 +602,7 @@ if __name__ == "__main__":
             position = np.random.uniform(-1, 1)
             ret = np.random.normal(0, 0.02)
 
-            sample_data.append(
-                {"ts": date, "asset": asset, "pos_sized": position, "ret_1d": ret}
-            )
+            sample_data.append({"ts": date, "asset": asset, "pos_sized": position, "ret_1d": ret})
 
     df = pd.DataFrame(sample_data)
 

@@ -137,14 +137,9 @@ def print_verification_summary():
         print("   Falsification Tests: ⚠️ NOT RUN")
 
     overall_passed = (
-        readiness_exists
-        and falsification_exists
-        and readiness_passed
-        and falsification_passed
+        readiness_exists and falsification_exists and readiness_passed and falsification_passed
     )
-    print(
-        f"   Overall Status: {'🎉 PRODUCTION READY' if overall_passed else '❌ NOT READY'}"
-    )
+    print(f"   Overall Status: {'🎉 PRODUCTION READY' if overall_passed else '❌ NOT READY'}")
 
     print("\n🔧 USAGE INSTRUCTIONS:")
     print("   1. Run readiness check: python scripts/readiness_check.py")

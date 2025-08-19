@@ -11,7 +11,6 @@ import logging
 import os
 import re
 from pathlib import Path
-from typing import Dict, List, Tuple
 
 import pandas as pd
 
@@ -29,7 +28,7 @@ class IndicatorConsolidator:
         self.files_analyzed = []
         self.duplicates_found = []
 
-    def _get_duplicate_patterns(self) -> Dict[str, Dict]:
+    def _get_duplicate_patterns(self) -> dict[str, dict]:
         """Define patterns for duplicate indicator calculations."""
         return {
             "rsi": {
@@ -64,7 +63,7 @@ class IndicatorConsolidator:
             },
         }
 
-    def scan_project(self) -> Dict[str, List[str]]:
+    def scan_project(self) -> dict[str, list[str]]:
         """Scan the project for Python files with technical indicators."""
         python_files = []
 
@@ -73,8 +72,7 @@ class IndicatorConsolidator:
             dirs[:] = [
                 d
                 for d in dirs
-                if not d.startswith(".")
-                and d not in ["__pycache__", "node_modules", "venv", "env"]
+                if not d.startswith(".") and d not in ["__pycache__", "node_modules", "venv", "env"]
             ]
 
             for file in files:
@@ -84,7 +82,7 @@ class IndicatorConsolidator:
         logger.info(f"Found {len(python_files)} Python files to analyze")
         return python_files
 
-    def analyze_file(self, file_path: str) -> Dict[str, List[Tuple[int, str]]]:
+    def analyze_file(self, file_path: str) -> dict[str, list[tuple[int, str]]]:
         """Analyze a single file for duplicate indicator patterns."""
         results = {}
 
@@ -134,17 +132,13 @@ class IndicatorConsolidator:
 
                 for indicator, matches in duplicates.items():
                     pattern_info = self.duplicate_patterns[indicator]
-                    report.append(
-                        f"### {pattern_info['description']} ({len(matches)} instances)"
-                    )
+                    report.append(f"### {pattern_info['description']} ({len(matches)} instances)")
                     report.append("")
 
                     for line_num, match in matches:
                         report.append(f"**Line {line_num}**:")
                         report.append("```python")
-                        report.append(
-                            match[:200] + "..." if len(match) > 200 else match
-                        )
+                        report.append(match[:200] + "..." if len(match) > 200 else match)
                         report.append("```")
                         report.append("")
                         report.append("**Suggested Replacement**:")
@@ -159,24 +153,16 @@ class IndicatorConsolidator:
         report.append(
             "1. **Start with high-impact files**: Focus on files with the most duplicates"
         )
-        report.append(
-            "2. **Use the centralized functions**: Import from `utils.indicators`"
-        )
+        report.append("2. **Use the centralized functions**: Import from `utils.indicators`")
         report.append("3. **Test thoroughly**: Ensure calculations remain identical")
-        report.append(
-            "4. **Update imports**: Add `from utils.indicators import ...` statements"
-        )
+        report.append("4. **Update imports**: Add `from utils.indicators import ...` statements")
         report.append("")
 
         # Performance benefits
         report.append("## Expected Benefits")
         report.append("")
-        report.append(
-            "- **Reduced code duplication**: Centralized indicator calculations"
-        )
-        report.append(
-            "- **Improved maintainability**: Single source of truth for indicators"
-        )
+        report.append("- **Reduced code duplication**: Centralized indicator calculations")
+        report.append("- **Improved maintainability**: Single source of truth for indicators")
         report.append("- **Better performance**: Optimized vectorized operations")
         report.append("- **Enhanced testing**: Easier to test indicator accuracy")
         report.append("- **Consistent behavior**: Standardized calculation methods")
@@ -319,9 +305,7 @@ if __name__ == "__main__":
         # Create migration script
         self.create_migration_script()
 
-        logger.info(
-            f"Analysis complete! Found duplicates in {len(self.duplicates_found)} files."
-        )
+        logger.info(f"Analysis complete! Found duplicates in {len(self.duplicates_found)} files.")
 
         return report
 

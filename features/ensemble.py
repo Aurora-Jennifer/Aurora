@@ -4,7 +4,6 @@ Combines multiple feature signals into a single trading signal with confidence s
 """
 
 import logging
-from typing import Dict, Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -32,15 +31,13 @@ class SignalCombiner:
             price_data: Price series with DateTimeIndex (e.g., Close prices)
         """
         self.price_data = price_data
-        self.features: Dict[str, pd.Series] = {}
-        self.weights: Dict[str, float] = {}
+        self.features: dict[str, pd.Series] = {}
+        self.weights: dict[str, float] = {}
         from core.utils import calculate_returns
 
         self.returns = calculate_returns(price_data, shift=-1)  # Next period returns
 
-        logger.info(
-            f"Initialized SignalCombiner with {len(price_data)} price observations"
-        )
+        logger.info(f"Initialized SignalCombiner with {len(price_data)} price observations")
 
     def add_feature(self, name: str, signal: pd.Series) -> None:
         """
@@ -67,7 +64,7 @@ class SignalCombiner:
         window: int = 60,
         min_obs: int = 30,
         regularization: float = 1e-6,
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         """
         Compute feature weights based on recent performance.
 
@@ -106,7 +103,7 @@ class SignalCombiner:
         logger.info(f"Computed weights using {method}: {normalized_weights}")
         return normalized_weights
 
-    def _compute_ic_weights(self, window: int, min_obs: int) -> Dict[str, float]:
+    def _compute_ic_weights(self, window: int, min_obs: int) -> dict[str, float]:
         """Compute weights based on Information Coefficient."""
         weights = {}
 
@@ -128,7 +125,7 @@ class SignalCombiner:
 
         return weights
 
-    def _compute_sharpe_weights(self, window: int, min_obs: int) -> Dict[str, float]:
+    def _compute_sharpe_weights(self, window: int, min_obs: int) -> dict[str, float]:
         """Compute weights based on Sharpe ratio of feature returns."""
         weights = {}
 
@@ -152,12 +149,10 @@ class SignalCombiner:
 
     def _compute_ridge_weights(
         self, window: int, min_obs: int, regularization: float
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         """Compute weights using Ridge regression."""
         if len(self.features) < 2:
-            logger.warning(
-                "Need at least 2 features for ridge regression, using equal weights"
-            )
+            logger.warning("Need at least 2 features for ridge regression, using equal weights")
             return {name: 1.0 / len(self.features) for name in self.features.keys()}
 
         # Prepare feature matrix
@@ -178,20 +173,18 @@ class SignalCombiner:
             ridge = Ridge(alpha=regularization, fit_intercept=False)
             ridge.fit(valid_data, valid_returns)
 
-            weights = dict(zip(self.features.keys(), ridge.coef_))
+            weights = dict(zip(self.features.keys(), ridge.coef_, strict=False))
         except Exception as e:
             logger.error(f"Ridge regression failed: {e}")
             weights = {name: 1.0 / len(self.features) for name in self.features.keys()}
 
         return weights
 
-    def _compute_voting_weights(self) -> Dict[str, float]:
+    def _compute_voting_weights(self) -> dict[str, float]:
         """Compute equal weights for simple voting."""
         return {name: 1.0 / len(self.features) for name in self.features.keys()}
 
-    def combine(
-        self, normalize: bool = True, cap: float = 1.0
-    ) -> Tuple[pd.Series, pd.Series]:
+    def combine(self, normalize: bool = True, cap: float = 1.0) -> tuple[pd.Series, pd.Series]:
         """
         Combine features into a single signal with confidence score.
 
@@ -258,9 +251,7 @@ class SignalCombiner:
             combined_sign = np.sign(combined_signal)
 
             # Agreement = percentage of features with same sign
-            agreement = (feature_signs == combined_sign.values.reshape(-1, 1)).mean(
-                axis=1
-            )
+            agreement = (feature_signs == combined_sign.values.reshape(-1, 1)).mean(axis=1)
 
         # Combine components (average of signal strength and agreement)
         confidence = (signal_strength + agreement) / 2
@@ -295,7 +286,7 @@ class SignalCombiner:
 
         return pd.DataFrame(summary_data)
 
-    def plot_ensemble(self, save_path: Optional[str] = None) -> None:
+    def plot_ensemble(self, save_path: str | None = None) -> None:
         """Plot feature weights and confidence over time."""
         try:
             import matplotlib.pyplot as plt
@@ -456,9 +447,7 @@ if __name__ == "__main__":
 
     # Print last 5 rows
     print("\nLast 5 rows of combined signal & confidence:")
-    result_df = pd.DataFrame(
-        {"Combined_Signal": combined_signal, "Confidence": confidence}
-    )
+    result_df = pd.DataFrame({"Combined_Signal": combined_signal, "Confidence": confidence})
     print(result_df.tail())
 
     # Print feature summary

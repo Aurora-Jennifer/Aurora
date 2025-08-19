@@ -8,7 +8,7 @@ import json
 import logging
 import sys
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 # Add parent directory to path for imports
 sys.path.append(str(Path(__file__).parent.parent))
@@ -17,7 +17,7 @@ from core.mvb_runner import run_mvb
 from core.utils import setup_logging
 
 
-def load_config(config_file: str) -> Dict[str, Any]:
+def load_config(config_file: str) -> dict[str, Any]:
     """Load configuration from file"""
     try:
         with open(config_file) as f:
@@ -28,7 +28,7 @@ def load_config(config_file: str) -> Dict[str, Any]:
         return {}
 
 
-def create_default_config() -> Dict[str, Any]:
+def create_default_config() -> dict[str, Any]:
     """Create default configuration"""
     return {
         "initial_capital": 100000,
@@ -65,9 +65,7 @@ def main():
     parser.add_argument(
         "--session-duration", type=int, default=30, help="Session duration in minutes"
     )
-    parser.add_argument(
-        "--initial-capital", type=float, default=100000, help="Initial capital"
-    )
+    parser.add_argument("--initial-capital", type=float, default=100000, help="Initial capital")
     parser.add_argument(
         "--max-position-pct",
         type=float,
@@ -86,9 +84,7 @@ def main():
         default="INFO",
         help="Logging level",
     )
-    parser.add_argument(
-        "--dry-run", action="store_true", help="Dry run mode (no real orders)"
-    )
+    parser.add_argument("--dry-run", action="store_true", help="Dry run mode (no real orders)")
 
     args = parser.parse_args()
 
@@ -117,20 +113,14 @@ def main():
 
     # Add mode-specific settings
     if args.mode == "backtest":
-        config.update(
-            {"start_date": "2024-01-01", "end_date": "2024-03-31", "data_dir": "data"}
-        )
+        config.update({"start_date": "2024-01-01", "end_date": "2024-03-31", "data_dir": "data"})
     elif args.mode == "shadow":
         config.update(
-            {
-                "log_file": f"results/shadow_{Path(__file__).stem}_{args.session_duration}m.ndjson"
-            }
+            {"log_file": f"results/shadow_{Path(__file__).stem}_{args.session_duration}m.ndjson"}
         )
     elif args.mode == "paper":
         config.update(
-            {
-                "log_file": f"results/paper_{Path(__file__).stem}_{args.session_duration}m.ndjson"
-            }
+            {"log_file": f"results/paper_{Path(__file__).stem}_{args.session_duration}m.ndjson"}
         )
 
     # Create results directory

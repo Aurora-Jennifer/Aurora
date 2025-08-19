@@ -15,15 +15,11 @@ import pandas as pd
 
 
 class Objective(Protocol):
-    def score(
-        self, daily_returns: pd.Series, equity: pd.Series, risk_metrics: dict
-    ) -> float:
-        ...
+    def score(self, daily_returns: pd.Series, equity: pd.Series, risk_metrics: dict) -> float: ...
 
     def derive_risk_budget(
         self, daily_returns: pd.Series, equity: pd.Series, risk_metrics: dict
-    ) -> tuple[float, float]:
-        ...
+    ) -> tuple[float, float]: ...
 
 
 @dataclass
@@ -44,9 +40,7 @@ class ExpectedLogUtility:
     def __init__(self, params: ObjectiveParams):
         self.params = params
 
-    def score(
-        self, daily_returns: pd.Series, equity: pd.Series, risk_metrics: dict
-    ) -> float:
+    def score(self, daily_returns: pd.Series, equity: pd.Series, risk_metrics: dict) -> float:
         if daily_returns is None or len(daily_returns) == 0:
             return 0.0
         # Use small epsilon to avoid log(0)
@@ -85,9 +79,7 @@ class MeanVariance:
     def __init__(self, params: ObjectiveParams):
         self.params = params
 
-    def score(
-        self, daily_returns: pd.Series, equity: pd.Series, risk_metrics: dict
-    ) -> float:
+    def score(self, daily_returns: pd.Series, equity: pd.Series, risk_metrics: dict) -> float:
         if daily_returns is None or len(daily_returns) == 0:
             return 0.0
         mu = float(np.nanmean(daily_returns))
@@ -120,18 +112,12 @@ class SortinoUtility:
     def __init__(self, params: ObjectiveParams):
         self.params = params
 
-    def score(
-        self, daily_returns: pd.Series, equity: pd.Series, risk_metrics: dict
-    ) -> float:
+    def score(self, daily_returns: pd.Series, equity: pd.Series, risk_metrics: dict) -> float:
         if daily_returns is None or len(daily_returns) == 0:
             return 0.0
         r = daily_returns.values
         downside = r[r < 0.0]
-        downside_dev = (
-            float(np.sqrt(np.nanmean(np.square(downside))))
-            if downside.size > 0
-            else 0.0
-        )
+        downside_dev = float(np.sqrt(np.nanmean(np.square(downside)))) if downside.size > 0 else 0.0
         mu = float(np.nanmean(r))
         sortino = 0.0 if downside_dev == 0.0 else mu / downside_dev
         return sortino - self.params.downside_lambda * downside_dev
@@ -142,11 +128,7 @@ class SortinoUtility:
         r = daily_returns.values if daily_returns is not None else np.array([])
         mu = float(np.nanmean(r)) if r.size > 0 else 0.0
         downside = r[r < 0.0]
-        downside_dev = (
-            float(np.sqrt(np.nanmean(np.square(downside))))
-            if downside.size > 0
-            else 0.0
-        )
+        downside_dev = float(np.sqrt(np.nanmean(np.square(downside)))) if downside.size > 0 else 0.0
         # Favor higher budgets when upside mean dominates downside risk
         signal = mu - self.params.downside_lambda * downside_dev
         risk_budget = float(np.clip(0.5 + signal, 0.0, 1.5))

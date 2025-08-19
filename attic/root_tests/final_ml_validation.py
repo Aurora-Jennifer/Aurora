@@ -9,7 +9,6 @@ import logging
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List
 
 import numpy as np
 import pandas as pd
@@ -67,9 +66,7 @@ def test_objective_functions():
         print(f"  Score: {score:.6f}")
 
         # Test risk budget derivation
-        risk_budget, pos_mult = objective.derive_risk_budget(
-            returns, equity, risk_metrics
-        )
+        risk_budget, pos_mult = objective.derive_risk_budget(returns, equity, risk_metrics)
         print(f"  Risk budget: {risk_budget:.3f}")
         print(f"  Position multiplier: {pos_mult:.3f}")
 
@@ -99,7 +96,7 @@ def test_ml_selector():
     results = {}
 
     for i, context in enumerate(contexts):
-        print(f"\nContext {i+1}: {context.regime} regime, vol_bin={context.vol_bin}")
+        print(f"\nContext {i + 1}: {context.regime} regime, vol_bin={context.vol_bin}")
 
         # Test strategy recommendation
         recommended = selector.recommend(context, candidates)
@@ -110,7 +107,7 @@ def test_ml_selector():
             reward = np.random.normal(0.001, 0.01)
             selector.update(context, recommended, reward)
 
-        results[f"context_{i+1}"] = {
+        results[f"context_{i + 1}"] = {
             "regime": context.regime,
             "recommended": recommended,
             "updates": 10,
@@ -244,15 +241,9 @@ def test_walkforward_synthetic():
 
         returns = pd.Series(fold_results["returns"])
         if len(returns) > 0:
-            sharpe = (
-                returns.mean() / returns.std() * np.sqrt(252)
-                if returns.std() > 0
-                else 0
-            )
+            sharpe = returns.mean() / returns.std() * np.sqrt(252) if returns.std() > 0 else 0
             max_dd = calculate_max_drawdown(fold_results["equity_curve"])
-            total_return = (
-                fold_results["equity_curve"][-1] / fold_results["equity_curve"][0]
-            ) - 1
+            total_return = (fold_results["equity_curve"][-1] / fold_results["equity_curve"][0]) - 1
 
             fold_metrics = {
                 "fold": len(results) + 1,
@@ -283,9 +274,7 @@ def test_walkforward_synthetic():
     return {"total_folds": 0}
 
 
-def simulate_trading_period(
-    data: pd.DataFrame, config: Dict, strategy_name: str
-) -> Dict:
+def simulate_trading_period(data: pd.DataFrame, config: dict, strategy_name: str) -> dict:
     """Simulate trading over a period."""
     capital = config["initial_capital"]
     equity_curve = [capital]
@@ -311,9 +300,7 @@ def simulate_trading_period(
             if len(current_data) >= 50:
                 ma_short = current_data["Close"].rolling(10).mean().iloc[-1]
                 ma_long = current_data["Close"].rolling(50).mean().iloc[-1]
-                signal = (
-                    0.5 if current_data["Close"].iloc[-1] < ma_short * 0.98 else -0.5
-                )
+                signal = 0.5 if current_data["Close"].iloc[-1] < ma_short * 0.98 else -0.5
             else:
                 signal = 0
         else:  # regime_aware_ensemble
@@ -353,9 +340,7 @@ def simulate_trading_period(
 
         equity_curve.append(capital)
         daily_return = (
-            (capital - equity_curve[-2]) / equity_curve[-2]
-            if len(equity_curve) > 1
-            else 0
+            (capital - equity_curve[-2]) / equity_curve[-2] if len(equity_curve) > 1 else 0
         )
         returns.append(daily_return)
 
@@ -369,7 +354,7 @@ def simulate_trading_period(
     }
 
 
-def calculate_max_drawdown(equity_curve: List[float]) -> float:
+def calculate_max_drawdown(equity_curve: list[float]) -> float:
     """Calculate maximum drawdown."""
     peak = equity_curve[0]
     max_dd = 0
@@ -383,7 +368,7 @@ def calculate_max_drawdown(equity_curve: List[float]) -> float:
     return max_dd
 
 
-def generate_validation_report(results: Dict):
+def generate_validation_report(results: dict):
     """Generate comprehensive validation report."""
     print("\n" + "=" * 80)
     print("🤖 FINAL ML VALIDATION REPORT")
@@ -434,9 +419,7 @@ def generate_validation_report(results: Dict):
     # Check if all components are working
     objectives_working = len(results.get("objectives", {})) == 3
     ml_working = len(results.get("ml_selector", {})) > 0
-    paper_trading_working = (
-        results.get("paper_trading", {}).get("successful_cycles", 0) > 0
-    )
+    paper_trading_working = results.get("paper_trading", {}).get("successful_cycles", 0) > 0
     walkforward_working = results.get("walkforward", {}).get("total_folds", 0) > 0
 
     print(f"✅ Objective Functions: {'PASS' if objectives_working else 'FAIL'}")
@@ -445,10 +428,7 @@ def generate_validation_report(results: Dict):
     print(f"✅ Walk-Forward Analysis: {'PASS' if walkforward_working else 'FAIL'}")
 
     all_passing = (
-        objectives_working
-        and ml_working
-        and paper_trading_working
-        and walkforward_working
+        objectives_working and ml_working and paper_trading_working and walkforward_working
     )
 
     print(

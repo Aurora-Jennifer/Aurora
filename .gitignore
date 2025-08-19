@@ -95,6 +95,9 @@ tmp/
 **/secrets*.{json,yaml}
 **/credentials*.{json,yaml}
 
+# Ensure core source modules are never ignored
+!core/data/**
+
 # Model files (can be regenerated)
 state/*.pkl
 state/*.joblib

@@ -1,6 +1,7 @@
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
-from pathlib import Path
 
 
 def main():
@@ -17,5 +18,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-

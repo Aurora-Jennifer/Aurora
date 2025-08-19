@@ -36,9 +36,7 @@ class AlertSinks:
 class AlertEngine:
     def __init__(self, config: dict[str, Any]):
         self.enabled = bool(config.get("alerts", {}).get("enabled", False))
-        self.sinks = config.get("alerts", {}).get(
-            "sinks", ["console"]
-        )  # console, file, webhook
+        self.sinks = config.get("alerts", {}).get("sinks", ["console"])  # console, file, webhook
         self.rules = [AlertRule(**r) for r in config.get("alerts", {}).get("rules", [])]
         self.webhook_url = config.get("alerts", {}).get("webhook_url", "")
 

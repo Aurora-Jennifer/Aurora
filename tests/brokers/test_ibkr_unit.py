@@ -1,6 +1,6 @@
 # tests/brokers/test_ibkr_unit.py
-import types
-from datetime import datetime, timezone
+from datetime import datetime
+
 import pytest
 
 from brokers.ibkr import IBKRBroker, IBKRConfig
@@ -35,32 +35,32 @@ class FakeIB:
         self._trades = []
         self._positions = []
         self._summary = []
-    
-    def connect(self, *a, **k): 
+
+    def connect(self, *a, **k):
         self._connected = True
-    
-    def disconnect(self): 
+
+    def disconnect(self):
         self._connected = False
-    
-    def sleep(self, *a, **k): 
+
+    def sleep(self, *a, **k):
         pass
-    
+
     def placeOrder(self, contract, order):
         self._order_seq += 1
         t = _Trade(_Order(self._order_seq, orderRef=str(self._order_seq)))
         self._trades.append(t)
         return t
-    
-    def trades(self): 
+
+    def trades(self):
         return list(self._trades)
-    
+
     def cancelOrder(self, order):  # order has orderId
         # mark canceled by simply keeping presence (adapter returns CANCEL_SENT)
         return None
-    
+
     def positions(self, account=None):
         return list(self._positions)
-    
+
     def accountSummary(self, account=None):
         return list(self._summary)
 
@@ -68,23 +68,24 @@ class FakeIB:
 @pytest.fixture
 def fake_ib(monkeypatch):
     from brokers import ibkr as mod
+
     fake = FakeIB()
 
     # monkeypatch ib_insync symbols inside module
     def _mk_ib():
         return fake
-    
+
     mod.IB = _mk_ib
-    
+
     def _mk_stock(symbol, exchange=None, currency=None):
         return _Contract(symbol)
-    
-    def _mk_mkt(**kw): 
+
+    def _mk_mkt(**kw):
         return object()
-    
-    def _mk_lmt(**kw): 
+
+    def _mk_lmt(**kw):
         return object()
-    
+
     mod.Stock = _mk_stock
     mod.MarketOrder = _mk_mkt
     mod.LimitOrder = _mk_lmt
@@ -109,17 +110,17 @@ def test_positions_and_cash(fake_ib):
         def __init__(self, symbol, position):
             self.contract = _Contract(symbol)
             self.position = position
-    
+
     fake_ib._positions = [_Pos("SPY", 5), _Pos("TSLA", -2)]
     fake_ib._summary = [
         _Summary("TotalCashValue", "100000", "USD"),
         _Summary("NetLiquidation", "123456", "USD"),
     ]
-    
+
     broker = IBKRBroker(IBKRConfig())
     pos = broker.get_positions()
     assert pos == {"SPY": 5.0, "TSLA": -2.0}
-    
+
     cash = broker.get_cash()
     assert cash == 100000.0
 
@@ -146,15 +147,15 @@ def test_get_fills(fake_ib):
             self.filled = 10
             self.avgFillPrice = 150.0
             self.updateTime = "20240101 10:30:00"
-    
+
     class _FilledTrade:
         def __init__(self):
             self.contract = _Contract("SPY")
             self.order = _Order(1001, "ref_1001")
             self.orderStatus = _OrderStatus()
-    
+
     fake_ib._trades = [_FilledTrade()]
-    
+
     broker = IBKRBroker(IBKRConfig())
     fills = broker.get_fills()
     assert len(fills) == 1
@@ -166,26 +167,26 @@ def test_get_fills(fake_ib):
 def test_broker_protocol_compliance(fake_ib):
     """Test that IBKRBroker implements the Broker protocol correctly."""
     broker = IBKRBroker(IBKRConfig())
-    
+
     # Test submit_order method signature
     result = broker.submit_order("SPY", "BUY", 10, "market")
     assert "order_id" in result
     assert "status" in result
     assert "timestamp" in result
-    
+
     # Test cancel_order method signature
     cancel_result = broker.cancel_order("1001")
     assert "status" in cancel_result
     assert "timestamp" in cancel_result
-    
+
     # Test get_positions method signature
     positions = broker.get_positions()
     assert isinstance(positions, dict)
-    
+
     # Test get_cash method signature
     cash = broker.get_cash()
     assert isinstance(cash, float)
-    
+
     # Test now method signature
     now = broker.now()
     assert isinstance(now, datetime)

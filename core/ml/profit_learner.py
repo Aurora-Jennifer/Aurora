@@ -9,7 +9,7 @@ import uuid
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -35,8 +35,8 @@ class TradeOutcome:
     hold_duration: int  # days
     profit_loss: float
     profit_loss_pct: float
-    market_features: Dict[str, float]
-    trade_features: Dict[str, float]
+    market_features: dict[str, float]
+    trade_features: dict[str, float]
 
 
 @dataclass
@@ -52,8 +52,8 @@ class MarketState:
     mean_reversion: float
     volume_profile: float
     price_level: float
-    technical_features: Dict[str, float]
-    market_features: Dict[str, float]
+    technical_features: dict[str, float]
+    market_features: dict[str, float]
 
 
 class ProfitLearner:
@@ -67,7 +67,7 @@ class ProfitLearner:
     - Uses ensemble of models for robustness
     """
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         """
         Initialize the profit learner.
 
@@ -129,9 +129,7 @@ class ProfitLearner:
                 with open(history_file, "rb") as f:
                     self.performance_history = pickle.load(f)
                 self.trade_count = len(self.performance_history)
-                logger.info(
-                    f"Loaded {len(self.performance_history)} existing trade records"
-                )
+                logger.info(f"Loaded {len(self.performance_history)} existing trade records")
             else:
                 self.performance_history = []
                 self.trade_count = 0
@@ -177,12 +175,10 @@ class ProfitLearner:
 
             # Extract feature names and coefficients
             feature_names = self._get_feature_names()
-            coefficients = dict(zip(feature_names, model.coef_))
+            coefficients = dict(zip(feature_names, model.coef_, strict=False))
 
             # Calculate feature importance (absolute coefficients)
-            feature_importances = {
-                name: abs(coeff) for name, coeff in coefficients.items()
-            }
+            feature_importances = {name: abs(coeff) for name, coeff in coefficients.items()}
 
             # Calculate performance metrics
             if self.performance_history:
@@ -249,7 +245,7 @@ class ProfitLearner:
         except Exception as e:
             logger.error(f"Error logging feature importance: {e}")
 
-    def _get_feature_names(self) -> List[str]:
+    def _get_feature_names(self) -> list[str]:
         """Get feature names for the current model."""
         # Default feature names - should be updated based on actual features used
         return [
@@ -298,7 +294,7 @@ class ProfitLearner:
 
     def extract_market_features(
         self, market_data: pd.DataFrame, symbol: str = None
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         """Extract comprehensive market features for learning."""
         try:
             if len(market_data) < 50:
@@ -330,9 +326,7 @@ class ProfitLearner:
 
             # Momentum features
             momentum_5 = (close.iloc[-1] / close.iloc[-5] - 1) if len(close) >= 5 else 0
-            momentum_20 = (
-                (close.iloc[-1] / close.iloc[-20] - 1) if len(close) >= 20 else 0
-            )
+            momentum_20 = (close.iloc[-1] / close.iloc[-20] - 1) if len(close) >= 20 else 0
 
             # Mean reversion features
             z_score = (close.iloc[-1] - sma_20) / (close.rolling(20).std().iloc[-1])
@@ -347,16 +341,12 @@ class ProfitLearner:
                 "momentum_20": float(momentum_20),
                 "z_score": float(z_score),
                 "returns_1d": float(returns.iloc[-1]) if len(returns) > 0 else 0.0,
-                "returns_5d": float(returns.tail(5).sum())
-                if len(returns) >= 5
-                else 0.0,
+                "returns_5d": float(returns.tail(5).sum()) if len(returns) >= 5 else 0.0,
             }
 
             # Add cross-asset features if unified model is enabled
             if self.unified_model and self.cross_asset_features and symbol:
-                cross_asset_features = self._extract_cross_asset_features(
-                    symbol, market_data
-                )
+                cross_asset_features = self._extract_cross_asset_features(symbol, market_data)
                 features.update(cross_asset_features)
 
             return features
@@ -367,16 +357,14 @@ class ProfitLearner:
 
     def _extract_cross_asset_features(
         self, symbol: str, market_data: pd.DataFrame
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         """Extract cross-asset features for unified model training."""
         try:
             features = {}
 
             # Asset-specific features
             returns_20d = (
-                market_data["Close"].pct_change(20).iloc[-1]
-                if len(market_data) >= 20
-                else 0
+                market_data["Close"].pct_change(20).iloc[-1] if len(market_data) >= 20 else 0
             )
             features[f"{symbol}_relative_strength"] = returns_20d
             features[f"{symbol}_volatility"] = (
@@ -392,18 +380,14 @@ class ProfitLearner:
 
             # Sector rotation features (for stocks)
             if symbol in ["SPY", "AAPL", "TSLA", "GOOG"]:
-                features["sector_tech"] = (
-                    1.0 if symbol in ["AAPL", "TSLA", "GOOG"] else 0.0
-                )
+                features["sector_tech"] = 1.0 if symbol in ["AAPL", "TSLA", "GOOG"] else 0.0
                 features["sector_broad"] = 1.0 if symbol == "SPY" else 0.0
             else:
                 features["sector_crypto"] = 1.0 if symbol == "BTC-USD" else 0.0
 
             # Asset correlation features (placeholder - would need all assets)
             features["correlation_spy"] = 0.5 if symbol != "SPY" else 1.0
-            features["correlation_tech"] = (
-                0.7 if symbol in ["AAPL", "TSLA", "GOOG"] else 0.3
-            )
+            features["correlation_tech"] = 0.7 if symbol in ["AAPL", "TSLA", "GOOG"] else 0.3
 
             return features
 
@@ -423,7 +407,7 @@ class ProfitLearner:
         except:
             return 50.0
 
-    def extract_trade_features(self, trade_data: Dict[str, Any]) -> Dict[str, float]:
+    def extract_trade_features(self, trade_data: dict[str, Any]) -> dict[str, float]:
         """Extract features specific to the trade."""
         try:
             features = {
@@ -454,16 +438,14 @@ class ProfitLearner:
             if self.trade_count % self.model_update_frequency == 0:
                 self._update_models()
 
-            logger.info(
-                f"Recorded trade outcome: {trade_outcome.profit_loss_pct:.2%} profit"
-            )
+            logger.info(f"Recorded trade outcome: {trade_outcome.profit_loss_pct:.2%} profit")
 
         except Exception as e:
             logger.error(f"Error recording trade outcome: {e}")
 
     def predict_profit_potential(
         self, market_data: pd.DataFrame, strategy: str, symbol: str = None
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         """
         Predict profit potential for a strategy in current market conditions.
 
@@ -481,14 +463,10 @@ class ProfitLearner:
 
             # Extract current market state
             market_features = self.extract_market_features(market_data, symbol)
-            regime_name, confidence, regime_params = self.regime_detector.detect_regime(
-                market_data
-            )
+            regime_name, confidence, regime_params = self.regime_detector.detect_regime(market_data)
 
             # Create feature vector
-            features = self._create_feature_vector(
-                market_features, strategy, regime_name
-            )
+            features = self._create_feature_vector(market_features, strategy, regime_name)
 
             # Get predictions from models
             predictions = {}
@@ -523,8 +501,8 @@ class ProfitLearner:
             return self._get_default_prediction(strategy)
 
     def _create_feature_vector(
-        self, market_features: Dict[str, float], strategy: str, regime: str
-    ) -> List[float]:
+        self, market_features: dict[str, float], strategy: str, regime: str
+    ) -> list[float]:
         """Create feature vector for model prediction."""
         # Encode strategy and regime
         strategy_encoding = {
@@ -591,7 +569,7 @@ class ProfitLearner:
         except Exception as e:
             logger.error(f"Error updating models: {e}")
 
-    def _train_strategy_model(self, strategy: str, trades: List[TradeOutcome]):
+    def _train_strategy_model(self, strategy: str, trades: list[TradeOutcome]):
         """Train model for a specific strategy."""
         try:
             # Prepare training data
@@ -636,7 +614,7 @@ class ProfitLearner:
         except Exception as e:
             logger.error(f"Error training model for {strategy}: {e}")
 
-    def _get_default_prediction(self, strategy: str) -> Dict[str, float]:
+    def _get_default_prediction(self, strategy: str) -> dict[str, float]:
         """Get default prediction when insufficient data."""
         return {
             "expected_profit_pct": 0.0,
@@ -646,7 +624,7 @@ class ProfitLearner:
             "regime_confidence": 0.0,
         }
 
-    def get_learning_summary(self) -> Dict[str, Any]:
+    def get_learning_summary(self) -> dict[str, Any]:
         """Get summary of learning progress."""
         return {
             "total_trades": self.trade_count,
@@ -656,12 +634,10 @@ class ProfitLearner:
             "performance_history_length": len(self.performance_history),
         }
 
-    def get_strategy_performance(self, strategy: str) -> Dict[str, float]:
+    def get_strategy_performance(self, strategy: str) -> dict[str, float]:
         """Get performance summary for a specific strategy."""
         try:
-            strategy_trades = [
-                t for t in self.performance_history if t.strategy == strategy
-            ]
+            strategy_trades = [t for t in self.performance_history if t.strategy == strategy]
 
             if not strategy_trades:
                 return {}

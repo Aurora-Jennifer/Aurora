@@ -6,7 +6,7 @@ Main orchestrator for the MVB system
 import logging
 import time
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 from core.factory import make_mvb_components
 from core.strategy import create_strategy
@@ -15,7 +15,7 @@ from core.strategy import create_strategy
 class MVBRunner:
     """Main MVB runner that orchestrates all components"""
 
-    def __init__(self, mode: str, config: Dict[str, Any]):
+    def __init__(self, mode: str, config: dict[str, Any]):
         self.mode = mode
         self.config = config
         self.logger = logging.getLogger(__name__)
@@ -25,9 +25,7 @@ class MVBRunner:
 
         # Create strategy
         strategy_type = config.get("strategy", "random")
-        self.strategy = create_strategy(
-            strategy_type, config.get("strategy_config", {})
-        )
+        self.strategy = create_strategy(strategy_type, config.get("strategy_config", {}))
 
         # Trading state
         self.trading_enabled = True
@@ -116,7 +114,7 @@ class MVBRunner:
         elapsed = datetime.now() - self.session_start
         return elapsed.total_seconds() > (self.session_duration * 60)
 
-    def _create_context(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
+    def _create_context(self, market_data: dict[str, Any]) -> dict[str, Any]:
         """Create context for strategy"""
         positions = self.components["broker"].get_positions()
         portfolio_value = self.components["portfolio"].get_total_value(
@@ -132,7 +130,7 @@ class MVBRunner:
             "mode": self.mode,
         }
 
-    def _process_signals(self, signals: Dict[str, float], market_data: Dict[str, Any]):
+    def _process_signals(self, signals: dict[str, float], market_data: dict[str, Any]):
         """Process trading signals"""
         for symbol, signal in signals.items():
             if abs(signal) < 0.1:  # Ignore small signals
@@ -141,7 +139,7 @@ class MVBRunner:
             # Calculate position size
             price = market_data[symbol]["price"]
             portfolio_value = self.components["portfolio"].get_total_value(
-                {symbol: price for symbol in market_data.keys()}
+                {symbol: price for symbol in market_data}
             )
 
             # Position sizing
@@ -188,9 +186,7 @@ class MVBRunner:
                 )
 
                 # Update portfolio
-                self.components["portfolio"].update_position(
-                    symbol, quantity, price, order["side"]
-                )
+                self.components["portfolio"].update_position(symbol, quantity, price, order["side"])
 
             except Exception as e:
                 self.logger.error(f"Error submitting order: {e}")
@@ -198,7 +194,7 @@ class MVBRunner:
                     "order_error", {"error": str(e), "order": order}
                 )
 
-    def _update_portfolio(self, market_data: Dict[str, Any]):
+    def _update_portfolio(self, market_data: dict[str, Any]):
         """Update portfolio with current market data"""
         # Calculate current P&L
         current_value = self.components["portfolio"].get_total_value(
@@ -296,13 +292,11 @@ class MVBRunner:
 
         self.logger.info(f"Session completed: {session_duration}")
         self.logger.info(f"Total orders: {self.total_orders}")
-        self.logger.info(
-            f"Reject rate: {self.reject_count/max(self.total_orders, 1):.2%}"
-        )
+        self.logger.info(f"Reject rate: {self.reject_count / max(self.total_orders, 1):.2%}")
         self.logger.info(f"Final P&L: ${self.daily_pnl:.2f}")
 
 
-def run_mvb(mode: str, config: Dict[str, Any]):
+def run_mvb(mode: str, config: dict[str, Any]):
     """Convenience function to run MVB"""
     runner = MVBRunner(mode, config)
     runner.run()

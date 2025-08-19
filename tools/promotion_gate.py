@@ -2,16 +2,20 @@
 import argparse
 import json
 import sys
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+
 
 def load_yaml(path: Path) -> dict:
     import yaml
+
     return yaml.safe_load(path.read_text())
+
 
 def load_thresholds(cfg_path: Path) -> dict:
     cfg = load_yaml(cfg_path)
     return cfg.get("thresholds", {})
+
 
 def load_metrics() -> dict:
     candidates = [
@@ -26,6 +30,7 @@ def load_metrics() -> dict:
                 pass
     return {}
 
+
 def check_returns_type_is_percent(base_cfg: Path) -> bool:
     try:
         cfg = load_yaml(base_cfg)
@@ -33,6 +38,7 @@ def check_returns_type_is_percent(base_cfg: Path) -> bool:
         return rt == "percent"
     except Exception:
         return False
+
 
 def has_quarantined_records() -> bool:
     q = Path("quarantine")
@@ -43,11 +49,14 @@ def has_quarantined_records() -> bool:
             return True
     return False
 
+
 def invariance_smoke_test() -> float:
     # Synthetic additive shift correlation on random series
     import numpy as np
     import pandas as pd
+
     from core.metrics.returns import percent_returns
+
     rng = np.random.default_rng(42)
     base = 100 + np.cumsum(rng.normal(0, 1.0, 500))
     s = pd.Series(base)
@@ -55,6 +64,7 @@ def invariance_smoke_test() -> float:
     r2 = percent_returns(s + 50.0)
     corr = np.corrcoef(r1.values, r2.values)[0, 1]
     return float(corr)
+
 
 def write_promotion_report(payload: dict) -> Path:
     date_dir = Path("docs/audit") / datetime.utcnow().strftime("%Y-%m-%d")
@@ -71,6 +81,7 @@ def write_promotion_report(payload: dict) -> Path:
     ]
     report.write_text("\n".join(lines))
     return report
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Aurora Promotion Gate")
@@ -125,7 +136,6 @@ def main() -> int:
 
     return 0 if passed else 1
 
+
 if __name__ == "__main__":
     sys.exit(main())
-
-

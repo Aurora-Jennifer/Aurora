@@ -11,9 +11,7 @@ import numpy as np
 import pandas as pd
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 # Import composer components
@@ -50,9 +48,7 @@ def demonstrate_composer_flow():
 
     for asset_class, asset_config in config.get("assets", {}).items():
         logger.info(f"\n  {asset_class.upper()}:")
-        logger.info(
-            f"    Eligible Strategies: {asset_config.get('eligible_strategies', [])}"
-        )
+        logger.info(f"    Eligible Strategies: {asset_config.get('eligible_strategies', [])}")
         logger.info(f"    Composer Params: {asset_config.get('composer_params', {})}")
 
     # Step 3: Show performance weight optimization

@@ -11,6 +11,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+
 def run_command(cmd: list, description: str):
     """Run a command and handle errors."""
     print(f"🔄 {description}...")
@@ -23,46 +24,52 @@ def run_command(cmd: list, description: str):
         print(f"   Error: {e.stderr}")
         sys.exit(1)
 
+
 def build_core_modules():
     """Build core modules with Nuitka."""
-    
+
     # Create build directory
     build_dir = Path("core_compiled")
     if build_dir.exists():
         shutil.rmtree(build_dir)
     build_dir.mkdir()
-    
+
     # Core modules to compile
     modules = [
         "core/engine/composer_integration.py",
-        "core/composer/registry.py", 
+        "core/composer/registry.py",
         "core/data_sanity.py",
         "core/config.py",
-        "core/config_loader.py"
+        "core/config_loader.py",
     ]
-    
+
     for module in modules:
         if not Path(module).exists():
             print(f"⚠️  Module not found: {module}")
             continue
-            
+
         module_name = Path(module).stem
         output_name = f"core_compiled/{module_name}"
-        
+
         cmd = [
-            "python", "-m", "nuitka",
-            "--module", module,
-            "--output-dir", str(build_dir),
-            "--output-filename", f"{module_name}.so",
+            "python",
+            "-m",
+            "nuitka",
+            "--module",
+            module,
+            "--output-dir",
+            str(build_dir),
+            "--output-filename",
+            f"{module_name}.so",
             "--nofollow-imports",
             "--include-data-files=config/*.yaml=config/",
             "--include-data-files=config/*.json=config/",
             "--remove-output",
-            "--assume-yes-for-downloads"
+            "--assume-yes-for-downloads",
         ]
-        
+
         run_command(cmd, f"Compiling {module_name}")
-    
+
     # Create __init__.py for the compiled package
     init_content = '''"""
 Compiled Core Modules
@@ -80,13 +87,14 @@ except ImportError as e:
     print(f"Warning: Could not import compiled modules: {e}")
     print("Falling back to source modules...")
 '''
-    
+
     with open(build_dir / "__init__.py", "w") as f:
         f.write(init_content)
 
+
 def build_api_client():
     """Build a simple API client for external use."""
-    
+
     client_code = '''"""
 Trading System API Client
 Simple client for the trading system API.
@@ -165,13 +173,14 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Error: {e}")
 '''
-    
+
     with open("trading_api_client.py", "w") as f:
         f.write(client_code)
 
+
 def create_demo_script():
     """Create a demo script for showcasing capabilities."""
-    
+
     demo_script = '''#!/usr/bin/env python3
 """
 Trading System Demo
@@ -304,36 +313,37 @@ def run_demo():
 if __name__ == "__main__":
     run_demo()
 '''
-    
+
     with open("demo_trading_system.py", "w") as f:
         f.write(demo_script)
-    
+
     # Make it executable
     os.chmod("demo_trading_system.py", 0o755)
+
 
 def main():
     """Main build process."""
     print("🔒 Building Secure Trading System")
     print("=" * 50)
-    
+
     # Check if Nuitka is installed
     try:
         import nuitka
+
         print("✅ Nuitka is available")
     except ImportError:
         print("❌ Nuitka not found. Installing...")
-        run_command([sys.executable, "-m", "pip", "install", "nuitka"], 
-                   "Installing Nuitka")
-    
+        run_command([sys.executable, "-m", "pip", "install", "nuitka"], "Installing Nuitka")
+
     # Build core modules
     build_core_modules()
-    
+
     # Build API client
     build_api_client()
-    
+
     # Create demo script
     create_demo_script()
-    
+
     print("\\n✅ Secure build completed!")
     print("\\nGenerated files:")
     print("  - core_compiled/ (compiled modules)")
@@ -348,6 +358,7 @@ def main():
     print("  - API token authentication")
     print("  - No source code exposure")
     print("  - Canary strings for tracking")
+
 
 if __name__ == "__main__":
     main()

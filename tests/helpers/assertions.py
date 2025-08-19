@@ -2,17 +2,13 @@
 Centralized assertion helpers for DataSanity tests.
 """
 
-from typing import List, Optional
-
 import numpy as np
 import pytest
 
 from core.data_sanity import DataSanityError, DataSanityValidator
 
 
-def assert_verdict(
-    validator: DataSanityValidator, df, expected: str, symbol: str = "TEST"
-):
+def assert_verdict(validator: DataSanityValidator, df, expected: str, symbol: str = "TEST"):
     """
     Assert that validation produces the expected verdict.
 
@@ -43,7 +39,7 @@ def assert_verdict_with_rules(
     validator: DataSanityValidator,
     df,
     expected: str,
-    rules: List[str],
+    rules: list[str],
     symbol: str = "TEST",
 ):
     """
@@ -85,9 +81,9 @@ def assert_repair_count(
     """Assert that validation performs expected number of repairs."""
     try:
         clean_data, result = validator.validate_and_repair(df, symbol)
-        assert (
-            len(result.repairs) == expected_count
-        ), f"Expected {expected_count} repairs, got {len(result.repairs)}"
+        assert len(result.repairs) == expected_count, (
+            f"Expected {expected_count} repairs, got {len(result.repairs)}"
+        )
         return clean_data, result
     except DataSanityError as e:
         if "Lookahead contamination" in str(e):
@@ -103,9 +99,9 @@ def assert_flag_present(
     """Assert that validation produces expected flag."""
     try:
         clean_data, result = validator.validate_and_repair(df, symbol)
-        assert (
-            expected_flag in result.flags
-        ), f"Expected flag '{expected_flag}' not found in {result.flags}"
+        assert expected_flag in result.flags, (
+            f"Expected flag '{expected_flag}' not found in {result.flags}"
+        )
         return clean_data, result
     except DataSanityError as e:
         if "Lookahead contamination" in str(e):
@@ -115,17 +111,15 @@ def assert_flag_present(
             pytest.fail(f"Validation failed unexpectedly: {e}")
 
 
-def assert_data_integrity(
-    clean_data, original_data, expected_rows: Optional[int] = None
-):
+def assert_data_integrity(clean_data, original_data, expected_rows: int | None = None):
     """Assert data integrity after validation."""
     if clean_data is None:
         return  # Lookahead contamination case
 
     if expected_rows is not None:
-        assert (
-            len(clean_data) == expected_rows
-        ), f"Expected {expected_rows} rows, got {len(clean_data)}"
+        assert len(clean_data) == expected_rows, (
+            f"Expected {expected_rows} rows, got {len(clean_data)}"
+        )
 
     # Check that required columns are present
     required_cols = ["Open", "High", "Low", "Close", "Volume"]
@@ -143,9 +137,7 @@ def assert_data_integrity(
                 "int32",
             ], f"Column {col} not numeric"
             assert clean_data[col].notna().all(), f"Column {col} contains NaN values"
-            assert np.isfinite(
-                clean_data[col]
-            ).all(), f"Column {col} contains non-finite values"
+            assert np.isfinite(clean_data[col]).all(), f"Column {col} contains non-finite values"
 
 
 def assert_ohlc_consistency(df):

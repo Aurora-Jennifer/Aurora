@@ -4,7 +4,6 @@ Risk management and safety checks for the trading system
 """
 
 import logging
-from typing import Dict, List
 
 import numpy as np
 
@@ -14,7 +13,7 @@ class RiskGuardrails:
     Risk management guardrails for trading operations.
     """
 
-    def __init__(self, config: Dict):
+    def __init__(self, config: dict):
         """
         Initialize risk guardrails.
 
@@ -30,7 +29,7 @@ class RiskGuardrails:
         # Risk limits
         self.risk_limits = self._initialize_risk_limits()
 
-    def _initialize_kill_switches(self) -> Dict:
+    def _initialize_kill_switches(self) -> dict:
         """Initialize kill switches for risk management."""
         kill_switches = self.config.get("kill_switches", {})
 
@@ -50,7 +49,7 @@ class RiskGuardrails:
 
         return kill_switches
 
-    def _initialize_risk_limits(self) -> Dict:
+    def _initialize_risk_limits(self) -> dict:
         """Initialize risk limits."""
         risk_params = self.config.get("risk_params", {})
 
@@ -62,7 +61,7 @@ class RiskGuardrails:
             "max_correlation": risk_params.get("max_correlation", 0.7),
         }
 
-    def check_kill_switches(self, daily_returns: List[Dict], capital: float) -> bool:
+    def check_kill_switches(self, daily_returns: list[dict], capital: float) -> bool:
         """
         Check if any kill switches are triggered.
 
@@ -83,9 +82,7 @@ class RiskGuardrails:
 
             # Check daily loss limits
             max_daily_loss_pct = self.kill_switches.get("max_daily_loss_pct", 2.0)
-            max_daily_loss_dollars = self.kill_switches.get(
-                "max_daily_loss_dollars", 2000
-            )
+            max_daily_loss_dollars = self.kill_switches.get("max_daily_loss_dollars", 2000)
 
             if daily_pnl_pct < -max_daily_loss_pct:
                 self.logger.warning(
@@ -142,7 +139,7 @@ class RiskGuardrails:
 
         return True
 
-    def validate_trade(self, trade: Dict, capital: float, positions: Dict) -> bool:
+    def validate_trade(self, trade: dict, capital: float, positions: dict) -> bool:
         """
         Validate a trade against risk limits.
 
@@ -176,9 +173,7 @@ class RiskGuardrails:
         elif action == "SELL":
             current_position = positions.get(symbol, 0)
             if current_position < shares:
-                self.logger.warning(
-                    f"Insufficient shares for sell: {shares} > {current_position}"
-                )
+                self.logger.warning(f"Insufficient shares for sell: {shares} > {current_position}")
                 return False
 
         return True
@@ -200,9 +195,7 @@ class RiskGuardrails:
 
         return max_shares
 
-    def check_portfolio_risk(
-        self, positions: Dict, prices: Dict, capital: float
-    ) -> Dict:
+    def check_portfolio_risk(self, positions: dict, prices: dict, capital: float) -> dict:
         """
         Check portfolio-level risk metrics.
 
@@ -242,9 +235,7 @@ class RiskGuardrails:
             "position_count": len(positions),
         }
 
-    def apply_stop_loss(
-        self, positions: Dict, prices: Dict, stop_loss_pct: float
-    ) -> List[Dict]:
+    def apply_stop_loss(self, positions: dict, prices: dict, stop_loss_pct: float) -> list[dict]:
         """
         Apply stop loss rules to positions.
 
@@ -278,8 +269,8 @@ class RiskGuardrails:
         return stop_orders
 
     def apply_take_profit(
-        self, positions: Dict, prices: Dict, take_profit_pct: float
-    ) -> List[Dict]:
+        self, positions: dict, prices: dict, take_profit_pct: float
+    ) -> list[dict]:
         """
         Apply take profit rules to positions.
 
@@ -312,9 +303,7 @@ class RiskGuardrails:
 
         return take_profit_orders
 
-    def calculate_var(
-        self, returns: List[float], confidence_level: float = 0.95
-    ) -> float:
+    def calculate_var(self, returns: list[float], confidence_level: float = 0.95) -> float:
         """
         Calculate Value at Risk (VaR).
 
@@ -335,7 +324,7 @@ class RiskGuardrails:
         return var
 
     def calculate_expected_shortfall(
-        self, returns: List[float], confidence_level: float = 0.95
+        self, returns: list[float], confidence_level: float = 0.95
     ) -> float:
         """
         Calculate Expected Shortfall (Conditional VaR).
@@ -360,8 +349,8 @@ class RiskGuardrails:
         return expected_shortfall
 
     def get_risk_report(
-        self, positions: Dict, prices: Dict, capital: float, daily_returns: List[Dict]
-    ) -> Dict:
+        self, positions: dict, prices: dict, capital: float, daily_returns: list[dict]
+    ) -> dict:
         """
         Generate comprehensive risk report.
 

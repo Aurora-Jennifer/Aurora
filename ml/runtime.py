@@ -1,8 +1,10 @@
 from __future__ import annotations
-import math, random
-from typing import Dict, List
+
+import random
+
 import numpy as np
 import pandas as pd
+
 from .model_interface import Model
 
 
@@ -21,7 +23,7 @@ def set_seeds(seed: int = 1337) -> None:
         pass
 
 
-def build_features(prices: pd.DataFrame, feature_list: List[str]) -> pd.DataFrame:
+def build_features(prices: pd.DataFrame, feature_list: list[str]) -> pd.DataFrame:
     df = prices.copy()
     feats = {}
     if "ret_1d" in feature_list:
@@ -48,11 +50,11 @@ def _map_scores_to_weights(scores: np.ndarray, map_name: str, max_abs: float) ->
 def infer_weights(
     model: Model,
     feat_df: pd.DataFrame,
-    feature_order: List[str],
+    feature_order: list[str],
     map_name: str,
     max_abs: float,
     min_bars: int,
-) -> Dict[str, float] | dict:
+) -> dict[str, float] | dict:
     if len(feat_df) < min_bars:
         return {"status": "HOLD", "reason": "insufficient_history"}
     # Feature alignment; require columns to exist
@@ -70,7 +72,9 @@ def infer_weights(
     return {i: float(w[i]) for i in range(len(w))}
 
 
-def detect_weight_spikes(previous: Dict[str, float] | None, current: Dict[str, float], max_delta: float) -> list[str]:
+def detect_weight_spikes(
+    previous: dict[str, float] | None, current: dict[str, float], max_delta: float
+) -> list[str]:
     if not previous:
         return []
     spikes: list[str] = []
@@ -81,7 +85,7 @@ def detect_weight_spikes(previous: Dict[str, float] | None, current: Dict[str, f
     return spikes
 
 
-def compute_turnover(previous: Dict[str, float] | None, current: Dict[str, float]) -> float:
+def compute_turnover(previous: dict[str, float] | None, current: dict[str, float]) -> float:
     if not previous:
         return float(sum(abs(float(w)) for w in current.values()))
     all_symbols = set(previous.keys()) | set(current.keys())
@@ -89,4 +93,3 @@ def compute_turnover(previous: Dict[str, float] | None, current: Dict[str, float
     for s in all_symbols:
         t += abs(float(current.get(s, 0.0)) - float(previous.get(s, 0.0)))
     return float(t)
-

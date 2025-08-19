@@ -1,8 +1,8 @@
 import hashlib
 import pickle
 from pathlib import Path
-from typing import Tuple
-from .model_interface import ModelSpec, Model
+
+from .model_interface import Model, ModelSpec
 
 
 def sha256_path(p: Path) -> str:
@@ -13,7 +13,7 @@ def sha256_path(p: Path) -> str:
     return h.hexdigest()
 
 
-def load_model(spec: ModelSpec) -> Tuple[Model, str]:
+def load_model(spec: ModelSpec) -> tuple[Model, str]:
     p = Path(spec.path)
     if not p.exists():
         raise FileNotFoundError(p)
@@ -22,14 +22,14 @@ def load_model(spec: ModelSpec) -> Tuple[Model, str]:
             model = pickle.load(f)
     elif spec.kind == "torch":
         import torch  # lazy import
+
         model = torch.load(p, map_location="cpu")
         if hasattr(model, "eval"):
             model.eval()
     elif spec.kind == "onnx":
         import onnxruntime as ort  # lazy import
+
         model = ort.InferenceSession(str(p))
     else:
         raise ValueError(f"Unknown model kind: {spec.kind}")
     return model, sha256_path(p)
-
-

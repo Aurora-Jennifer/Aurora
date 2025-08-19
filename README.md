@@ -82,6 +82,9 @@ python tools/validate_alpha.py reports/alpha_eval.json
 # Run Alpha v1 walkforward testing
 python scripts/walkforward_alpha_v1.py --symbols SPY TSLA
 
+# For testing with smaller datasets:
+python scripts/walkforward_alpha_v1.py --symbols SPY --train-len 50 --test-len 20 --stride 10 --warmup 10
+
 # Compare old regime-based vs Alpha v1 ML approaches
 python scripts/compare_walkforward.py --symbols SPY TSLA
 

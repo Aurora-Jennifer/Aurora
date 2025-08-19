@@ -39,9 +39,7 @@ def metrics() -> Response:
             "Rolling Sortino",
         )
     )
-    lines.append(
-        _gauge("trader_mdd", float(os.getenv("TRADER_MDD", 0.0)), "Max drawdown")
-    )
+    lines.append(_gauge("trader_mdd", float(os.getenv("TRADER_MDD", 0.0)), "Max drawdown"))
     lines.append(
         _gauge(
             "trader_gross_exposure",

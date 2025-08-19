@@ -80,9 +80,7 @@ def load_test_data(symbol: str = "SPY") -> pd.DataFrame:
         np.random.seed(42)  # For reproducible results
 
         # Generate realistic price data
-        returns = np.random.normal(
-            0.0005, 0.015, len(dates)
-        )  # 0.05% daily return, 1.5% volatility
+        returns = np.random.normal(0.0005, 0.015, len(dates))  # 0.05% daily return, 1.5% volatility
         prices = 100 * np.exp(np.cumsum(returns))
 
         data = pd.DataFrame(
@@ -138,9 +136,7 @@ def test_strategy_selector_meaningful(test: MeaningfulValidationTest) -> bool:
             continue
 
         try:
-            strategy_name, params, expected_sharpe = selector.select_best_strategy(
-                slice_data
-            )
+            strategy_name, params, expected_sharpe = selector.select_best_strategy(slice_data)
             selections.append(
                 {
                     "strategy": strategy_name,
@@ -168,9 +164,7 @@ def test_strategy_selector_meaningful(test: MeaningfulValidationTest) -> bool:
 
     # Check that we have sufficient data for regime detection
     avg_data_length = np.mean([s["data_length"] for s in selections])
-    test.assert_greater_equal(
-        avg_data_length, 50, "Should have sufficient data for analysis"
-    )
+    test.assert_greater_equal(avg_data_length, 50, "Should have sufficient data for analysis")
 
     logger.info(
         f"✅ Strategy Selector: {len(selections)} selections, {len(strategies_used)} strategies, avg Sharpe: {avg_sharpe:.3f}"
@@ -330,9 +324,7 @@ def test_walkforward_meaningful(test: MeaningfulValidationTest) -> bool:
 
     # Should have some variability in returns
     return_std = np.std(returns)
-    test.assert_greater(
-        return_std, 0.001, "Should have variability in returns across folds"
-    )
+    test.assert_greater(return_std, 0.001, "Should have variability in returns across folds")
 
     # Should have some positive returns
     positive_returns = sum(1 for r in returns if r > 0)
@@ -367,17 +359,11 @@ def test_objective_functions_meaningful(test: MeaningfulValidationTest) -> bool:
             # Test position sizing with more realistic data
             portfolio_value = 100000
             # Create a series of returns to test with
-            returns_series = pd.Series(
-                [0.001, 0.002, -0.001, 0.003, 0.001]
-            )  # 0.1% to 0.3% returns
-            equity_series = pd.Series(
-                [portfolio_value * (1 + r) for r in returns_series]
-            )
+            returns_series = pd.Series([0.001, 0.002, -0.001, 0.003, 0.001])  # 0.1% to 0.3% returns
+            equity_series = pd.Series([portfolio_value * (1 + r) for r in returns_series])
 
             # Calculate position size using objective's risk budget
-            risk_budget, pos_mult = objective.derive_risk_budget(
-                returns_series, equity_series, {}
-            )
+            risk_budget, pos_mult = objective.derive_risk_budget(returns_series, equity_series, {})
             position_size = risk_budget * pos_mult
 
             # Validate position sizing
@@ -389,12 +375,8 @@ def test_objective_functions_meaningful(test: MeaningfulValidationTest) -> bool:
             )
 
             # Test risk budget calculation
-            risk_budget, pos_mult = objective.derive_risk_budget(
-                returns_series, equity_series, {}
-            )
-            test.assert_greater(
-                risk_budget, 0.0, f"{obj_type}: Risk budget should be positive"
-            )
+            risk_budget, pos_mult = objective.derive_risk_budget(returns_series, equity_series, {})
+            test.assert_greater(risk_budget, 0.0, f"{obj_type}: Risk budget should be positive")
 
         except Exception as e:
             test.log_error(f"Objective function {obj_type} failed: {e}")
@@ -438,7 +420,7 @@ def main():
     print("\n" + "=" * 50)
     print("📊 TEST SUMMARY")
     print(f"Passed: {passed}/{total}")
-    print(f"Success Rate: {passed/total*100:.1f}%")
+    print(f"Success Rate: {passed / total * 100:.1f}%")
 
     if test.errors:
         print(f"\n❌ ERRORS ({len(test.errors)}):")

@@ -16,9 +16,9 @@ def test_train_ends_before_test_starts():
     folds = list(gen_walkforward(n=100, train_len=20, test_len=10, stride=5))
 
     for fold in folds:
-        assert (
-            fold.train_hi < fold.test_lo
-        ), f"WF_BOUNDARY: train_hi ({fold.train_hi}) must be < test_lo ({fold.test_lo})"
+        assert fold.train_hi < fold.test_lo, (
+            f"WF_BOUNDARY: train_hi ({fold.train_hi}) must be < test_lo ({fold.test_lo})"
+        )
 
 
 def test_no_index_overlap():
@@ -30,9 +30,7 @@ def test_no_index_overlap():
         test_indices = set(range(fold.test_lo, fold.test_hi + 1))
 
         overlap = train_indices & test_indices
-        assert (
-            len(overlap) == 0
-        ), f"WF_OVERLAP: Train and test indices overlap: {overlap}"
+        assert len(overlap) == 0, f"WF_OVERLAP: Train and test indices overlap: {overlap}"
 
 
 def test_feature_pipeline_no_lookahead():
@@ -96,9 +94,9 @@ def test_constant_predictor_sanity_check():
 
     # Average accuracy should be reasonable (not >0.9)
     avg_accuracy = np.mean(fold_accuracies)
-    assert (
-        avg_accuracy < 0.9
-    ), f"WF_SANITY: Constant predictor achieved unrealistic accuracy: {avg_accuracy}"
+    assert avg_accuracy < 0.9, (
+        f"WF_SANITY: Constant predictor achieved unrealistic accuracy: {avg_accuracy}"
+    )
 
 
 def test_feature_timestamps_no_future_leakage():
@@ -134,9 +132,9 @@ def test_feature_timestamps_no_future_leakage():
         max_train_time = train_timestamps.max()
         min_test_time = test_timestamps.min()
 
-        assert (
-            max_train_time < min_test_time
-        ), f"WF_TIMESTAMP: Train timestamp ({max_train_time}) >= test timestamp ({min_test_time})"
+        assert max_train_time < min_test_time, (
+            f"WF_TIMESTAMP: Train timestamp ({max_train_time}) >= test timestamp ({min_test_time})"
+        )
 
 
 def test_rolling_window_features_no_lookahead():
@@ -204,12 +202,8 @@ def test_target_alignment_no_lookahead():
         y_test = y[test_indices]
 
         # Verify target alignment
-        assert len(y_train) == len(
-            train_indices
-        ), "WF_TARGET: Train target length mismatch"
-        assert len(y_test) == len(
-            test_indices
-        ), "WF_TARGET: Test target length mismatch"
+        assert len(y_train) == len(train_indices), "WF_TARGET: Train target length mismatch"
+        assert len(y_test) == len(test_indices), "WF_TARGET: Test target length mismatch"
 
 
 def test_data_sanity_in_folds():
@@ -305,6 +299,4 @@ def test_no_global_state_leakage():
     # Average correlation should not be too high (indicating leakage)
     if correlations:
         avg_corr = np.mean(correlations)
-        assert (
-            avg_corr < 0.95
-        ), f"WF_GLOBAL: High correlation between train/test stats: {avg_corr}"
+        assert avg_corr < 0.95, f"WF_GLOBAL: High correlation between train/test stats: {avg_corr}"

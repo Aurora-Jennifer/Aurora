@@ -4,14 +4,14 @@ Configuration loader with deep merging support.
 
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Union
+from typing import Any
 
 import yaml
 
 logger = logging.getLogger(__name__)
 
 
-def deep_merge(base: Dict[str, Any], overlay: Dict[str, Any]) -> Dict[str, Any]:
+def deep_merge(base: dict[str, Any], overlay: dict[str, Any]) -> dict[str, Any]:
     """
     Deep merge two dictionaries, with overlay taking precedence.
 
@@ -33,7 +33,7 @@ def deep_merge(base: Dict[str, Any], overlay: Dict[str, Any]) -> Dict[str, Any]:
     return result
 
 
-def load_config(config_paths: List[Union[str, Path]]) -> Dict[str, Any]:
+def load_config(config_paths: list[str | Path]) -> dict[str, Any]:
     """
     Load and merge configuration from multiple files.
 
@@ -75,7 +75,7 @@ def load_config(config_paths: List[Union[str, Path]]) -> Dict[str, Any]:
     return config
 
 
-def get_cfg(config: Dict[str, Any], path: str, default: Any = None) -> Any:
+def get_cfg(config: dict[str, Any], path: str, default: Any = None) -> Any:
     """
     Get configuration value using dot notation path.
 
@@ -99,7 +99,7 @@ def get_cfg(config: Dict[str, Any], path: str, default: Any = None) -> Any:
     return current
 
 
-def validate_config(config: Dict[str, Any]) -> bool:
+def validate_config(config: dict[str, Any]) -> bool:
     """
     Validate configuration structure.
 

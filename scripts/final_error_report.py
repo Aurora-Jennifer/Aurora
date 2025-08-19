@@ -127,9 +127,7 @@ def generate_final_report():
     print("   6. Consider live trading after 6+ months of trusted performance")
 
     print("\n🔧 MONITORING COMMANDS:")
-    print(
-        "   Daily Walk-Forward: python apps/walk_cli.py --parquet <symbol> --train 252 --test 63"
-    )
+    print("   Daily Walk-Forward: python apps/walk_cli.py --parquet <symbol> --train 252 --test 63")
     print("   Multi-Symbol Test: python scripts/multi_symbol_test.py")
     print("   Error Check: python scripts/comprehensive_error_check.py")
     print("   Debug Verification: python scripts/debug_verification.py")

@@ -2,7 +2,6 @@
 Unit tests for composite scoring system.
 """
 
-
 import pytest
 
 from core.metrics.composite import (
@@ -29,17 +28,11 @@ class TestNormalizationFunctions:
 
         # Test negative CAGR
         assert normalize_cagr(-0.2) == pytest.approx(0.2, rel=1e-2)  # -20% CAGR
-        assert normalize_cagr(-0.5) == pytest.approx(
-            0.0, rel=1e-2
-        )  # -50% CAGR (clipped)
+        assert normalize_cagr(-0.5) == pytest.approx(0.0, rel=1e-2)  # -50% CAGR (clipped)
 
         # Test bounds
-        assert normalize_cagr(1.0) == pytest.approx(
-            1.0, rel=1e-2
-        )  # 100% CAGR (clipped)
-        assert normalize_cagr(-0.6) == pytest.approx(
-            0.0, rel=1e-2
-        )  # -60% CAGR (clipped)
+        assert normalize_cagr(1.0) == pytest.approx(1.0, rel=1e-2)  # 100% CAGR (clipped)
+        assert normalize_cagr(-0.6) == pytest.approx(0.0, rel=1e-2)  # -60% CAGR (clipped)
 
     def test_normalize_sharpe(self):
         """Test Sharpe ratio normalization."""
@@ -49,17 +42,11 @@ class TestNormalizationFunctions:
 
         # Test negative Sharpe
         assert normalize_sharpe(-1.0) == pytest.approx(0.2, rel=1e-2)  # Sharpe -1.0
-        assert normalize_sharpe(-2.0) == pytest.approx(
-            0.0, rel=1e-2
-        )  # Sharpe -2.0 (clipped)
+        assert normalize_sharpe(-2.0) == pytest.approx(0.0, rel=1e-2)  # Sharpe -2.0 (clipped)
 
         # Test bounds
-        assert normalize_sharpe(3.0) == pytest.approx(
-            1.0, rel=1e-2
-        )  # Sharpe 3.0 (clipped)
-        assert normalize_sharpe(-3.0) == pytest.approx(
-            0.0, rel=1e-2
-        )  # Sharpe -3.0 (clipped)
+        assert normalize_sharpe(3.0) == pytest.approx(1.0, rel=1e-2)  # Sharpe 3.0 (clipped)
+        assert normalize_sharpe(-3.0) == pytest.approx(0.0, rel=1e-2)  # Sharpe -3.0 (clipped)
 
     def test_normalize_win_rate(self):
         """Test win rate normalization."""
@@ -75,17 +62,13 @@ class TestNormalizationFunctions:
     def test_normalize_avg_trade_return(self):
         """Test average trade return normalization."""
         # Test positive returns
-        assert normalize_avg_trade_return(0.005) == pytest.approx(
-            0.75, rel=1e-2
-        )  # 0.5% return
+        assert normalize_avg_trade_return(0.005) == pytest.approx(0.75, rel=1e-2)  # 0.5% return
         assert normalize_avg_trade_return(0.01) == pytest.approx(
             1.0, rel=1e-2
         )  # 1% return (clipped)
 
         # Test negative returns
-        assert normalize_avg_trade_return(-0.005) == pytest.approx(
-            0.25, rel=1e-2
-        )  # -0.5% return
+        assert normalize_avg_trade_return(-0.005) == pytest.approx(0.25, rel=1e-2)  # -0.5% return
         assert normalize_avg_trade_return(-0.01) == pytest.approx(
             0.0, rel=1e-2
         )  # -1% return (clipped)
@@ -109,10 +92,7 @@ class TestCompositeWeights:
         assert weights.beta == 0.3
         assert weights.gamma == 0.2
         assert weights.delta == 0.1
-        assert (
-            abs(weights.alpha + weights.beta + weights.gamma + weights.delta - 1.0)
-            < 1e-10
-        )
+        assert abs(weights.alpha + weights.beta + weights.gamma + weights.delta - 1.0) < 1e-10
 
     def test_custom_weights(self):
         """Test custom weight values."""
@@ -206,9 +186,7 @@ class TestCompositeScore:
         score_acceptable = composite_score(metrics_acceptable)
         score_excessive = composite_score(metrics_excessive)
 
-        assert (
-            score_acceptable > score_excessive
-        )  # Excessive drawdown should be penalized
+        assert score_acceptable > score_excessive  # Excessive drawdown should be penalized
 
     def test_trade_count_penalty(self):
         """Test trade count penalty application."""
@@ -235,9 +213,7 @@ class TestCompositeScore:
         score_sufficient = composite_score(metrics_sufficient)
         score_insufficient = composite_score(metrics_insufficient)
 
-        assert (
-            score_sufficient > score_insufficient
-        )  # Insufficient trades should be penalized
+        assert score_sufficient > score_insufficient  # Insufficient trades should be penalized
 
     def test_missing_metrics(self):
         """Test handling of missing metrics."""
@@ -372,10 +348,10 @@ class TestLoadCompositeConfig:
         config = {
             "metric_weights": {
                 "alpha": 0.6,
-                "beta": 0.4
+                "beta": 0.4,
                 # Missing gamma and delta
             },
-            "metric_weight_max_dd_cap": 0.2
+            "metric_weight_max_dd_cap": 0.2,
             # Missing other penalty parameters
         }
 

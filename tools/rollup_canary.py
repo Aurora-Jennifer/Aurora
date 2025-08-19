@@ -1,7 +1,7 @@
-import json
 import glob
+import json
+from datetime import UTC, datetime
 from pathlib import Path
-from datetime import datetime, timezone
 
 
 def roll() -> None:
@@ -19,7 +19,7 @@ def roll() -> None:
                 s = obj.get("symbol")
                 if s:
                     symbols.add(s)
-    ts = datetime.now(timezone.utc).strftime("%Y%m%d")
+    ts = datetime.now(UTC).strftime("%Y%m%d")
     out = {"trades": trades, "symbols": sorted(symbols)}
     Path("reports").mkdir(exist_ok=True)
     Path("docs/analysis").mkdir(parents=True, exist_ok=True)
@@ -31,5 +31,3 @@ def roll() -> None:
 
 if __name__ == "__main__":
     roll()
-
-

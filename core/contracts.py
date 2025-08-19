@@ -44,9 +44,7 @@ class DataFrameContract:
         required_cols = ["Open", "High", "Low", "Close", "Volume"]
         missing_cols = [col for col in required_cols if col not in df.columns]
         if missing_cols:
-            raise DataSanityError(
-                f"{context}: Missing required columns: {missing_cols}"
-            )
+            raise DataSanityError(f"{context}: Missing required columns: {missing_cols}")
 
         # Check data types
         expected_dtypes = {
@@ -178,17 +176,13 @@ def require_validated_data(context: str = "unknown"):
             # Check first DataFrame argument
             for arg in args:
                 if isinstance(arg, pd.DataFrame):
-                    DataFrameContract.validate_market_data(
-                        arg, f"{func.__name__}:{context}"
-                    )
+                    DataFrameContract.validate_market_data(arg, f"{func.__name__}:{context}")
                     break
 
             # Check DataFrame keyword arguments
             for key, value in kwargs.items():
                 if isinstance(value, pd.DataFrame):
-                    DataFrameContract.validate_market_data(
-                        value, f"{func.__name__}:{context}"
-                    )
+                    DataFrameContract.validate_market_data(value, f"{func.__name__}:{context}")
 
             return func(*args, **kwargs)
 
@@ -245,9 +239,7 @@ class FeatureContract:
             DataSanityError: If validation fails
         """
         if not isinstance(features, pd.DataFrame):
-            raise DataSanityError(
-                f"{context}: Expected DataFrame, got {type(features)}"
-            )
+            raise DataSanityError(f"{context}: Expected DataFrame, got {type(features)}")
 
         if features.empty:
             raise DataSanityError(f"{context}: Feature DataFrame is empty")
@@ -256,9 +248,7 @@ class FeatureContract:
         non_finite = ~np.isfinite(features.select_dtypes(include=[np.number]))
         if non_finite.any().any():
             non_finite_cols = non_finite.any()[non_finite.any()].index.tolist()
-            raise DataSanityError(
-                f"{context}: Non-finite values in columns: {non_finite_cols}"
-            )
+            raise DataSanityError(f"{context}: Non-finite values in columns: {non_finite_cols}")
 
         # Check index integrity
         if not features.index.is_monotonic_increasing:
@@ -302,9 +292,7 @@ def validate_strategy_output(func):
         if isinstance(result, pd.Series):
             SignalContract.validate_signals(result, f"{func.__name__}:output")
         elif isinstance(result, dict) and "signals" in result:
-            SignalContract.validate_signals(
-                result["signals"], f"{func.__name__}:signals"
-            )
+            SignalContract.validate_signals(result["signals"], f"{func.__name__}:signals")
             if "confidence" in result:
                 SignalContract.validate_confidence(
                     result["confidence"], f"{func.__name__}:confidence"

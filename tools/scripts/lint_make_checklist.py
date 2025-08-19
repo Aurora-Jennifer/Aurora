@@ -30,5 +30,3 @@ for d, counts in sorted(dirs.items()):
 
 out.write_text("\n".join(lines))
 print(f"Wrote {out}")
-
-

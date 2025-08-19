@@ -1,8 +1,11 @@
 from __future__ import annotations
-from typing import Dict, Any
+
+from typing import Any
 
 
-def check_live_risk(equity: float, positions: Dict[str, float], prices: Dict[str, float], risk_cfg: Dict[str, Any]) -> Dict[str, Any]:
+def check_live_risk(
+    equity: float, positions: dict[str, float], prices: dict[str, float], risk_cfg: dict[str, Any]
+) -> dict[str, Any]:
     max_lev = float(risk_cfg.get("max_leverage", 1.0))
     max_gross = float(risk_cfg.get("max_gross_exposure", 1.0))
     max_pos = float(risk_cfg.get("max_position_pct", 1.0))
@@ -20,5 +23,3 @@ def check_live_risk(equity: float, positions: Dict[str, float], prices: Dict[str
     if max_abs > max_pos + 1e-9:
         return {"status": "FAIL", "code": "POSITION_LIMIT"}
     return {"status": "OK"}
-
-

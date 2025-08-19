@@ -35,5 +35,3 @@ def write_provenance(out_path="reports/smoke_provenance.json", configs=None):
     prov = {"config_hashes": hash_configs(configs), "cache_hashes": hash_cache()}
     Path(out_path).write_text(json.dumps(prov, indent=2))
     return prov
-
-

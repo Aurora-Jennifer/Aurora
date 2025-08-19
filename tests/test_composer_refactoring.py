@@ -89,11 +89,7 @@ def test_fold_generation_short_window():
     stride = 63
 
     # Test without allowing truncated folds
-    folds = list(
-        gen_walkforward(
-            n, train_len, test_len, stride, allow_truncated_final_fold=False
-        )
-    )
+    folds = list(gen_walkforward(n, train_len, test_len, stride, allow_truncated_final_fold=False))
 
     # All folds should have full test windows
     for fold in folds:
@@ -101,17 +97,11 @@ def test_fold_generation_short_window():
         assert test_window_size >= test_len
 
     # Test with allowing truncated folds
-    folds = list(
-        gen_walkforward(n, train_len, test_len, stride, allow_truncated_final_fold=True)
-    )
+    folds = list(gen_walkforward(n, train_len, test_len, stride, allow_truncated_final_fold=True))
 
     # Should have more folds when allowing truncation
     assert len(folds) >= len(
-        list(
-            gen_walkforward(
-                n, train_len, test_len, stride, allow_truncated_final_fold=False
-            )
-        )
+        list(gen_walkforward(n, train_len, test_len, stride, allow_truncated_final_fold=False))
     )
 
 

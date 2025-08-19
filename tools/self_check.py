@@ -17,9 +17,7 @@ def check_python_environment():
 
     # Check Python version
     python_version = sys.version_info
-    print(
-        f"  Python version: {python_version.major}.{python_version.minor}.{python_version.micro}"
-    )
+    print(f"  Python version: {python_version.major}.{python_version.minor}.{python_version.micro}")
 
     if python_version < (3, 8):
         print("  ❌ Python 3.8+ required")

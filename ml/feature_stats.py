@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from typing import Any
+
 import numpy as np
 import pandas as pd
-from typing import Dict, Any
 
 
 def _finite(x: float) -> float:
@@ -11,9 +12,9 @@ def _finite(x: float) -> float:
     return float(x)
 
 
-def stats(df: pd.DataFrame) -> Dict[str, Dict[str, float]]:
+def stats(df: pd.DataFrame) -> dict[str, dict[str, float]]:
     """Compute per-feature mean/std/missing_pct. Returns finite values or NaN."""
-    result: Dict[str, Dict[str, float]] = {}
+    result: dict[str, dict[str, float]] = {}
     for name in df.columns:
         col = pd.to_numeric(df[name], errors="coerce")
         miss = float(col.isna().mean())
@@ -41,8 +42,8 @@ def psi_from_edges(current: pd.Series, ref_edges: np.ndarray, ref_probs: np.ndar
     return float(np.sum((cur_probs - ref_probs) * np.log(cur_probs / ref_probs)))
 
 
-def psi(current_df: pd.DataFrame, ref: Dict[str, Any]) -> Dict[str, float]:
-    out: Dict[str, float] = {}
+def psi(current_df: pd.DataFrame, ref: dict[str, Any]) -> dict[str, float]:
+    out: dict[str, float] = {}
     for name in current_df.columns:
         r = ref.get(name, {}) or {}
         edges = np.asarray(r.get("bin_edges", []), dtype="float64")
@@ -54,5 +55,3 @@ def psi(current_df: pd.DataFrame, ref: Dict[str, Any]) -> Dict[str, float]:
     vals = [v for v in out.values() if np.isfinite(v)]
     out["__global__"] = float(np.mean(vals)) if vals else float("nan")
     return out
-
-

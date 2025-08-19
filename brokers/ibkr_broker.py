@@ -7,7 +7,6 @@ import logging
 import os
 import time
 from dataclasses import dataclass
-from typing import Dict, Optional
 
 import pandas as pd
 
@@ -27,9 +26,7 @@ class IBKRConfig:
     def __init__(self):
         self.paper_trading = os.getenv("IBKR_PAPER_TRADING", "true").lower() == "true"
         self.host = os.getenv("IBKR_HOST", "127.0.0.1")
-        self.port = int(
-            os.getenv("IBKR_PORT", "7497" if self.paper_trading else "7496")
-        )
+        self.port = int(os.getenv("IBKR_PORT", "7497" if self.paper_trading else "7496"))
         self.client_id = int(os.getenv("IBKR_CLIENT_ID", "1"))
         self.timeout = int(os.getenv("IBKR_TIMEOUT", "20"))
         self.max_retries = int(os.getenv("IBKR_MAX_RETRIES", "3"))
@@ -129,18 +126,14 @@ class IBKRBroker:
         logger.error(f"IBKR Error {errorCode}: {errorString} (reqId: {reqId})")
 
         # Handle specific error codes
-        if errorCode == 1100:  # Connectivity between IB and TWS lost
-            self._handle_disconnect()
-        elif errorCode == 1101:  # Connectivity between TWS and IB server lost
+        if errorCode == 1100 or errorCode == 1101:  # Connectivity between IB and TWS lost
             self._handle_disconnect()
 
     def _request_account_info(self):
         """Request account information."""
         try:
             # Request account summary
-            self.ib.reqAccountSummary(
-                1, "All", "NetLiquidation,BuyingPower,TotalCashValue"
-            )
+            self.ib.reqAccountSummary(1, "All", "NetLiquidation,BuyingPower,TotalCashValue")
 
             # Wait for account info
             self.ib.sleep(1)
@@ -159,13 +152,11 @@ class IBKRBroker:
                 account_values = self.ib.accountValues()
                 for value in account_values:
                     self.account_info[value.tag] = value.value
-                logger.info(
-                    f"Account info loaded via alternative method: {self.account_info}"
-                )
+                logger.info(f"Account info loaded via alternative method: {self.account_info}")
             except Exception as e2:
                 logger.error(f"Alternative account info method also failed: {e2}")
 
-    def get_account_info(self) -> Dict[str, str]:
+    def get_account_info(self) -> dict[str, str]:
         """Get current account information."""
         if not self.connected:
             self.connect()
@@ -173,7 +164,7 @@ class IBKRBroker:
         self._request_account_info()
         return self.account_info.copy()
 
-    def get_positions(self) -> Dict[str, Dict]:
+    def get_positions(self) -> dict[str, dict]:
         """Get current positions."""
         if not self.connected:
             self.connect()
@@ -202,10 +193,10 @@ class IBKRBroker:
         symbol: str,
         quantity: int,
         order_type: str = "MKT",
-        limit_price: Optional[float] = None,
-        stop_price: Optional[float] = None,
+        limit_price: float | None = None,
+        stop_price: float | None = None,
         tif: str = "DAY",
-    ) -> Optional[str]:
+    ) -> str | None:
         """
         Place an order.
 
@@ -233,20 +224,14 @@ class IBKRBroker:
             elif order_type == "LMT":
                 if limit_price is None:
                     raise ValueError("Limit price required for LMT orders")
-                order = LimitOrder(
-                    "BUY" if quantity > 0 else "SELL", abs(quantity), limit_price
-                )
+                order = LimitOrder("BUY" if quantity > 0 else "SELL", abs(quantity), limit_price)
             elif order_type == "STP":
                 if stop_price is None:
                     raise ValueError("Stop price required for STP orders")
-                order = StopOrder(
-                    "BUY" if quantity > 0 else "SELL", abs(quantity), stop_price
-                )
+                order = StopOrder("BUY" if quantity > 0 else "SELL", abs(quantity), stop_price)
             elif order_type == "STP_LMT":
                 if limit_price is None or stop_price is None:
-                    raise ValueError(
-                        "Both limit and stop prices required for STP_LMT orders"
-                    )
+                    raise ValueError("Both limit and stop prices required for STP_LMT orders")
                 order = StopLimitOrder(
                     "BUY" if quantity > 0 else "SELL",
                     abs(quantity),
@@ -300,7 +285,7 @@ class IBKRBroker:
             logger.error(f"Failed to cancel order: {e}")
             return False
 
-    def get_order_status(self, order_id: str) -> Optional[Dict]:
+    def get_order_status(self, order_id: str) -> dict | None:
         """Get order status."""
         if order_id in self.orders:
             trade = self.orders[order_id]
@@ -316,7 +301,7 @@ class IBKRBroker:
 
     def get_market_data(
         self, symbol: str, duration: str = "1 D", bar_size: str = "1 min"
-    ) -> Optional[pd.DataFrame]:
+    ) -> pd.DataFrame | None:
         """
         Get market data for a symbol.
 
@@ -372,7 +357,7 @@ class IBKRBroker:
             logger.error(f"Failed to get market data for {symbol}: {e}")
             return None
 
-    def get_real_time_price(self, symbol: str) -> Optional[float]:
+    def get_real_time_price(self, symbol: str) -> float | None:
         """Get real-time price for a symbol."""
         if not self.connected:
             self.connect()

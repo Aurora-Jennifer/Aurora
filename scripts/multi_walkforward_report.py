@@ -10,23 +10,21 @@ walkforward framework APIs and writes a markdown report.
 
 import argparse
 import datetime as dt
+import json
 import logging
 import math
+import os
+import pathlib
 import random
+import subprocess
+import sys
 import time
-import traceback
 from pathlib import Path
-from typing import Dict, List, Tuple
 
 import numpy as np
 import pandas as pd
-import json
-
-import os
-import pathlib
-import sys
-import subprocess
 import yaml
+
 try:
     from tools.provenance import write_provenance
 except Exception:  # fallback when package import fails
@@ -36,13 +34,16 @@ except Exception:  # fallback when package import fails
     try:
         from provenance import write_provenance  # type: ignore
     except Exception:
+
         def write_provenance(*_a, **_k):
             return {}
+
+
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from scripts.walkforward_framework import (
+    LeakageProofPipeline,
     build_feature_table,
     gen_walkforward,
-    LeakageProofPipeline,
     walkforward_run,
 )
 
@@ -57,7 +58,7 @@ def in_ci() -> bool:
     return str(os.getenv("CI", "")).lower() in {"1", "true", "yes", "on"}
 
 
-def _write_smoke_json(payload: Dict) -> None:
+def _write_smoke_json(payload: dict) -> None:
     payload = {
         "timestamp": dt.datetime.now(dt.UTC).strftime("%Y%m%dT%H%M%SZ"),
         **payload,
@@ -74,7 +75,7 @@ def _git_sha_short() -> str:
         return "unknown"
 
 
-def _write_smoke_meta(payload: Dict) -> None:
+def _write_smoke_meta(payload: dict) -> None:
     meta = {
         "run_id": payload.get("timestamp"),
         "git_sha": _git_sha_short(),
@@ -111,8 +112,15 @@ def load_data(symbol: str, start: str, end: str) -> pd.DataFrame:
                 df.index = df.index.tz_localize("UTC")
             # If only Close exists, synthesize minimal OHLCV
             cols = set(df.columns)
-            if "Open" not in cols or "High" not in cols or "Low" not in cols or "Volume" not in cols:
-                close = df[df.columns[0]] if len(df.columns) == 1 else df.get("Close", df.iloc[:, 0])
+            if (
+                "Open" not in cols
+                or "High" not in cols
+                or "Low" not in cols
+                or "Volume" not in cols
+            ):
+                close = (
+                    df[df.columns[0]] if len(df.columns) == 1 else df.get("Close", df.iloc[:, 0])
+                )
                 out = pd.DataFrame(index=df.index)
                 out["Close"] = close
                 out["Open"] = close.shift(1).fillna(close)
@@ -127,10 +135,10 @@ def load_data(symbol: str, start: str, end: str) -> pd.DataFrame:
     # Ensure UTC index
     if df.index.tz is None:
         df.index = df.index.tz_localize("UTC")
-    return df["Open High Low Close Volume".split()]
+    return df[["Open", "High", "Low", "Close", "Volume"]]
 
 
-def choose_fold_params(n: int, target_folds: int) -> Tuple[int, int, int]:
+def choose_fold_params(n: int, target_folds: int) -> tuple[int, int, int]:
     # Simple heuristic: 70% train / 30% test over target_folds, rolling by test
     if n < target_folds * 100:
         # small data; keep windows small
@@ -160,7 +168,7 @@ def run_for_symbol_profile(
     train_days: int | None = None,
     test_days: int | None = None,
     warmup_days: int = 60,
-) -> Tuple[List[Dict], List[int], int]:
+) -> tuple[list[dict], list[int], int]:
     data = load_data(symbol, start, end)
     X, y, prices = build_feature_table(data, warmup_days=warmup_days)
     n = len(X)
@@ -216,7 +224,7 @@ def run_for_symbol_profile(
     return results, fold_test_lengths, total_trades
 
 
-def run_smoke(symbols: List[str], train: int = 60, test: int = 10) -> Dict:
+def run_smoke(symbols: list[str], train: int = 60, test: int = 10) -> dict:
     # Use fixed short window and CI data if present
     start, end = "2020-01-01", "2020-03-31"
     ordered = symbols
@@ -230,13 +238,22 @@ def run_smoke(symbols: List[str], train: int = 60, test: int = 10) -> Dict:
                 res = validator.validate_dataframe_fast(df_sanity, sanity_profile)
                 if res.violations and getattr(res, "mode", "warn") == "enforce":
                     code, reason = _map_violation(res)
-                    return {"status": "FAIL", "violation_code": code, "reason": reason, "symbols": [sym], "folds": 0, "any_nan_inf": False, "total_trades": 0}
+                    return {
+                        "status": "FAIL",
+                        "violation_code": code,
+                        "reason": reason,
+                        "symbols": [sym],
+                        "folds": 0,
+                        "any_nan_inf": False,
+                        "total_trades": 0,
+                    }
         except Exception:
             # Do not fail pre-check hard; main run will still guard
             pass
     start_time = time.monotonic()
     summary = make_report(
-        out_path=Path("docs/analysis") / f"walkforward_smoke_{dt.datetime.now(dt.UTC).strftime('%Y%m%d_%H%M%S')}.md",
+        out_path=Path("docs/analysis")
+        / f"walkforward_smoke_{dt.datetime.now(dt.UTC).strftime('%Y%m%d_%H%M%S')}.md",
         profiles=["risk_balanced"],
         symbols=ordered,
         start=start,
@@ -259,8 +276,8 @@ def run_smoke(symbols: List[str], train: int = 60, test: int = 10) -> Dict:
 
 def make_report(
     out_path: Path,
-    profiles: List[str],
-    symbols: List[str],
+    profiles: list[str],
+    symbols: list[str],
     start: str,
     end: str,
     validate_data: bool,
@@ -269,24 +286,28 @@ def make_report(
     test_days: int | None,
 ):
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    lines: List[str] = []
-    lines.append(f"# Walkforward Report — {dt.datetime.now(dt.UTC).isoformat(timespec='seconds')}\n")
+    lines: list[str] = []
+    lines.append(
+        f"# Walkforward Report — {dt.datetime.now(dt.UTC).isoformat(timespec='seconds')}\n"
+    )
     lines.append(f"Date range: {start} → {end}\n")
     lines.append(f"Symbols: {', '.join(symbols)}\n")
     lines.append(f"Profiles: {', '.join(profiles)}\n")
     lines.append(f"DataSanity: {'ON' if validate_data else 'OFF'}\n")
 
-    overall_summary: Dict[str, Dict[str, float]] = {}
+    overall_summary: dict[str, dict[str, float]] = {}
     any_nan_inf = False
     total_trades_all = 0
 
     for profile in profiles:
         lines.append(f"\n## Profile: {profile}\n")
-        lines.append("| Symbol | Fold | Sharpe | MaxDD | HitRate | Return | MedianHold | CAGR est. | Risk OK |\n")
+        lines.append(
+            "| Symbol | Fold | Sharpe | MaxDD | HitRate | Return | MedianHold | CAGR est. | Risk OK |\n"
+        )
         lines.append("|---|---:|---:|---:|---:|---:|---:|---:|:---:|\n")
 
-        sharpe_vals: List[float] = []
-        maxdd_vals: List[float] = []
+        sharpe_vals: list[float] = []
+        maxdd_vals: list[float] = []
 
         for symbol in symbols:
             results, fold_lengths, symbol_trades = run_for_symbol_profile(
@@ -297,10 +318,16 @@ def make_report(
                 validate_data=validate_data,
                 train_days=train_days,
                 test_days=test_days,
-                warmup_days=10 if (train_days is not None and test_days is not None and (train_days <= 30 or test_days <= 10)) else 60,
+                warmup_days=10
+                if (
+                    train_days is not None
+                    and test_days is not None
+                    and (train_days <= 30 or test_days <= 10)
+                )
+                else 60,
             )
             total_trades_all += symbol_trades
-            for (fold_id, metrics, _), bars in zip(results, fold_lengths):
+            for (fold_id, metrics, _), bars in zip(results, fold_lengths, strict=False):
                 sharpe = float(metrics.get("sharpe_nw", 0.0))
                 max_dd = float(metrics.get("max_dd", 0.0))
                 hit_rate = float(metrics.get("hit_rate", 0.0))
@@ -338,23 +365,25 @@ def make_report(
     if best_profile is None:
         lines.append("No clear winner.\n")
     else:
-        lines.append(
-            f"Recommend profile: {best_profile} (balance of Sharpe and drawdown).\n"
-        )
+        lines.append(f"Recommend profile: {best_profile} (balance of Sharpe and drawdown).\n")
 
     out_path.write_text("".join(lines), encoding="utf-8")
-    return {"overall_summary": overall_summary, "any_nan_inf": any_nan_inf, "total_trades": total_trades_all}
+    return {
+        "overall_summary": overall_summary,
+        "any_nan_inf": any_nan_inf,
+        "total_trades": total_trades_all,
+    }
 
 
-def _normalize_symbols(raw: List[str]) -> List[str]:
-    combined: List[str] = []
+def _normalize_symbols(raw: list[str]) -> list[str]:
+    combined: list[str] = []
     for token in raw:
         if "," in token:
             combined.extend([t for t in token.split(",") if t])
         else:
             combined.append(token)
     seen = set()
-    out: List[str] = []
+    out: list[str] = []
     for s in combined:
         sx = s.strip()
         if not sx:
@@ -380,7 +409,9 @@ def main():
         nargs="+",
         default=["risk_low", "risk_balanced", "risk_strict"],
     )
-    ap.add_argument("--separate-crypto", action="store_true", help="Run crypto in a separate section")
+    ap.add_argument(
+        "--separate-crypto", action="store_true", help="Run crypto in a separate section"
+    )
     ap.add_argument("--validate-data", action="store_true")
     ap.add_argument("--smoke", action="store_true")
     ap.add_argument("--folds", type=int, default=None)
@@ -395,6 +426,7 @@ def main():
     np.random.seed(1337)
     try:
         import torch  # type: ignore
+
         torch.manual_seed(1337)
         try:
             torch.use_deterministic_algorithms(True)  # type: ignore
@@ -438,8 +470,28 @@ def main():
         ts = dt.datetime.now(dt.UTC).strftime("%Y%m%d_%H%M%S")
         out_non = out_file.with_name(out_file.stem + f"_noncrypto_{ts}.md")
         out_cry = out_file.with_name(out_file.stem + f"_crypto_{ts}.md")
-        make_report(out_non, args.profiles, non_crypto, eff_start, eff_end, args.validate_data, eff_folds, eff_train, eff_test)
-        make_report(out_cry, args.profiles, crypto, eff_start, eff_end, args.validate_data, eff_folds, eff_train, eff_test)
+        make_report(
+            out_non,
+            args.profiles,
+            non_crypto,
+            eff_start,
+            eff_end,
+            args.validate_data,
+            eff_folds,
+            eff_train,
+            eff_test,
+        )
+        make_report(
+            out_cry,
+            args.profiles,
+            crypto,
+            eff_start,
+            eff_end,
+            args.validate_data,
+            eff_folds,
+            eff_train,
+            eff_test,
+        )
         print(f"Report written: {out_non}\nReport written: {out_cry}")
     else:
         ordered = non_crypto + crypto
@@ -479,36 +531,63 @@ def main():
         if args.smoke:
             try:
                 if summary.get("any_nan_inf"):
-                    payload = {"status":"FAIL","violation_code":"NAN_INF_METRICS","reason":"NaN/inf metrics detected","symbols": ordered}
+                    payload = {
+                        "status": "FAIL",
+                        "violation_code": "NAN_INF_METRICS",
+                        "reason": "NaN/inf metrics detected",
+                        "symbols": ordered,
+                    }
                     _write_smoke_json(payload)
                     raise SystemExit(1)
                 if int(summary.get("total_trades", 0)) <= 0:
-                    payload = {"status":"FAIL","violation_code":"NO_TRADES","reason":"No trades across test window","symbols": ordered}
+                    payload = {
+                        "status": "FAIL",
+                        "violation_code": "NO_TRADES",
+                        "reason": "No trades across test window",
+                        "symbols": ordered,
+                    }
                     _write_smoke_json(payload)
                     raise SystemExit(1)
                 duration = time.monotonic() - start_time
                 if duration > args.max_runtime:
-                    payload = {"status":"FAIL","violation_code":"RUNTIME_BUDGET","reason":f"Exceeded {args.max_runtime}s","symbols": ordered}
+                    payload = {
+                        "status": "FAIL",
+                        "violation_code": "RUNTIME_BUDGET",
+                        "reason": f"Exceeded {args.max_runtime}s",
+                        "symbols": ordered,
+                    }
                     _write_smoke_json(payload)
                     raise SystemExit(1)
                 overall = summary.get("overall_summary", {})
-                avg_sharpe = float(np.mean([v.get("avg_sharpe", 0.0) for v in overall.values()])) if overall else 0.0
-                avg_maxdd = float(np.mean([v.get("avg_maxdd", 0.0) for v in overall.values()])) if overall else 0.0
-                print(f"SMOKE OK | folds={eff_folds} | symbols={','.join(ordered)} | sharpe={avg_sharpe:.3f} maxdd={avg_maxdd:.3f}")
+                avg_sharpe = (
+                    float(np.mean([v.get("avg_sharpe", 0.0) for v in overall.values()]))
+                    if overall
+                    else 0.0
+                )
+                avg_maxdd = (
+                    float(np.mean([v.get("avg_maxdd", 0.0) for v in overall.values()]))
+                    if overall
+                    else 0.0
+                )
+                print(
+                    f"SMOKE OK | folds={eff_folds} | symbols={','.join(ordered)} | sharpe={avg_sharpe:.3f} maxdd={avg_maxdd:.3f}"
+                )
                 # Build per-fold summaries (use average placeholders if detailed not available from framework)
                 fold_summaries = []
                 for idx_fold in range(eff_folds):
-                    fold_summaries.append({
-                        "fold": idx_fold,
-                        "sharpe": float(avg_sharpe),
-                        "max_drawdown": float(avg_maxdd),
-                        "trades": int(summary.get("total_trades", 0)),
-                        "duration_ms": int(duration * 1000 / max(eff_folds,1)),
-                    })
+                    fold_summaries.append(
+                        {
+                            "fold": idx_fold,
+                            "sharpe": float(avg_sharpe),
+                            "max_drawdown": float(avg_maxdd),
+                            "trades": int(summary.get("total_trades", 0)),
+                            "duration_ms": int(duration * 1000 / max(eff_folds, 1)),
+                        }
+                    )
                 # Load risk costs from config for provenance/visibility
                 risk_costs = {}
                 try:
-                    with open("config/base.yaml", "r", encoding="utf-8") as f:
+                    with open("config/base.yaml", encoding="utf-8") as f:
                         cfg_yaml = yaml.safe_load(f)
                         risk_cfg = (cfg_yaml or {}).get("risk", {})
                         risk_costs = {
@@ -520,7 +599,7 @@ def main():
                     risk_costs = {}
 
                 payload_ok = {
-                    "status":"OK",
+                    "status": "OK",
                     "folds": eff_folds,
                     "symbols": ordered,
                     "trades": int(summary.get("total_trades", 0)),
@@ -538,7 +617,12 @@ def main():
             except SystemExit:
                 raise
             except Exception as e:
-                fail_payload = {"status":"FAIL","violation_code":"UNEXPECTED_ERROR","reason":f"{e.__class__.__name__}: {e}","symbols": ordered}
+                fail_payload = {
+                    "status": "FAIL",
+                    "violation_code": "UNEXPECTED_ERROR",
+                    "reason": f"{e.__class__.__name__}: {e}",
+                    "symbols": ordered,
+                }
                 _write_smoke_json(fail_payload)
                 raise
 
@@ -547,5 +631,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
