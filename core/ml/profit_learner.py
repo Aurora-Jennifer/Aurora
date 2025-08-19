@@ -404,7 +404,7 @@ class ProfitLearner:
             rs = gain / loss
             rsi = 100 - (100 / (1 + rs))
             return float(rsi.iloc[-1])
-        except:
+        except Exception:
             return 50.0
 
     def extract_trade_features(self, trade_data: dict[str, Any]) -> dict[str, float]:

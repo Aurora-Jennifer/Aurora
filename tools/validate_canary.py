@@ -7,8 +7,10 @@ from jsonschema import ValidationError, validate
 def main(
     meta_path: str = "reports/canary_run.meta.json", schema_path: str = "reports/canary.schema.json"
 ) -> int:
-    data = json.loads(open(meta_path).read())
-    schema = json.loads(open(schema_path).read())
+    with open(meta_path) as f:
+        data = json.loads(f.read())
+    with open(schema_path) as f:
+        schema = json.loads(f.read())
     validate(instance=data, schema=schema)
     fallbacks = int(data.get("model_fallbacks", 0))
     anomalies = data.get("anomalies", []) or []

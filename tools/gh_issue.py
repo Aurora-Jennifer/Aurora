@@ -37,7 +37,8 @@ def main():
     if not repo or not token:
         print("missing repo or token; skipping")
         return 0
-    meta = json.loads(open("reports/paper_run.meta.json").read())
+    with open("reports/paper_run.meta.json") as f:
+        meta = json.loads(f.read())
     fallbacks = int(meta.get("model_fallbacks", 0))
     tw = meta.get("model_tripwire") or meta.get("model_tripwire_turnover")
     if fallbacks > 0 or tw:

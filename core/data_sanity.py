@@ -500,7 +500,7 @@ class DataSanityValidator:
                 try:
                     data.index = pd.to_datetime(data.index)
                     repairs.append("converted_to_datetime_index")
-                except:
+                except Exception:
                     raise DataSanityError(f"{symbol}: No valid datetime index found")
             else:
                 raise DataSanityError(f"{symbol}: No valid datetime index found")
@@ -615,7 +615,7 @@ class DataSanityValidator:
                         raise DataSanityError(
                             f"{symbol}: String data type in {col} not allowed in strict mode"
                         )
-                except:
+                except Exception:
                     if not self.profile_config.get("allow_repairs", True):
                         raise DataSanityError(
                             f"{symbol}: Cannot convert string data to numeric in {col}"

@@ -399,14 +399,14 @@ def _compute_metrics(
                 metrics["auc"] = roc_auc_score(y_true, y_pred)
                 if y_cal is not None:
                     metrics["auc_calibrated"] = roc_auc_score(y_true, y_cal)
-            except:
+            except Exception:
                 pass
 
             try:
                 metrics["log_loss"] = log_loss(y_true, y_pred)
                 if y_cal is not None:
                     metrics["log_loss_calibrated"] = log_loss(y_true, y_cal)
-            except:
+            except Exception:
                 pass
 
     else:

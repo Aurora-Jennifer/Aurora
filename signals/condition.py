@@ -199,7 +199,7 @@ def _generate_raw_signals(scores: pd.Series, conf_q: float) -> pd.Series:
                     # Short signal
                     short_mask = (scores.loc[date] <= lower_q) & (lower_q < 0.5)
                     signals.loc[date] = np.where(short_mask, -1, signals.loc[date])
-        except:
+        except Exception:
             # Fallback to global quantiles
             pass
 

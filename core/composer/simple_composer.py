@@ -179,14 +179,12 @@ class SoftmaxSelector(Composer):
                     score *= 1.0 / self.chop_bias
 
             # Adjust based on trend strength
-            if abs(regime_features.trend_strength) > 0.5:
-                if self._is_trend_strategy(pred.strategy_name):
-                    score *= 1.0 + abs(regime_features.trend_strength)
+            if abs(regime_features.trend_strength) > 0.5 and self._is_trend_strategy(pred.strategy_name):
+                score *= 1.0 + abs(regime_features.trend_strength)
 
             # Adjust based on choppiness
-            if regime_features.choppiness > 0.7:
-                if self._is_mean_reversion_strategy(pred.strategy_name):
-                    score *= 1.0 + regime_features.choppiness
+            if regime_features.choppiness > 0.7 and self._is_mean_reversion_strategy(pred.strategy_name):
+                score *= 1.0 + regime_features.choppiness
 
             scores.append(score)
 

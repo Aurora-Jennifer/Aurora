@@ -46,7 +46,7 @@ def calculate_ic_spearman(predictions: np.ndarray, targets: np.ndarray) -> float
     try:
         correlation, _ = spearmanr(predictions, targets)
         return correlation if not np.isnan(correlation) else 0.0
-    except:
+    except Exception:
         return 0.0
 
 

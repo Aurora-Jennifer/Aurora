@@ -9,9 +9,10 @@ def roll():
     trades = 0
     syms = set()
     for fp in files[-3:]:  # Process last 3 days of logs
-        for line in open(fp):
-            obj = json.loads(line)
-            trades += 1
+        with open(fp) as f:
+            for line in f:
+                obj = json.loads(line)
+                trades += 1
             syms.add(obj.get("symbol"))
     ts = datetime.now(UTC).strftime("%Y%m%d")
     out = {"trades": trades, "symbols": sorted(list(syms))}
