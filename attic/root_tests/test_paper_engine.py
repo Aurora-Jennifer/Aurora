@@ -153,7 +153,7 @@ class TestPaperTradingEngine:
 
                 # Calculate portfolio return based on positions
                 portfolio_return = 0.0
-                for symbol, position_size in self.positions.items():
+                for _symbol, position_size in self.positions.items():
                     # Add some realistic return variation
                     position_return = (
                         position_size * price_change * (1 + np.random.normal(0, 0.1))

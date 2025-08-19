@@ -131,10 +131,7 @@ class EnsembleStrategy(BaseStrategy):
         self.signal_combiner = SignalCombiner(data["Close"])
 
         # Add features to combiner based on regime
-        if self.params.use_regime_switching:
-            signals = self._generate_regime_switched_signals(data)
-        else:
-            signals = self._generate_combined_signals()
+        signals = self._generate_regime_switched_signals(data) if self.params.use_regime_switching else self._generate_combined_signals()
 
         # Apply confidence threshold
         if self.params.confidence_threshold > 0:

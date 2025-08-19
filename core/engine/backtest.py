@@ -871,10 +871,7 @@ class BacktestEngine:
         returns_series = pd.Series(daily_returns)
 
         # Basic metrics
-        if self.daily_returns:
-            final_portfolio_value = self.daily_returns[-1]["portfolio_value"]
-        else:
-            final_portfolio_value = self.initial_capital
+        final_portfolio_value = self.daily_returns[-1]["portfolio_value"] if self.daily_returns else self.initial_capital
 
         total_return = (final_portfolio_value / self.initial_capital) - 1
         annualized_return = (

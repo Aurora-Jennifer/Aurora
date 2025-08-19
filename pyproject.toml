@@ -83,10 +83,11 @@ known_first_party = ["core", "strategies", "features", "brokers"]
 
 [tool.ruff]
 target-version = "py311"
+line-length = 160
 
 [tool.ruff.lint]
 extend-select = ["E","F","I","B","UP","SIM"]
-ignore = ["E203","E266","E501"]
+ignore = ["E203","E266"]
 exclude = [
     "attic/",
     "docs/",

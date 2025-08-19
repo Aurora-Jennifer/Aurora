@@ -94,10 +94,7 @@ class SignalCombiner:
 
         # Normalize weights to sum to 1
         total_weight = sum(abs(w) for w in weights.values())
-        if total_weight > 0:
-            normalized_weights = {name: w / total_weight for name, w in weights.items()}
-        else:
-            normalized_weights = {name: 1.0 / len(weights) for name in weights}
+        normalized_weights = {name: w / total_weight for name, w in weights.items()} if total_weight > 0 else {name: 1.0 / len(weights) for name in weights}
 
         self.weights = normalized_weights
         logger.info(f"Computed weights using {method}: {normalized_weights}")
@@ -116,10 +113,7 @@ class SignalCombiner:
             ic_vol = ic_series.std()
 
             # Weight = mean_ic / ic_vol (with regularization)
-            if ic_vol > 0 and not pd.isna(mean_ic) and not pd.isna(ic_vol):
-                weight = mean_ic / (ic_vol + 1e-6)
-            else:
-                weight = 0.0
+            weight = mean_ic / (ic_vol + 1e-06) if ic_vol > 0 and not pd.isna(mean_ic) and not pd.isna(ic_vol) else 0.0
 
             weights[name] = weight
 

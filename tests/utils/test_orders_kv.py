@@ -42,47 +42,45 @@ def test_orders_kv_basic_operations():
 
 def test_orders_kv_idempotency():
     """Test idempotency operations."""
-    with tempfile.TemporaryDirectory() as tmpdir:
-        with patch("utils.orders_kv.DB", Path(tmpdir) / "test_orders_kv.json"):
-            # Test is_seen
-            assert not is_seen("nonexistent_order")
+    with tempfile.TemporaryDirectory() as tmpdir, patch("utils.orders_kv.DB", Path(tmpdir) / "test_orders_kv.json"):
+        # Test is_seen
+        assert not is_seen("nonexistent_order")
 
-            # Test put_order
-            put_order("order1", "broker_123", "SUBMITTED")
-            assert is_seen("order1")
+        # Test put_order
+        put_order("order1", "broker_123", "SUBMITTED")
+        assert is_seen("order1")
 
-            # Test get_order
-            order_data = get_order("order1")
-            assert order_data["broker_order_id"] == "broker_123"
-            assert order_data["status"] == "SUBMITTED"
+        # Test get_order
+        order_data = get_order("order1")
+        assert order_data["broker_order_id"] == "broker_123"
+        assert order_data["status"] == "SUBMITTED"
 
-            # Test update_order_status
-            update_order_status("order1", "FILLED", "broker_123")
-            updated_order = get_order("order1")
-            assert updated_order["status"] == "FILLED"
-            assert "updated" in updated_order
+        # Test update_order_status
+        update_order_status("order1", "FILLED", "broker_123")
+        updated_order = get_order("order1")
+        assert updated_order["status"] == "FILLED"
+        assert "updated" in updated_order
 
 
 def test_orders_kv_cleanup():
     """Test cleanup of old orders."""
-    with tempfile.TemporaryDirectory() as tmpdir:
-        with patch("utils.orders_kv.DB", Path(tmpdir) / "test_orders_kv.json"):
-            # Add some orders
-            put_order("old_order", status="FILLED")
-            put_order("new_order", status="NEW")
+    with tempfile.TemporaryDirectory() as tmpdir, patch("utils.orders_kv.DB", Path(tmpdir) / "test_orders_kv.json"):
+        # Add some orders
+        put_order("old_order", status="FILLED")
+        put_order("new_order", status="NEW")
 
-            # Manually set old timestamp for old_order
-            data = load()
-            data["old_order"]["timestamp"] = time.time() - 25 * 3600  # 25 hours ago
-            save(data)
+        # Manually set old timestamp for old_order
+        data = load()
+        data["old_order"]["timestamp"] = time.time() - 25 * 3600  # 25 hours ago
+        save(data)
 
-            # Clean up orders older than 24 hours
-            cleaned = cleanup_old_orders(max_age_hours=24)
-            assert cleaned == 1
+        # Clean up orders older than 24 hours
+        cleaned = cleanup_old_orders(max_age_hours=24)
+        assert cleaned == 1
 
-            # Verify old order is gone, new order remains
-            assert not is_seen("old_order")
-            assert is_seen("new_order")
+        # Verify old order is gone, new order remains
+        assert not is_seen("old_order")
+        assert is_seen("new_order")
 
 
 def test_orders_kv_persistence():

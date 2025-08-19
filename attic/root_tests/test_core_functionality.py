@@ -489,7 +489,7 @@ def test_error_handling():
         print("  🔧 Testing invalid configuration...")
         try:
             engine = BacktestEngine("nonexistent_config.json")
-            assert False, "Should fail with nonexistent config"
+            raise AssertionError("Should fail with nonexistent config")
         except Exception:
             print("    ✅ Properly handles missing config")
 
@@ -520,7 +520,7 @@ def test_error_handling():
         try:
             # Try to sell more than we have
             portfolio.execute_order("SPY", -1000, 100.0, fee=0.0)
-            assert False, "Should not allow overselling"
+            raise AssertionError("Should not allow overselling")
         except Exception:
             print("    ✅ Properly handles invalid orders")
 

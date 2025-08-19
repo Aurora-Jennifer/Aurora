@@ -132,7 +132,7 @@ def test_ml_selector():
     print(f"Recommended strategy: {recommended}")
 
     # Test learning updates
-    for i in range(10):
+    for _i in range(10):
         reward = np.random.normal(0.001, 0.01)  # Synthetic reward
         selector.update(context, recommended, reward)
 

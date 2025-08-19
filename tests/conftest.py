@@ -59,7 +59,7 @@ def mk_ts():
 
         # Generate prices without using future information
         prices = [base_price]
-        for i in range(1, n):
+        for _i in range(1, n):
             # Simple random walk without lookahead
             change = np.random.normal(0, 0.02)
             new_price = prices[-1] * (1 + change)

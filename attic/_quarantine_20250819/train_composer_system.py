@@ -268,7 +268,7 @@ def aggregate_results(results: list[dict[str, Any]]) -> dict[str, Any]:
 
     # Calculate averages
     avg_metrics = {}
-    for key in all_metrics[0].keys():
+    for key in all_metrics[0]:
         if key in ["mean_sharpe", "mean_total_return", "mean_hit_rate", "mean_max_dd"]:
             values = [m[key] for m in all_metrics if key in m and not np.isnan(m[key])]
             if values:

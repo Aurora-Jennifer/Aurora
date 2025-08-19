@@ -66,10 +66,7 @@ class TradingGuardrails:
         if key not in self.trade_count:
             self.trade_count[key] = 0
 
-        if self.trade_count[key] >= self.max_trades_per_symbol:
-            return False
-
-        return True
+        return not self.trade_count[key] >= self.max_trades_per_symbol
 
     def _check_position_limits(self, symbol: str, action: str, size: float) -> bool:
         """Check if position limits are respected."""
@@ -112,10 +109,7 @@ class TradingGuardrails:
             return True
 
         last_time = self.last_trade_time[symbol]
-        if datetime.now() - last_time < timedelta(minutes=self.cooldown_minutes):
-            return False
-
-        return True
+        return not datetime.now() - last_time < timedelta(minutes=self.cooldown_minutes)
 
     def record_trade(self, symbol: str, action: str, size: float, price: float):
         """Record a trade for guardrail tracking."""

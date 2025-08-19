@@ -235,11 +235,11 @@ class MultiAssetWalkforwardRunner:
                                 and "score" in feature
                             ):
                                 report.append(f"{i}. {feature['name']}: {feature['score']:.4f}")
-                            elif isinstance(feature, (list, tuple)) and len(feature) >= 2:
+                            elif isinstance(feature, list | tuple) and len(feature) >= 2:
                                 name = str(feature[0])
                                 score = (
                                     float(feature[1])
-                                    if isinstance(feature[1], (int, float))
+                                    if isinstance(feature[1], int | float)
                                     else 0.0
                                 )
                                 report.append(f"{i}. {name}: {score:.4f}")

@@ -1068,16 +1068,10 @@ class DataSanityValidator:
             return data, repairs, flags
 
         # Calculate log returns
-        if returns_config["method"] == "log_close_to_close":
-            returns = np.log(close_prices / close_prices.shift(1))
-        else:
-            returns = close_prices.pct_change()
+        returns = np.log(close_prices / close_prices.shift(1)) if returns_config["method"] == "log_close_to_close" else close_prices.pct_change()
 
         # Handle missing values
-        if returns_config["fill_method"] == "forward":
-            returns = returns.ffill().bfill()
-        else:
-            returns = returns.fillna(0)
+        returns = returns.ffill().bfill() if returns_config["fill_method"] == "forward" else returns.fillna(0)
 
         # Check for extreme returns
         max_return = self.config["price_limits"]["max_daily_return"]
@@ -1111,16 +1105,10 @@ class DataSanityValidator:
             return data
 
         # Calculate log returns
-        if returns_config["method"] == "log_close_to_close":
-            returns = np.log(close_prices / close_prices.shift(1))
-        else:
-            returns = close_prices.pct_change()
+        returns = np.log(close_prices / close_prices.shift(1)) if returns_config["method"] == "log_close_to_close" else close_prices.pct_change()
 
         # Handle missing values
-        if returns_config["fill_method"] == "forward":
-            returns = returns.ffill().bfill()
-        else:
-            returns = returns.fillna(0)
+        returns = returns.ffill().bfill() if returns_config["fill_method"] == "forward" else returns.fillna(0)
 
         # Check for extreme returns
         max_return = self.config["price_limits"]["max_daily_return"]

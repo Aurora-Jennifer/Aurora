@@ -235,10 +235,7 @@ def compute_metrics_from_pnl(pnl_series: np.ndarray, trades: list[dict]) -> dict
 
     # Sharpe ratio (no risk-free rate)
     returns = np.diff(cumulative)
-    if len(returns) > 0 and np.std(returns) > 0:
-        sharpe_nw = np.mean(returns) / np.std(returns) * np.sqrt(252)
-    else:
-        sharpe_nw = 0.0
+    sharpe_nw = np.mean(returns) / np.std(returns) * np.sqrt(252) if len(returns) > 0 and np.std(returns) > 0 else 0.0
 
     # Maximum drawdown
     running_max = np.maximum.accumulate(cumulative)

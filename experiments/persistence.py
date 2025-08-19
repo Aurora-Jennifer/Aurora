@@ -222,10 +222,7 @@ class FeaturePersistenceAnalyzer:
         """Update the checkpoints index CSV."""
         try:
             # Read existing index
-            if self.checkpoints_index.exists():
-                df = pd.read_csv(self.checkpoints_index)
-            else:
-                df = pd.DataFrame()
+            df = pd.read_csv(self.checkpoints_index) if self.checkpoints_index.exists() else pd.DataFrame()
 
             # Add new record
             new_record = {

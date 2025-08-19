@@ -62,7 +62,7 @@ def aggregate_fold_metrics(results):
     volatilities = []
     trade_counts = []
 
-    for fold_id, metrics, trades in results:
+    for _fold_id, metrics, trades in results:
         sharpe_scores.append(metrics["sharpe_nw"])
         sortino_scores.append(metrics["sortino"])
         max_dds.append(metrics["max_dd"])
@@ -155,27 +155,27 @@ def test_metric_calculation_consistency():
         "volatility",
     ]
 
-    for fold_id, metrics, trades in results:
+    for fold_id, metrics, _trades in results:
         for key in expected_metric_keys:
             assert key in metrics, f"WF_METRIC: Missing metric '{key}' in fold {fold_id}"
 
         # Verify metric value types
-        assert isinstance(metrics["sharpe_nw"], (int, float)), (
+        assert isinstance(metrics["sharpe_nw"], int | float), (
             f"WF_METRIC: Sharpe should be numeric in fold {fold_id}"
         )
-        assert isinstance(metrics["sortino"], (int, float)), (
+        assert isinstance(metrics["sortino"], int | float), (
             f"WF_METRIC: Sortino should be numeric in fold {fold_id}"
         )
-        assert isinstance(metrics["max_dd"], (int, float)), (
+        assert isinstance(metrics["max_dd"], int | float), (
             f"WF_METRIC: Max DD should be numeric in fold {fold_id}"
         )
-        assert isinstance(metrics["hit_rate"], (int, float)), (
+        assert isinstance(metrics["hit_rate"], int | float), (
             f"WF_METRIC: Hit rate should be numeric in fold {fold_id}"
         )
-        assert isinstance(metrics["total_return"], (int, float)), (
+        assert isinstance(metrics["total_return"], int | float), (
             f"WF_METRIC: Total return should be numeric in fold {fold_id}"
         )
-        assert isinstance(metrics["volatility"], (int, float)), (
+        assert isinstance(metrics["volatility"], int | float), (
             f"WF_METRIC: Volatility should be numeric in fold {fold_id}"
         )
 
@@ -209,7 +209,7 @@ def test_trade_consistency():
     results, folds = run_walkforward_test(data, model_seed=42)
 
     # Check trade consistency
-    for fold_id, metrics, trades in results:
+    for fold_id, _metrics, trades in results:
         assert isinstance(trades, list), f"WF_TRADE: Trades should be list in fold {fold_id}"
 
         # Check trade structure (simplified format)

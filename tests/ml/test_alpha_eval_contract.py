@@ -255,7 +255,7 @@ def test_alpha_eval_schema_compliance():
         required_metrics = ["mean_ic", "mean_hit_rate", "mean_turnover", "mean_return_with_costs"]
         for metric in required_metrics:
             assert metric in overall_metrics
-            assert isinstance(overall_metrics[metric], (int, float))
+            assert isinstance(overall_metrics[metric], int | float)
 
         # Check fold summaries
         fold_summaries = results["fold_summaries"]

@@ -16,7 +16,7 @@ def base_df(n: int = 100, start: str = "2024-01-01", freq: str = "1min") -> pd.D
     # Generate realistic price data without lookahead
     base_price = 100.0
     prices = [base_price]
-    for i in range(1, n):
+    for _i in range(1, n):
         # Small random walk to avoid extreme returns
         change = np.random.uniform(-0.02, 0.02)  # Max 2% change
         new_price = prices[-1] * (1 + change)

@@ -103,7 +103,7 @@ def test_ml_selector():
         print(f"  Recommended strategy: {recommended}")
 
         # Test learning updates
-        for j in range(10):
+        for _j in range(10):
             reward = np.random.normal(0.001, 0.01)
             selector.update(context, recommended, reward)
 
@@ -288,14 +288,7 @@ def simulate_trading_period(data: pd.DataFrame, config: dict, strategy_name: str
 
         # Generate signal
         if strategy_name == "momentum":
-            if len(current_data) >= 20:
-                signal = (
-                    0.5
-                    if current_data["Close"].iloc[-1] > current_data["Close"].iloc[-20]
-                    else -0.5
-                )
-            else:
-                signal = 0
+            signal = (0.5 if current_data["Close"].iloc[-1] > current_data["Close"].iloc[-20] else -0.5) if len(current_data) >= 20 else 0
         elif strategy_name == "mean_reversion":
             if len(current_data) >= 50:
                 ma_short = current_data["Close"].rolling(10).mean().iloc[-1]

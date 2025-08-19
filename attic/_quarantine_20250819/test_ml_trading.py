@@ -15,6 +15,8 @@ import yaml
 
 from core.engine.backtest import BacktestEngine
 from core.ml.profit_learner import ProfitLearner, TradeOutcome
+import contextlib
+import builtins
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -206,10 +208,8 @@ def test_ml_backtest():
         print(f"❌ Failed to test ML backtest: {e}")
 
     # Clean up
-    try:
+    with contextlib.suppress(builtins.BaseException):
         Path("config/test_ml_backtest.json").unlink()
-    except:
-        pass
 
 
 if __name__ == "__main__":

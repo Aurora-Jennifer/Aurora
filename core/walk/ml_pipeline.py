@@ -89,12 +89,7 @@ class MLPipeline:
 
         try:
             # Ensure features are in the right order
-            if hasattr(self.model, "named_steps"):
-                # sklearn Pipeline
-                predictions = self.model.predict(Xte)
-            else:
-                # Direct model
-                predictions = self.model.predict(Xte)
+            predictions = self.model.predict(Xte)
 
             # Debug: Log prediction statistics
             logger.info(

@@ -278,22 +278,13 @@ def _train_model(
     model_params = {**default_params, **params}
 
     if model_type == "xgb" and XGBOOST_AVAILABLE:
-        if task_type == "regression":
-            model = xgb.XGBRegressor(**model_params)
-        else:
-            model = xgb.XGBClassifier(**model_params)
+        model = xgb.XGBRegressor(**model_params) if task_type == "regression" else xgb.XGBClassifier(**model_params)
 
     elif model_type == "lgb" and LIGHTGBM_AVAILABLE:
-        if task_type == "regression":
-            model = lgb.LGBMRegressor(**model_params)
-        else:
-            model = lgb.LGBMClassifier(**model_params)
+        model = lgb.LGBMRegressor(**model_params) if task_type == "regression" else lgb.LGBMClassifier(**model_params)
 
     else:  # Fallback to scikit-learn
-        if task_type == "regression":
-            model = GradientBoostingRegressor(**model_params)
-        else:
-            model = GradientBoostingClassifier(**model_params)
+        model = GradientBoostingRegressor(**model_params) if task_type == "regression" else GradientBoostingClassifier(**model_params)
 
     # Train model
     model.fit(X_train, y_train)

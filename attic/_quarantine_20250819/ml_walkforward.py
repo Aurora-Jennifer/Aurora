@@ -505,10 +505,7 @@ class MLWalkforwardAnalyzer:
             f.write(f"- **Win Rate**: {overall.get('win_rate', 0.0):.2%}\n\n")
 
             # Feature importance summary
-            if isinstance(results, list):
-                feature_summary = {}
-            else:
-                feature_summary = results.get("feature_importance_summary", {})
+            feature_summary = {} if isinstance(results, list) else results.get("feature_importance_summary", {})
             f.write("## Feature Importance Summary\n\n")
 
             top_features = feature_summary.get("top_alpha_features", [])
@@ -518,10 +515,10 @@ class MLWalkforwardAnalyzer:
                     try:
                         if isinstance(feature, dict) and "name" in feature and "score" in feature:
                             f.write(f"- **{feature['name']}**: {feature['score']:.4f}\n")
-                        elif isinstance(feature, (list, tuple)) and len(feature) >= 2:
+                        elif isinstance(feature, list | tuple) and len(feature) >= 2:
                             name = str(feature[0])
                             score = (
-                                float(feature[1]) if isinstance(feature[1], (int, float)) else 0.0
+                                float(feature[1]) if isinstance(feature[1], int | float) else 0.0
                             )
                             f.write(f"- **{name}**: {score:.4f}\n")
                         else:
@@ -541,10 +538,10 @@ class MLWalkforwardAnalyzer:
                             and "stability" in feature
                         ):
                             f.write(f"- **{feature['name']}**: {feature['stability']:.4f}\n")
-                        elif isinstance(feature, (list, tuple)) and len(feature) >= 2:
+                        elif isinstance(feature, list | tuple) and len(feature) >= 2:
                             name = str(feature[0])
                             stability = (
-                                float(feature[1]) if isinstance(feature[1], (int, float)) else 0.0
+                                float(feature[1]) if isinstance(feature[1], int | float) else 0.0
                             )
                             f.write(f"- **{name}**: {stability:.4f}\n")
                         else:

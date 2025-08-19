@@ -600,10 +600,7 @@ def compute_daily_metrics(
             current_consecutive = 0
 
     # Daily turnover
-    if daily_positions is not None:
-        avg_daily_turnover = turnover(daily_positions, method="absolute")
-    else:
-        avg_daily_turnover = np.nan
+    avg_daily_turnover = turnover(daily_positions, method="absolute") if daily_positions is not None else np.nan
 
     return DailyMetrics(
         avg_daily_return=avg_daily_return,

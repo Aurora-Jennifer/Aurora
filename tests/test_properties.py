@@ -183,7 +183,7 @@ class TestDataSanityProperties:
         # Generate realistic price data without extreme movements
         base_price = 100.0
         prices = [base_price]
-        for i in range(1, data_size):
+        for _i in range(1, data_size):
             # Small random walk to avoid extreme returns
             change = np.random.uniform(-0.05, 0.05)  # Max 5% change
             new_price = prices[-1] * (1 + change)

@@ -190,10 +190,7 @@ class BasicRegimeExtractor(RegimeExtractor):
         # Momentum with safe access
         start_price = prices[-self.lookback] if _safe_len(prices) > self.lookback else None
         end_price = _last(prices)
-        if start_price is not None and end_price is not None and start_price > 0:
-            momentum = (end_price - start_price) / start_price
-        else:
-            momentum = 0.0
+        momentum = (end_price - start_price) / start_price if start_price is not None and end_price is not None and start_price > 0 else 0.0
 
         # Determine regime type with safe percentile calculation
         if abs(trend_strength) > 0.3:

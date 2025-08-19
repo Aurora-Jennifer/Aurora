@@ -141,11 +141,7 @@ def load_data(symbol: str, start: str, end: str) -> pd.DataFrame:
 
 def choose_fold_params(n: int, target_folds: int) -> tuple[int, int, int]:
     # Simple heuristic: 70% train / 30% test over target_folds, rolling by test
-    if n < target_folds * 100:
-        # small data; keep windows small
-        test_len = max(30, n // (target_folds * 3))
-    else:
-        test_len = max(63, n // (target_folds * 3))
+    test_len = max(30, n // (target_folds * 3)) if n < target_folds * 100 else max(63, n // (target_folds * 3))
     train_len = max(test_len * 2, 126)
     stride = test_len
     return train_len, test_len, stride
