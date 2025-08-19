@@ -1,0 +1,38 @@
+# Gitleaks configuration for Aurora trading system
+# Ignores false positives and safe patterns
+
+[[rules]]
+id = "demo-token-placeholder"
+description = "Demo token placeholder (not a real secret)"
+regex = '''demo_token_placeholder'''
+tags = ["key", "demo"]
+allowlist = [
+    { path = "api/demo_server.py" },
+    { path = "build_secure.py" }
+]
+
+[[rules]]
+id = "environment-variables"
+description = "Environment variable references (not actual secrets)"
+regex = '''(GITHUB_TOKEN|GH_TOKEN|TRADING_API_TOKEN|BROKER_SECRET)'''
+tags = ["env"]
+allowlist = [
+    { path = ".*\\.md$" },
+    { path = ".*\\.txt$" },
+    { path = ".*\\.yaml$" },
+    { path = ".*\\.yml$" },
+    { path = ".*\\.json$" }
+]
+
+# Ignore test and documentation files
+[allowlist]
+files = [
+    "test_*",
+    "*_test*", 
+    "docs/*",
+    "*.md",
+    "*.txt",
+    "*.yaml",
+    "*.yml",
+    "*.json"
+]

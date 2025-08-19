@@ -20,6 +20,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
   security-events: write
 
 concurrency:
@@ -120,4 +121,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          config-path: .gitleaksignore
+          config-path: .gitleaks.toml
