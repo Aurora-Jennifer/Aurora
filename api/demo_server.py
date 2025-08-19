@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 # Security
 security = HTTPBearer()
-API_TOKEN = os.getenv("TRADING_API_TOKEN", "demo_token_2025")
+API_TOKEN = os.getenv("TRADING_API_TOKEN", "demo_token_placeholder")
 
 app = FastAPI(
     title="Advanced Trading System API",

@@ -145,7 +145,7 @@ class TradingAPIClient:
 
 # Example usage
 if __name__ == "__main__":
-    client = TradingAPIClient("http://localhost:8000", "demo_token_2025")
+    client = TradingAPIClient("http://localhost:8000", "demo_token_placeholder")
     
     # Example market data
     market_data = {
@@ -239,7 +239,7 @@ def run_demo():
     
     # API configuration
     base_url = "http://localhost:8000"
-    api_token = "demo_token_2025"
+    api_token = "demo_token_placeholder"
     headers = {
         'Authorization': f'Bearer {api_token}',
         'Content-Type': 'application/json'
