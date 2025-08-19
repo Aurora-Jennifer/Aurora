@@ -6,6 +6,10 @@ __pycache__/
 .ruff_cache/
 .hypothesis/
 .cursor/
+.ipynb_checkpoints/
+.cache/
+.env
+.DS_Store
 
 # Generated files
 trading_system.egg-info/

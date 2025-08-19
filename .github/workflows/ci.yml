@@ -1,8 +1,6 @@
 name: CI
-
 on:
-  push:
-    branches: ["**"]
+  push: { branches: ["**"] }
   pull_request:
 
 concurrency:
@@ -17,9 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: "pip"
+        with: { python-version: "3.11", cache: "pip" }
       - run: pip install -r requirements.txt
       - run: python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO
 
@@ -30,9 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: "pip"
+        with: { python-version: "3.11", cache: "pip" }
       - run: pip install ruff
       - run: ruff check .
 
@@ -44,45 +38,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: "pip"
+        with: { python-version: "3.11", cache: "pip" }
       - run: pip install -r requirements.txt
       - run: pip install -r requirements-dev.txt || true
       - run: pytest -m "not quarantine" -q || true
-name: CI
-
-on:
-  push: { branches: [ main ] }
-  pull_request: { branches: [ main ] }
-
-jobs:
-  build-test-promote:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: "pip"
-      - name: Install
-        run: pip install -r requirements.txt
-      - name: Lint (changed files)
-        run: |
-          git fetch origin main >/dev/null 2>&1 || true
-          CHANGED=$(git diff --name-only --diff-filter=ACMRT origin/main...HEAD | grep -E '\.py$' || true)
-          if [ -n "$CHANGED" ]; then ruff check --output-format=github $CHANGED; else echo "No changed Python files."; fi
-      - name: Tests
-        run: pytest -q
-      - name: Promotion gate
-        run: make promote
-      - name: Lint (full, non-blocking)
-        if: always()
-        continue-on-error: true
-        run: tools/scripts/lint_report.sh
-      - name: Upload lint artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ruff-full
-          path: artifacts/ruff_full.txt
