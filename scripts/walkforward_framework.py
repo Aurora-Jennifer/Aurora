@@ -19,6 +19,9 @@ import pandas as pd
 # Import centralized logging setup
 from core.utils import setup_logging
 
+# Import simulation function
+from core.sim.simulate import simulate_orders_numba
+
 
 
 # Configure logging

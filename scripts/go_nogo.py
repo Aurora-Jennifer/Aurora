@@ -236,14 +236,10 @@ def check_backtest_realism(cfg):
                     config = json.load(f)
 
                 # Check for fees and slippage settings
-                if cfg["backtest"]["require_fees"]:
-                    # Check for execution_params with per_share_fee
-                    if not config.get("execution_params", {}).get("per_share_fee", 0) > 0:
+                if cfg["backtest"]["require_fees"] and not config.get("execution_params", {}).get("per_share_fee", 0) > 0:
                         fail(f"Fees not properly configured in {config_file}")
 
-                if cfg["backtest"]["require_slippage"]:
-                    # Check for execution_params with slippage_bps
-                    if not config.get("execution_params", {}).get("slippage_bps", 0) > 0:
+                if cfg["backtest"]["require_slippage"] and not config.get("execution_params", {}).get("slippage_bps", 0) > 0:
                         fail(f"Slippage not properly configured in {config_file}")
 
                 ok(f"Backtest realism: fees/slippage settings present in {config_file}")
@@ -305,8 +301,7 @@ def check_accounting(cfg):
                         results = json.load(f)
 
                     # Check for basic accounting fields
-                    if isinstance(results, dict):
-                        if "equity_curve" in results or "portfolio_value" in results:
+                    if isinstance(results, dict) and ("equity_curve" in results or "portfolio_value" in results):
                             ok(f"Accounting data found in {results_file}")
                             results_found = True
                             break

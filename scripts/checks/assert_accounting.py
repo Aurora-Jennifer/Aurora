@@ -25,7 +25,8 @@ if neg_fees > 0:
 
 # Print reconciliation
 print(
-    f"Accounting: final_equity={final_equity:.2f} initial={initial_capital:.2f} equity_pnl={pnl_equity:.2f}"
+    f"Accounting: final_equity={final_equity:.2f} initial={initial_capital:.2f} "
+    f"equity_pnl={pnl_equity:.2f}"
 )
 
 sys.exit(0 if ok else 2)

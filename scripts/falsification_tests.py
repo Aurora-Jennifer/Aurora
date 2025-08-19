@@ -404,7 +404,8 @@ def main():
         for result in results:
             if not result["passed"]:
                 print(
-                    f"  ❌ {result['test']}: {result.get('error', result.get('reason', 'Unknown error'))}"
+                    f"  ❌ {result['test']}: "
+                    f"{result.get('error', result.get('reason', 'Unknown error'))}"
                 )
 
     print("\nDetailed report saved to: falsification_report.json")

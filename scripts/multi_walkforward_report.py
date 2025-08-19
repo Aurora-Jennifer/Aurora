@@ -428,10 +428,8 @@ def main():
         import torch  # type: ignore
 
         torch.manual_seed(1337)
-        try:
+        with contextlib.suppress(Exception):
             torch.use_deterministic_algorithms(True)  # type: ignore
-        except Exception:
-            pass
     except Exception:
         pass
 

@@ -319,7 +319,8 @@ def evaluate_alpha_model(
     # Log summary
     logger.info(f"Overall IC: {overall_metrics['mean_ic']:.4f} ± {overall_metrics['std_ic']:.4f}")
     logger.info(
-        f"Overall Hit Rate: {overall_metrics['mean_hit_rate']:.4f} ± {overall_metrics['std_hit_rate']:.4f}"
+        f"Overall Hit Rate: {overall_metrics['mean_hit_rate']:.4f} ± "
+        f"{overall_metrics['std_hit_rate']:.4f}"
     )
     logger.info(f"Overall Turnover: {overall_metrics['mean_turnover']:.4f}")
     logger.info(f"Overall Return (with costs): {overall_metrics['mean_return_with_costs']:.4f}")

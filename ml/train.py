@@ -523,9 +523,7 @@ def validate_walkforward_results(results_df: pd.DataFrame) -> dict[str, Any]:
         for asset in fold_data["asset"].unique():
             asset_data = fold_data[fold_data["asset"] == asset].sort_values("ts")
 
-            if len(asset_data) > 1:
-                # Check for any non-chronological predictions
-                if not asset_data["ts"].is_monotonic_increasing:
+            if len(asset_data) > 1 and not asset_data["ts"].is_monotonic_increasing:
                     validation["warnings"].append(
                         f"Non-chronological predictions in fold {fold_id}, asset {asset}"
                     )

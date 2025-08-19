@@ -46,7 +46,8 @@ def check_gates(results_file: str = "results/walkforward/results.json"):
     max_dd_gate = max_dd_violations == 0
 
     print(
-        f"MaxDD Gate: {'PASS' if max_dd_gate else 'FAIL'} ({max_dd_violations} folds exceed {max_dd_threshold * 100}% drawdown)"
+        f"MaxDD Gate: {'PASS' if max_dd_gate else 'FAIL'} "
+        f"({max_dd_violations} folds exceed {max_dd_threshold * 100}% drawdown)"
     )
 
     # Gate 3: Minimum trades per fold
@@ -55,7 +56,8 @@ def check_gates(results_file: str = "results/walkforward/results.json"):
     trades_gate = low_trade_folds == 0
 
     print(
-        f"Trades Gate: {'PASS' if trades_gate else 'FAIL'} ({low_trade_folds} folds have < {min_trades_threshold} trades)"
+        f"Trades Gate: {'PASS' if trades_gate else 'FAIL'} "
+        f"({low_trade_folds} folds have < {min_trades_threshold} trades)"
     )
 
     # Gate 4: Trusted fold requirements
