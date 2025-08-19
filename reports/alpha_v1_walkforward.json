@@ -3,61 +3,33 @@
   "symbols": [
     "SPY"
   ],
-  "n_folds": 3,
-  "train_len": 50,
-  "test_len": 20,
+  "n_folds": 1,
+  "train_len": 30,
+  "test_len": 10,
   "stride": 10,
-  "warmup": 10,
+  "warmup": 60,
   "fold_results": [
     {
       "fold_id": 0,
-      "n_bars": 20,
-      "n_trades": 10,
-      "win_rate": 0.4,
-      "median_hold_bars": 1,
-      "sharpe_nw": -2.1430331825149422,
-      "sortino": -1.8511987704048827,
-      "max_dd": -28.24774787205359,
-      "turnover": 1.0526316165924072,
-      "psr": 6.140532526899278e-12,
-      "regime": "alpha_v1_ml",
-      "model_type": "ridge_regression"
-    },
-    {
-      "fold_id": 1,
-      "n_bars": 20,
-      "n_trades": 8,
-      "win_rate": 0.625,
-      "median_hold_bars": 1,
-      "sharpe_nw": 1.6333503840437547,
-      "sortino": 1.6154063181618823,
-      "max_dd": -0.9586498985925305,
-      "turnover": 0.8947368264198303,
-      "psr": 0.9999980795653718,
-      "regime": "alpha_v1_ml",
-      "model_type": "ridge_regression"
-    },
-    {
-      "fold_id": 2,
-      "n_bars": 20,
-      "n_trades": 8,
+      "n_bars": 10,
+      "n_trades": 4,
       "win_rate": 0.5,
       "median_hold_bars": 2,
-      "sharpe_nw": -1.9390959321522003,
-      "sortino": -1.3500683484802154,
-      "max_dd": -1.8132032480542224,
-      "turnover": 0.8421052694320679,
-      "psr": 2.0721293236825034e-08,
+      "sharpe_nw": -5.622131965475339,
+      "sortino": -3.2068555741588787,
+      "max_dd": -2.3818243062978093,
+      "turnover": 0.8888888955116272,
+      "psr": 0.0,
       "regime": "alpha_v1_ml",
       "model_type": "ridge_regression"
     }
   ],
   "aggregate_metrics": {
-    "avg_sharpe": -0.8162595768744626,
-    "avg_win_rate": 0.5083333333333333,
-    "avg_turnover": 0.9298245708147684,
-    "total_trades": 26,
-    "overall_sharpe": -0.4508930410216298,
-    "overall_max_dd": -28.24774787205359
+    "avg_sharpe": -5.622131965475339,
+    "avg_win_rate": 0.5,
+    "avg_turnover": 0.8888888955116272,
+    "total_trades": 4,
+    "overall_sharpe": -5.622131965475339,
+    "overall_max_dd": -2.3818243062978093
   }
 }
