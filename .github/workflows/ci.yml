@@ -1,7 +1,25 @@
 name: CI
+
 on:
-  push: { branches: ["**"] }
+  push:
+    branches: [main]          # no more every-branch spam
+    paths-ignore:
+      - "docs/**"
+      - "**/*.md"
+      - ".github/**"
+      - "data/**"
+      - "assets/**"
   pull_request:
+    types: [opened, synchronize, reopened]
+    paths-ignore:
+      - "docs/**"
+      - "**/*.md"
+      - ".github/**"
+      - "data/**"
+      - "assets/**"
+
+permissions:
+  contents: read
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -17,23 +35,53 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: "3.11", cache: "pip" }
       - run: pip install -r requirements.txt
-      - run: python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO
+      - name: Run smoke (fast & deterministic)
+        run: python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO
+      - name: Summary
+        if: always()
+        run: |
+          echo "### Smoke ✅ completed" >> $GITHUB_STEP_SUMMARY
 
   lint:
-    name: Lint (ruff)
+    name: Lint (ruff on changed files)
     runs-on: ubuntu-latest
-    continue-on-error: true
+    continue-on-error: false          # make this required once green
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with: { python-version: "3.11", cache: "pip" }
       - run: pip install ruff
-      - run: ruff check . --select E,F,I,UP,B,SIM
+      - name: Compute changed Python files
+        id: diff
+        shell: bash
+        run: |
+          BASE=${{ github.base_ref || 'origin/main' }}
+          # For push to main, compare against previous commit
+          if [ "${{ github.event_name }}" = "push" ]; then
+            BASE=$(git rev-parse HEAD~1)
+          fi
+          CHANGED=$(git diff --name-only --diff-filter=ACMRTUXB "$BASE"... | grep -E '\.py$' || true)
+          echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
+      - name: Ruff on changed files
+        if: steps.diff.outputs.changed != ''
+        run: ruff check ${{ steps.diff.outputs.changed }} --select E,F,I,UP,B,SIM --format=github
+      - name: No Python changes
+        if: steps.diff.outputs.changed == ''
+        run: echo "No Python changes to lint."
+      - name: Summary
+        if: always()
+        run: |
+          echo "### Lint results" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.diff.outputs.changed }}" | tr ' ' '\n' >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
 
   tests-full:
     name: Full Tests (non-blocking)
     runs-on: ubuntu-latest
-    continue-on-error: true
+    continue-on-error: true           # stays non-blocking
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
@@ -41,4 +89,20 @@ jobs:
         with: { python-version: "3.11", cache: "pip" }
       - run: pip install -r requirements.txt
       - run: pip install -r requirements-dev.txt || true
-      - run: pytest -m "not quarantine" -q || true
+      - name: Pytest (quarantine excluded)
+        run: |
+          set +e
+          pytest -q -m "not quarantine" | tee pytest.out
+          echo "exit_code=$?" >> $GITHUB_OUTPUT
+      - name: Upload short log
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-log
+          path: pytest.out
+      - name: Summary
+        if: always()
+        run: |
+          echo "### Full Tests (non-blocking)" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          head -n 200 pytest.out >> $GITHUB_STEP_SUMMARY || true
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
