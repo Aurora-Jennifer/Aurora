@@ -1,5 +1,9 @@
 name: Security
 on: [push, pull_request]
+
+permissions:
+  contents: read
+  security-events: write
 jobs:
   bandit:
     runs-on: ubuntu-latest
@@ -13,8 +17,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: gitleaks/gitleaks-action@v2
-        with: { args: detect --no-banner --redact --exit-code 0 }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: .gitleaks.toml
 
   pip-audit:
     runs-on: ubuntu-latest
