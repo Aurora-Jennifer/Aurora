@@ -1,4 +1,0 @@
-run_id,date,change_desc,total_pnl,sharpe,win_rate,max_dd,top_symbol,worst_symbol,suggested_next_change
-run_bab9a63e,2025-08-13T08:43:27.469791,Increase confidence_threshold by +0.05,0.0,-1.39,0.046462513199577615,25.26,SPY,QQQ,Tweak momentum threshold by +0.01
-run_bb601583,2025-08-13T08:48:03.726627+00:00,Increase confidence_threshold by +0.05,0.0,-1.39,0.046462513199577615,25.26,SPY,QQQ,Tweak momentum threshold by +0.01
-run_58617500,2025-08-13T08:50:49.329148+00:00,Increase rolling_window by +20,0.0,-1.39,0.046462513199577615,25.26,SPY,QQQ,Tweak momentum threshold by +0.01
