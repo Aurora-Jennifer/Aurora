@@ -1,0 +1,12 @@
+{
+  "symbols": [
+    "SPY",
+    "TSLA"
+  ],
+  "start_date": "2023-01-01",
+  "end_date": "2023-12-31",
+  "seed": 42,
+  "n_days": 260,
+  "n_records": 520,
+  "generated_at": "2025-08-19T14:22:10.160434"
+}

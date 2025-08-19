@@ -1,16 +1,111 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Aurora Smoke Run Report Schema",
+  "description": "Schema for validating smoke run reports from Aurora trading system",
   "type": "object",
-  "required": ["timestamp", "ok"],
+  "required": ["timestamp", "status", "folds", "symbols", "trades", "duration_s", "sharpe", "max_drawdown"],
   "properties": {
-    "timestamp": {"type": "string"},
-    "ok": {"type": "boolean"},
-    "violation_code": {"type": ["string", "null"]},
-    "folds": {"type": "integer", "minimum": 0},
-    "symbols": {"type": "array", "items": {"type": "string"}},
-    "trades": {"type": "integer", "minimum": 0},
-    "duration_s": {"type": "number", "minimum": 0},
-    "sharpe": {"type": "number"},
-    "max_drawdown": {"type": "number"}
+    "timestamp": {
+      "type": "string",
+      "description": "ISO timestamp of the run",
+      "pattern": "^\\d{8}T\\d{6}Z$"
+    },
+    "status": {
+      "type": "string",
+      "description": "Status of the smoke run",
+      "enum": ["OK", "FAILED", "ERROR"]
+    },
+    "folds": {
+      "type": "integer",
+      "description": "Number of walkforward folds",
+      "minimum": 1
+    },
+    "symbols": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of symbols processed"
+    },
+    "trades": {
+      "type": "integer",
+      "description": "Number of trades executed",
+      "minimum": 0
+    },
+    "duration_s": {
+      "type": "number",
+      "description": "Duration of the run in seconds",
+      "minimum": 0.0
+    },
+    "sharpe": {
+      "type": "number",
+      "description": "Sharpe ratio of returns"
+    },
+    "max_drawdown": {
+      "type": "number",
+      "description": "Maximum drawdown",
+      "minimum": -1.0,
+      "maximum": 0.0
+    },
+    "fold_summaries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fold", "sharpe", "max_drawdown", "trades", "duration_ms"],
+        "properties": {
+          "fold": {
+            "type": "integer",
+            "description": "Fold index",
+            "minimum": 0
+          },
+          "sharpe": {
+            "type": "number",
+            "description": "Sharpe ratio for this fold"
+          },
+          "max_drawdown": {
+            "type": "number",
+            "description": "Maximum drawdown for this fold"
+          },
+          "trades": {
+            "type": "integer",
+            "description": "Number of trades in this fold",
+            "minimum": 0
+          },
+          "duration_ms": {
+            "type": "integer",
+            "description": "Duration of this fold in milliseconds",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "risk_costs": {
+      "type": "object",
+      "properties": {
+        "slippage_bps": {
+          "type": "integer",
+          "description": "Slippage in basis points",
+          "minimum": 0
+        },
+        "fee_bps": {
+          "type": "integer",
+          "description": "Fee in basis points",
+          "minimum": 0
+        },
+        "max_leverage": {
+          "type": "number",
+          "description": "Maximum leverage allowed",
+          "minimum": 0.0
+        }
+      }
+    },
+    "seed": {
+      "type": "integer",
+      "description": "Random seed used for reproducibility"
+    },
+    "auto_adjust": {
+      "type": "boolean",
+      "description": "Whether auto-adjust was enabled"
+    }
   }
 }

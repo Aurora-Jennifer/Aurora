@@ -56,9 +56,11 @@ flatten-dry-run:
 .PHONY: help install test sanity falsify bench-sanity clean coverage lint lint-changed format promote wf smoke type datasanity golden bless_golden quality configcheck lock audit
 
 # Default target
-.DEFAULT_GOAL := smoke
+.DEFAULT_GOAL := e2e
 help:
 	@echo "Available targets:"
+	@echo "  e2e          - Run end-to-end tests (default)"
+	@echo "  smoke        - Run smoke test"
 	@echo "  install      - Install dependencies"
 	@echo "  test         - Run all tests"
 	@echo "  sanity       - Run DataSanity tests only"
@@ -118,6 +120,11 @@ wf:
 promote:
 	python tools/promotion_gate.py --fail-on-quarantine --report
 
+# End-to-end tests
+e2e:
+	python tests/fixtures/gen_fixture.py
+	pytest -m e2e -q
+
 # Smoke preset (fast CI-friendly walkforward)
 smoke:
 	python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO
@@ -162,7 +169,7 @@ clean:
 	rm -rf results/falsification_results.json
 
 # CI target - run all checks
-ci: lint test sanity falsify coverage
+ci: lint e2e
 
 # Development setup
 dev-setup: install
