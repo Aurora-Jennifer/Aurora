@@ -1,6 +1,7 @@
 # utils/quotes_provider_ibkr.py
 from __future__ import annotations
 
+import contextlib
 from dataclasses import dataclass
 from datetime import UTC, datetime
 
@@ -58,7 +59,5 @@ class IBKRQuoteProvider:
 
     def close(self):
         """Close connection."""
-        try:
+        with contextlib.suppress(Exception):
             self.ib.disconnect()
-        except Exception:
-            pass

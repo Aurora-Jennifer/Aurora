@@ -140,10 +140,7 @@ class RepoIndexer:
         module_map += f"**Total Files:** {len(all_files)}\n"
         module_map += f"**Total Directories:** {len(sorted_dirs)}\n\n"
         for dir_name in sorted_dirs:
-            if dir_name == Path("."):
-                dir_display = "Root"
-            else:
-                dir_display = str(dir_name)
+            dir_display = "Root" if dir_name == Path(".") else str(dir_name)
             module_map += f"## {dir_display}\n\n"
             files = dirs[dir_name]
             files.sort(key=lambda x: x["name"])
@@ -199,10 +196,7 @@ class RepoIndexer:
 
 def main():
     """Command line interface."""
-    if len(sys.argv) > 1:
-        root_dir = sys.argv[1]
-    else:
-        root_dir = "."
+    root_dir = sys.argv[1] if len(sys.argv) > 1 else "."
     indexer = RepoIndexer(root_dir)
     indexer.run()
 

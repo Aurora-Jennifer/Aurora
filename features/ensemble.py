@@ -97,7 +97,7 @@ class SignalCombiner:
         if total_weight > 0:
             normalized_weights = {name: w / total_weight for name, w in weights.items()}
         else:
-            normalized_weights = {name: 1.0 / len(weights) for name in weights.keys()}
+            normalized_weights = {name: 1.0 / len(weights) for name in weights}
 
         self.weights = normalized_weights
         logger.info(f"Computed weights using {method}: {normalized_weights}")
@@ -153,7 +153,7 @@ class SignalCombiner:
         """Compute weights using Ridge regression."""
         if len(self.features) < 2:
             logger.warning("Need at least 2 features for ridge regression, using equal weights")
-            return {name: 1.0 / len(self.features) for name in self.features.keys()}
+            return {name: 1.0 / len(self.features) for name in self.features}
 
         # Prepare feature matrix
         feature_matrix = pd.DataFrame(self.features)
@@ -166,7 +166,7 @@ class SignalCombiner:
             logger.warning(
                 f"Insufficient data for ridge regression ({len(valid_data)} < {min_obs})"
             )
-            return {name: 1.0 / len(self.features) for name in self.features.keys()}
+            return {name: 1.0 / len(self.features) for name in self.features}
 
         # Fit ridge regression
         try:
@@ -176,13 +176,13 @@ class SignalCombiner:
             weights = dict(zip(self.features.keys(), ridge.coef_, strict=False))
         except Exception as e:
             logger.error(f"Ridge regression failed: {e}")
-            weights = {name: 1.0 / len(self.features) for name in self.features.keys()}
+            weights = {name: 1.0 / len(self.features) for name in self.features}
 
         return weights
 
     def _compute_voting_weights(self) -> dict[str, float]:
         """Compute equal weights for simple voting."""
-        return {name: 1.0 / len(self.features) for name in self.features.keys()}
+        return {name: 1.0 / len(self.features) for name in self.features}
 
     def combine(self, normalize: bool = True, cap: float = 1.0) -> tuple[pd.Series, pd.Series]:
         """

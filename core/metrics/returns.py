@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 import logging
 from typing import Literal
 
@@ -32,13 +33,11 @@ def diff_returns(close: pd.Series) -> pd.Series:
 
 def get_returns(close: pd.Series, kind: Literal["percent", "log", "diff"] = "percent") -> pd.Series:
     # Structured one-time log for shape and selection
-    try:
+    with contextlib.suppress(Exception):
         logger.debug(
             "returns_selection",
             extra={"kind": kind, "n": int(len(close) if close is not None else 0)},
         )
-    except Exception:
-        pass
     if kind == "log":
         return log_returns(close)
     if kind == "diff":

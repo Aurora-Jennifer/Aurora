@@ -118,10 +118,9 @@ def validate_config(config: dict[str, Any]) -> bool:
 
     # Validate composer configuration
     composer = config.get("composer", {})
-    if composer.get("use_composer", False):
-        if "min_history_bars" not in composer:
-            logger.error("Composer enabled but min_history_bars not specified")
-            return False
+    if composer.get("use_composer", False) and "min_history_bars" not in composer:
+        logger.error("Composer enabled but min_history_bars not specified")
+        return False
 
     # Validate walkforward configuration
     walkforward = config.get("walkforward", {})

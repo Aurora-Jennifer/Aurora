@@ -8,6 +8,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+import contextlib
 import shutil
 import subprocess
 
@@ -169,10 +170,8 @@ def main(argv: list[str] | None = None):
     meta["stop"] = datetime.now(UTC).strftime("%Y-%m-%dT%H%M%SZ")
     (Path("reports") / "paper_run.meta.json").write_text(json.dumps(meta, indent=2))
     # Persist prev weights across restarts
-    try:
+    with contextlib.suppress(Exception):
         _save_prev_weights(locals().get("prev_weights") or {})
-    except Exception:
-        pass
     # End-of-run notification with summary if anomalies occurred
     if args.ntfy:
         fallbacks = int(meta.get("model_fallbacks", 0))
@@ -190,10 +189,8 @@ def main(argv: list[str] | None = None):
             repo = os.getenv("GITHUB_REPOSITORY", "")
             token = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN") or ""
             if shutil.which("python") and (repo and token):
-                try:
+                with contextlib.suppress(Exception):
                     subprocess.run(["python", "tools/gh_issue.py", repo, token], check=False)
-                except Exception:
-                    pass
 
 
 if __name__ == "__main__":

@@ -449,9 +449,8 @@ def run_walkforward_with_composer(
     logger.info(f"Composer used: {composer_integration.use_composer}")
 
     # Performance validation
-    if performance_mode == "STRICT":
-        if avg_fold_time > 0.6:  # 10k rows baseline
-            logger.warning(f"Fold time {avg_fold_time:.3f}s exceeds STRICT threshold of 0.6s")
+    if performance_mode == "STRICT" and avg_fold_time > 0.6:  # 10k rows baseline
+        logger.warning(f"Fold time {avg_fold_time:.3f}s exceeds STRICT threshold of 0.6s")
 
     return results
 
@@ -465,7 +464,7 @@ def save_results(results: list[tuple[int, dict[str, float], list[dict]]], symbol
             {
                 "fold_id": fold_id,
                 "metrics": {
-                    k: float(v) if isinstance(v, (np.integer, np.floating)) else v
+                    k: float(v) if isinstance(v, np.integer | np.floating) else v
                     for k, v in metrics.items()
                 },
                 "trades": trades,

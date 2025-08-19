@@ -1,3 +1,4 @@
+import contextlib
 import json
 import os
 import time
@@ -31,7 +32,5 @@ def notify_ntfy(title: str, msg):
     req = urllib.request.Request(url, data=payload.encode(), method="POST")
     req.add_header("Title", title)
     req.add_header("Content-Type", "application/json" if isinstance(msg, dict) else "text/plain")
-    try:
+    with contextlib.suppress(Exception):
         urllib.request.urlopen(req, timeout=5)
-    except Exception:
-        pass

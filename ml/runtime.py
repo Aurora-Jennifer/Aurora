@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 import random
 
 import numpy as np
@@ -15,10 +16,8 @@ def set_seeds(seed: int = 1337) -> None:
         import torch
 
         torch.manual_seed(seed)
-        try:
+        with contextlib.suppress(Exception):
             torch.use_deterministic_algorithms(True)
-        except Exception:
-            pass
     except Exception:
         pass
 

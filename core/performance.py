@@ -49,10 +49,7 @@ def calculate_trade_metrics(
     sum_pos = sum(wins)
     sum_neg = abs(sum(losses))
 
-    if sum_neg == 0:
-        profit_factor = "N/A"
-    else:
-        profit_factor = sum_pos / sum_neg
+    profit_factor = "N/A" if sum_neg == 0 else sum_pos / sum_neg
 
     return {
         "win_rate": win_rate,

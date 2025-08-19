@@ -61,7 +61,7 @@ def check_gates(results_file: str = "results/walkforward/results.json"):
     # Gate 4: Trusted fold requirements
     # Need at least 6 months of contiguous trusted folds
     trusted_folds = []
-    for i, (sharpe, max_dd, trades) in enumerate(
+    for _i, (sharpe, max_dd, trades) in enumerate(
         zip(sharpe_scores, max_dds, n_trades, strict=False)
     ):
         is_trusted = (

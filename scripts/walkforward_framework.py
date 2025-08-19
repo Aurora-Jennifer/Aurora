@@ -269,10 +269,7 @@ def compute_metrics_from_pnl(pnl_series: np.ndarray, trades: list[dict]) -> dict
     volatility = np.std(returns) * np.sqrt(252) if len(returns) > 1 else 0.0
 
     # Sharpe ratio (Newey-West adjusted)
-    if volatility > 0:
-        sharpe_nw = (np.mean(returns) * 252) / volatility
-    else:
-        sharpe_nw = 0.0
+    sharpe_nw = np.mean(returns) * 252 / volatility if volatility > 0 else 0.0
 
     # Sortino ratio
     downside_returns = returns[returns < 0]
@@ -285,10 +282,7 @@ def compute_metrics_from_pnl(pnl_series: np.ndarray, trades: list[dict]) -> dict
     # Maximum drawdown
     peak = np.maximum.accumulate(pnl_series)
     # Avoid division by zero - use absolute values for drawdown
-    if peak[-1] != 0:
-        drawdown = (pnl_series - peak) / abs(peak[-1])
-    else:
-        drawdown = np.zeros_like(pnl_series)
+    drawdown = (pnl_series - peak) / abs(peak[-1]) if peak[-1] != 0 else np.zeros_like(pnl_series)
     max_dd = np.min(drawdown) if len(drawdown) > 0 else 0.0
 
     # Hit rate
@@ -469,9 +463,8 @@ def walkforward_run(
     logger.info(f"Performance mode: {performance_mode}")
 
     # Performance validation
-    if performance_mode == "STRICT":
-        if avg_fold_time > 0.6:  # 10k rows baseline
-            logger.warning(f"Fold time {avg_fold_time:.3f}s exceeds STRICT threshold of 0.6s")
+    if performance_mode == "STRICT" and avg_fold_time > 0.6:  # 10k rows baseline
+        logger.warning(f"Fold time {avg_fold_time:.3f}s exceeds STRICT threshold of 0.6s")
 
     return results
 

@@ -331,10 +331,7 @@ def validate_strategy_params(params: dict[str, Any], required_params: list[str])
     Returns:
         True if valid, False otherwise
     """
-    for param in required_params:
-        if param not in params:
-            return False
-    return True
+    return all(param in params for param in required_params)
 
 
 def format_percentage(value: float, decimals: int = 2) -> str:

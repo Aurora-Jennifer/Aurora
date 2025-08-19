@@ -173,10 +173,7 @@ class BasicRegimeExtractor(RegimeExtractor):
 
         # Calculate basic features with safe access
         returns = np.diff(np.log(prices))
-        if _safe_len(returns) < self.lookback:
-            volatility = 0.0
-        else:
-            volatility = np.std(returns[-self.lookback :])
+        volatility = 0.0 if _safe_len(returns) < self.lookback else np.std(returns[-self.lookback:])
 
         # Trend strength (linear regression slope)
         x = np.arange(self.lookback)

@@ -93,10 +93,7 @@ def main():
     logger = logging.getLogger(__name__)
 
     # Load or create config
-    if args.config:
-        config = load_config(args.config)
-    else:
-        config = create_default_config()
+    config = load_config(args.config) if args.config else create_default_config()
 
     # Override config with command line arguments
     config.update(

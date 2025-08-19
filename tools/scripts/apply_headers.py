@@ -29,9 +29,7 @@ def should_skip(path: Path) -> bool:
     parts = path.parts
     if any(p in {"tests", "attic", ".venv", "venv", "__pycache__"} for p in parts):
         return True
-    if path.suffix != ".py":
-        return True
-    return False
+    return path.suffix != ".py"
 
 
 def has_header(text: str) -> bool:

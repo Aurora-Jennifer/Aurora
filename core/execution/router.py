@@ -106,17 +106,16 @@ def submit_order_with_idempotency(
                 }
 
             # Retry on rate limits and network errors
-            if attempt < max_retries:
-                if (
-                    "rate limit" in error_msg.lower()
-                    or "429" in error_msg
-                    or "timeout" in error_msg.lower()
-                    or "network" in error_msg.lower()
-                    or "5" in error_msg
-                    and "xx" in error_msg
-                ):
-                    backoff_with_jitter(attempt)
-                    continue
+            if attempt < max_retries and (
+                "rate limit" in error_msg.lower()
+                or "429" in error_msg
+                or "timeout" in error_msg.lower()
+                or "network" in error_msg.lower()
+                or "5" in error_msg
+                and "xx" in error_msg
+            ):
+                backoff_with_jitter(attempt)
+                continue
 
             # Final attempt failed
             update_order_status(client_order_id, "ERROR")
@@ -189,17 +188,16 @@ def cancel_order_with_idempotency(
                 }
 
             # Retry on rate limits and network errors
-            if attempt < max_retries:
-                if (
-                    "rate limit" in error_msg.lower()
-                    or "429" in error_msg
-                    or "timeout" in error_msg.lower()
-                    or "network" in error_msg.lower()
-                    or "5" in error_msg
-                    and "xx" in error_msg
-                ):
-                    backoff_with_jitter(attempt)
-                    continue
+            if attempt < max_retries and (
+                "rate limit" in error_msg.lower()
+                or "429" in error_msg
+                or "timeout" in error_msg.lower()
+                or "network" in error_msg.lower()
+                or "5" in error_msg
+                and "xx" in error_msg
+            ):
+                backoff_with_jitter(attempt)
+                continue
 
             # Final attempt failed
             return {

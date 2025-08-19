@@ -154,10 +154,7 @@ class TradeBook:
         sum_pos = sum(wins)
         sum_neg = abs(sum(losses))
 
-        if sum_neg == 0:
-            profit_factor = "N/A"
-        else:
-            profit_factor = sum_pos / sum_neg
+        profit_factor = "N/A" if sum_neg == 0 else sum_pos / sum_neg
 
         return {
             "total_trades": total_trades,
@@ -194,7 +191,7 @@ class TradeBook:
             )
 
         # Add open positions
-        for symbol, tr in self.open.items():
+        for _symbol, tr in self.open.items():
             trades_data.append(
                 {
                     "date": tr.entry_date,

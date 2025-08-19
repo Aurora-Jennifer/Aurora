@@ -44,10 +44,7 @@ def has_quarantined_records() -> bool:
     q = Path("quarantine")
     if not q.exists():
         return False
-    for p in q.rglob("*"):
-        if p.is_file():
-            return True
-    return False
+    return any(p.is_file() for p in q.rglob("*"))
 
 
 def invariance_smoke_test() -> float:

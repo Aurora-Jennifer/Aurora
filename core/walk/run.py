@@ -121,10 +121,7 @@ def reweight(metrics_list: list[dict[str, Any]]) -> np.ndarray:
 
     # Normalize
     total = exp_weights.sum()
-    if total > 0:
-        weights = exp_weights / total
-    else:
-        weights = np.ones_like(exp_weights) / len(exp_weights)
+    weights = exp_weights / total if total > 0 else np.ones_like(exp_weights) / len(exp_weights)
 
     return weights
 
@@ -138,7 +135,7 @@ def contiguous_trusted_span(
     span = timedelta(0)
     best = timedelta(0)
 
-    for i, (meta, (start, end)) in enumerate(zip(fold_meta, fold_dates, strict=False)):
+    for _i, (meta, (start, end)) in enumerate(zip(fold_meta, fold_dates, strict=False)):
         if meta["trusted"]:
             span += end - start
             best = max(best, span)

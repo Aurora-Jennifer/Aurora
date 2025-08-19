@@ -180,7 +180,7 @@ def require_validated_data(context: str = "unknown"):
                     break
 
             # Check DataFrame keyword arguments
-            for key, value in kwargs.items():
+            for _key, value in kwargs.items():
                 if isinstance(value, pd.DataFrame):
                     DataFrameContract.validate_market_data(value, f"{func.__name__}:{context}")
 
@@ -209,7 +209,7 @@ def require_validated_signals(context: str = "unknown"):
                     break
 
             # Check Series keyword arguments
-            for key, value in kwargs.items():
+            for _key, value in kwargs.items():
                 if isinstance(value, pd.Series):
                     SignalContract.validate_signals(value, f"{func.__name__}:{context}")
 

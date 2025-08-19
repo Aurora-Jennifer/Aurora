@@ -13,6 +13,8 @@ import pandas as pd
 import yaml
 
 _sys.path.append(_os.path.dirname(_os.path.dirname(__file__)))
+import contextlib
+
 from core.execution.canary_limits import CanaryConfig, check_caps
 from ml.model_interface import ModelSpec
 from ml.registry import load_model
@@ -267,10 +269,8 @@ def main(argv: list[str] | None = None) -> None:
         repo = os.getenv("GITHUB_REPOSITORY", "")
         token = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN") or ""
         if shutil.which("python") and (repo and token):
-            try:
+            with contextlib.suppress(Exception):
                 subprocess.run(["python", "tools/gh_issue.py", repo, token], check=False)
-            except Exception:
-                pass
     if fallbacks > 0 or anomalies:
         raise SystemExit(1)
 

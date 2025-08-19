@@ -523,5 +523,5 @@ if __name__ == "__main__":
 
     # Print feature names
     print(f"\nGenerated {len(features)} features:")
-    for name in features.keys():
+    for name in features:
         print(f"  - {name}")
