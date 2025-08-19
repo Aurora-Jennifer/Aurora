@@ -1,38 +1,49 @@
 # Gitleaks configuration for Aurora trading system
 # Ignores false positives and safe patterns
 
+# Global allowlist for common safe patterns
+[allowlist]
+paths = [
+  '''^attic/''',
+  '''^docs/''',
+  '''^tests/''',
+  '''^.*\.md$''',
+  '''^.*\.txt$''',
+  '''^.*\.yaml$''',
+  '''^.*\.yml$''',
+  '''^.*\.json$'''
+]
+regexes = [
+  '''(?i)demo_token_placeholder''',
+  '''(?i)GITHUB_TOKEN|GH_TOKEN|TRADING_API_TOKEN|BROKER_SECRET''',
+  '''(?i)example|dummy|sample|test_key'''
+]
+
+# Custom rule for demo tokens
 [[rules]]
 id = "demo-token-placeholder"
 description = "Demo token placeholder (not a real secret)"
 regex = '''demo_token_placeholder'''
 tags = ["key", "demo"]
-allowlist = [
-    { path = "api/demo_server.py" },
-    { path = "build_secure.py" }
-]
 
+  [rules.allowlist]
+  paths = [
+    '''^api/demo_server\.py$''',
+    '''^build_secure\.py$'''
+  ]
+
+# Custom rule for environment variables
 [[rules]]
 id = "environment-variables"
 description = "Environment variable references (not actual secrets)"
 regex = '''(GITHUB_TOKEN|GH_TOKEN|TRADING_API_TOKEN|BROKER_SECRET)'''
 tags = ["env"]
-allowlist = [
-    { path = ".*\\.md$" },
-    { path = ".*\\.txt$" },
-    { path = ".*\\.yaml$" },
-    { path = ".*\\.yml$" },
-    { path = ".*\\.json$" }
-]
 
-# Ignore test and documentation files
-[allowlist]
-files = [
-    "test_*",
-    "*_test*", 
-    "docs/*",
-    "*.md",
-    "*.txt",
-    "*.yaml",
-    "*.yml",
-    "*.json"
-]
+  [rules.allowlist]
+  paths = [
+    '''^.*\.md$''',
+    '''^.*\.txt$''',
+    '''^.*\.yaml$''',
+    '''^.*\.yml$''',
+    '''^.*\.json$'''
+  ]

@@ -121,4 +121,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          config-path: .gitleaks.toml
+          config: .gitleaks.toml
+          redact: true
+          verbose: true
+          report_format: sarif
+          output: results.sarif
+          fail: true
