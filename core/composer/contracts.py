@@ -291,12 +291,8 @@ class SoftmaxComposer(Composer):
                 # Favor momentum strategies in trending markets
                 if "momentum" in pred.strategy_name.lower():
                     score += 0.2 * self.trend_bias
-            elif regime_features.regime_type == "chop":
-                # Favor mean reversion strategies in choppy markets
-                if (
-                    "mean" in pred.strategy_name.lower()
-                    or "reversion" in pred.strategy_name.lower()
-                ):
+            elif (regime_features.regime_type == "chop" and 
+                  ("mean" in pred.strategy_name.lower() or "reversion" in pred.strategy_name.lower())):
                     score += 0.2 * self.chop_bias
 
             scores.append(score)

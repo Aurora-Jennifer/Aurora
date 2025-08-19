@@ -8,6 +8,8 @@ import logging
 from collections.abc import Callable
 from typing import Any
 
+import numpy as np
+
 # Import safety functions
 from ..utils import _last, _safe_len
 from .contracts import Composer, RegimeExtractor, Strategy, BasicRegimeExtractor, SoftmaxComposer

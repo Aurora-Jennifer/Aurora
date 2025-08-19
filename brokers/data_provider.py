@@ -408,7 +408,8 @@ def test_data_provider():
 
             if data is not None:
                 print(
-                    f"✅ {symbol}: {len(data)} rows, date range: {data.index[0]} to {data.index[-1]}"
+                    f"✅ {symbol}: {len(data)} rows, date range: {data.index[0]} to "
+                    f"{data.index[-1]}"
                 )
                 print(f"   Columns: {list(data.columns)}")
                 print(f"   Last close: ${data['Close'].iloc[-1]:.2f}")

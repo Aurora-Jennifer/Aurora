@@ -326,11 +326,10 @@ def main():
     print("=" * 50)
 
     # Check if Nuitka is installed
-    try:
-        import nuitka
-
+    import importlib.util
+    if importlib.util.find_spec("nuitka") is not None:
         print("✅ Nuitka is available")
-    except ImportError:
+    else:
         print("❌ Nuitka not found. Installing...")
         run_command([sys.executable, "-m", "pip", "install", "nuitka"], "Installing Nuitka")
 

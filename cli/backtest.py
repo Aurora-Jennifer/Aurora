@@ -82,7 +82,8 @@ def main():
         if results:
             print("✅ Backtest completed successfully!")
             print(
-                f"📊 Configuration: {args.profile or 'base'} profile, {len(config['symbols'])} symbols"
+                f"📊 Configuration: {args.profile or 'base'} profile, "
+                f"{len(config['symbols'])} symbols"
             )
         else:
             print("❌ Backtest failed or returned no results")

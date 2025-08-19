@@ -78,7 +78,8 @@ def main():
 
         # Print fold results
         print(
-            f"Fold {m['fold_id']:02d} | SharpeNW={m['sharpe_nw']:.2f} | PSR={m['psr']:.2f} | WR={m['win_rate']:.2f} | DD={m['max_dd']:.3f} | Trusted={m['trusted']}"
+            f"Fold {m['fold_id']:02d} | SharpeNW={m['sharpe_nw']:.2f} | PSR={m['psr']:.2f} | "
+            f"WR={m['win_rate']:.2f} | DD={m['max_dd']:.3f} | Trusted={m['trusted']}"
         )
 
     # Calculate weighted metrics
@@ -119,7 +120,8 @@ def main():
     print(f"Weighted MaxDD: {weighted_metrics.get('weighted_max_dd', 0):.3f}")
     print(f"Weighted Win Rate: {weighted_metrics.get('weighted_win_rate', 0):.3f}")
     print(
-        f"Trusted Folds: {weighted_metrics.get('trusted_folds', 0)}/{weighted_metrics.get('total_folds', 0)}"
+        f"Trusted Folds: {weighted_metrics.get('trusted_folds', 0)}/"
+        f"{weighted_metrics.get('total_folds', 0)}"
     )
     print(f"Contiguous Trusted Span: {best_span.days} days")
     print(f"Sufficient Live Months ({args.min_live_months}): {has_sufficient_span}")
@@ -130,10 +132,13 @@ def main():
         print(f"\n🚨 PAYOFF ANOMALIES DETECTED ({len(payoff_anomalies)} folds):")
         for anomaly in payoff_anomalies:
             print(
-                f"  Fold {anomaly['fold_id']}: WR={anomaly['win_rate']:.3f}, Sharpe={anomaly['sharpe_nw']:.3f}, Trades={anomaly['n_trades']}, Turnover={anomaly['turnover']:.3f}"
+                f"  Fold {anomaly['fold_id']}: WR={anomaly['win_rate']:.3f}, "
+                f"Sharpe={anomaly['sharpe_nw']:.3f}, Trades={anomaly['n_trades']}, "
+                f"Turnover={anomaly['turnover']:.3f}"
             )
         print(
-            "  → High win rate with negative Sharpe suggests: tiny wins, large losses, or cost domination"
+            "  → High win rate with negative Sharpe suggests: tiny wins, large losses, "
+            "or cost domination"
         )
 
     # Regime performance breakdown
@@ -159,7 +164,8 @@ def main():
             avg_win_rate = np.mean(stats["win_rate"])
             avg_max_dd = np.mean(stats["max_dd"])
             print(
-                f"  {regime}: {stats['count']} folds | Sharpe={avg_sharpe:.3f} | WR={avg_win_rate:.3f} | DD={avg_max_dd:.3f}"
+                f"  {regime}: {stats['count']} folds | Sharpe={avg_sharpe:.3f} | "
+                f"WR={avg_win_rate:.3f} | DD={avg_max_dd:.3f}"
             )
 
     # Turnover analysis

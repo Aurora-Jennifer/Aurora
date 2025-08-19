@@ -79,7 +79,8 @@ class IBKRBroker:
             if self.ib.isConnected():
                 self.connected = True
                 logger.info(
-                    f"Connected to IBKR {'Paper Trading' if self.config.paper_trading else 'Live Trading'}"
+                    f"Connected to IBKR "
+                    f"{'Paper Trading' if self.config.paper_trading else 'Live Trading'}"
                 )
 
                 # Request account info
@@ -405,7 +406,8 @@ def test_ibkr_connection():
 
         if broker.is_connected():
             print(
-                f"✅ Connected to IBKR {'Paper Trading' if config.paper_trading else 'Live Trading'}"
+                f"✅ Connected to IBKR "
+                f"{'Paper Trading' if config.paper_trading else 'Live Trading'}"
             )
 
             # Test account info

@@ -245,9 +245,8 @@ class PortfolioState:
                     f"Cannot sell {abs(delta):.2f} of {symbol} - only {abs(current_qty):.2f} available"
                 )
                 return False
-        elif side == "SELL" and current_qty > 0:
-            # If we're trying to sell more than we have, and we're not creating a short position
-            if abs(delta) > current_qty and (target_qty >= 0 or not self.shorting_enabled):
+        elif (side == "SELL" and current_qty > 0 and 
+              abs(delta) > current_qty and (target_qty >= 0 or not self.shorting_enabled)):
                 logger.warning(
                     f"Cannot sell {abs(delta):.2f} of {symbol} - only {current_qty:.2f} available"
                 )

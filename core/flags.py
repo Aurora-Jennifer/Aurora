@@ -24,11 +24,10 @@ def enabled(flag: str, default: bool = True) -> bool:
     # Parse boolean values
     if env_value.lower() in ["true", "1", "yes", "on"]:
         return True
-    elif env_value.lower() in ["false", "0", "no", "off"]:
+    if env_value.lower() in ["false", "0", "no", "off"]:
         return False
-    else:
-        # If not a boolean, treat as enabled if set
-        return True
+    # If not a boolean, treat as enabled if set
+    return True
 
 
 def disabled(flag: str, default: bool = False) -> bool:
