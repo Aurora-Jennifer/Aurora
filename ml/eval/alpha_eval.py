@@ -231,7 +231,7 @@ def evaluate_alpha_model(
 
     # Load configurations
     feature_config = load_feature_config()
-    model_config = load_model_config()
+    load_model_config()
 
     # Load feature data
     from ml.trainers.train_linear import load_feature_data

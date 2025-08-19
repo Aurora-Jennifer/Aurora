@@ -89,7 +89,7 @@ class IndicatorConsolidator:
         try:
             with open(file_path, encoding="utf-8") as f:
                 content = f.read()
-                lines = content.split("\n")
+                content.split("\n")
 
             for indicator, pattern_info in self.duplicate_patterns.items():
                 matches = []

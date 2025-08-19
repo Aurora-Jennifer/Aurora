@@ -144,7 +144,7 @@ def test_performance_configurations():
             logger.info("Running walkforward (DataSanity enabled)...")
             start_time = time.time()
             try:
-                results_slow = walkforward_run(
+                walkforward_run(
                     pipeline,
                     folds,
                     prices,

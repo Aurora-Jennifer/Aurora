@@ -200,7 +200,7 @@ def check_strategy_initialization():
         )
 
         params = RegimeAwareEnsembleParams()
-        strategy = RegimeAwareEnsembleStrategy(params)
+        RegimeAwareEnsembleStrategy(params)
 
         print("  ✅ RegimeAwareEnsembleStrategy - initialized")
         return True
@@ -237,7 +237,6 @@ def check_environment_variables():
 
     env_vars = ["IBKR_PAPER_TRADING", "IBKR_HOST", "IBKR_PORT", "IBKR_CLIENT_ID"]
 
-    all_good = True
 
     for var in env_vars:
         value = os.getenv(var)

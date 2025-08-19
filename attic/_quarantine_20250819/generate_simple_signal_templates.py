@@ -90,8 +90,8 @@ class SimpleSignalTemplateGenerator:
             Dictionary of technical indicators
         """
         close = data["Close"]
-        high = data["High"]
-        low = data["Low"]
+        data["High"]
+        data["Low"]
         volume = data["Volume"]
 
         indicators = {}

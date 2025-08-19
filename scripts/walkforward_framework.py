@@ -380,7 +380,7 @@ def walkforward_run(
         Xtr = pipeline.transform(tr)
         ytr = pipeline.y[tr]
         Xte = pipeline.transform(te)
-        yte = pipeline.y[te]
+        pipeline.y[te]
 
         # Validate data with DataSanity if enabled (SKIPPED by default for performance)
         if validator is not None:
@@ -500,8 +500,8 @@ def build_feature_table(
 
     # Price-based features - ensure 1D arrays
     close = data["Close"].values.flatten()
-    high = data["High"].values.flatten()
-    low = data["Low"].values.flatten()
+    data["High"].values.flatten()
+    data["Low"].values.flatten()
     volume = data["Volume"].values.flatten()
 
     # Returns

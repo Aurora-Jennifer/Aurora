@@ -307,7 +307,7 @@ class MLVisualizer:
 
         # Extract model performance data
         model_names = list(profit_learner.models.keys())
-        model_types = [type(model).__name__ for model in profit_learner.models.values()]
+        [type(model).__name__ for model in profit_learner.models.values()]
 
         # Create bar chart
         x_pos = np.arange(len(model_names))
@@ -350,8 +350,8 @@ class MLVisualizer:
         x_pos = np.arange(len(strategies))
         width = 0.35
 
-        bars1 = ax.bar(x_pos - width / 2, avg_profits, width, label="Avg Profit (%)", alpha=0.7)
-        bars2 = ax.bar(x_pos + width / 2, win_rates, width, label="Win Rate (%)", alpha=0.7)
+        ax.bar(x_pos - width / 2, avg_profits, width, label="Avg Profit (%)", alpha=0.7)
+        ax.bar(x_pos + width / 2, win_rates, width, label="Win Rate (%)", alpha=0.7)
 
         ax.set_title("Strategy Performance Comparison")
         ax.set_xlabel("Strategies")

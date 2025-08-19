@@ -75,7 +75,7 @@ class TradingGuardrails:
         """Check if position limits are respected."""
         max_weight = self.config.get("max_weight_per_symbol", 0.25)
         initial_capital = self.config.get("initial_capital", 100000)
-        max_position_value = initial_capital * max_weight
+        initial_capital * max_weight
 
         # For now, just check if size is reasonable
         if size <= 0:

@@ -49,7 +49,6 @@ def build_core_modules():
             continue
 
         module_name = Path(module).stem
-        output_name = f"core_compiled/{module_name}"
 
         cmd = [
             "python",

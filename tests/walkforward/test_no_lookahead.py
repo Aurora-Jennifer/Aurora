@@ -71,9 +71,9 @@ def test_constant_predictor_sanity_check():
     # Create synthetic data with random labels
     np.random.seed(42)
     n_samples = 100
-    X = np.random.randn(n_samples, 10)
+    np.random.randn(n_samples, 10)
     y = np.random.choice([-1, 0, 1], n_samples)  # Random labels
-    prices = np.random.randn(n_samples) + 100
+    np.random.randn(n_samples) + 100
 
     # Generate folds
     folds = list(gen_walkforward(n=n_samples, train_len=30, test_len=10, stride=5))

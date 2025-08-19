@@ -709,7 +709,7 @@ class TestDataSanityEnforcement:
             data = self.create_test_data(size)
 
             # Should handle small DataFrames
-            guard = attach_guard(data)
+            attach_guard(data)
             clean_data = self.wrapper.validate_dataframe(data, f"SMALL_GUARD_TEST_{size}")
             assert_validated(clean_data, f"edge_case_{size}")
             assert len(clean_data) == size, f"Should preserve data for size {size}"
@@ -785,7 +785,7 @@ class TestDataSanityEnforcement:
                 index=dates,
             )
 
-            guard = attach_guard(data)
+            attach_guard(data)
             # Should handle extreme negative prices
             clean_data = self.wrapper.validate_dataframe(data, "FALSIFY_GUARD_NEGATIVE")
             assert len(clean_data) > 0, "Should handle extreme negative prices"
@@ -805,7 +805,7 @@ class TestDataSanityEnforcement:
                 index=dates,
             )
 
-            guard = attach_guard(data)
+            attach_guard(data)
             # Should fail or repair OHLC violations
             try:
                 clean_data = self.wrapper.validate_dataframe(data, "FALSIFY_GUARD_OHLC")
@@ -839,7 +839,7 @@ class TestDataSanityEnforcement:
             data["Returns"] = np.log(data["Close"] / data["Close"].shift(1))
             data.loc[data.index[5], "Returns"] = data.loc[data.index[6], "Returns"]  # Lookahead
 
-            guard = attach_guard(data)
+            attach_guard(data)
             # Should detect or handle lookahead
             clean_data = self.wrapper.validate_dataframe(data, "FALSIFY_GUARD_LOOKAHEAD")
             assert "Returns" in clean_data.columns, "Should handle lookahead contamination"
@@ -859,7 +859,7 @@ class TestDataSanityEnforcement:
                 index=dates,
             )
 
-            guard = attach_guard(data)
+            attach_guard(data)
             # Should handle invalid data types
             clean_data = self.wrapper.validate_dataframe(data, "FALSIFY_GUARD_DTYPE")
             assert len(clean_data) > 0, "Should handle invalid data types"
@@ -879,7 +879,7 @@ class TestDataSanityEnforcement:
             data["Symbol"] = symbol
 
             # Attach guard and validate data (like updated backtest engine)
-            guard = attach_guard(data)
+            attach_guard(data)
             clean_data = self.wrapper.validate_dataframe(data, symbol)
             all_data.append(clean_data)
 
@@ -1162,7 +1162,7 @@ class TestDataSanityEnforcement:
 
         # Should handle partial corruption with guards
         data = mock_download("SPY", start="2024-01-01", end="2024-01-31")
-        guard = attach_guard(data)
+        attach_guard(data)
         clean_data = self.wrapper.validate_dataframe(data, "NETWORK_GUARD_TEST")
         assert len(clean_data) > 0, "Should handle partial data corruption"
         assert_validated(clean_data, "network_test")
@@ -1492,7 +1492,7 @@ class TestDataSanityEnforcement:
             data.loc[data.index[5], "Close"] = data.loc[data.index[5], "Close"] * 10  # 10x spike
             data.loc[data.index[10], "Close"] = data.loc[data.index[10], "Close"] * 0.1  # 90% drop
 
-            guard = attach_guard(data)
+            attach_guard(data)
             clean_data = self.wrapper.validate_dataframe(data, "CORRUPTION_SPIKES")
             assert len(clean_data) > 0, "Should handle price spikes"
             assert_validated(clean_data, "corruption_spikes")
@@ -1503,7 +1503,7 @@ class TestDataSanityEnforcement:
             data.loc[data.index[5], "Volume"] = 0  # Zero volume
             data.loc[data.index[10], "Volume"] = 1e15  # Extreme volume
 
-            guard = attach_guard(data)
+            attach_guard(data)
             clean_data = self.wrapper.validate_dataframe(data, "CORRUPTION_VOLUME")
             assert len(clean_data) > 0, "Should handle volume anomalies"
             assert_validated(clean_data, "corruption_volume")
@@ -1513,7 +1513,7 @@ class TestDataSanityEnforcement:
             data = self.create_test_data(20)
             data.index = data.index.astype(str)  # Convert to string timestamps
 
-            guard = attach_guard(data)
+            attach_guard(data)
             clean_data = self.wrapper.validate_dataframe(data, "CORRUPTION_TIMESTAMP")
             assert len(clean_data) > 0, "Should handle timestamp corruption"
             assert isinstance(clean_data.index, pd.DatetimeIndex), "Should restore datetime index"
@@ -1524,7 +1524,7 @@ class TestDataSanityEnforcement:
             data = self.create_test_data(20)
             data["Open"], data["Close"] = data["Close"], data["Open"]  # Swap columns
 
-            guard = attach_guard(data)
+            attach_guard(data)
             clean_data = self.wrapper.validate_dataframe(data, "CORRUPTION_COLUMNS")
             assert len(clean_data) > 0, "Should handle column mixing"
             assert_validated(clean_data, "corruption_columns")
@@ -1534,7 +1534,7 @@ class TestDataSanityEnforcement:
             data = self.create_test_data(20)
             data["Close"] = data["Close"].astype(str)  # Convert to string
 
-            guard = attach_guard(data)
+            attach_guard(data)
             clean_data = self.wrapper.validate_dataframe(data, "CORRUPTION_DTYPE")
             assert len(clean_data) > 0, "Should handle data type corruption"
             assert clean_data["Close"].dtype in [
@@ -1548,7 +1548,7 @@ class TestDataSanityEnforcement:
             data = self.create_test_data(20)
             data.index = pd.RangeIndex(0, len(data))  # Replace with range index
 
-            guard = attach_guard(data)
+            attach_guard(data)
             clean_data = self.wrapper.validate_dataframe(data, "CORRUPTION_INDEX")
             assert len(clean_data) > 0, "Should handle index corruption"
             assert isinstance(clean_data.index, pd.DatetimeIndex), "Should restore datetime index"
@@ -1569,7 +1569,7 @@ class TestDataSanityEnforcement:
         validator = DataSanityValidator()
         validator.config = config
 
-        guard = attach_guard(data)
+        attach_guard(data)
 
         if repair_strategy == "winsorize":
             # Test winsorization
@@ -1605,7 +1605,7 @@ class TestDataSanityEnforcement:
 
         if validation_type == "basic":
             # Basic validation
-            guard = attach_guard(data)
+            attach_guard(data)
             clean_data = self.wrapper.validate_dataframe(data, "UNIT_BASIC")
             assert len(clean_data) == len(data), "Basic validation should preserve data"
             assert_validated(clean_data, "unit_basic")
@@ -1613,7 +1613,7 @@ class TestDataSanityEnforcement:
         elif validation_type == "strict":
             # Strict validation
             validator = self.create_config_with_profile("strict")
-            guard = attach_guard(data)
+            attach_guard(data)
             clean_data, result = validator.validate_and_repair(data, "UNIT_STRICT")
             assert len(clean_data) == len(data), "Strict validation should preserve valid data"
             assert_validated(clean_data, "unit_strict")
@@ -1621,7 +1621,7 @@ class TestDataSanityEnforcement:
         elif validation_type == "lenient":
             # Lenient validation
             validator = self.create_config_with_profile("lenient")
-            guard = attach_guard(data)
+            attach_guard(data)
             clean_data, result = validator.validate_and_repair(data, "UNIT_LENIENT")
             assert len(clean_data) == len(data), "Lenient validation should preserve data"
             assert_validated(clean_data, "unit_lenient")
@@ -1641,7 +1641,7 @@ class TestDataSanityEnforcement:
             process = psutil.Process(os.getpid())
             memory_before = process.memory_info().rss / 1024 / 1024  # MB
 
-            guard = attach_guard(data)
+            attach_guard(data)
             clean_data = self.wrapper.validate_dataframe(data, "MEMORY_LARGE")
 
             memory_after = process.memory_info().rss / 1024 / 1024  # MB
@@ -1662,7 +1662,7 @@ class TestDataSanityEnforcement:
             process = psutil.Process(os.getpid())
             memory_before = process.memory_info().rss / 1024 / 1024  # MB
 
-            guard = attach_guard(data)
+            attach_guard(data)
             clean_data = self.wrapper.validate_dataframe(data, "MEMORY_COLUMNS")
 
             memory_after = process.memory_info().rss / 1024 / 1024  # MB
@@ -1682,7 +1682,7 @@ class TestDataSanityEnforcement:
 
             # Perform multiple deep copy operations
             for i in range(10):
-                guard = attach_guard(data.copy())
+                attach_guard(data.copy())
                 clean_data = self.wrapper.validate_dataframe(data.copy(), f"MEMORY_COPY_{i}")
                 assert_validated(clean_data, f"memory_copy_{i}")
 
@@ -1701,7 +1701,7 @@ class TestDataSanityEnforcement:
             memory_before = process.memory_info().rss / 1024 / 1024  # MB
 
             # Perform chained operations
-            guard = attach_guard(data)
+            attach_guard(data)
             clean_data1 = self.wrapper.validate_dataframe(data, "MEMORY_CHAIN_1")
             clean_data2 = self.wrapper.validate_dataframe(clean_data1, "MEMORY_CHAIN_2")
             clean_data3 = self.wrapper.validate_dataframe(clean_data2, "MEMORY_CHAIN_3")
@@ -1746,7 +1746,7 @@ class TestDataSanityEnforcement:
                 index=weekend_dates,
             )
 
-            guard = attach_guard(data)
+            attach_guard(data)
             clean_data = self.wrapper.validate_dataframe(data, "EDGE_HOLIDAYS")
             assert len(clean_data) > 0, "Should handle market holidays"
             assert_validated(clean_data, "edge_holidays")
@@ -1760,7 +1760,7 @@ class TestDataSanityEnforcement:
             data.loc[data.index[10:], "High"] = data.loc[data.index[10:], "High"] * 2
             data.loc[data.index[10:], "Low"] = data.loc[data.index[10:], "Low"] * 2
 
-            guard = attach_guard(data)
+            attach_guard(data)
             clean_data = self.wrapper.validate_dataframe(data, "EDGE_CORP_ACTIONS")
             assert len(clean_data) > 0, "Should handle corporate actions"
             assert_validated(clean_data, "edge_corp_actions")
@@ -1775,7 +1775,7 @@ class TestDataSanityEnforcement:
             data["High"] = data["High"] * exchange_rate
             data["Low"] = data["Low"] * exchange_rate
 
-            guard = attach_guard(data)
+            attach_guard(data)
             clean_data = self.wrapper.validate_dataframe(data, "EDGE_CURRENCY")
             assert len(clean_data) > 0, "Should handle currency conversion"
             assert_validated(clean_data, "edge_currency")
@@ -1795,7 +1795,7 @@ class TestDataSanityEnforcement:
                 index=dates,
             )
 
-            guard = attach_guard(data)
+            attach_guard(data)
             clean_data = self.wrapper.validate_dataframe(data, "EDGE_TIMEZONE")
             assert len(clean_data) > 0, "Should handle timezone boundaries"
             assert clean_data.index.tz == UTC, "Should convert to UTC"
@@ -1815,7 +1815,7 @@ class TestDataSanityEnforcement:
                 index=dates,
             )
 
-            guard = attach_guard(data)
+            attach_guard(data)
             clean_data = self.wrapper.validate_dataframe(data, "EDGE_LEAP_YEAR")
             assert len(clean_data) > 0, "Should handle leap years"
             assert_validated(clean_data, "edge_leap_year")
@@ -1834,7 +1834,7 @@ class TestDataSanityEnforcement:
                 index=dates,
             )
 
-            guard = attach_guard(data)
+            attach_guard(data)
             clean_data = self.wrapper.validate_dataframe(data, "EDGE_MILLISECOND")
             assert len(clean_data) > 0, "Should handle millisecond precision"
             assert_validated(clean_data, "edge_millisecond")

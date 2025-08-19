@@ -119,8 +119,8 @@ def run_training_with_persistence(args):
             return False
 
         # Initialize components
-        persistence_analyzer = FeaturePersistenceAnalyzer()
-        warm_start_manager = WarmStartManager()
+        FeaturePersistenceAnalyzer()
+        WarmStartManager()
 
         # Generate run ID
         run_id = args.run_id or f"train_{datetime.now().strftime('%Y%m%d_%H%M%S')}"

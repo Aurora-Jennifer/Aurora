@@ -417,21 +417,6 @@ def test_consistency_across_modes():
         from strategies.factory import StrategyFactory
 
         # Create identical config for all modes
-        base_config = {
-            "symbols": ["SPY"],
-            "initial_capital": 100000,
-            "strategy": "regime_aware_ensemble",
-            "strategy_params": {
-                "regime_aware_ensemble": {
-                    "confidence_threshold": 0.3,
-                    "regime_lookback": 252,
-                    "trend_following_weight": 0.6,
-                    "mean_reversion_weight": 0.4,
-                }
-            },
-            "risk_params": {"max_position_size_pct": 10.0},
-            "execution_params": {"slippage_bps": 2, "commission_bps": 5},
-        }
 
         # Test 1: Strategy consistency
         print("  📈 Testing strategy consistency...")
@@ -623,7 +608,7 @@ def test_performance_benchmarks():
         )
 
         strategy = RegimeAwareEnsembleStrategy(RegimeAwareEnsembleParams())
-        signals = strategy.generate_signals(test_data)
+        strategy.generate_signals(test_data)
 
         strategy_time = time.time() - start_time
         print(f"    📊 Signal generation: {strategy_time:.3f}s for {len(test_data)} bars")
@@ -662,7 +647,7 @@ def test_performance_benchmarks():
         start_time = time.time()
 
         engine = BacktestEngine(config_file)
-        results = engine.run_backtest(
+        engine.run_backtest(
             start_date="2024-01-01", end_date="2024-01-31", symbols=["SPY"]
         )
 

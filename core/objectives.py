@@ -44,7 +44,6 @@ class ExpectedLogUtility:
         if daily_returns is None or len(daily_returns) == 0:
             return 0.0
         # Use small epsilon to avoid log(0)
-        eps = 1e-6
         log_growth = np.log1p(np.clip(daily_returns.values, -0.99, 10.0))
         return float(np.nanmean(log_growth))
 

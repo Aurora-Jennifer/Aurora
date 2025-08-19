@@ -479,7 +479,7 @@ class PaperTradingEngine:
 
             # Calculate maximum position size per symbol
             max_position_pct = self.config.get("risk_params", {}).get("max_position_size", 0.1)
-            max_position_value = available_capital * max_position_pct
+            available_capital * max_position_pct
 
             for symbol, signal in signals.items():
                 if abs(signal) < 0.1:  # Skip small signals

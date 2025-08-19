@@ -71,7 +71,7 @@ def main(argv: list[str] | None = None) -> None:
     models_cfg = cfg.get("models") or {}
     live = cfg.get("live") or {}
     paper = cfg.get("paper") or {}
-    risk = cfg.get("risk") or {}
+    cfg.get("risk") or {}
 
     equity = float((cfg.get("live") or {}).get("equity", 100_000.0))
     cap_cfg = CanaryConfig(

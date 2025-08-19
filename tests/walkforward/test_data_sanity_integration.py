@@ -68,10 +68,10 @@ def test_corruption_in_training_fold_trips_validator():
     X, y, prices = build_feature_table(clean_data, warmup_days=20)
 
     # Generate folds
-    folds = list(gen_walkforward(n=len(X), train_len=30, test_len=10, stride=5))
+    list(gen_walkforward(n=len(X), train_len=30, test_len=10, stride=5))
 
     # Create pipeline
-    pipeline = LeakageProofPipeline(X, y)
+    LeakageProofPipeline(X, y)
 
     # Test with corrupted data
     corrupted_data = inject_nan_burst(clean_data)
@@ -143,10 +143,10 @@ def test_clean_data_passes_without_errors():
     X, y, prices = build_feature_table(clean_data, warmup_days=20)
 
     # Generate folds
-    folds = list(gen_walkforward(n=len(X), train_len=30, test_len=10, stride=5))
+    list(gen_walkforward(n=len(X), train_len=30, test_len=10, stride=5))
 
     # Create pipeline
-    pipeline = LeakageProofPipeline(X, y)
+    LeakageProofPipeline(X, y)
 
     # Validate clean data
     validator = DataSanityValidator(profile="strict")

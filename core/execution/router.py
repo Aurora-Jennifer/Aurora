@@ -72,7 +72,7 @@ def submit_order_with_idempotency(
 
             # Update KV store with broker response
             broker_order_id = result.get("order_id")
-            perm_id = result.get("perm_id")
+            result.get("perm_id")
             status = result.get("status", "SUBMITTED")
 
             update_order_status(client_order_id, status, broker_order_id)

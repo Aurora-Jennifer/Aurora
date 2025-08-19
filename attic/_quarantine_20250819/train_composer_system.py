@@ -413,7 +413,7 @@ def main():
     args = parser.parse_args()
 
     # Setup logging
-    logger = setup_logging()
+    setup_logging()
 
     # Build CLI overrides
     cli_overrides = {}

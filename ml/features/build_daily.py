@@ -121,7 +121,7 @@ def build_features_for_symbol(
     # Verify leakage guard: label index > feature index
     if len(features) > 0:
         label_col = "ret_fwd_1d"
-        feature_cols = [col for col in features.columns if col != label_col]
+        [col for col in features.columns if col != label_col]
 
         # Check that label is properly shifted
         for i in range(len(features) - 1):

@@ -29,7 +29,7 @@ def check_gates(results_file: str = "results/walkforward/results.json"):
     # Extract metrics
     sharpe_scores = [f["metrics"]["sharpe_nw"] for f in fold_results]
     max_dds = [f["metrics"]["max_dd"] for f in fold_results]
-    hit_rates = [f["metrics"]["hit_rate"] for f in fold_results]
+    [f["metrics"]["hit_rate"] for f in fold_results]
     n_trades = [f["n_trades"] for f in fold_results]
 
     # Gate 1: PSR (Probability of Sharpe Ratio) >= 0.95

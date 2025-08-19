@@ -339,7 +339,7 @@ def run_walkforward_with_composer(
         tr = slice(fold.train_lo, fold.train_hi + 1)
         te = slice(fold.test_lo, fold.test_hi + 1)
 
-        train_data = data.iloc[tr]
+        data.iloc[tr]
         test_data = data.iloc[te]
 
         # Generate predictions using composer with fold-level logging

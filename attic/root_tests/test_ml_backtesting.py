@@ -271,7 +271,7 @@ def simulate_trading_period(data: pd.DataFrame, config: dict, strategy_name: str
 
     # Initialize components
     growth_calculator = GrowthTargetCalculator(config)
-    objective = build_objective(config)
+    build_objective(config)
 
     for i in range(30, len(data)):  # Start after warmup period
         # Get current market data
@@ -284,7 +284,7 @@ def simulate_trading_period(data: pd.DataFrame, config: dict, strategy_name: str
             )
         elif strategy_name == "mean_reversion":
             ma_short = current_data["Close"].rolling(10).mean().iloc[-1]
-            ma_long = current_data["Close"].rolling(50).mean().iloc[-1]
+            current_data["Close"].rolling(50).mean().iloc[-1]
             signal = 0.5 if current_data["Close"].iloc[-1] < ma_short * 0.98 else -0.5
         else:  # regime_aware_ensemble
             signal = np.random.normal(0, 0.3)  # Random signal for demo

@@ -55,12 +55,12 @@ def test_label_shift_leakage_guard():
         # Check that label is properly shifted
         if len(features) > 0:
             label_col = "ret_fwd_1d"
-            feature_cols = [col for col in features.columns if col != label_col]
+            [col for col in features.columns if col != label_col]
 
             # For each row, the label should be for a future date
             for i in range(len(features) - 1):
                 current_date = features.index[i]
-                next_date = features.index[i + 1]
+                features.index[i + 1]
 
                 # Label should be shifted by 1 day
                 expected_label_date = current_date + timedelta(days=1)

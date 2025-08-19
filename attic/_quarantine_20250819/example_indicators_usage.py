@@ -71,7 +71,7 @@ def demonstrate_basic_indicators(data: pd.DataFrame):
     close = data["Close"]
     high = data["High"]
     low = data["Low"]
-    volume = data["Volume"]
+    data["Volume"]
 
     # RSI
     rsi_14 = rsi(close, window=14)

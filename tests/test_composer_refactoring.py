@@ -144,7 +144,6 @@ def test_config_loading():
     assert "walkforward" in config
 
     # Test deep merging
-    overlay_config = {"risk": {"vol_target": 0.25}}
 
     merged = load_config(["config/base.yaml"])
     # Note: In a real test, we'd need to create a temporary overlay file

@@ -406,7 +406,7 @@ def test_data_integrity_validation(test: DataIntegrityTest) -> bool:
         segment_data = data.iloc[i : i + 50].copy()
         original_segment_close = segment_data["Close"].copy()
 
-        result = engine.run_trading_cycle(segment_data)
+        engine.run_trading_cycle(segment_data)
 
         # Validate data integrity
         test.assert_true(
@@ -427,8 +427,8 @@ def test_meaningful_correlation_analysis(test: DataIntegrityTest) -> bool:
 
     # Calculate actual data patterns
     returns = data["Close"].pct_change().dropna()
-    volatility = returns.rolling(20).std()
-    trend = returns.rolling(20).mean()
+    returns.rolling(20).std()
+    returns.rolling(20).mean()
 
     # Create trading engine
     config = {

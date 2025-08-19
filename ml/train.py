@@ -168,7 +168,7 @@ def rolling_walkforward(
 
     # Get unique timestamps and assets
     all_timestamps = df[ts_col].unique()
-    all_assets = df[asset_col].unique()
+    df[asset_col].unique()
 
     # Sort timestamps
     all_timestamps = np.sort(all_timestamps)
@@ -473,15 +473,15 @@ def _generate_fold_boundaries(
 
     # Convert retrain_every to timedelta
     if retrain_every == "D":
-        delta = timedelta(days=1)
+        timedelta(days=1)
     elif retrain_every == "W":
-        delta = timedelta(weeks=1)
+        timedelta(weeks=1)
     elif retrain_every == "M":
-        delta = timedelta(days=30)  # Approximate
+        timedelta(days=30)  # Approximate
     elif retrain_every == "Q":
-        delta = timedelta(days=90)  # Approximate
+        timedelta(days=90)  # Approximate
     elif retrain_every == "Y":
-        delta = timedelta(days=365)  # Approximate
+        timedelta(days=365)  # Approximate
     else:
         raise ValueError(f"Invalid retrain_every: {retrain_every}")
 

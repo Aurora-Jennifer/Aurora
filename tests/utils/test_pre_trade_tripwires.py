@@ -129,7 +129,7 @@ def test_market_closed_tripwire():
     for sym in symbols:
         try:
             quote = provider.quote(sym)
-            bid, ask, mid = quote["bid"], quote["ask"], quote["mid"]
+            bid, ask, _mid = quote["bid"], quote["ask"], quote["mid"]
 
             # Market state tripwire (null/zero quotes)
             if not bid or not ask or bid == 0 or ask == 0:
@@ -158,7 +158,7 @@ def test_quote_error_handling():
 
     for sym in symbols:
         try:
-            quote = provider.quote(sym)
+            provider.quote(sym)
             # ... rest of processing
         except Exception as e:
             anomalies.append(f"quote_error:{sym}:{str(e)[:50]}")

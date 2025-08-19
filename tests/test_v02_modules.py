@@ -66,7 +66,7 @@ class TestRegimeFeatures(unittest.TestCase):
             self.assertIn(feature, features_df.columns)
 
         # Check no forward-looking leakage (may fail with test data)
-        validation = validate_features(features_df)
+        validate_features(features_df)
         # Don't fail on leakage check as test data may trigger false positives
 
     def test_missing_columns(self):
@@ -368,7 +368,7 @@ class TestIntegration(unittest.TestCase):
         self.assertIn("dd_final", risk_df.columns)
 
         # Validate no data leakage (features validation may fail due to test data characteristics)
-        features_validation = validate_features(features_df)
+        validate_features(features_df)
         # Don't fail on leakage check as test data may trigger false positives
 
         signals_validation = validate_signals(signals_df)

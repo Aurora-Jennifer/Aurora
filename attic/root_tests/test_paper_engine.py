@@ -121,8 +121,8 @@ class TestPaperTradingEngine:
                     trades_executed += 1
 
                     # Calculate position size using objective
-                    price = market_data["Close"].iloc[-1]
-                    volatility = market_data["Close"].pct_change().std()
+                    market_data["Close"].iloc[-1]
+                    market_data["Close"].pct_change().std()
                     expected_return = 0.001  # 0.1% expected return
 
                     # Calculate position size using objective's risk budget

@@ -60,7 +60,7 @@ def main():
         logger.info("Step 2: Training Ridge model...")
         from ml.trainers.train_linear import train_linear_model
 
-        pipeline = train_linear_model(symbols, args.feature_dir, args.model_path, args.random_state)
+        train_linear_model(symbols, args.feature_dir, args.model_path, args.random_state)
 
         logger.info("Model training complete")
 

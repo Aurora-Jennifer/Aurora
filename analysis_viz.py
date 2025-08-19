@@ -599,7 +599,7 @@ class TradingAnalysisVisualizer:
         features_sorted = [features[i] for i in sorted_idx]
         importance_sorted = importance[sorted_idx]
 
-        bars = ax.barh(features_sorted, importance_sorted, color=self.colors["info"], alpha=0.8)
+        ax.barh(features_sorted, importance_sorted, color=self.colors["info"], alpha=0.8)
         ax.set_xlabel("Importance")
         ax.set_title("Feature Importance", fontweight="bold")
         ax.grid(True, alpha=0.3, axis="x")
@@ -747,7 +747,7 @@ class TradingAnalysisVisualizer:
         # Add text annotations
         for i in range(len(years)):
             for j in range(len(months)):
-                text = ax.text(
+                ax.text(
                     j,
                     i,
                     f"{monthly_returns[i, j]:.1%}",
@@ -783,7 +783,7 @@ class TradingAnalysisVisualizer:
 
         # Calculate running max and drawdown
         running_max = np.maximum.accumulate(cumulative)
-        drawdown = (cumulative - running_max) / running_max
+        (cumulative - running_max) / running_max
 
         ax.plot(
             dates,
@@ -995,7 +995,7 @@ class TradingAnalysisVisualizer:
 
         # Plot top 10 features
         top_features = alpha_scores.head(10)
-        bars = ax.barh(
+        ax.barh(
             range(len(top_features)),
             top_features.values,
             color=self.colors["success"],
