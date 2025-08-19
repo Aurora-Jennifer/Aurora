@@ -20,6 +20,9 @@ import pandas as pd
 # Import centralized logging setup
 from core.utils import setup_logging
 
+# Import composer integration
+from core.engine.composer_integration import ComposerIntegration
+
 # Configure logging
 logger = setup_logging("logs/walkforward_composer.log", logging.INFO)
 
@@ -46,10 +49,6 @@ except ImportError:
             return func
 
         return decorator
-
-
-# Import composer integration
-from core.engine.composer_integration import ComposerIntegration
 
 
 @dataclass

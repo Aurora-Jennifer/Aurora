@@ -10,7 +10,7 @@ from typing import Any
 
 # Import safety functions
 from ..utils import _last, _safe_len
-from .contracts import Composer, RegimeExtractor, Strategy
+from .contracts import Composer, RegimeExtractor, Strategy, BasicRegimeExtractor, SoftmaxComposer
 
 logger = logging.getLogger(__name__)
 
@@ -157,14 +157,12 @@ def build_composer(name: str, **kwargs) -> Composer | None:
 
 
 # Register built-in components
-from .contracts import BasicRegimeExtractor, SoftmaxComposer
 
 registry.register_regime_extractor("basic_kpis")(BasicRegimeExtractor)
 registry.register_composer("softmax_blender")(SoftmaxComposer)
 
 
 # Strategy adapters for existing strategies
-import numpy as np
 
 
 def create_momentum_strategy_adapter():

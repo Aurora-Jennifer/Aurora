@@ -68,12 +68,7 @@ class StrategyFactory:
         strategy_class = self._strategies[name]
         param_class = self._param_classes[name]
 
-        if params is None:
-            # Create default parameters
-            param_instance = param_class()
-        else:
-            # Create parameters from dict
-            param_instance = param_class(**params)
+        param_instance = param_class() if params is None else param_class(**params)
 
         return strategy_class(param_instance)
 

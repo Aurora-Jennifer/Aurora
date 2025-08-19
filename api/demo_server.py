@@ -133,7 +133,7 @@ async def predict_signal(request: PredictionRequest, token: str = Depends(verify
 
     except Exception as e:
         logger.error(f"Prediction error: {e}")
-        raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}") from e
 
 
 @app.post("/validate", response_model=ValidationResponse)
@@ -175,7 +175,7 @@ async def validate_data(request: ValidationRequest, token: str = Depends(verify_
 
     except Exception as e:
         logger.error(f"Validation error: {e}")
-        raise HTTPException(status_code=500, detail=f"Validation failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Validation failed: {str(e)}") from e
 
 
 @app.get("/capabilities")

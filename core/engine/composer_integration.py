@@ -91,11 +91,7 @@ class ComposerIntegration:
                 symbol=symbol,
             )
 
-        if current_idx < lookback:
-            # Pad with first available data
-            start_idx = 0
-        else:
-            start_idx = current_idx - lookback + 1
+        start_idx = 0 if current_idx < lookback else current_idx - lookback + 1
 
         # Extract price and volume data
         prices = data.iloc[start_idx : current_idx + 1]["Close"].values

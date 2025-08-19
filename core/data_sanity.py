@@ -501,7 +501,7 @@ class DataSanityValidator:
                     data.index = pd.to_datetime(data.index)
                     repairs.append("converted_to_datetime_index")
                 except Exception:
-                    raise DataSanityError(f"{symbol}: No valid datetime index found")
+                    raise DataSanityError(f"{symbol}: No valid datetime index found") from None
             else:
                 raise DataSanityError(f"{symbol}: No valid datetime index found")
 
@@ -619,7 +619,7 @@ class DataSanityValidator:
                     if not self.profile_config.get("allow_repairs", True):
                         raise DataSanityError(
                             f"{symbol}: Cannot convert string data to numeric in {col}"
-                        )
+                        ) from None
                     else:
                         # Try to extract numeric values from strings
                         series = pd.to_numeric(
@@ -750,10 +750,7 @@ class DataSanityValidator:
                 if non_finite.any():
                     # Use median of finite values as fallback
                     finite_series = series[np.isfinite(series)]
-                    if len(finite_series) > 0:
-                        median_val = finite_series.median()
-                    else:
-                        median_val = 100.0  # Ultimate fallback
+                    median_val = finite_series.median() if len(finite_series) > 0 else 100.0  # Ultimate fallback
 
                     data.loc[non_finite, col] = median_val
                     self._log_repair(

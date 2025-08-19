@@ -19,6 +19,8 @@ import pandas as pd
 # Import centralized logging setup
 from core.utils import setup_logging
 
+
+
 # Configure logging
 logger = setup_logging("logs/walkforward.log", logging.INFO)
 
@@ -171,12 +173,7 @@ class LeakageProofPipeline:
         """Fit model with optional warm-start."""
         # Simple linear model for demonstration
         # Replace with your actual model (XGBoost, PyTorch, etc.)
-        if warm_model is None:
-            # Initialize new model
-            model = SimpleLinearModel()
-        else:
-            # Warm-start existing model
-            model = warm_model
+        model = SimpleLinearModel() if warm_model is None else warm_model
 
         model.fit(Xtr, ytr)
         return model
@@ -221,8 +218,7 @@ class SimpleLinearModel:
         return np.tanh(raw_predictions)
 
 
-# Import the unified simulation function from core
-from core.sim.simulate import simulate_orders_numba
+
 
 
 def compute_metrics_from_pnl(pnl_series: np.ndarray, trades: list[dict]) -> dict[str, float]:
@@ -416,7 +412,7 @@ def walkforward_run(
                 logger.error(f"DataSanity validation failed for fold {fold.fold_id}: {str(e)}")
                 raise Exception(
                     f"RULE:DATASANITY_VALIDATION_FAILED - Fold {fold.fold_id}: {str(e)}"
-                )
+                ) from e
 
         # Fit model with warm-start
         model = pipeline.fit_model(Xtr, ytr, warm_model=model)

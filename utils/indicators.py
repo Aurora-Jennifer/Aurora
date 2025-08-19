@@ -168,11 +168,11 @@ def normalize(
             mad_val = np.median(np.abs(data - median_val))
             return (data - median_val) / (mad_val + 1e-8)
         else:
-            rolling_median = rolling_median(data, window)
+            median_series = data.rolling(window=window, min_periods=window // 2).median()
             rolling_mad = data.rolling(window=window, min_periods=window // 2).apply(
                 lambda x: np.median(np.abs(x - x.median()))
             )
-            return (data - rolling_median) / (rolling_mad + 1e-8)
+            return (data - median_series) / (rolling_mad + 1e-8)
 
     else:
         raise ValueError(f"Unknown normalization method: {method}")
