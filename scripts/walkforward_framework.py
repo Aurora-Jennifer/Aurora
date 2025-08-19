@@ -16,13 +16,11 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-# Import centralized logging setup
-from core.utils import setup_logging
-
 # Import simulation function
 from core.sim.simulate import simulate_orders_numba
 
-
+# Import centralized logging setup
+from core.utils import setup_logging
 
 # Configure logging
 logger = setup_logging("logs/walkforward.log", logging.INFO)

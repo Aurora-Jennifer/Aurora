@@ -17,11 +17,11 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-# Import centralized logging setup
-from core.utils import setup_logging
-
 # Import composer integration
 from core.engine.composer_integration import ComposerIntegration
+
+# Import centralized logging setup
+from core.utils import setup_logging
 
 # Configure logging
 logger = setup_logging("logs/walkforward_composer.log", logging.INFO)

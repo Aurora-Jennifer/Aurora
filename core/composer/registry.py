@@ -12,7 +12,7 @@ import numpy as np
 
 # Import safety functions
 from ..utils import _last, _safe_len
-from .contracts import Composer, RegimeExtractor, Strategy, BasicRegimeExtractor, SoftmaxComposer
+from .contracts import BasicRegimeExtractor, Composer, RegimeExtractor, SoftmaxComposer, Strategy
 
 logger = logging.getLogger(__name__)
 
