@@ -2,18 +2,19 @@
 Utility functions for end-to-end testing.
 """
 
-import json
-import hashlib
-import subprocess
-import socket
 import contextlib
+import hashlib
+import json
+import socket
+import subprocess
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any
+
 import jsonschema
 import pandas as pd
 
 
-def run_command(cmd: List[str]) -> subprocess.CompletedProcess:
+def run_command(cmd: list[str]) -> subprocess.CompletedProcess:
     """
     Run a command and capture output.
     
@@ -38,7 +39,7 @@ def run_command(cmd: List[str]) -> subprocess.CompletedProcess:
         )
         return result
     except subprocess.TimeoutExpired:
-        raise TimeoutError(f"Command timed out: {' '.join(cmd)}")
+        raise TimeoutError(f"Command timed out: {' '.join(cmd)}") from None
 
 
 def sha256_of(file_path: Path) -> str:
@@ -62,7 +63,7 @@ def sha256_of(file_path: Path) -> str:
     return hash_sha256.hexdigest()
 
 
-def assert_json_schema(file_path: Path, schema: Dict[str, Any]) -> None:
+def assert_json_schema(file_path: Path, schema: dict[str, Any]) -> None:
     """
     Assert that a JSON file conforms to a schema.
     
@@ -82,7 +83,7 @@ def assert_json_schema(file_path: Path, schema: Dict[str, Any]) -> None:
     try:
         jsonschema.validate(instance=data, schema=schema)
     except jsonschema.ValidationError as e:
-        raise AssertionError(f"JSON schema validation failed: {e}")
+        raise AssertionError(f"JSON schema validation failed: {e}") from e
 
 
 @contextlib.contextmanager
@@ -109,7 +110,7 @@ def assert_no_network():
         socket.socket = original_socket
 
 
-def validate_csv_structure(file_path: Path, required_columns: List[str] = None) -> pd.DataFrame:
+def validate_csv_structure(file_path: Path, required_columns: list[str] = None) -> pd.DataFrame:
     """
     Validate CSV file structure and return DataFrame.
     
@@ -129,7 +130,7 @@ def validate_csv_structure(file_path: Path, required_columns: List[str] = None) 
     try:
         df = pd.read_csv(file_path)
     except Exception as e:
-        raise AssertionError(f"Failed to read CSV {file_path}: {e}")
+        raise AssertionError(f"Failed to read CSV {file_path}: {e}") from e
     
     assert len(df) > 0, f"CSV file {file_path} is empty"
     
@@ -162,7 +163,7 @@ def check_timestamp_monotonicity(df: pd.DataFrame, timestamp_col: str = "timesta
     return df[timestamp_col].is_monotonic_increasing
 
 
-def extract_metrics_from_report(report_path: Path) -> Dict[str, Any]:
+def extract_metrics_from_report(report_path: Path) -> dict[str, Any]:
     """
     Extract metrics from a smoke run report.
     
@@ -181,7 +182,7 @@ def extract_metrics_from_report(report_path: Path) -> Dict[str, Any]:
     return data.get("metrics", {})
 
 
-def assert_metrics_reasonable(metrics: Dict[str, Any]) -> None:
+def assert_metrics_reasonable(metrics: dict[str, Any]) -> None:
     """
     Assert that metrics are within reasonable bounds for test data.
     
@@ -212,7 +213,7 @@ def assert_metrics_reasonable(metrics: Dict[str, Any]) -> None:
         assert 0.0 <= turnover <= 10.0, f"Turnover {turnover} outside reasonable range [0, 10]"
 
 
-def create_test_config(config_path: Path, symbols: List[str] = None) -> Path:
+def create_test_config(config_path: Path, symbols: list[str] = None) -> Path:
     """
     Create a test configuration file.
     

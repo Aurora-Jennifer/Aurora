@@ -4,15 +4,15 @@ Generate deterministic test fixtures for Aurora trading system.
 Creates realistic price data for testing without external dependencies.
 """
 
+import json
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
-from pathlib import Path
-from typing import List, Dict
-import json
 
 
 def generate_test_data(
-    symbols: List[str] = None,
+    symbols: list[str] = None,
     start_date: str = "2023-01-01",
     end_date: str = "2023-12-31",
     seed: int = 42
@@ -135,7 +135,7 @@ def generate_symbol_data(symbol: str, date_range: pd.DatetimeIndex, seed: int) -
     # Generate OHLC data
     data = []
     
-    for i, (date, close) in enumerate(zip(date_range, prices)):
+    for i, (date, close) in enumerate(zip(date_range, prices, strict=False)):
         # Generate realistic OHLC from close
         volatility = 0.02 if symbol == "SPY" else 0.04
         

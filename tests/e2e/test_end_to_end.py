@@ -6,16 +6,14 @@ using deterministic fixtures with no external dependencies.
 """
 
 import json
-import subprocess
-import hashlib
-import tempfile
 import shutil
+import subprocess
 from pathlib import Path
-from typing import Dict, Any
-import pytest
-import pandas as pd
 
-from .utils import run_command, sha256_of, assert_json_schema, assert_no_network
+import pandas as pd
+import pytest
+
+from .utils import assert_json_schema, assert_no_network, run_command
 
 
 @pytest.mark.e2e
@@ -259,11 +257,10 @@ class TestEndToEnd:
                     if "results" in csv_file.name.lower():
                         required_cols = ["timestamp", "symbol", "close"]
                         for col in required_cols:
-                            if col in df.columns:
+                            if col in df.columns and col == "timestamp":
                                 # Check timestamp is increasing
-                                if col == "timestamp":
-                                    df[col] = pd.to_datetime(df[col])
-                                    assert df[col].is_monotonic_increasing, f"Timestamps should be increasing in {csv_file}"
+                                df[col] = pd.to_datetime(df[col])
+                                assert df[col].is_monotonic_increasing, f"Timestamps should be increasing in {csv_file}"
     
     def test_no_network_dependencies(self):
         """Test that no network calls are made during execution."""
