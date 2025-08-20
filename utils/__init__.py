@@ -1,3 +1,4 @@
+# Explicit package marker to avoid namespace/pytest import variance in CI.
 """
 Shared Utilities Package
 
