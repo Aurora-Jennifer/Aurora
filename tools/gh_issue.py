@@ -21,7 +21,7 @@ def create_issue(repo: str, title: str, body: dict, token: str) -> int:
             "User-Agent": "aurora-paper-bot",
         },
     )
-    with urllib.request.urlopen(req, timeout=10) as r:
+    with urllib.request.urlopen(req, timeout=10) as r:  # nosec B310  # URL from config/secrets; timeout set
         resp = json.loads(r.read().decode())
     return int(resp.get("number", 0))
 

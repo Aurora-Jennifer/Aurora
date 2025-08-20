@@ -34,7 +34,7 @@ class BanditSelector:
         if os.path.exists(self.state_path):
             try:
                 with open(self.state_path, "rb") as f:
-                    self.priors = pickle.load(f)
+                    self.priors = pickle.load(f)  # nosec B301  # trusted local artifact; not user-supplied data
             except Exception:
                 self.priors = {}
 

@@ -80,7 +80,7 @@ def notify_ntfy(title: str, body: str):
         import urllib.request
 
         req = urllib.request.Request(url, data=body.encode("utf-8"), headers={"Title": title})
-        urllib.request.urlopen(req, timeout=5).read()
+        urllib.request.urlopen(req, timeout=5).read()  # nosec B310  # URL from config; timeout set
     except Exception:
         pass  # best effort
 

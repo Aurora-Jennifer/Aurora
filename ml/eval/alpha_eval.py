@@ -160,7 +160,7 @@ def evaluate_fold(
 
     # Load model
     with open(model_path, "rb") as f:
-        pipeline = pickle.load(f)
+        pipeline = pickle.load(f)  # nosec B301  # trusted local artifact; not user-supplied data
 
     # Prepare features and target
     feature_cols = list(config["features"].keys())

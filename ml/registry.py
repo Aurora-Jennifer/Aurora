@@ -19,11 +19,11 @@ def load_model(spec: ModelSpec) -> tuple[Model, str]:
         raise FileNotFoundError(p)
     if spec.kind == "pickle":
         with p.open("rb") as f:
-            model = pickle.load(f)
+            model = pickle.load(f)  # nosec B301  # trusted local artifact; not user-supplied data
     elif spec.kind == "torch":
         import torch  # lazy import
 
-        model = torch.load(p, map_location="cpu")
+        model = torch.load(p, map_location="cpu")  # nosec B614  # trusted local artifact; not user-supplied data
         if hasattr(model, "eval"):
             model.eval()
     elif spec.kind == "onnx":

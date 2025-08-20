@@ -99,7 +99,7 @@ class WarmStartManager:
             checkpoint_file = self.runs_dir / "checkpoints" / f"{run_id}_checkpoint.pkl"
             if checkpoint_file.exists():
                 with open(checkpoint_file, "rb") as f:
-                    return pickle.load(f)
+                    return pickle.load(f)  # nosec B301  # trusted local artifact; not user-supplied data
             return None
         except Exception as e:
             logger.error(f"Error loading checkpoint data: {e}")
@@ -249,7 +249,7 @@ class WarmStartManager:
                 return None
 
             with open(checkpoint_file, "rb") as f:
-                checkpoint_data = pickle.load(f)
+                checkpoint_data = pickle.load(f)  # nosec B301  # trusted local artifact; not user-supplied data
 
             logger.info(f"Loaded checkpoint for run {run_id}")
             return checkpoint_data

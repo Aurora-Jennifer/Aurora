@@ -13,7 +13,7 @@ def main():
     art = Path("artifacts/models/dummy_v1.pkl")
     if not art.exists():
         raise SystemExit("dummy model not found; run tools/gen_dummy_model.py first")
-    model = pickle.loads(art.read_bytes())
+    model = pickle.loads(art.read_bytes())  # nosec B301  # trusted local artifact; not user-supplied data
     # Fixed 3x3 feature matrix aligned with [ret_1d, ret_5d, vol_10d]
     X = np.array(
         [

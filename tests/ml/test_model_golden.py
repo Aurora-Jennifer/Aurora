@@ -14,7 +14,7 @@ def test_model_dummy_v1_golden():
     if not art.exists():
         # allow skip if artifact not present
         return
-    model = pickle.loads(art.read_bytes())
+    model = pickle.loads(art.read_bytes())  # nosec B301  # trusted local artifact; not user-supplied data
     base = json.loads(Path("baselines/model_dummy_v1.json").read_text())
     X = np.array(base["features"], dtype="float64")
     scores = [float(model.predict(X[i : i + 1])[0]) for i in range(X.shape[0])]

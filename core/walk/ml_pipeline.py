@@ -35,7 +35,7 @@ class MLPipeline:
             raise FileNotFoundError(f"Model not found: {self.model_path}")
 
         with open(self.model_path, "rb") as f:
-            self.model = pickle.load(f)
+            self.model = pickle.load(f)  # nosec B301  # trusted local artifact; not user-supplied data
 
         logger.info(f"Loaded Alpha v1 model from {self.model_path}")
 

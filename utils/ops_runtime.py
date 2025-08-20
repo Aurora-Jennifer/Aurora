@@ -33,4 +33,4 @@ def notify_ntfy(title: str, msg):
     req.add_header("Title", title)
     req.add_header("Content-Type", "application/json" if isinstance(msg, dict) else "text/plain")
     with contextlib.suppress(Exception):
-        urllib.request.urlopen(req, timeout=5)
+        urllib.request.urlopen(req, timeout=5)  # nosec B310  # URL from config; timeout set

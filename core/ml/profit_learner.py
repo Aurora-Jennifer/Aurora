@@ -120,14 +120,14 @@ class ProfitLearner:
             model_file = self.state_dir / "models.pkl"
             if model_file.exists():
                 with open(model_file, "rb") as f:
-                    self.models = pickle.load(f)
+                    self.models = pickle.load(f)  # nosec B301  # trusted local artifact; not user-supplied data
                 logger.info(f"Loaded {len(self.models)} existing models")
 
             # Load performance history
             history_file = self.state_dir / "performance_history.pkl"
             if history_file.exists():
                 with open(history_file, "rb") as f:
-                    self.performance_history = pickle.load(f)
+                    self.performance_history = pickle.load(f)  # nosec B301  # trusted local artifact; not user-supplied data
                 self.trade_count = len(self.performance_history)
                 logger.info(f"Loaded {len(self.performance_history)} existing trade records")
             else:
