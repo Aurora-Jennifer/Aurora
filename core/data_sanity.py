@@ -1979,8 +1979,8 @@ class DataSanityWrapper:
 
         # Load data based on file extension
         if filepath.endswith(".pkl"):
-            # Trusted local artifact; acceptable in controlled context  # nosec B301
-            data = pd.read_pickle(filepath)
+            # Trusted local artifact; acceptable in controlled context
+            data = pd.read_pickle(filepath)  # nosec B301  # trusted local artifact; not user-supplied data
         elif filepath.endswith(".csv"):
             data = pd.read_csv(filepath, index_col=0, parse_dates=True)
         elif filepath.endswith(".parquet"):
