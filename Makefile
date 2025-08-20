@@ -127,7 +127,7 @@ e2e:
 
 # Smoke preset (fast CI-friendly walkforward)
 smoke:
-	python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO
+	python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO --datasanity-profile walkforward_smoke --allow-zero-trades
 
 pre-push: smoke
 

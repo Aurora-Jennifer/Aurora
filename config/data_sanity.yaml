@@ -40,9 +40,25 @@ profiles:
     allow_drop_dupes: true
     allow_ffill_nans: true
     tolerate_outliers_after_repair: true
-    fail_on_lookahead_flag: false  # Disable lookahead check for smoke tests
+    fail_on_lookahead_flag: true
     fail_if_any_repair: false
     # Time-series strictness
+    require_monotonic_dates: true
+    tz: "UTC"
+    price_max: 1000000.0
+
+  # Relaxed profile specifically for Smoke CI runs
+  walkforward_smoke:
+    mode: "enforce"
+    allow_repairs: true
+    allow_winsorize: true
+    allow_clip_prices: true
+    allow_fix_ohlc: true
+    allow_drop_dupes: true
+    allow_ffill_nans: true
+    tolerate_outliers_after_repair: true
+    fail_on_lookahead_flag: false  # relaxed to avoid false positives in synthetic smoke path
+    fail_if_any_repair: false
     require_monotonic_dates: true
     tz: "UTC"
     price_max: 1000000.0

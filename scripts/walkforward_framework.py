@@ -467,6 +467,7 @@ def walkforward_run(
                     return df
 
                 train_data = _ensure_finite_ohlc(train_data)
+                logger.info("SMOKE_OHLC_GUARD_OK: train fold finite float64 enforced")
                 
                 # Replace any accidental non-finite values in synthetic slices
                 train_data = train_data.replace([np.inf, -np.inf], np.nan).ffill().bfill()
@@ -499,6 +500,7 @@ def walkforward_run(
                 )
                 
                 test_data = _ensure_finite_ohlc(test_data)
+                logger.info("SMOKE_OHLC_GUARD_OK: test fold finite float64 enforced")
                 
                 # Replace any accidental non-finite values in synthetic slices
                 test_data = test_data.replace([np.inf, -np.inf], np.nan).ffill().bfill()

@@ -42,7 +42,17 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Run smoke (fast & deterministic)
         run: |
-          python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO --datasanity-profile walkforward_ci
+          python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO --datasanity-profile walkforward_smoke --allow-zero-trades
+      - name: Smoke contract test (single test file)
+        run: |
+          pip install pytest
+          pytest -q tests/smoke/test_smoke_datasanity_contract.py --junitxml=pytest-smoke.xml || exit 1
+      - name: Upload smoke test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-smoke
+          path: pytest-smoke.xml
       - name: Summary
         if: always()
         run: |

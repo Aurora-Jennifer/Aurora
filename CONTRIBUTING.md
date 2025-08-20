@@ -13,6 +13,14 @@
 - Quality (coverage report): `make quality`
 - Config schema check: `make configcheck`
 
+## Smoke Contract (CI)
+- CI Smoke runs with `--datasanity-profile walkforward_smoke --allow-zero-trades`.
+- The smoke path enforces finite float64 OHLC and logs a stable cue:
+  - `SMOKE_OHLC_GUARD_OK: train fold finite float64 enforced`
+  - `SMOKE_OHLC_GUARD_OK: test fold finite float64 enforced`
+- A dedicated test `tests/smoke/test_smoke_datasanity_contract.py` asserts these cues and the profile.
+- Do not change Smoke flags or remove the cues without updating the test.
+
 ## CI Facts
 - Required checks on `main`: **Smoke / smoke**, **Smoke / Promote gate**
 - Non-blocking signals: datasanity, golden, quality, security (Bandit, Gitleaks, pip-audit)
