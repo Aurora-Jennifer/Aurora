@@ -192,7 +192,9 @@ class PortfolioState:
         date_str = date if isinstance(date, str) else date.strftime("%Y-%m-%d")
 
         logger.debug(
-            f"MTM {date_str} equity=${equity:,.2f} cash=${self.cash:,.2f} unreal=${unrealized_pnl_total:,.2f} realized=${self.realized_pnl:,.2f} gross=${gross_exposure:,.0f} net=${net_exposure:,.0f}"
+            f"MTM {date_str} equity=${equity:,.2f} cash=${self.cash:,.2f} "
+            f"unreal=${unrealized_pnl_total:,.2f} realized=${self.realized_pnl:,.2f} "
+            f"gross=${gross_exposure:,.0f} net=${net_exposure:,.0f}"
         )
 
         # Append to ledger

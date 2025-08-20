@@ -1,0 +1,12 @@
+columns:
+  - { name: timestamp, dtype: "datetime64[ns]" }
+  - { name: open, dtype: float64 }
+  - { name: high, dtype: float64 }
+  - { name: low, dtype: float64 }
+  - { name: close, dtype: float64 }
+  - { name: volume, dtype: float64 }
+
+missing_data:
+  method: ffill
+  log: true
+

@@ -17,12 +17,19 @@ import yaml
 _sys.path.append(_os.path.dirname(_os.path.dirname(__file__)))
 import contextlib
 
-from core.execution.canary_limits import CanaryConfig, check_caps
-from ml.model_interface import ModelSpec
-from ml.registry import load_model
-from ml.runtime import build_features, infer_weights, set_seeds
-from utils.ops_runtime import kill_switch, notify_ntfy
-from utils.quotes_provider import QuoteProvider, get_quote_provider
+from importlib import import_module
+
+CanaryConfig = import_module("core.execution.canary_limits").CanaryConfig
+check_caps = import_module("core.execution.canary_limits").check_caps
+ModelSpec = import_module("ml.model_interface").ModelSpec
+load_model = import_module("ml.registry").load_model
+build_features = import_module("ml.runtime").build_features
+infer_weights = import_module("ml.runtime").infer_weights
+set_seeds = import_module("ml.runtime").set_seeds
+kill_switch = import_module("utils.ops_runtime").kill_switch
+notify_ntfy = import_module("utils.ops_runtime").notify_ntfy
+QuoteProvider = import_module("utils.quotes_provider").QuoteProvider
+get_quote_provider = import_module("utils.quotes_provider").get_quote_provider
 
 STATE = Path("reports/runner_state.json")
 

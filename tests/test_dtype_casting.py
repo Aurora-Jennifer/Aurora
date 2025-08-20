@@ -85,6 +85,8 @@ def test_mixed_numeric_string_conversion(strict_validator, mk_ts):
 
     # Mix numeric and string values
     data.loc[data.index[0:5], "Open"] = [100.0, 200.0, 300.0, 400.0, 500.0]  # Numeric
+    # Convert to object dtype first to avoid FutureWarning
+    data["Open"] = data["Open"].astype(object)
     data.loc[data.index[5:10], "Open"] = [
         "$600.01",
         "700,02",

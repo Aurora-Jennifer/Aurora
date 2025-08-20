@@ -21,7 +21,11 @@ def backup_file(file_path: str) -> str:
 def migrate_rsi_calculations(content: str) -> str:
     """Migrate RSI calculations to use centralized function."""
     # Pattern for RSI calculation
-    pattern = r"delta\s*=\s*.*\.diff\(\)\s*\n.*gain\s*=\s*.*where\(delta\s*>\s*0.*\n.*loss\s*=\s*.*where\(delta\s*<\s*0.*\n.*rs\s*=\s*gain\s*/\s*loss\s*\n.*rsi\s*=\s*100\s*-\s*\(100\s*/\s*\(1\s*\+\s*rs\)\)"
+    pattern = (
+        r"delta\s*=\s*.*\.diff\(\)\s*\n.*gain\s*=\s*.*where\(delta\s*>\s*0.*\n.*"
+        r"loss\s*=\s*.*where\(delta\s*<\s*0.*\n.*rs\s*=\s*gain\s*/\s*loss\s*\n.*"
+        r"rsi\s*=\s*100\s*-\s*\(100\s*/\s*\(1\s*\+\s*rs\)\)"
+    )
 
     def replace_rsi(match):
         return "from utils.indicators import rsi\nrsi_val = rsi(close, window=14)"
@@ -43,7 +47,12 @@ def migrate_macd_calculations(content: str) -> str:
 def migrate_bollinger_bands(content: str) -> str:
     """Migrate Bollinger Bands calculations to use centralized function."""
     # Pattern for Bollinger Bands calculation
-    pattern = r"bb_.*\s*=\s*.*\.rolling\(window=\d+\)\.mean\(\)\s*\n.*bb_.*\s*=\s*.*\.rolling\(window=\d+\)\.std\(\)\s*\n.*bb_upper\s*=\s*bb_.*\s*\+\s*\(bb_.*\s*\*\s*\d+\)\s*\n.*bb_lower\s*=\s*bb_.*\s*-\s*\(bb_.*\s*\*\s*\d+\)"
+    pattern = (
+        r"bb_.*\s*=\s*.*\.rolling\(window=\d+\)\.mean\(\)\s*\n.*"
+        r"bb_.*\s*=\s*.*\.rolling\(window=\d+\)\.std\(\)\s*\n.*"
+        r"bb_upper\s*=\s*bb_.*\s*\+\s*\(bb_.*\s*\*\s*\d+\)\s*\n.*"
+        r"bb_lower\s*=\s*bb_.*\s*-\s*\(bb_.*\s*\*\s*\d+\)"
+    )
 
     def replace_bb(match):
         return "from utils.indicators import bollinger_bands\nbb_data = bollinger_bands(close)\nbb_upper = bb_data['upper']\nbb_lower = bb_data['lower']"

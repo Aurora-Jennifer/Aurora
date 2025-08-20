@@ -42,7 +42,7 @@
 # NaN validation cases
 - id: nan_burst_fail
   kind: FAIL
-  rules: [Lookahead contamination]
+  rules: [Non-finite values]
   factory: nan_burst
   description: "NaN burst should fail in strict mode"
 

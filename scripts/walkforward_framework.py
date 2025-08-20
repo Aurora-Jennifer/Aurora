@@ -15,12 +15,63 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import importlib
 
-# Import simulation function
-from core.sim.simulate import simulate_orders_numba
+# Import simulation function lazily to respect boundaries
+simulate_orders_numba = importlib.import_module("core.sim.simulate").simulate_orders_numba  # type: ignore[attr-defined]
 
-# Import centralized logging setup
-from core.utils import setup_logging
+# Import centralized logging setup lazily
+setup_logging = importlib.import_module("core.utils").setup_logging  # type: ignore[attr-defined]
+
+_OHLC_ORDER = ["Open", "High", "Low", "Close", "Volume"]
+
+def _standardize_ohlc_cols(df: pd.DataFrame) -> pd.DataFrame:
+    """Normalize common vendor/dirty names to canonical OHLCV."""
+    rename = {}
+    lower_map = {c.lower(): c for c in df.columns}
+    # map lowercased incoming → canonical
+    mapping = {
+        "open": "Open",
+        "high": "High",
+        "low": "Low",
+        "close": "Close",
+        "adj close": "Adj Close",
+        "adjclose": "Adj Close",
+        "volume": "Volume",
+        "vol": "Volume",
+    }
+    for k, canon in mapping.items():
+        if k in lower_map:
+            rename[lower_map[k]] = canon
+    return df.rename(columns=rename)
+
+def ensure_ohlc(data: pd.Series | pd.DataFrame) -> pd.DataFrame:
+    """
+    Accept Series / narrow DF and return a canonical OHLCV frame.
+    Missing O/H/L are backfilled from Close; Volume defaults to 0.
+    """
+    if isinstance(data, pd.Series):
+        data = data.to_frame(name="Close")
+    data = data.copy()
+    data = _standardize_ohlc_cols(data)
+
+    # If only Adj Close exists, treat it as Close
+    if "Close" not in data.columns and "Adj Close" in data.columns:
+        data["Close"] = data["Adj Close"]
+
+    if "Close" not in data.columns:
+        raise ValueError("ensure_ohlc: no Close (or Adj Close) column present")
+
+    for col in ("Open", "High", "Low"):
+        if col not in data.columns:
+            data[col] = data["Close"]
+
+    if "Volume" not in data.columns:
+        data["Volume"] = 0
+
+    # order and return only canonical columns we have
+    cols = [c for c in _OHLC_ORDER if c in data.columns]
+    return data[cols]
 
 # Configure logging
 logger = setup_logging("logs/walkforward.log", logging.INFO)
@@ -29,10 +80,9 @@ logger = setup_logging("logs/walkforward.log", logging.INFO)
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 try:
-    from core.data_sanity import DataSanityValidator
-
+    DataSanityValidator = importlib.import_module("core.data_sanity").DataSanityValidator  # type: ignore[attr-defined]
     DATASANITY_AVAILABLE = True
-except ImportError:
+except Exception:
     DATASANITY_AVAILABLE = False
     DataSanityValidator = None
 
@@ -481,6 +531,9 @@ def build_feature_table(
         y: target labels
         prices: price array
     """
+    # Standardize OHLC data
+    data = ensure_ohlc(data)
+    
     # Ensure we have enough data
     if len(data) < warmup_days:
         raise ValueError(f"Need at least {warmup_days} days of data")
@@ -490,8 +543,6 @@ def build_feature_table(
 
     # Price-based features - ensure 1D arrays
     close = data["Close"].values.flatten()
-    data["High"].values.flatten()
-    data["Low"].values.flatten()
     volume = data["Volume"].values.flatten()
 
     # Returns
@@ -796,7 +847,7 @@ if __name__ == "__main__":
         cli_overrides["data"]["output_dir"] = args.output_dir
 
     # Load configuration
-    from core.config_loader import load_config
+    load_config = importlib.import_module("core.config_loader").load_config
 
     config = load_config(
         profile=args.profile,

@@ -24,7 +24,8 @@ def build_features_for_symbol(
     try:
         import yfinance as yf
 
-        from core.data.features import build_features_parquet
+        from importlib import import_module
+        build_features_parquet = import_module("core.data.features").build_features_parquet
 
         print(f"Building features for {symbol}...")
         df = yf.download(symbol, start=start_date, end=end_date, auto_adjust=True).reset_index()

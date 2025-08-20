@@ -18,10 +18,12 @@ import numpy as np
 import pandas as pd
 
 # Import composer integration
-from core.engine.composer_integration import ComposerIntegration
+from importlib import import_module
 
-# Import centralized logging setup
-from core.utils import setup_logging
+ComposerIntegration = import_module("core.engine.composer_integration").ComposerIntegration
+
+# Import centralized logging setup lazily
+setup_logging = import_module("core.utils").setup_logging
 
 # Configure logging
 logger = setup_logging("logs/walkforward_composer.log", logging.INFO)
@@ -30,10 +32,9 @@ logger = setup_logging("logs/walkforward_composer.log", logging.INFO)
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 try:
-    from core.data_sanity import DataSanityValidator
-
+    DataSanityValidator = import_module("core.data_sanity").DataSanityValidator  # type: ignore[attr-defined]
     DATASANITY_AVAILABLE = True
-except ImportError:
+except Exception:
     DATASANITY_AVAILABLE = False
     DataSanityValidator = None
 

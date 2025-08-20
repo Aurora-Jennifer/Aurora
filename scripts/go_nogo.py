@@ -22,10 +22,10 @@ import yaml
 
 # Import your existing modules
 try:
-    from core.data_sanity import DataSanityValidator
-
+    from importlib import import_module
+    DataSanityValidator = import_module("core.data_sanity").DataSanityValidator  # type: ignore[attr-defined]
     MODULES_AVAILABLE = True
-except ImportError as e:
+except Exception as e:
     print(f"Warning: Some modules not available: {e}")
     MODULES_AVAILABLE = False
 

@@ -14,18 +14,29 @@ import numpy as np
 # Add project root to path
 sys.path.append(str(Path(__file__).parent.parent))
 
-from core.metrics.stats import (
+from importlib import import_module
+
+metrics_stats = import_module("core.metrics.stats")
+(
     daily_turnover,
     max_drawdown,
     psr,
     sharpe_newey_west,
     sortino,
     win_rate,
+)= (
+    metrics_stats.daily_turnover,
+    metrics_stats.max_drawdown,
+    metrics_stats.psr,
+    metrics_stats.sharpe_newey_west,
+    metrics_stats.sortino,
+    metrics_stats.win_rate,
 )
-from core.sim.simulate import simulate_safe
-from core.utils import setup_logging
-from core.walk.folds import Fold, gen_walkforward
-from core.walk.ml_pipeline import create_ml_pipeline
+simulate_safe = import_module("core.sim.simulate").simulate_safe
+setup_logging = import_module("core.utils").setup_logging
+Fold = import_module("core.walk.folds").Fold
+gen_walkforward = import_module("core.walk.folds").gen_walkforward
+create_ml_pipeline = import_module("core.walk.ml_pipeline").create_ml_pipeline
 from ml.trainers.train_linear import load_feature_data
 
 logger = setup_logging("logs/walkforward_alpha_v1.log", logging.INFO)

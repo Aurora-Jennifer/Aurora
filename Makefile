@@ -53,7 +53,7 @@ flatten-dry-run:
 	python scripts/flatten_positions.py --dry-run
 # Makefile for Trading System with DataSanity Enforcement
 
-.PHONY: help install test sanity falsify bench-sanity clean coverage lint lint-changed format promote wf smoke type datasanity golden bless_golden quality configcheck lock audit
+.PHONY: help install test sanity falsify bench-sanity clean coverage lint lint-changed format promote wf smoke type datasanity golden bless_golden quality configcheck lock audit pre-push
 
 # Default target
 .DEFAULT_GOAL := e2e
@@ -128,6 +128,8 @@ e2e:
 # Smoke preset (fast CI-friendly walkforward)
 smoke:
 	python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO
+
+pre-push: smoke
 
 datasanity:
 	pytest -q tests/walkforward/test_datasanity_*.py tests/backtest/test_datasanity_*.py

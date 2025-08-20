@@ -3,11 +3,23 @@ Fixtures for DataSanity test suite.
 """
 
 import os
+import pathlib
+import socket
 from datetime import UTC
 
 import numpy as np
 import pandas as pd
 import pytest
+
+
+def pytest_collection_modifyitems(config, items):
+    """Skip attic/quarantine tests by default."""
+    attic = pathlib.Path("attic").resolve()
+    skip_attic = pytest.mark.skip(reason="Skipped attic/quarantine tests")
+    for it in items:
+        p = pathlib.Path(str(getattr(it, "fspath", ""))).resolve()
+        if attic in p.parents:
+            it.add_marker(skip_attic)
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -18,14 +30,52 @@ def seed_rng():
 
 
 @pytest.fixture(scope="session", autouse=True)
+def no_network():
+    """Block network access during tests."""
+    # Only enforce when tests explicitly require offline or for whole suite
+    if os.getenv("AURORA_TEST_OFFLINE", "1") != "1":
+        return
+    
+    def guard(*a, **k):
+        raise RuntimeError("Network access is forbidden in tests")
+    
+    # Store original functions to restore later
+    original_socket = socket.socket
+    original_urlopen = None
+    
+    try:
+        import urllib.request as _u
+        original_urlopen = _u.urlopen
+        _u.urlopen = guard
+    except Exception:
+        pass
+    
+    socket.socket = guard
+    
+    yield
+    
+    # Restore original functions
+    socket.socket = original_socket
+    if original_urlopen:
+        try:
+            import urllib.request as _u
+            _u.urlopen = original_urlopen
+        except Exception:
+            pass
+
+
+@pytest.fixture(scope="session", autouse=True)
 def force_strict_mode():
     """Force strict mode for all tests."""
     # Set environment variable to force strict mode
     os.environ["DATASANITY_PROFILE"] = "strict"
+    os.environ["AURORA_SANITY_MODE"] = "raise"
     yield
     # Clean up
     if "DATASANITY_PROFILE" in os.environ:
         del os.environ["DATASANITY_PROFILE"]
+    if "AURORA_SANITY_MODE" in os.environ:
+        del os.environ["AURORA_SANITY_MODE"]
 
 
 @pytest.fixture

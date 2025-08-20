@@ -60,14 +60,14 @@ def build_case(name: str, **kwargs) -> pd.DataFrame:
         ),
         # NaN violations
         "nan_burst": lambda d: d.assign(
-            Close=d["Close"].where(~d.index.isin(d.index[100:120]), np.nan)
+            Close=d["Close"].where(~d.index.isin(d.index[50:70]), np.nan)
         ),
         "nan_scattered": lambda d: d.assign(
             Close=d["Close"].where([i % 10 != 0 for i in range(len(d))], np.nan)
         ),
         "inf_values": lambda d: d.assign(Close=d["Close"].where(d.index != d.index[50], np.inf)),
         # Time series violations
-        "duplicate_timestamps": lambda d: d.set_index(d.index.repeat(2)[::2]),
+        "duplicate_timestamps": lambda d: pd.concat([d.iloc[:50], d.iloc[45:50]]).sort_index(),
         "non_monotonic": lambda d: d.reindex(d.index[::-1]),
         "naive_timezone": lambda d: d.set_index(d.index.tz_localize(None)),
         "wrong_timezone": lambda d: d.set_index(
@@ -93,7 +93,7 @@ def build_case(name: str, **kwargs) -> pd.DataFrame:
         "lookahead_returns": lambda d: d.assign(
             Returns=d["Close"]
             .pct_change()
-            .where(d.index != d.index[10], d["Close"].pct_change().iloc[11])
+            .where(d.index != d.index[10], d["Close"].pct_change().shift(-1).iloc[10])
         ),
         "future_data": lambda d: d.assign(Future_Price=d["Close"].shift(-1)),
         # Data type violations

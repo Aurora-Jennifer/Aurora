@@ -485,6 +485,9 @@ $ gitleaks dir ~/leaky-repo/ --report-path "report.json" --report-format templat
 
 ## Sponsorships
 
+## CI Status
+Smoke: ![Smoke](https://img.shields.io/github/actions/workflow/status/${OWNER}/${REPO}/ci.yml?branch=main&label=Smoke)
+
 <p align="left">
 	<h3><a href="https://coderabbit.ai/?utm_source=oss&utm_medium=sponsorship&utm_campaign=gitleaks">coderabbit.ai</h3>
 	  <a href="https://coderabbit.ai/?utm_source=oss&utm_medium=sponsorship&utm_campaign=gitleaks">

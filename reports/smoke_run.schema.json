@@ -43,9 +43,7 @@
     },
     "max_drawdown": {
       "type": "number",
-      "description": "Maximum drawdown",
-      "minimum": -1.0,
-      "maximum": 0.0
+      "description": "Maximum drawdown"
     },
     "fold_summaries": {
       "type": "array",

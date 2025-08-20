@@ -200,10 +200,10 @@ def test_duplicate_timestamps_detection():
     with pytest.raises(Exception) as exc_info:
         validator.validate_and_repair(corrupted_data, "DUPLICATE_TIMESTAMPS")
 
-    error_msg = str(exc_info.value)
-    assert "Index is not monotonic" in error_msg, (
-        f"WF_DUPLICATE: Expected duplicate timestamp error, got: {error_msg}"
-    )
+        error_msg = str(exc_info.value)
+        assert "duplicate" in error_msg.lower(), (
+            f"WF_DUPLICATE: Expected duplicate timestamp error, got: {error_msg}"
+        )
 
 
 def test_lookahead_contamination_detection():

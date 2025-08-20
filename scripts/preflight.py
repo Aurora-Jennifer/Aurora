@@ -9,7 +9,9 @@ import pandas as pd
 
 # Add project root to sys.path when running from scripts/
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from core.engine.backtest import BacktestEngine
+from importlib import import_module
+
+BacktestEngine = import_module("core.engine.backtest").BacktestEngine
 
 CFG_PATH = "config/enhanced_paper_trading_config.json"
 

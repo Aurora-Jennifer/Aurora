@@ -25,6 +25,8 @@ risk:
   fee_bps: 1
   max_gross_exposure: 1.0
   max_position_pct: 1.0
+  rate_limit:
+    max_requests_per_minute: 120
 
 composer:
   use_composer: true
@@ -85,3 +87,13 @@ models:
   score_to_weight: "tanh"    # {linear|tanh|softmax}
   max_abs_weight: 0.5
   min_history_bars: 60
+
+observability:
+  thresholds:
+    sharpe_min: 0.5
+    drawdown_max: 0.3
+    winrate_min: 0.45
+    vol_max: 0.6
+  promotion:
+    require_schema: true
+    forbid_drift: true

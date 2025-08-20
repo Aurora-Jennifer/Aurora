@@ -18,9 +18,7 @@ from utils.orders_kv import (
 
 def test_orders_kv_basic_operations():
     """Test basic KV store operations."""
-    with tempfile.TemporaryDirectory() as tmpdir:
-        # Mock the DB path
-        with patch("utils.orders_kv.DB", Path(tmpdir) / "test_orders_kv.json"):
+    with tempfile.TemporaryDirectory() as tmpdir, patch("utils.orders_kv.DB", Path(tmpdir) / "test_orders_kv.json"):
             # Test empty store
             assert load() == {}
 

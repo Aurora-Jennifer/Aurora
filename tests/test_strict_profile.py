@@ -36,7 +36,7 @@ def test_strict_blocks_duplicate_timestamps(strict_validator, mk_ts):
 
     # Should fail in strict mode
     with pytest.raises(
-        DataSanityError, match="duplicate|timestamp.*duplicate|Lookahead contamination"
+        DataSanityError, match="duplicate|Duplicate"
     ):
         strict_validator.validate_and_repair(data, "DUPLICATE_TIMESTAMP_TEST")
 

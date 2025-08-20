@@ -119,7 +119,7 @@ def _compute_asset_features(
     df = df.sort_values(ts_col).reset_index(drop=True)
 
     # Compute returns
-    df["ret_1d"] = df[price_col].pct_change()
+    df["ret_1d"] = df[price_col].pct_change(fill_method=None)
 
     # 1. TREND FEATURES
     # Simple Moving Averages
@@ -169,8 +169,8 @@ def _compute_asset_features(
 
     # 5. ADDITIONAL FEATURES
     # Price momentum
-    df["momentum_5"] = df[price_col].pct_change(periods=5)
-    df["momentum_20"] = df[price_col].pct_change(periods=20)
+    df["momentum_5"] = df[price_col].pct_change(periods=5, fill_method=None)
+    df["momentum_20"] = df[price_col].pct_change(periods=20, fill_method=None)
 
     # Volume momentum
     df["volume_momentum"] = df[volume_col].pct_change(periods=5)

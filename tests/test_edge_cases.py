@@ -127,7 +127,7 @@ def test_duplicate_timestamps_handling(strict_validator, mk_ts):
     # Should fail with clear error message
     with pytest.raises(
         DataSanityError,
-        match="Index has duplicates|duplicate.*timestamp|timestamp.*duplicate",
+        match="duplicate|Duplicate",
     ):
         strict_validator.validate_and_repair(data, "DUPLICATE_TIMESTAMP_TEST")
 

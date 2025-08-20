@@ -20,6 +20,8 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Smoke run
         run: make smoke
+      - name: Validate run hashes
+        run: python scripts/validate_run_hashes.py
       - name: Promote gate
         run: python tools/validate_metrics.py --input reports/smoke_run.json --schema reports/smoke_run.schema.json
 
@@ -28,6 +30,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11', cache: 'pip' }
+      - name: Generate SBOM
+        run: |
+          mkdir -p reports
+          python - <<'PY'
+import json, hashlib, importlib.metadata as md
+sbom=[{"name":d.metadata['Name'], "version":d.version, "hash":hashlib.sha256((d.metadata['Name']+d.version).encode()).hexdigest()} for d in md.distributions()]
+json.dump(sbom, open("reports/sbom.json","w"))
+PY
+      - name: Verify build hash if present
+        run: |
+          if [ -f reports/build.sha256 ]; then
+            echo "Found build.sha256; verifying placeholder artifact hash"
+            sha256sum reports/sbom.json | awk '{print $1}' > reports/.tmp.sha
+            if ! diff -q reports/build.sha256 reports/.tmp.sha >/dev/null 2>&1; then
+              echo "Build hash mismatch"; exit 1; fi
+          fi
       - uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true

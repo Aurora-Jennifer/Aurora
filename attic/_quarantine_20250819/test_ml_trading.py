@@ -14,6 +14,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 import builtins
 import contextlib
 
+import pandas as pd
 import yaml
 
 from core.engine.backtest import BacktestEngine

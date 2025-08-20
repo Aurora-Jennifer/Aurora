@@ -19,8 +19,9 @@ import pandas as pd
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
+from importlib import import_module
 
-from core.data_sanity import get_data_sanity_wrapper
+get_data_sanity_wrapper = import_module("core.data_sanity").get_data_sanity_wrapper
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

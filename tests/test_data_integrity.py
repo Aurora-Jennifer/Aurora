@@ -1207,7 +1207,7 @@ def test_real_world_data_scenarios():
 
     # Test 1: Real market data from yfinance
     print("Testing with real SPY data...")
-    spy_data = yf.download("SPY", start="2024-01-01", end="2024-01-31", progress=False)
+    spy_data = yf.download("SPY", start="2024-01-01", end="2024-01-31", progress=False, auto_adjust=False)
     clean_spy = data_sanity.validate_dataframe(spy_data, "SPY")
 
     assert len(clean_spy) > 0, "Should have data"
@@ -1217,7 +1217,7 @@ def test_real_world_data_scenarios():
 
     # Test 2: Data with gaps (weekends)
     print("Testing data with gaps...")
-    gap_data = yf.download("AAPL", start="2024-01-01", end="2024-01-31", progress=False)
+    gap_data = yf.download("AAPL", start="2024-01-01", end="2024-01-31", progress=False, auto_adjust=False)
     clean_gap = data_sanity.validate_dataframe(gap_data, "AAPL")
 
     # Should handle gaps gracefully
@@ -1228,7 +1228,7 @@ def test_real_world_data_scenarios():
     symbols = ["SPY", "QQQ", "IWM"]
     for symbol in symbols:
         try:
-            data = yf.download(symbol, start="2024-01-01", end="2024-01-15", progress=False)
+            data = yf.download(symbol, start="2024-01-01", end="2024-01-15", progress=False, auto_adjust=False)
             clean_data = data_sanity.validate_dataframe(data, symbol)
             assert len(clean_data) > 0, f"Should validate {symbol}"
             assert "Returns" in clean_data.columns, f"Should calculate returns for {symbol}"
@@ -1370,7 +1370,7 @@ def test_data_sanity_configuration():
 
         fail_validator = DataSanityValidator(config_path)
 
-        with pytest.raises(Exception):  # Should fail due to extreme price
+        with pytest.raises(ValueError):  # Should fail due to extreme price
             fail_validator.validate_and_repair(data, "FAIL_TEST")
         print("✅ Fail mode works correctly")
     finally:

@@ -1,6 +1,6 @@
 {
   "config_hashes": {
-    "config/base.yaml": "df23080ec06abf26c9827896e213a261d4d6873afdd989c14d2e55edb64f4cd5"
+    "config/base.yaml": "1efefdf1ecb414466fecc88e9064eba14a18154c1bad92d82d8e78b39a2478cd"
   },
   "cache_hashes": {
     "data/smoke_cache/TSLA.parquet": "d971ec386934afd9bbb71ba0be4d122bce4fd48b1847777cf8bcd2017aaec100",

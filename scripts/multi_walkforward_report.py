@@ -9,6 +9,7 @@ walkforward framework APIs and writes a markdown report.
 """
 
 import argparse
+import importlib
 import contextlib
 import datetime as dt
 import json
@@ -50,7 +51,7 @@ from scripts.walkforward_framework import (
 
 # Data sanity (fast pre-check for smoke)
 try:
-    from core.data_sanity import DataSanityValidator
+    DataSanityValidator = importlib.import_module("core.data_sanity").DataSanityValidator  # type: ignore[attr-defined]
 except Exception:  # pragma: no cover
     DataSanityValidator = None  # type: ignore
 
@@ -90,6 +91,34 @@ def _write_smoke_meta(payload: dict) -> None:
     (out / "smoke_run.meta.json").write_text(json.dumps(meta, indent=2))
 
 
+def _write_run_json(payload: dict) -> None:
+    # Build a minimal run.json for promotion validation
+    started = payload.get("started_at") or dt.datetime.now(dt.UTC).isoformat()
+    finished = payload.get("finished_at") or dt.datetime.now(dt.UTC).isoformat()
+    cfg_hash = ""
+    try:
+        base = pathlib.Path("config/base.yaml")
+        if base.exists():
+            import hashlib
+
+            h = hashlib.sha256()
+            h.update(base.read_bytes())
+            cfg_hash = h.hexdigest()
+    except Exception:
+        cfg_hash = ""
+    run = {
+        "run_id": payload.get("timestamp") or dt.datetime.now(dt.UTC).strftime("%Y%m%dT%H%M%SZ"),
+        "model_version": "n/a",
+        "data_hash": payload.get("data_hash", ""),
+        "config_hash": cfg_hash,
+        "started_at": started,
+        "finished_at": finished,
+    }
+    out = Path("reports")
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "run.json").write_text(json.dumps(run, indent=2))
+
+
 def _map_violation(result) -> tuple[str, str]:
     if not getattr(result, "violations", None):
         return ("UNKNOWN", "data_sanity_violation")
@@ -100,12 +129,22 @@ def _map_violation(result) -> tuple[str, str]:
 
 
 def load_data(symbol: str, start: str, end: str) -> pd.DataFrame:
-    try:
-        import yfinance as yf
-    except ImportError as e:
-        raise RuntimeError("yfinance is required for this script") from e
-    # CI offline cache (deterministic)
-    if os.getenv("CI") == "true":
+    # Check for offline mode (tests or CI)
+    offline_mode = os.getenv("AURORA_TEST_OFFLINE", "1") == "1" or os.getenv("CI") == "true"
+    
+    if offline_mode:
+        # Try fixture directory first
+        fixture_path = pathlib.Path("data/fixtures/smoke") / f"{symbol}.csv"
+        if fixture_path.exists():
+            df = pd.read_csv(fixture_path, index_col=0, parse_dates=True)
+            if isinstance(df.index, pd.DatetimeIndex) and df.index.tz is None:
+                df.index = df.index.tz_localize("UTC")
+            # Ensure OHLCV columns exist
+            cols = set(df.columns)
+            if "Open" in cols and "High" in cols and "Low" in cols and "Close" in cols and "Volume" in cols:
+                return df[["Open", "High", "Low", "Close", "Volume"]]
+        
+        # Fall back to CI cache
         cache_path = pathlib.Path("data/smoke_cache") / f"{symbol}.parquet"
         if cache_path.exists():
             df = pd.read_parquet(cache_path)
@@ -130,6 +169,16 @@ def load_data(symbol: str, start: str, end: str) -> pd.DataFrame:
                 out["Volume"] = 1_000_000
                 return out[["Open", "High", "Low", "Close", "Volume"]]
             return df[["Open", "High", "Low", "Close", "Volume"]]
+        
+        # If no offline data, raise error in offline mode
+        raise RuntimeError(f"No offline data available for {symbol}. Expected fixture at {fixture_path} or cache at {cache_path}")
+    
+    # Online mode: use yfinance
+    try:
+        import yfinance as yf
+    except ImportError as e:
+        raise RuntimeError("yfinance is required for this script when not in offline mode") from e
+    
     df = yf.download(symbol, start=start, end=end, progress=False, auto_adjust=False)
     if not isinstance(df, pd.DataFrame) or df.empty:
         raise RuntimeError(f"No data for {symbol} in range {start}..{end}")
@@ -339,7 +388,9 @@ def make_report(
                 maxdd_vals.append(max_dd)
 
                 lines.append(
-                    f"| {symbol} | {fold_id} | {sharpe:.3f} | {max_dd:.3f} | {hit_rate:.2f} | {total_return:.3f} | {median_hold:.0f} | {cagr_est:.3f} | {'✅' if risk_ok else '❌'} |\n"
+                    f"| {symbol} | {fold_id} | {sharpe:.3f} | {max_dd:.3f} | {hit_rate:.2f} | "
+                    f"{total_return:.3f} | {median_hold:.0f} | {cagr_est:.3f} | "
+                    f"{'✅' if risk_ok else '❌'} |\n"
                 )
 
         # Profile summary
@@ -609,6 +660,7 @@ def main():
                 _write_smoke_json(payload_ok)
                 write_provenance("reports/smoke_provenance.json", ["config/base.yaml"])
                 _write_smoke_meta(payload_ok)
+                _write_run_json({"timestamp": payload_ok.get("run_id")})
             except SystemExit:
                 raise
             except Exception as e:

@@ -7,7 +7,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from core.data_sanity import DataSanityValidator
+from core.data_sanity import DataSanityError, DataSanityValidator
+from core.meta.invariance import invariance_score, additive_invariance_score
 from tests.factories import base_df
 from tests.helpers.assertions import assert_data_integrity, assert_verdict
 
@@ -49,12 +50,12 @@ def test_failure_invariance(transform):
     original_df.loc[original_df.index[50], "Close"] = -50.0
 
     # Original should fail
-    with pytest.raises(Exception):
+    with pytest.raises(DataSanityError):
         validator.validate_and_repair(original_df, "ORIGINAL")
 
     # Transformed should also fail
     transformed_df = transform(original_df)
-    with pytest.raises(Exception):
+    with pytest.raises(DataSanityError):
         validator.validate_and_repair(transformed_df, "TRANSFORMED")
 
 
@@ -75,14 +76,13 @@ def test_scale_invariance():
         # All should pass
         clean_data, result = assert_verdict(validator, scaled_data, "PASS", f"SCALE_{scale}")
 
-        if clean_data is not None:
+        if clean_data is not None and "Returns" in clean_data.columns:
             # Returns should be the same (scale invariant)
-            if "Returns" in clean_data.columns:
-                original_returns = base_data["Close"].pct_change().fillna(0.0)
-                scaled_returns = clean_data["Returns"]
-                np.testing.assert_allclose(
-                    original_returns.values, scaled_returns.values, rtol=1e-10
-                )
+            original_returns = base_data["Close"].pct_change(fill_method=None).fillna(0.0)
+            scaled_returns = clean_data["Returns"]
+            # Use invariance_score for truly scale-invariant comparison
+            score = invariance_score(original_returns.values, scaled_returns.values)
+            assert score >= 0.999, f"Scale invariance failed: score={score}"
 
 
 def test_time_invariance():
@@ -183,12 +183,10 @@ def test_additive_invariance():
         clean_data, result = assert_verdict(validator, shifted_data, "PASS", f"ADD_{const}")
 
         if clean_data is not None:
-            # Returns should remain highly correlated under additive shifts for percent returns
-            if "Returns" in clean_data.columns:
-                original_returns = base_data["Close"].pct_change().fillna(0.0)
-                shifted_returns = clean_data["Returns"]
-                corr = np.corrcoef(original_returns.values, shifted_returns.values)[0, 1]
-                assert corr >= 0.999
+            # Use additive_invariance_score for mathematically correct additive invariance
+            # This compares z-scored first differences of price columns, which are truly invariant to additive shifts
+            score = additive_invariance_score(base_data, shifted_data)
+            assert score >= 0.999, f"Additive invariance failed: score={score}"
 
 
 def test_monotonic_transformations():
