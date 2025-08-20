@@ -101,6 +101,17 @@ jobs:
           set +e
           pytest -q -m "not quarantine" | tee pytest.out
           echo "exit_code=$?" >> $GITHUB_OUTPUT
+      - name: Generate per-test coverage traceability (allow-fail)
+        run: |
+          set +e
+          pip install pytest-cov || true
+          pytest -q --cov=. --cov-context=test --cov-report=json:coverage.json || true
+          python tools/traceability.py --coverage coverage.json --output tests/_traceability.md || true
+      - name: Upload traceability
+        uses: actions/upload-artifact@v4
+        with:
+          name: traceability
+          path: tests/_traceability.md
       - name: Kill-switch simulation
         run: |
           touch kill.flag
