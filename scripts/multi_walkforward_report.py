@@ -473,6 +473,11 @@ def main():
     ap.add_argument("--train-window", type=int, default=None)
     ap.add_argument("--test-window", type=int, default=None)
     ap.add_argument("--max-runtime", type=int, default=60)
+    ap.add_argument(
+        "--allow-zero-trades",
+        action="store_true",
+        help="Do not fail smoke if total_trades == 0",
+    )
     ap.add_argument("--log-level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR"])
     args = ap.parse_args()
 
@@ -595,7 +600,7 @@ def main():
                     }
                     _write_smoke_json(payload)
                     raise SystemExit(1)
-                if int(summary.get("total_trades", 0)) <= 0:
+                if not args.allow_zero_trades and int(summary.get("total_trades", 0)) <= 0:
                     payload = {
                         "status": "FAIL",
                         "violation_code": "NO_TRADES",
