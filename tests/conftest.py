@@ -1,3 +1,53 @@
+import pathlib
+import typing as t
+
+import pandas as pd
+import pytest
+
+
+def pytest_addoption(parser: pytest.Parser) -> None:
+    parser.addoption("--datasanity-profile", action="store", default="walkforward_ci")
+
+
+def pytest_configure(config: pytest.Config) -> None:
+    for m in ["sanity", "smoke", "slow", "fuzz", "integration", "contract"]:
+        config.addinivalue_line("markers", f"{m}: DataSanity {m} tests")
+
+
+@pytest.fixture(scope="session")
+def datasanity(request: pytest.FixtureRequest):
+    from core.data_sanity import DataSanityValidator, DataSanityError
+
+    class DS:
+        Error = DataSanityError
+
+        def __init__(self, profile: str):
+            self.profile = profile
+            self.validator = DataSanityValidator(profile=profile)
+
+        def validate(self, df: pd.DataFrame, symbol: str = "TEST") -> pd.DataFrame:
+            clean, _ = self.validator.validate_and_repair(df, symbol)
+            return clean
+
+    profile = request.config.getoption("--datasanity-profile")
+    return DS(profile)
+
+
+@pytest.fixture(scope="session")
+def load_clean_df() -> t.Callable[[str, str], pd.DataFrame]:
+    base = pathlib.Path("data/fixtures/smoke")
+
+    def _load(symbol: str, size: str = "tiny") -> pd.DataFrame:
+        fp = base / f"{symbol}.csv"
+        df = pd.read_csv(fp, index_col=0, parse_dates=True)
+        if size == "tiny":
+            return df.head(120)
+        if size == "small":
+            return df.head(1000)
+        return df
+
+    return _load
+
 """
 Fixtures for DataSanity test suite.
 """
