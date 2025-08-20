@@ -10,7 +10,7 @@ def pytest_addoption(parser: pytest.Parser) -> None:
 
 
 def pytest_configure(config: pytest.Config) -> None:
-    for m in ["sanity", "smoke", "slow", "fuzz", "integration", "contract"]:
+    for m in ["sanity", "smoke", "slow", "fuzz", "integration", "contract", "property", "golden", "regression"]:
         config.addinivalue_line("markers", f"{m}: DataSanity {m} tests")
 
 
