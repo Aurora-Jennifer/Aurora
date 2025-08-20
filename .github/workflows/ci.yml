@@ -39,8 +39,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.11", cache: "pip" }
-      - run: |
-          if [ -f requirements.lock ]; then pip install -r requirements.lock; else pip install -r requirements.txt; fi
+      - run: pip install -r requirements.txt
       - name: Run smoke (fast & deterministic)
         run: python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO
       - name: Summary
@@ -93,8 +92,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.11", cache: "pip" }
-      - run: |
-          if [ -f requirements.lock ]; then pip install -r requirements.lock; else pip install -r requirements.txt; fi
+      - run: pip install -r requirements.txt
       - run: pip install -r requirements-dev.txt || true
       - name: Pytest (quarantine excluded)
         run: |
