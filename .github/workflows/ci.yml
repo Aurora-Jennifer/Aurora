@@ -41,7 +41,9 @@ jobs:
         with: { python-version: "3.11", cache: "pip" }
       - run: pip install -r requirements.txt
       - name: Run smoke (fast & deterministic)
-        run: python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO
+        run: |
+          export DATASANITY_PROFILE=walkforward_ci
+          python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO
       - name: Summary
         if: always()
         run: |

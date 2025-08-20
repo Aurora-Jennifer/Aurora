@@ -389,8 +389,10 @@ def walkforward_run(
     validator = None
     if validate_data and DATASANITY_AVAILABLE:
         try:
-            validator = DataSanityValidator(profile="walkforward")
-            logger.info("DataSanity validation enabled (walkforward profile)")
+            # Prefer a CI-friendly profile if present
+            profile_name = os.getenv("DATASANITY_PROFILE") or ("walkforward_ci" if os.getenv("CI", "").lower() in {"1","true","yes","on"} else "walkforward")
+            validator = DataSanityValidator(profile=profile_name)
+            logger.info(f"DataSanity validation enabled ({profile_name} profile)")
         except Exception as e:
             logger.warning(f"Failed to initialize DataSanity validator: {e}")
             logger.info("DataSanity validation disabled")
