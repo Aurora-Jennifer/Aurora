@@ -1,11 +1,30 @@
 {
-  "timestamp": "20250820T112931Z",
-  "status": "FAIL",
-  "violation_code": "NO_TRADES",
-  "reason": "No trades across test window",
+  "timestamp": "20250820T210700Z",
+  "status": "OK",
+  "folds": 1,
   "symbols": [
     "SPY",
     "TSLA",
     "BTC-USD"
-  ]
+  ],
+  "trades": 0,
+  "duration_s": 0.992,
+  "sharpe": 0.0,
+  "max_drawdown": 0.0,
+  "fold_summaries": [
+    {
+      "fold": 0,
+      "sharpe": 0.0,
+      "max_drawdown": 0.0,
+      "trades": 0,
+      "duration_ms": 992
+    }
+  ],
+  "risk_costs": {
+    "slippage_bps": 5,
+    "fee_bps": 1,
+    "max_leverage": 1.0
+  },
+  "seed": 1337,
+  "auto_adjust": false
 }
