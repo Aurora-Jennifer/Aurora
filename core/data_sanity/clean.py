@@ -27,10 +27,11 @@ def coerce_ohlcv_numeric(df: pd.DataFrame, profile) -> pd.DataFrame:
     # DTYPE gate
     for c in cols:
         if not pd.api.types.is_numeric_dtype(out[c]):
-            # Try peeking for numeric; if any non-coercible and strict, raise
-            coerced = pd.to_numeric(out[c], errors="coerce")
-            if not profile.get("allow_repairs", True) and coerced.isna().any():
+            # In strict mode do not coerce silently; fail closed
+            if not profile.get("allow_repairs", True):
                 raise DataSanityError(estring(INVALID_DTYPE, f"non-numeric in {c}"))
+            # Lenient: attempt coercion
+            coerced = pd.to_numeric(out[c], errors="coerce")
             out[c] = coerced
 
     # FINITE gate

@@ -1,0 +1,7 @@
+{
+  "dup_timestamps.csv": {
+    "rule_ids": ["DUPLICATE_TSTAMPS"],
+    "notes": "two identical timestamps should be flagged"
+  }
+}
+

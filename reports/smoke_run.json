@@ -1,13 +1,14 @@
 {
-  "timestamp": "20250820T094420Z",
+  "timestamp": "20250820T095546Z",
   "status": "OK",
   "folds": 1,
   "symbols": [
     "SPY",
-    "TSLA"
+    "TSLA",
+    "BTC-USD"
   ],
-  "trades": 48,
-  "duration_s": 0.633,
+  "trades": 72,
+  "duration_s": 0.768,
   "sharpe": -1.713712174329828,
   "max_drawdown": -1.8207951811239063,
   "fold_summaries": [
@@ -15,8 +16,8 @@
       "fold": 0,
       "sharpe": -1.713712174329828,
       "max_drawdown": -1.8207951811239063,
-      "trades": 48,
-      "duration_ms": 633
+      "trades": 72,
+      "duration_ms": 768
     }
   ],
   "risk_costs": {

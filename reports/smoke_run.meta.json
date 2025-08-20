@@ -1,10 +1,11 @@
 {
   "run_id": null,
-  "git_sha": "9c75940",
+  "git_sha": "d7c6a93",
   "profile": "walkforward",
   "symbols": [
     "SPY",
-    "TSLA"
+    "TSLA",
+    "BTC-USD"
   ],
   "folds": 1,
   "seed": 1337

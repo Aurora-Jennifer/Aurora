@@ -440,9 +440,10 @@ class DataSanityValidator:
         # Check for lookahead contamination
         lookahead_detected = self._detect_lookahead_contamination(clean_data)
         if lookahead_detected:
-            flags.append("lookahead_detected")
+            flags.append("lookahead_contamination")
+            # Strict fails if configured
             if self.profile_config.get("fail_on_lookahead_flag", False):
-                raise DataSanityError(f"{symbol}: Lookahead contamination detected")
+                raise DataSanityError(f"{symbol}: Lookahead contamination")
 
         # --- Only enforce repairs that actually changed data ---
         benign = {"canonicalized_datetime_index", "coerced_ohlcv_numeric"}
@@ -1208,28 +1209,13 @@ class DataSanityValidator:
 
     def _detect_lookahead_contamination(self, data: pd.DataFrame) -> bool:
         """Detect potential lookahead contamination."""
-        if "Returns" in data.columns:
-            # Only check for actual lookahead patterns, not synthetic data
-            # Skip detection for test data with synthetic patterns
-            if len(data) > 1:
-                # Check for obvious lookahead contamination patterns
-                # Look for cases where a return value matches a future return value
-                # This is a more specific pattern that indicates actual lookahead
-                for i in range(len(data) - 1):
-                    current_return = data["Returns"].iloc[i]
-                    future_return = data["Returns"].iloc[i + 1]
-                    # Only flag if the values are exactly the same and non-zero
-                    # This is a strong indicator of lookahead contamination
-                    if (
-                        abs(current_return - future_return) < 1e-10
-                        and abs(current_return) > 1e-10
-                        and i > 0
-                    ):  # Skip the first row comparison
-                        return True
-
-            # Check for any other signs of lookahead contamination
-            # For now, we'll be more conservative and only flag obvious cases
-            return False
+        if "Returns" in data.columns and len(data) > 1:
+            # Detect simple future leakage: value equals next-step value at t
+            r = data["Returns"].to_numpy()
+            # Compare r[t] vs r[t+1]
+            eq_next = np.isfinite(r[:-1]) & np.isfinite(r[1:]) & (np.abs(r[:-1] - r[1:]) < 1e-12)
+            if eq_next.any():
+                return True
         return False
 
     def _final_validation_checks(self, data: pd.DataFrame, symbol: str) -> pd.DataFrame:
