@@ -1,0 +1,9 @@
+{
+  "generated_at": "PLACEHOLDER_GENERATED_AT",
+  "metrics": {
+    "_totals": { "loc": 0, "nosec": 0, "errors": 0 },
+    "": { "loc": 0, "nosec": 0, "errors": 0 }
+  },
+  "results": []
+}
+
