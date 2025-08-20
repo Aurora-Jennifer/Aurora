@@ -79,6 +79,8 @@ data/ibkr/*.pkl
 data/ibkr/*.csv
 data/ibkr/*.json
 data/
+!data/fixtures/
+!data/fixtures/smoke/**
 datasets/
 **/*.parquet
 **/*.feather

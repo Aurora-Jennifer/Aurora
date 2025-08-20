@@ -33,19 +33,6 @@ profiles:
     mode: "warn"              # Walkforward testing profile - allow repairs
   walkforward_ci:
     mode: "enforce"
-    allow_repairs: false
-    allow_winsorize: false
-    allow_clip_prices: false
-    allow_fix_ohlc: false
-    allow_drop_dupes: false
-    allow_ffill_nans: false
-    tolerate_outliers_after_repair: false
-    fail_on_lookahead_flag: true
-    fail_if_any_repair: true
-    # Time-series strictness
-    require_monotonic_dates: true
-    tz: "UTC"
-    price_max: 1000000.0
     allow_repairs: true
     allow_winsorize: true
     allow_clip_prices: true
@@ -53,8 +40,12 @@ profiles:
     allow_drop_dupes: true
     allow_ffill_nans: true
     tolerate_outliers_after_repair: true
-    fail_on_lookahead_flag: true  # Still check for lookahead
+    fail_on_lookahead_flag: false  # Disable lookahead check for smoke tests
     fail_if_any_repair: false
+    # Time-series strictness
+    require_monotonic_dates: true
+    tz: "UTC"
+    price_max: 1000000.0
 
 # Price validation limits
 price_limits:

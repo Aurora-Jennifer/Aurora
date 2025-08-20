@@ -42,8 +42,7 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Run smoke (fast & deterministic)
         run: |
-          export DATASANITY_PROFILE=walkforward_ci
-          python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO
+          python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO --datasanity-profile walkforward_ci
       - name: Summary
         if: always()
         run: |

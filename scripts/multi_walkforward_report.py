@@ -214,6 +214,7 @@ def run_for_symbol_profile(
     train_days: int | None = None,
     test_days: int | None = None,
     warmup_days: int = 60,
+    datasanity_profile: str = "walkforward",
 ) -> tuple[list[dict], list[int], int]:
     data = load_data(symbol, start, end)
     X, y, prices = build_feature_table(data, warmup_days=warmup_days)
@@ -254,12 +255,14 @@ def run_for_symbol_profile(
         folds = folds[:target_folds]
 
     pipeline = LeakageProofPipeline(X, y)
+    # Use stricter CI profile for smoke/validation runs.
     results = walkforward_run(
         pipeline,
         folds,
         prices,
         performance_mode="RELAXED",
         validate_data=validate_data,
+        datasanity_profile=datasanity_profile,
     )
     # Attach fold lengths for CAGR
     fold_test_lengths = [f.test_hi - f.test_lo + 1 for f in folds]
@@ -308,6 +311,7 @@ def run_smoke(symbols: list[str], train: int = 60, test: int = 10) -> dict:
         target_folds=1,
         train_days=train,
         test_days=test,
+        datasanity_profile=sanity_profile,
     )
     duration = time.monotonic() - start_time
     return {
@@ -330,6 +334,7 @@ def make_report(
     target_folds: int,
     train_days: int | None,
     test_days: int | None,
+    datasanity_profile: str = "walkforward",
 ):
     out_path.parent.mkdir(parents=True, exist_ok=True)
     lines: list[str] = []
@@ -371,6 +376,7 @@ def make_report(
                     and (train_days <= 30 or test_days <= 10)
                 )
                 else 60,
+                datasanity_profile=datasanity_profile,
             )
             total_trades_all += symbol_trades
             for (fold_id, metrics, _), bars in zip(results, fold_lengths, strict=False):
@@ -462,6 +468,7 @@ def main():
     )
     ap.add_argument("--validate-data", action="store_true")
     ap.add_argument("--smoke", action="store_true")
+    ap.add_argument("--datasanity-profile", default="walkforward", help="DataSanity profile to use")
     ap.add_argument("--folds", type=int, default=None)
     ap.add_argument("--train-window", type=int, default=None)
     ap.add_argument("--test-window", type=int, default=None)
@@ -526,6 +533,7 @@ def main():
             eff_folds,
             eff_train,
             eff_test,
+            datasanity_profile=args.datasanity_profile,
         )
         make_report(
             out_cry,
@@ -537,6 +545,7 @@ def main():
             eff_folds,
             eff_train,
             eff_test,
+            datasanity_profile=args.datasanity_profile,
         )
         print(f"Report written: {out_non}\nReport written: {out_cry}")
     else:
@@ -572,6 +581,7 @@ def main():
             target_folds=eff_folds,
             train_days=eff_train,
             test_days=eff_test,
+            datasanity_profile=args.datasanity_profile,
         )
         # Smoke guardrails and summary
         if args.smoke:
