@@ -1,0 +1,5 @@
+[run]
+dynamic_context = test
+
+[json]
+show_contexts = true
