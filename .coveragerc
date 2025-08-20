@@ -1,5 +1,5 @@
 [run]
-dynamic_context = test
+dynamic_context = test_function
 
 [json]
 show_contexts = true

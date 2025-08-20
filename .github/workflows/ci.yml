@@ -104,8 +104,9 @@ jobs:
       - name: Generate per-test coverage traceability (allow-fail)
         run: |
           set +e
-          pip install pytest-cov || true
-          pytest -q --cov=. --cov-context=test --cov-report=json:coverage.json || true
+          pip install coverage pytest || true
+          coverage run -m pytest -q -m "not quarantine" || true
+          coverage json -o coverage.json --show-contexts || true
           python tools/traceability.py --coverage coverage.json --output tests/_traceability.md || true
       - name: Upload traceability
         uses: actions/upload-artifact@v4
