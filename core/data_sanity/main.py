@@ -83,7 +83,8 @@ class DataSanityGuard:
         hash_data = f"{df.shape}_{df.dtypes.to_dict()}"
         if len(df) > 0:
             hash_data += f"_{df.iloc[0].to_dict()}_{df.iloc[-1].to_dict()}"
-        return hashlib.md5(hash_data.encode()).hexdigest()[:8]
+        # Use SHA256 truncated; not used for security, but avoid weak hash warning
+        return hashlib.sha256(hash_data.encode()).hexdigest()[:8]
 
     def mark_validated(self, df: pd.DataFrame, symbol: str = None):
         """Mark this DataFrame as validated."""
@@ -1512,6 +1513,7 @@ class DataSanityWrapper:
 
         # Load data based on file extension
         if filepath.endswith(".pkl"):
+            # Trusted local artifact; acceptable in controlled context  # nosec B301
             data = pd.read_pickle(filepath)
         elif filepath.endswith(".csv"):
             data = pd.read_csv(filepath, index_col=0, parse_dates=True)

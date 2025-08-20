@@ -6,6 +6,79 @@ import json
 import os
 from dataclasses import dataclass
 from typing import Any
+import urllib.request
+import urllib.error
+import ast
+
+
+def _safe_eval(expr: str, context: dict[str, Any]) -> bool:
+    """Evaluate a simple boolean expression safely.
+
+    Supports names from {risk, config, selector, exec}, literals, comparisons,
+    boolean ops, subscripts, and attributes. No function calls.
+    """
+    allowed_names = {"risk", "config", "selector", "exec"}
+
+    def _eval(node):
+        if isinstance(node, ast.Expression):
+            return _eval(node.body)
+        if isinstance(node, ast.BoolOp):
+            vals = [_eval(v) for v in node.values]
+            if isinstance(node.op, ast.And):
+                return all(vals)
+            if isinstance(node.op, ast.Or):
+                return any(vals)
+            raise ValueError("unsupported boolean op")
+        if isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.Not):
+            return not _eval(node.operand)
+        if isinstance(node, ast.Compare):
+            left = _eval(node.left)
+            for op, comparator in zip(node.ops, node.comparators):
+                right = _eval(comparator)
+                if isinstance(op, ast.Eq) and not (left == right):
+                    return False
+                elif isinstance(op, ast.NotEq) and not (left != right):
+                    return False
+                elif isinstance(op, ast.Gt) and not (left > right):
+                    return False
+                elif isinstance(op, ast.GtE) and not (left >= right):
+                    return False
+                elif isinstance(op, ast.Lt) and not (left < right):
+                    return False
+                elif isinstance(op, ast.LtE) and not (left <= right):
+                    return False
+                elif isinstance(op, ast.In) and not (left in right):
+                    return False
+                elif isinstance(op, ast.NotIn) and not (left not in right):
+                    return False
+                else:
+                    # continue to next comparison
+                    pass
+                left = right
+            return True
+        if isinstance(node, ast.Name):
+            if node.id not in allowed_names:
+                raise ValueError("unknown name")
+            return context.get(node.id)
+        if isinstance(node, ast.Constant):
+            return node.value
+        if isinstance(node, ast.Subscript):
+            base = _eval(node.value)
+            key = _eval(node.slice)
+            return base[key]
+        if isinstance(node, ast.Attribute):
+            base = _eval(node.value)
+            return getattr(base, node.attr)
+        if isinstance(node, ast.Tuple):
+            return tuple(_eval(elt) for elt in node.elts)
+        if isinstance(node, ast.List):
+            return [_eval(elt) for elt in node.elts]
+        if isinstance(node, ast.Dict):
+            return { _eval(k): _eval(v) for k, v in zip(node.keys, node.values) }
+        raise ValueError("unsupported expression")
+
+    tree = ast.parse(expr, mode="eval")
+    return bool(_eval(tree))
 
 
 @dataclass
@@ -27,10 +100,19 @@ class AlertSinks:
 
     @staticmethod
     def webhook(message: str, url: str) -> None:
-        # Minimal dependency-free webhook (curl)
-        os.system(
-            f"curl -s -X POST -H 'Content-Type: application/json' -d '{json.dumps({'text': message})}' {url} >/dev/null 2>&1"
+        # Minimal dependency-free webhook using urllib (no shell) to avoid injection
+        data = json.dumps({"text": message}).encode("utf-8")
+        req = urllib.request.Request(
+            url,
+            data=data,
+            headers={"Content-Type": "application/json"},
+            method="POST",
         )
+        try:
+            with urllib.request.urlopen(req, timeout=5) as resp:  # nosec B310 - controlled URL from config
+                _ = resp.read()
+        except Exception:
+            pass
 
 
 class AlertEngine:
@@ -46,9 +128,8 @@ class AlertEngine:
         triggered: list[str] = []
         for rule in self.rules:
             try:
-                if eval(
+                if _safe_eval(
                     rule.when,
-                    {},
                     {
                         "risk": context.get("risk", {}),
                         "config": context.get("config", {}),

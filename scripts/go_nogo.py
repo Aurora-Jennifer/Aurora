@@ -150,6 +150,7 @@ def check_data(cfg):
 
         for data_file in data_files:
             if os.path.exists(data_file):
+                # Controlled internal cache file  # nosec B301
                 df = pd.read_pickle(data_file)
 
                 # Basic structural checks
@@ -197,6 +198,7 @@ def check_leakage(cfg):
 
         for data_file in data_files:
             if os.path.exists(data_file):
+                # Controlled internal cache file  # nosec B301
                 df = pd.read_pickle(data_file)
 
                 # Check for future timestamps

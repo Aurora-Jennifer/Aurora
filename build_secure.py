@@ -316,7 +316,7 @@ if __name__ == "__main__":
     with open("demo_trading_system.py", "w") as f:
         f.write(demo_script)
 
-    # Make it executable
+    # Make it executable (intended for local demo)  # nosec B103
     os.chmod("demo_trading_system.py", 0o755)
 
 
