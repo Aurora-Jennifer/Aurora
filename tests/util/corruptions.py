@@ -27,9 +27,9 @@ def inject_lookahead(df: pd.DataFrame, col: str = "Close", shift: int = -1) -> p
         shifted = df[col].shift(shift)
         # Fill NaN values created by shift to avoid triggering non-finite checks
         if shift < 0:  # Future leak - fill end with last value
-            shifted = shifted.fillna(method='ffill')
+            shifted = shifted.ffill()
         else:  # Past leak - fill beginning with first value
-            shifted = shifted.fillna(method='bfill')
+            shifted = shifted.bfill()
         df[col] = shifted
     return df
 
