@@ -441,6 +441,8 @@ def walkforward_run(
                     },
                     index=train_dates,
                 )
+                # Ensure numeric dtype to avoid object/NaN coercion in strict checks
+                train_data = train_data.astype("float64")
                 validator.validate_and_repair(train_data, f"TRAIN_FOLD_{fold.fold_id}")
                 logger.debug(f"DataSanity validation passed for train fold {fold.fold_id}")
 
@@ -457,6 +459,8 @@ def walkforward_run(
                     },
                     index=test_dates,
                 )
+                # Ensure numeric dtype to avoid object/NaN coercion in strict checks
+                test_data = test_data.astype("float64")
                 validator.validate_and_repair(test_data, f"TEST_FOLD_{fold.fold_id}")
                 logger.debug(f"DataSanity validation passed for test fold {fold.fold_id}")
             except Exception as e:
