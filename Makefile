@@ -246,3 +246,39 @@ allow-live:
 	@echo "# Created: $$(date)" >> runtime/ALLOW_LIVE.txt
 	@echo "# Purpose: Manual override for Go/No-Go gate" >> runtime/ALLOW_LIVE.txt
 	@echo "Live trading enabled. Delete runtime/ALLOW_LIVE.txt to block."
+
+.PHONY: smoke test test-full integ lint pre-push mut mut-results mut-report
+
+smoke:
+	python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO --datasanity-profile walkforward_smoke --allow-zero-trades
+
+test:
+	pytest -q
+
+test-full:
+	pytest -m "not quarantine" -q
+
+integ:
+	pytest tests/integration -q
+
+lint:
+	ruff check .
+
+pre-push: smoke
+
+# Mutation testing targets
+mut:
+	@echo "Running mutation tests on core/data_sanity..."
+	@mutmut run --use-coverage || true
+	@echo "Mutation testing complete."
+
+mut-results:
+	@echo "=== Mutation Test Results ==="
+	@mutmut results
+
+mut-report:
+	@mkdir -p artifacts
+	@mutmut junitxml > artifacts/mutmut-report.xml
+	@echo "Mutation report saved to artifacts/mutmut-report.xml"
+
+mut-full: mut mut-results mut-report

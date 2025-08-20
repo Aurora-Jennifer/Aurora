@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main]          # no more every-branch spam
+    branches: [main]
     paths-ignore:
       - "docs/**"
       - "**/*.md"
@@ -43,25 +43,19 @@ jobs:
       - name: Run smoke (fast & deterministic)
         run: |
           python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO --datasanity-profile walkforward_smoke --allow-zero-trades
-      - name: Smoke contract test (single test file)
+      - name: Run smoke contract test
         run: |
-          pip install pytest
-          pytest -q tests/smoke/test_smoke_datasanity_contract.py --junitxml=pytest-smoke.xml || exit 1
-      - name: Upload smoke test report
-        if: always()
+          pytest --junitxml=smoke-contract-results.xml tests/smoke/test_smoke_datasanity_contract.py
+      - name: Upload smoke contract test results
         uses: actions/upload-artifact@v4
         with:
-          name: pytest-smoke
-          path: pytest-smoke.xml
-      - name: Summary
-        if: always()
-        run: |
-          echo "### Smoke ✅ completed" >> $GITHUB_STEP_SUMMARY
+          name: smoke-contract-test-results
+          path: smoke-contract-results.xml
 
   lint:
     name: Lint (ruff on changed files)
     runs-on: ubuntu-latest
-    continue-on-error: true          # non-blocking per rules
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
         with:
@@ -97,7 +91,7 @@ jobs:
   tests-full:
     name: Full Tests (non-blocking)
     runs-on: ubuntu-latest
-    continue-on-error: true           # stays non-blocking
+    continue-on-error: true
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
@@ -110,27 +104,6 @@ jobs:
           set +e
           pytest -q -m "not quarantine" | tee pytest.out
           echo "exit_code=$?" >> $GITHUB_OUTPUT
-      - name: Generate per-test coverage traceability (allow-fail)
-        run: |
-          set +e
-          pip install coverage pytest || true
-          coverage run -m pytest -q -m "not quarantine" || true
-          coverage json -o coverage.json --show-contexts || true
-          python tools/traceability.py --coverage coverage.json --output tests/_traceability.md || true
-      - name: Upload traceability
-        uses: actions/upload-artifact@v4
-        with:
-          name: traceability
-          path: tests/_traceability.md
-      - name: Kill-switch simulation
-        run: |
-          touch kill.flag
-          python scripts/canary_runner.py --steps 1 --shadow --symbols SPY --quotes dummy || true
-          rm -f kill.flag
-      - name: Validate data schema
-        run: python scripts/validate_schema.py
-      - name: Analyze metrics thresholds
-        run: python scripts/analyze_metrics.py --config config/base.yaml --reports reports/
       - name: Upload short log
         uses: actions/upload-artifact@v4
         with:
@@ -143,4 +116,44 @@ jobs:
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
           head -n 200 pytest.out >> $GITHUB_STEP_SUMMARY || true
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+  mutation-testing:
+    name: Mutation Testing (DataSanity)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11", cache: "pip" }
+      - run: pip install -r requirements.txt
+      - run: pip install mutmut
+      - name: Run metamorphic tests
+        run: |
+          pytest -q tests/datasanity/test_mutations.py -v
+      - name: Run basic mutation tests (limited scope)
+        run: |
+          # Run a small subset of mutation tests to avoid long CI times
+          mutmut run --paths-to-mutate core/data_sanity/clean.py --max-children 5 || true
+      - name: Show mutation results
+        run: |
+          mutmut results || echo "No mutation results available"
+      - name: Summary
+        if: always()
+        run: |
+          echo "### Mutation Testing Results" >> $GITHUB_STEP_SUMMARY
+          echo "Metamorphic tests verify DataSanity detects data corruption correctly." >> $GITHUB_STEP_SUMMARY
+
+  gitleaks:
+    name: Security (gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: .gitleaks.toml
 

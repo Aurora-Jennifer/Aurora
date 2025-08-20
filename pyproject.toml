@@ -3,51 +3,28 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "trading-system"
+name = "aurora-trader"
 version = "0.1.0"
-description = "Enhanced trading system with regime detection and IBKR integration"
+description = "Aurora Trading System"
+authors = [{name = "Jennifer", email = "jennifer@aurora.com"}]
 readme = "README.md"
-requires-python = ">=3.8"
-license = {text = "Proprietary"}
-authors = [
-    {name = "Trading System Team"}
-]
-keywords = ["trading", "algorithmic", "ibkr", "regime-detection"]
-classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Financial and Insurance Industry",
-    # License classifier removed (proprietary)
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-]
-
+requires-python = ">=3.11"
 dependencies = [
-    "pandas>=1.5.0",
-    "numpy>=1.21.0",
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
     "yfinance>=0.2.0",
-    "ib_insync>=0.9.85",
-    "scikit-learn>=1.0.0",
-    "matplotlib>=3.5.0",
-    "seaborn>=0.11.0",
-    "schedule>=1.2.0",
-    "flask>=2.0.0",
-    "plotly>=5.0.0",
-    "dash>=2.0.0",
+    "pyyaml>=6.0",
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "hypothesis>=6.0.0",
+    "mutmut>=3.0.0",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "black>=22.0.0",
-    "isort>=5.0.0",
     "ruff>=0.1.0",
-    "pytest>=7.0.0",
-    "pytest-cov>=4.0.0",
-    "pre-commit>=2.20.0",
+    "bandit>=1.7.0",
+    "pip-audit>=1.0.0",
 ]
 
 [project.scripts]
@@ -55,7 +32,7 @@ trading-bot = "enhanced_paper_trading:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["core*", "strategies*", "features*", "brokers*"]
+include = ["core*", "scripts*", "tests*", "utils*"]
 
 [tool.black]
 line-length = 88
@@ -83,7 +60,9 @@ known_first_party = ["core", "strategies", "features", "brokers"]
 
 [tool.ruff]
 target-version = "py311"
-line-length = 160
+line-length = 88
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501", "B008", "B006"]
 
 [tool.ruff.lint]
 extend-select = ["E","F","I","B","UP","SIM"]
@@ -113,3 +92,11 @@ addopts = [
     "--strict-markers",
     "--strict-config",
 ]
+
+[tool.mutmut]
+paths_to_mutate = ["core/data_sanity"]
+tests_dir = "tests"
+runner = "python -m pytest tests/ -q"
+backup = false
+CI = true
+dict_synonyms = ["Struct", "NamedStruct"]
