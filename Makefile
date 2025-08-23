@@ -480,23 +480,6 @@ mut-report:
 
 mut-full: mut mut-results mut-report
 
-smoke:
-	python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO
-
-test:
-	pytest -q
-
-test-full:
-	pytest -m "not quarantine" -q
-
-integ:
-	pytest tests/integration -q
-
-lint:
-	ruff check .
-
-pre-push: smoke
-
 l0-time:
 	pytest -q tests/gates/l0/test_timezones.py
 
