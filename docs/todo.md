@@ -1,14 +1,20 @@
 # TODO - Aurora Trading System
 
 ## Current Status
-- **Paper Trading Readiness**: 33/52 (63%) - Updated with hard gate requirements
-- **L0 Gates**: ✅ Implemented and integrated into CI
+- **Paper Trading Readiness**: 39/52 (75%) - L0 Gates operational with real artifact validation
+- **L0 Gates**: ✅ **COMPLETED** - Wired to real E2D artifacts with validation drills
 - **L1/L2 Gates**: 📋 Required for production readiness
 
 ## High Priority (Blocking Production)
 
 ### Hard Gates Implementation
-- [ ] **Wire L0 gates to real E2D outputs** (currently using mocks)
+- [x] ✅ **Wire L0 gates to real E2D outputs** (COMPLETED!)
+  - [x] Timezone Gate: Enforces UTC timezone-aware DatetimeIndex ✅
+  - [x] Dtype Gate: Enforces float32 policy, no NaN/Inf ✅
+  - [x] Snapshot Gate: Enforces content hash verification ✅
+  - [x] Validation drills prove gates fail correctly ✅
+  - [x] Golden snapshot compliance fixes ✅
+  - [x] Automated tooling (fixer, hasher, acceptance) ✅
 - [ ] **Implement L1 Gates** (nightly CI):
   - [ ] Corporate actions normalization
   - [ ] Export parity edge cases  
@@ -79,8 +85,8 @@
 - Promotion discipline enforced
 
 ### Next Actions
-1. Wire L0 gates to real E2D outputs (not mocks)
+1. ✅ ~~Wire L0 gates to real E2D outputs~~ **COMPLETED!**
 2. Implement circuit breakers and kill switch
-3. Add idempotency/crash recovery
+3. Add idempotency/crash recovery  
 4. Implement L1 gates for nightly validation
 5. Add L2 gates for promotion discipline

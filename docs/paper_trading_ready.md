@@ -1,5 +1,5 @@
 # Paper Trading Readiness Checklist
-Status: 🚧 in progress (63% complete - Updated with hard gate requirements)
+Status: 🚧 in progress (75% complete - L0 Gates implemented and operational)
 
 ---
 
@@ -83,15 +83,19 @@ Status: 🚧 in progress (63% complete - Updated with hard gate requirements)
 - Risk/rollback: 🚧 (2/4 complete)
 - Release: 🚧 (2/5 complete)
 
-**Overall: 33/52 complete (63%) - Updated with hard gate requirements**
+**Overall: 39/52 complete (75%) - L0 Gates operational with real artifact validation**
 
 ---
 
 ## 🎯 Next Priority Actions
-1. **Wire L0 gates to real E2D outputs** (Hard Gates)
+1. **✅ L0 gates wired to real E2D artifacts** - **COMPLETED!**
+   - Timezone Gate: Enforces UTC timezone-aware DatetimeIndex ✅
+   - Dtype Gate: Enforces float32 policy, no NaN/Inf ✅  
+   - Snapshot Gate: Enforces content hash verification ✅
+   - Validation drills prove gates fail correctly on violations ✅
 2. **Implement circuit breakers & kill switch** (Risk & Rollback)
 3. **Add idempotency/crash recovery** (Risk & Rollback)
-4. **Implement L1/L2 gates** (Hard Gates)
+4. **Implement L1/L2 gates for nightly/promotion validation** (Hard Gates)
 
 ---
 
@@ -109,6 +113,9 @@ Status: 🚧 in progress (63% complete - Updated with hard gate requirements)
 - **Golden Snapshot**: Frozen reference dataset for deterministic experiments
 - **Export Parity**: ONNX vs native validation prevents model drift
 - **Comprehensive Metrics**: IC, turnover, fill_rate, latency, memory monitoring
+- **L0 Gates**: Operational with real artifact validation (timezone, dtype, snapshot)
+- **Validation Drills**: Prove gates fail correctly on contract violations
+- **Automated Tooling**: Snapshot fixers, hashers, acceptance tests
 
 ### 🚧 **In Progress / Partially Complete**
 - **Integration Tests**: Paper runner exists but no automated CI testing
