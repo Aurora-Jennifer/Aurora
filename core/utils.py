@@ -66,14 +66,13 @@ def normalize_prices(prices: pd.Series | np.ndarray) -> pd.Series | np.ndarray:
     """
     if isinstance(prices, pd.Series):
         return prices.fillna(method="ffill").fillna(method="bfill")
-    else:
-        prices = np.asarray(prices)
-        prices = np.nan_to_num(prices, nan=np.nan, posinf=np.nan, neginf=np.nan)
-        # Forward fill then backward fill
-        mask = np.isnan(prices)
-        if mask.any():
-            prices = pd.Series(prices).fillna(method="ffill").fillna(method="bfill").values
-        return prices
+    prices = np.asarray(prices)
+    prices = np.nan_to_num(prices, nan=np.nan, posinf=np.nan, neginf=np.nan)
+    # Forward fill then backward fill
+    mask = np.isnan(prices)
+    if mask.any():
+        prices = pd.Series(prices).fillna(method="ffill").fillna(method="bfill").values
+    return prices
 
 
 def apply_slippage(
@@ -93,8 +92,8 @@ def apply_slippage(
     slippage_multiplier = 1 + (slippage_bps / 10000)
     if quantity > 0:  # Buy
         return price * slippage_multiplier
-    else:  # Sell
-        return price / slippage_multiplier
+    # Sell
+    return price / slippage_multiplier
 
 
 def calculate_drawdown(equity_curve: pd.Series | np.ndarray) -> float:
@@ -374,8 +373,7 @@ def load_config(config_file: str) -> dict[str, Any]:
     """
     try:
         with open(config_file) as f:
-            config = json.load(f)
-        return config
+            return json.load(f)
     except FileNotFoundError:
         logging.error(f"Config file not found: {config_file}")
         return {}

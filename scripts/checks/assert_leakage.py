@@ -105,9 +105,8 @@ def test_leakage():
     if sharpe_diff < 0.1:  # threshold
         print("PASS: No leakage detected")
         return True
-    else:
-        print("FAIL: Potential leakage detected")
-        return False
+    print("FAIL: Potential leakage detected")
+    return False
 
 
 if __name__ == "__main__":

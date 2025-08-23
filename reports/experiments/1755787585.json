@@ -1,0 +1,46 @@
+{
+  "exp_id": 1755787585,
+  "profile": "golden_xgb_v2",
+  "snapshot": "golden_ml_v1",
+  "features": [
+    "ret_1d_lag1",
+    "sma_10",
+    "sma_20",
+    "vol_10",
+    "rsi_14"
+  ],
+  "model": {
+    "kind": "xgboost",
+    "n_estimators": 100,
+    "max_depth": 3,
+    "learning_rate": 0.1,
+    "random_state": 42
+  },
+  "metrics": {
+    "r2": 0.024867211080580875,
+    "ic": 0.11705936039309135,
+    "duration_sec": 1.8184573650360107,
+    "rows": 966,
+    "cols": 5
+  },
+  "onnx": {
+    "exported": true,
+    "path": "artifacts/models/1755787585_model.onnx",
+    "parity": {
+      "parity_ok": false,
+      "max_diff": 0.016853168606758118,
+      "mean_diff": 0.000923002720810473,
+      "tolerance": 1e-05
+    }
+  },
+  "oof_predictions_path": "artifacts/models/1755787585/preds_oof.parquet",
+  "grid_search": {
+    "history_path": "artifacts/models/1755787585/search_history.json",
+    "best_vs_baseline": {
+      "baseline_ic_mean": 0.06066978376035222,
+      "best_ic_mean": 0.0992982777973493,
+      "delta_mean": 0.0386284940369971,
+      "p_value": 0.3052201729686025
+    }
+  }
+}

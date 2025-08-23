@@ -21,8 +21,7 @@ def load_config(config_file: str) -> dict[str, Any]:
     """Load configuration from file"""
     try:
         with open(config_file) as f:
-            config = json.load(f)
-        return config
+            return json.load(f)
     except Exception as e:
         print(f"Error loading config: {e}")
         return {}

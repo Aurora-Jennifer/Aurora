@@ -1,0 +1,34 @@
+# Timezone & Market Hours Contract
+# L0 Gate: PR CI, <3 min total
+
+spec:
+  name: "timezone_and_market_hours"
+  level: "L0"
+  description: "All timestamps timezone-aware UTC; bars within exchange session"
+  
+requirements:
+  timestamps:
+    - timezone_aware: true
+    - timezone: "UTC"
+    - monotonic: true  # no decreasing timestamps
+    - no_duplicates: true
+    
+  market_hours:
+    - within_session: true  # incl. scheduled early close
+    - exchange: "NYSE"  # primary exchange for symbols
+    - respect_holidays: true
+    
+  validation:
+    - fail_on_out_of_session: true
+    - fail_on_timezone_missing: true
+    - fail_on_non_monotonic: true
+
+tests:
+  - test_tz_aware_and_utc
+  - test_within_session
+  - test_monotonic_index
+
+fail_messages:
+  out_of_session: "Out-of-session bars: {count} (first={timestamp})"
+  timezone_missing: "Non-timezone-aware timestamps detected"
+  non_monotonic: "Non-monotonic timestamps detected"

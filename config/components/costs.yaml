@@ -1,0 +1,14 @@
+# Trading cost model
+commission_bps: 0.3
+half_spread_bps: 0.7
+slippage_bps_per_turnover: 0.2
+
+# Optional overlays for robustness testing
+profiles:
+  high_cost:
+    commission_bps: 5.0
+    half_spread_bps: 5.0
+    slippage_bps_per_turnover: 4.0
+
+# Cost calculation
+# total_cost_bps = commission_bps + half_spread_bps + (turnover * slippage_bps_per_turnover)

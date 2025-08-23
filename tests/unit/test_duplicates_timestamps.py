@@ -1,7 +1,8 @@
-import pandas as pd
 from pathlib import Path
 
-from core.data_sanity import DataSanityValidator, DataSanityError
+import pandas as pd
+
+from core.data_sanity import DataSanityError, DataSanityValidator
 
 
 def test_duplicate_timestamps_flagged():

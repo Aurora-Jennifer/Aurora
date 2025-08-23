@@ -7,10 +7,12 @@ from __future__ import annotations
 import random
 import time
 from datetime import UTC, datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from brokers.interface import Broker
 from utils.orders_kv import generate_client_order_id, is_seen, put_order, update_order_status
+
+if TYPE_CHECKING:
+    from brokers.interface import Broker
 
 
 def backoff_with_jitter(attempt: int, max_delay: float = 5.0) -> None:

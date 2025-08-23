@@ -50,7 +50,7 @@ def create_synthetic_data(symbol: str, days: int = 500) -> pd.DataFrame:
     prices = 100 * np.exp(np.cumsum(returns))
 
     # Add OHLCV data
-    data = pd.DataFrame(
+    return pd.DataFrame(
         {
             "Date": dates,
             "Open": prices * (1 + np.random.normal(0, 0.002, days)),
@@ -61,7 +61,6 @@ def create_synthetic_data(symbol: str, days: int = 500) -> pd.DataFrame:
         }
     )
 
-    return data
 
 
 def test_objective_functions():
@@ -439,9 +438,8 @@ def main():
     if passed == total:
         print("🎉 All ML backtesting passed! System ready for deployment.")
         return 0
-    else:
-        print("⚠️  Some tests failed. Review issues above.")
-        return 1
+    print("⚠️  Some tests failed. Review issues above.")
+    return 1
 
 
 if __name__ == "__main__":

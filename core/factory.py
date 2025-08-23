@@ -344,6 +344,5 @@ def make_mvb_components(mode: str, config: dict[str, Any]) -> dict[str, Any]:
 
     # Create trading engine (simplified for MVB)
     # We'll use the MVB runner instead of the full engines
-    pass
 
     return components

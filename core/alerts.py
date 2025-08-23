@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
+import ast
 import json
 import os
+import urllib.error
+import urllib.request
 from dataclasses import dataclass
 from typing import Any
-import urllib.request
-import urllib.error
-import ast
 
 
 def _safe_eval(expr: str, context: dict[str, Any]) -> bool:
@@ -33,27 +33,13 @@ def _safe_eval(expr: str, context: dict[str, Any]) -> bool:
             return not _eval(node.operand)
         if isinstance(node, ast.Compare):
             left = _eval(node.left)
-            for op, comparator in zip(node.ops, node.comparators):
+            for op, comparator in zip(node.ops, node.comparators, strict=False):
                 right = _eval(comparator)
-                if isinstance(op, ast.Eq) and not (left == right):
+                if isinstance(op, ast.Eq) and left != right:
                     return False
-                elif isinstance(op, ast.NotEq) and not (left != right):
+                if isinstance(op, ast.NotEq) and left == right or isinstance(op, ast.Gt) and not (left > right) or isinstance(op, ast.GtE) and not (left >= right) or isinstance(op, ast.Lt) and not (left < right) or isinstance(op, ast.LtE) and not (left <= right) or isinstance(op, ast.In) and left not in right or isinstance(op, ast.NotIn) and not (left not in right):
                     return False
-                elif isinstance(op, ast.Gt) and not (left > right):
-                    return False
-                elif isinstance(op, ast.GtE) and not (left >= right):
-                    return False
-                elif isinstance(op, ast.Lt) and not (left < right):
-                    return False
-                elif isinstance(op, ast.LtE) and not (left <= right):
-                    return False
-                elif isinstance(op, ast.In) and not (left in right):
-                    return False
-                elif isinstance(op, ast.NotIn) and not (left not in right):
-                    return False
-                else:
-                    # continue to next comparison
-                    pass
+                # continue to next comparison
                 left = right
             return True
         if isinstance(node, ast.Name):
@@ -74,7 +60,7 @@ def _safe_eval(expr: str, context: dict[str, Any]) -> bool:
         if isinstance(node, ast.List):
             return [_eval(elt) for elt in node.elts]
         if isinstance(node, ast.Dict):
-            return { _eval(k): _eval(v) for k, v in zip(node.keys, node.values) }
+            return { _eval(k): _eval(v) for k, v in zip(node.keys, node.values, strict=False) }
         raise ValueError("unsupported expression")
 
     tree = ast.parse(expr, mode="eval")

@@ -1,0 +1,28 @@
+{
+  "ok": false,
+  "failing_rules": [
+    {
+      "id": "rsi_bounds",
+      "msg": "rsi_14 outside [0,100]",
+      "n": 504
+    },
+    {
+      "id": "vol_nonneg",
+      "msg": "vol_10 < 0",
+      "n": 477
+    },
+    {
+      "id": "ret_reasonable_daily",
+      "msg": "ret_1d_lag1 outside soft range > 0.50% rows",
+      "n": 859
+    }
+  ],
+  "counts": {
+    "non_null_all": 0,
+    "finite_all": 0,
+    "rsi_bounds": 504,
+    "vol_nonneg": 477,
+    "ret_reasonable_daily": 0.859,
+    "no_duplicate_rows": 0
+  }
+}

@@ -9,9 +9,9 @@ walkforward framework APIs and writes a markdown report.
 """
 
 import argparse
-import importlib
 import contextlib
 import datetime as dt
+import importlib
 import json
 import logging
 import math
@@ -131,7 +131,7 @@ def _map_violation(result) -> tuple[str, str]:
 def load_data(symbol: str, start: str, end: str) -> pd.DataFrame:
     # Check for offline mode (tests or CI)
     offline_mode = os.getenv("AURORA_TEST_OFFLINE", "1") == "1" or os.getenv("CI") == "true"
-    
+
     if offline_mode:
         # Try fixture directory first
         fixture_path = pathlib.Path("data/fixtures/smoke") / f"{symbol}.csv"
@@ -143,7 +143,7 @@ def load_data(symbol: str, start: str, end: str) -> pd.DataFrame:
             cols = set(df.columns)
             if "Open" in cols and "High" in cols and "Low" in cols and "Close" in cols and "Volume" in cols:
                 return df[["Open", "High", "Low", "Close", "Volume"]]
-        
+
         # Fall back to CI cache
         cache_path = pathlib.Path("data/smoke_cache") / f"{symbol}.parquet"
         if cache_path.exists():
@@ -169,16 +169,16 @@ def load_data(symbol: str, start: str, end: str) -> pd.DataFrame:
                 out["Volume"] = 1_000_000
                 return out[["Open", "High", "Low", "Close", "Volume"]]
             return df[["Open", "High", "Low", "Close", "Volume"]]
-        
+
         # If no offline data, raise error in offline mode
         raise RuntimeError(f"No offline data available for {symbol}. Expected fixture at {fixture_path} or cache at {cache_path}")
-    
+
     # Online mode: use yfinance
     try:
         import yfinance as yf
     except ImportError as e:
         raise RuntimeError("yfinance is required for this script when not in offline mode") from e
-    
+
     df = yf.download(symbol, start=start, end=end, progress=False, auto_adjust=False)
     if not isinstance(df, pd.DataFrame) or df.empty:
         raise RuntimeError(f"No data for {symbol} in range {start}..{end}")

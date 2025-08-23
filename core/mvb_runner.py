@@ -139,7 +139,7 @@ class MVBRunner:
             # Calculate position size
             price = market_data[symbol]["price"]
             portfolio_value = self.components["portfolio"].get_total_value(
-                {symbol: price for symbol in market_data}
+                dict.fromkeys(market_data, price)
             )
 
             # Position sizing

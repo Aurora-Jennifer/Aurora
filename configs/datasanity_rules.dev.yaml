@@ -1,0 +1,50 @@
+schema:
+  required_cols: [ret_1d_lag1, sma_10, sma_20, vol_10, rsi_14]
+  dtypes:
+    ret_1d_lag1: float64
+    sma_10: float64
+    sma_20: float64
+    vol_10: float64
+    rsi_14: float64
+
+row_rules:
+  - id: non_null_all
+    kind: non_null
+    cols: [ret_1d_lag1, sma_10, sma_20, vol_10, rsi_14]
+
+  - id: finite_all
+    kind: finite
+    cols: [ret_1d_lag1, sma_10, sma_20, vol_10, rsi_14]
+
+  # Loose bounds for synthetic data
+  - id: rsi_reasonable
+    kind: range_soft
+    col: rsi_14
+    min: -10
+    max: 110
+
+  - id: vol_reasonable
+    kind: range_soft
+    col: vol_10
+    min: -5
+    max: 5
+
+  - id: ret_reasonable_daily
+    kind: range_soft
+    col: ret_1d_lag1
+    min: -0.5
+    max: 0.5
+
+dataset_rules:
+  - id: no_duplicate_rows
+    kind: no_dupes
+    subset: [ret_1d_lag1, sma_10, sma_20, vol_10, rsi_14]
+
+  - id: leakage_guard_label_shift
+    kind: no_future_leak
+    features: [ret_1d_lag1, sma_10, sma_20, vol_10, rsi_14]
+    label_col: y
+    lookahead_bars: 1
+
+thresholds:
+  soft_fail_fraction: 0.01   # 1% rows can violate soft rules (more lenient)

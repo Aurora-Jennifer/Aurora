@@ -10,11 +10,14 @@ import logging
 import warnings
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import numpy as np
-import pandas as pd
 import yaml
 from scipy.stats import spearmanr
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 warnings.filterwarnings("ignore")
 

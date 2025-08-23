@@ -102,12 +102,11 @@ def load_test_data(symbol: str = "SPY") -> pd.DataFrame:
         from core.data_sanity import validate_market_data
 
         return validate_market_data(data, symbol)
-    else:
-        # Use DataSanity wrapper for loading and validation
-        from core.data_sanity import get_data_sanity_wrapper
+    # Use DataSanity wrapper for loading and validation
+    from core.data_sanity import get_data_sanity_wrapper
 
-        wrapper = get_data_sanity_wrapper()
-        return wrapper.load_and_validate(str(data_file), symbol)
+    wrapper = get_data_sanity_wrapper()
+    return wrapper.load_and_validate(str(data_file), symbol)
 
 
 def test_strategy_selector_meaningful(test: MeaningfulValidationTest) -> bool:
@@ -154,7 +153,7 @@ def test_strategy_selector_meaningful(test: MeaningfulValidationTest) -> bool:
         return False
 
     # Check that we got different strategies (not always fallback)
-    strategies_used = set(s["strategy"] for s in selections)
+    strategies_used = {s["strategy"] for s in selections}
     test.assert_greater(len(strategies_used), 1, "Should use multiple strategies")
 
     # Check that expected Sharpe ratios are reasonable
@@ -448,9 +447,8 @@ def main():
     if passed == total and len(test.errors) == 0:
         print("\n🎉 ALL TESTS PASSED - SYSTEM PRODUCES MEANINGFUL RESULTS!")
         return 0
-    else:
-        print(f"\n❌ {total - passed} TESTS FAILED - SYSTEM NEEDS FIXES")
-        return 1
+    print(f"\n❌ {total - passed} TESTS FAILED - SYSTEM NEEDS FIXES")
+    return 1
 
 
 if __name__ == "__main__":

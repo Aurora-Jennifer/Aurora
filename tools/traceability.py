@@ -11,9 +11,7 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 from pathlib import Path
-from typing import Dict, Set, Tuple
 
 
 def parse_args() -> argparse.Namespace:
@@ -28,21 +26,19 @@ def is_repo_source(path: str) -> bool:
     lowered = path.replace("\\", "/").lower()
     if "/tests/" in lowered or lowered.endswith("/tests"):
         return False
-    if "site-packages" in lowered or ".venv" in lowered or "/usr/lib/" in lowered:
-        return False
-    return True
+    return not ("site-packages" in lowered or ".venv" in lowered or "/usr/lib/" in lowered)
 
 
-def load_coverage(coverage_path: Path) -> Dict:
+def load_coverage(coverage_path: Path) -> dict:
     with coverage_path.open("r", encoding="utf-8") as f:
         return json.load(f)
 
 
-def build_traceability(cov: Dict) -> Tuple[Dict[str, Set[str]], bool]:
+def build_traceability(cov: dict) -> tuple[dict[str, set[str]], bool]:
     """Return mapping test_context -> set(source_files), and whether contexts were present."""
     files = cov.get("files") or {}
     has_contexts = False
-    mapping: Dict[str, Set[str]] = {}
+    mapping: dict[str, set[str]] = {}
 
     for file_path, payload in files.items():
         if not is_repo_source(file_path):
@@ -58,19 +54,18 @@ def build_traceability(cov: Dict) -> Tuple[Dict[str, Set[str]], bool]:
             if isinstance(any_val, list):
                 has_contexts = True
                 handled = True
-                seen_ctxs: Set[str] = set()
+                seen_ctxs: set[str] = set()
                 for _, ctx_list in contexts.items():
                     for ctx in ctx_list or []:
-                        if isinstance(ctx, str) and ctx:
-                            if "test" in ctx or "/tests/" in ctx or "::test" in ctx:
-                                seen_ctxs.add(ctx)
+                        if isinstance(ctx, str) and ctx and ("test" in ctx or "/tests/" in ctx or "::test" in ctx):
+                            seen_ctxs.add(ctx)
                 for ctx in seen_ctxs:
                     mapping.setdefault(ctx, set()).add(file_path)
             else:
                 # Rare shape: context -> payload (not observed in our runs). Best-effort parse.
                 has_contexts = True
                 handled = True
-                for ctx in contexts.keys():
+                for ctx in contexts:
                     if not isinstance(ctx, str):
                         continue
                     if "test" in ctx or "/tests/" in ctx or "::test" in ctx:
@@ -82,11 +77,10 @@ def build_traceability(cov: Dict) -> Tuple[Dict[str, Set[str]], bool]:
             if isinstance(contexts_by_lineno, dict):
                 has_contexts = True
                 # Aggregate all contexts observed for this file
-                seen_ctxs: Set[str] = set()
+                seen_ctxs: set[str] = set()
                 for _, ctx_list in contexts_by_lineno.items():
                     for ctx in ctx_list or []:
-                        if isinstance(ctx, str):
-                            if "test" in ctx or "/tests/" in ctx or "::test" in ctx:
+                        if isinstance(ctx, str) and ("test" in ctx or "/tests/" in ctx or "::test" in ctx):
                                 seen_ctxs.add(ctx)
                 for ctx in seen_ctxs:
                     mapping.setdefault(ctx, set()).add(file_path)
@@ -98,7 +92,7 @@ def build_traceability(cov: Dict) -> Tuple[Dict[str, Set[str]], bool]:
     return mapping, has_contexts
 
 
-def write_markdown(output_path: Path, mapping: Dict[str, Set[str]], contexts_present: bool) -> None:
+def write_markdown(output_path: Path, mapping: dict[str, set[str]], contexts_present: bool) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("w", encoding="utf-8") as out:
         out.write("# Test Traceability\n\n")

@@ -40,9 +40,8 @@ class SMACrossover(BaseStrategy):
         slow_sma = close.rolling(self.slow_period).mean()
 
         # Generate signals (1 = long when fast > slow, 0 = flat)
-        signals = (fast_sma > slow_sma).astype(int)
+        return (fast_sma > slow_sma).astype(int)
 
-        return signals
 
     def get_default_params(self) -> SMAParams:
         """Return default SMA parameters."""

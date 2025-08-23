@@ -332,8 +332,7 @@ class FeatureEngine:
         gain = (delta.where(delta > 0, 0)).rolling(period).mean()
         loss = (-delta.where(delta < 0, 0)).rolling(period).mean()
         rs = gain / (loss + 1e-6)
-        rsi = 100 - (100 / (1 + rs))
-        return rsi
+        return 100 - (100 / (1 + rs))
 
     def _calculate_atr(self, data: pd.DataFrame, period: int) -> pd.Series:
         """Calculate Average True Range."""
@@ -346,8 +345,7 @@ class FeatureEngine:
         tr3 = abs(low - close_prev)
 
         tr = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
-        atr = tr.rolling(period).mean()
-        return atr
+        return tr.rolling(period).mean()
 
     def _calculate_adx(self, data: pd.DataFrame, period: int) -> pd.Series:
         """Calculate ADX (simplified version)."""
@@ -368,9 +366,8 @@ class FeatureEngine:
 
         # Calculate DX and ADX
         dx = 100 * abs(plus_di - minus_di) / (plus_di + minus_di + 1e-6)
-        adx = dx.rolling(period).mean()
+        return dx.rolling(period).mean()
 
-        return adx
 
     def _calculate_obv(self, close: pd.Series, volume: pd.Series) -> pd.Series:
         """Calculate On-Balance Volume."""
@@ -398,8 +395,7 @@ class FeatureEngine:
         mfm = mfm.clip(-1, 1)
         mfv = mfm * volume
 
-        ad_line = mfv.cumsum()
-        return ad_line
+        return mfv.cumsum()
 
     def _calculate_mfi(self, data: pd.DataFrame, period: int) -> pd.Series:
         """Calculate Money Flow Index."""
@@ -418,8 +414,7 @@ class FeatureEngine:
             money_flow.where(typical_price < typical_price.shift(1), 0).rolling(period).sum()
         )
 
-        mfi = 100 - (100 / (1 + positive_flow / (negative_flow + 1e-6)))
-        return mfi
+        return 100 - (100 / (1 + positive_flow / (negative_flow + 1e-6)))
 
     def _calculate_choppiness(self, data: pd.DataFrame, period: int) -> pd.Series:
         """Calculate Choppiness Index."""
@@ -429,8 +424,7 @@ class FeatureEngine:
         tr = self._calculate_atr(data, 1) * period
         range_sum = (high - low).rolling(period).sum()
 
-        choppiness = 100 * np.log10(range_sum / tr) / np.log10(period)
-        return choppiness
+        return 100 * np.log10(range_sum / tr) / np.log10(period)
 
     def get_feature_summary(self) -> pd.DataFrame:
         """Get summary statistics for all features."""

@@ -28,7 +28,6 @@ class Strategy(ABC):
         Returns:
             Dictionary of symbol -> signal (-1 to 1)
         """
-        pass
 
 
 class SimpleMAStrategy(Strategy):
@@ -141,9 +140,8 @@ def create_strategy(strategy_type: str, config: dict[str, Any]) -> Strategy:
     """Factory function to create strategies"""
     if strategy_type == "simple_ma":
         return SimpleMAStrategy(config)
-    elif strategy_type == "random":
+    if strategy_type == "random":
         return RandomStrategy(config)
-    elif strategy_type == "regime_aware":
+    if strategy_type == "regime_aware":
         return RegimeAwareStrategy(config)
-    else:
-        raise ValueError(f"Unknown strategy type: {strategy_type}")
+    raise ValueError(f"Unknown strategy type: {strategy_type}")

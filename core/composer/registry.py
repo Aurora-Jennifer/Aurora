@@ -75,36 +75,33 @@ class Registry:
         if name in self._strategies:
             cls = self._strategies[name]
             return cls(**kwargs)
-        elif name in self._factories:
+        if name in self._factories:
             factory = self._factories[name]
             return factory(**kwargs)
-        else:
-            logger.error(f"Strategy not found: {name}")
-            return None
+        logger.error(f"Strategy not found: {name}")
+        return None
 
     def build_regime_extractor(self, name: str, **kwargs) -> RegimeExtractor | None:
         """Build a regime extractor instance."""
         if name in self._regime_extractors:
             cls = self._regime_extractors[name]
             return cls(**kwargs)
-        elif name in self._factories:
+        if name in self._factories:
             factory = self._factories[name]
             return factory(**kwargs)
-        else:
-            logger.error(f"Regime extractor not found: {name}")
-            return None
+        logger.error(f"Regime extractor not found: {name}")
+        return None
 
     def build_composer(self, name: str, **kwargs) -> Composer | None:
         """Build a composer instance."""
         if name in self._composers:
             cls = self._composers[name]
             return cls(**kwargs)
-        elif name in self._factories:
+        if name in self._factories:
             factory = self._factories[name]
             return factory(**kwargs)
-        else:
-            logger.error(f"Composer not found: {name}")
-            return None
+        logger.error(f"Composer not found: {name}")
+        return None
 
     def list_strategies(self) -> list[str]:
         """List all registered strategy names."""
@@ -189,8 +186,7 @@ def create_momentum_strategy_adapter():
 
         if short_ma > long_ma:
             return 0.5  # Positive momentum
-        else:
-            return -0.5  # Negative momentum
+        return -0.5  # Negative momentum
 
     from .contracts import SimpleStrategy
 
@@ -224,10 +220,9 @@ def create_mean_reversion_strategy_adapter():
 
         if z_score > 1.0:
             return -0.5  # Overbought, sell
-        elif z_score < -1.0:
+        if z_score < -1.0:
             return 0.5  # Oversold, buy
-        else:
-            return 0.0  # Neutral
+        return 0.0  # Neutral
 
     from .contracts import SimpleStrategy
 
@@ -256,10 +251,9 @@ def create_breakout_strategy_adapter():
 
         if current_price >= high_20 * 0.99:  # Near high
             return 0.5  # Breakout up
-        elif current_price <= low_20 * 1.01:  # Near low
+        if current_price <= low_20 * 1.01:  # Near low
             return -0.5  # Breakout down
-        else:
-            return 0.0  # No breakout
+        return 0.0  # No breakout
 
     from .contracts import SimpleStrategy
 

@@ -12,11 +12,8 @@ NEGATIVE_PRICES = "Negative prices"
 OHLC_INVARIANT = "OHLC invariant violation"
 LOOKAHEAD = "Lookahead contamination"
 FUTURE_DATA = "Future data present"
-from inspect import signature as _mutmut_signature
+from collections.abc import Callable
 from typing import Annotated
-from typing import Callable
-from typing import ClassVar
-
 
 MutantDict = Annotated[dict[str, Callable], "Mutant"]
 

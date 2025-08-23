@@ -58,8 +58,7 @@ def load_feature_data(
     if not all_data:
         raise ValueError("No feature data found")
 
-    combined = pd.concat(all_data, ignore_index=False)
-    return combined
+    return pd.concat(all_data, ignore_index=False)
 
 
 def prepare_training_data(
@@ -101,9 +100,8 @@ def create_ridge_pipeline() -> Pipeline:
         alphas=[0.1, 1.0, 10.0], cv=TimeSeriesSplit(n_splits=5), scoring="neg_mean_squared_error"
     )
 
-    pipeline = Pipeline([("scaler", scaler), ("ridge", ridge)])
+    return Pipeline([("scaler", scaler), ("ridge", ridge)])
 
-    return pipeline
 
 
 def train_model(train_df: pd.DataFrame, random_state: int = 42) -> Pipeline:

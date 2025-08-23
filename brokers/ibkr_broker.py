@@ -87,9 +87,8 @@ class IBKRBroker:
                 self._request_account_info()
 
                 return True
-            else:
-                logger.error("Failed to connect to IBKR")
-                return False
+            logger.error("Failed to connect to IBKR")
+            return False
 
         except Exception as e:
             logger.error(f"Failed to connect to IBKR: {e}")
@@ -253,9 +252,8 @@ class IBKRBroker:
                 self.orders[order_id] = trade
                 logger.info(f"Order placed: {symbol} {quantity} shares at {order_type}")
                 return order_id
-            else:
-                logger.error(f"Order failed: {trade.orderStatus.status}")
-                return None
+            logger.error(f"Order failed: {trade.orderStatus.status}")
+            return None
 
         except Exception as e:
             logger.error(f"Failed to place order: {e}")
@@ -275,12 +273,10 @@ class IBKRBroker:
                 if trade.orderStatus.status == "Cancelled":
                     logger.info(f"Order {order_id} cancelled successfully")
                     return True
-                else:
-                    logger.error(f"Failed to cancel order {order_id}")
-                    return False
-            else:
-                logger.error(f"Order {order_id} not found")
+                logger.error(f"Failed to cancel order {order_id}")
                 return False
+            logger.error(f"Order {order_id} not found")
+            return False
 
         except Exception as e:
             logger.error(f"Failed to cancel order: {e}")
@@ -350,9 +346,8 @@ class IBKRBroker:
                 df = pd.DataFrame(data)
                 df.set_index("Date", inplace=True)
                 return df
-            else:
-                logger.warning(f"No market data received for {symbol}")
-                return None
+            logger.warning(f"No market data received for {symbol}")
+            return None
 
         except Exception as e:
             logger.error(f"Failed to get market data for {symbol}: {e}")
@@ -375,9 +370,8 @@ class IBKRBroker:
             ticker = self.ib.ticker(contract)
             if ticker and ticker.last:
                 return ticker.last
-            else:
-                logger.warning(f"No real-time price available for {symbol}")
-                return None
+            logger.warning(f"No real-time price available for {symbol}")
+            return None
 
         except Exception as e:
             logger.error(f"Failed to get real-time price for {symbol}: {e}")
@@ -420,9 +414,8 @@ def test_ibkr_connection():
 
             broker.disconnect()
             return True
-        else:
-            print("❌ Failed to connect to IBKR")
-            return False
+        print("❌ Failed to connect to IBKR")
+        return False
 
     except Exception as e:
         print(f"❌ Error testing IBKR connection: {e}")

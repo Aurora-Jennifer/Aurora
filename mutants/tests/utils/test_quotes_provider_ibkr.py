@@ -1,6 +1,5 @@
 # tests/utils/test_quotes_provider_ibkr.py
 import pytest
-
 from utils.quotes_provider_ibkr import IBKRQuoteConfig, IBKRQuoteProvider
 
 

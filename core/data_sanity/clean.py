@@ -2,10 +2,13 @@
 Non-finite value handling and repair utilities.
 """
 
-import numpy as np, pandas as pd
-from .errors import DataSanityError, estring
-from .codes import NONFINITE, INVALID_DTYPE, PRICES_GT
+import numpy as np
+import pandas as pd
+
+from .codes import INVALID_DTYPE, NONFINITE
 from .columnmap import map_ohlcv
+from .errors import DataSanityError, estring
+
 
 def coerce_ohlcv_numeric(df: pd.DataFrame, profile) -> pd.DataFrame:
     out = df.copy()
@@ -15,10 +18,10 @@ def coerce_ohlcv_numeric(df: pd.DataFrame, profile) -> pd.DataFrame:
         raise DataSanityError(estring("Missing required columns", "['Close']"))
     # Synthesize Close in lenient mode only
     if "Close" not in m and profile.get("allow_repairs", True):
-        o,h,l = m.get("Open"), m.get("High"), m.get("Low")
-        if o and h and l:
+        o,h,low = m.get("Open"), m.get("High"), m.get("Low")
+        if o and h and low:
             out["Close"] = np.clip(pd.to_numeric(out[o], errors="coerce"),
-                                   pd.to_numeric(out[l], errors="coerce"),
+                                   pd.to_numeric(out[low], errors="coerce"),
                                    pd.to_numeric(out[h], errors="coerce"))
             m["Close"] = "Close"
 

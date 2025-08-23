@@ -50,30 +50,28 @@ class Position:
                     self.avg_price = total_cost / new_qty
                 self.qty = new_qty
                 return 0.0  # No realized PnL on position increase
-            else:
-                # Short position - this reduces exposure (covers short)
-                if qty <= abs(self.qty):
-                    # Partial cover
-                    realized = (self.avg_price - price) * qty  # For shorts: profit when price falls
-                    self.qty += qty  # qty is positive, so this reduces the negative
-                    if abs(self.qty) < 1e-6:
-                        self.avg_price = 0.0
-                    return realized
-                else:
-                    # Full cover plus new long
-                    cover_qty = abs(self.qty)
-                    new_long_qty = qty - cover_qty
+            # Short position - this reduces exposure (covers short)
+            if qty <= abs(self.qty):
+                # Partial cover
+                realized = (self.avg_price - price) * qty  # For shorts: profit when price falls
+                self.qty += qty  # qty is positive, so this reduces the negative
+                if abs(self.qty) < 1e-6:
+                    self.avg_price = 0.0
+                return realized
+            # Full cover plus new long
+            cover_qty = abs(self.qty)
+            new_long_qty = qty - cover_qty
 
-                    # Realized PnL on the cover portion
-                    realized = (self.avg_price - price) * cover_qty
+            # Realized PnL on the cover portion
+            realized = (self.avg_price - price) * cover_qty
 
-                    # Set up new long position
-                    self.qty = new_long_qty
-                    self.avg_price = price
+            # Set up new long position
+            self.qty = new_long_qty
+            self.avg_price = price
 
-                    return realized
+            return realized
 
-        elif side.upper() == "SELL":
+        if side.upper() == "SELL":
             # Determine if this increases or reduces exposure
             if self.qty <= 0:
                 # Short position or flat - this increases short exposure
@@ -86,30 +84,27 @@ class Position:
                     self.avg_price = total_value / new_qty
                 self.qty = new_qty
                 return 0.0  # No realized PnL on position increase
-            else:
-                # Long position - this reduces exposure (sells long)
-                if qty <= self.qty:
-                    # Partial sell
-                    realized = (price - self.avg_price) * qty
-                    self.qty -= qty
-                    if abs(self.qty) < 1e-6:
-                        self.avg_price = 0.0
-                    return realized
-                else:
-                    # Full sell plus new short
-                    sell_qty = self.qty
-                    new_short_qty = qty - sell_qty
+            # Long position - this reduces exposure (sells long)
+            if qty <= self.qty:
+                # Partial sell
+                realized = (price - self.avg_price) * qty
+                self.qty -= qty
+                if abs(self.qty) < 1e-6:
+                    self.avg_price = 0.0
+                return realized
+            # Full sell plus new short
+            sell_qty = self.qty
+            new_short_qty = qty - sell_qty
 
-                    # Realized PnL on the sell portion
-                    realized = (price - self.avg_price) * sell_qty
+            # Realized PnL on the sell portion
+            realized = (price - self.avg_price) * sell_qty
 
-                    # Set up new short position
-                    self.qty = -new_short_qty
-                    self.avg_price = price
+            # Set up new short position
+            self.qty = -new_short_qty
+            self.avg_price = price
 
-                    return realized
-        else:
-            raise ValueError(f"Invalid side: {side}")
+            return realized
+        raise ValueError(f"Invalid side: {side}")
 
     def unrealized_pnl(self, price: float) -> float:
         """Calculate unrealized PnL at given price."""
@@ -247,7 +242,7 @@ class PortfolioState:
                     f"Cannot sell {abs(delta):.2f} of {symbol} - only {abs(current_qty):.2f} available"
                 )
                 return False
-        elif (side == "SELL" and current_qty > 0 and 
+        elif (side == "SELL" and current_qty > 0 and
               abs(delta) > current_qty and (target_qty >= 0 or not self.shorting_enabled)):
                 logger.warning(
                     f"Cannot sell {abs(delta):.2f} of {symbol} - only {current_qty:.2f} available"

@@ -1,0 +1,38 @@
+{
+  "model_path": "artifacts/models/1755775496_model.json",
+  "feature_names": [
+    "ret_1d_lag1",
+    "sma_10",
+    "sma_20",
+    "vol_10",
+    "rsi_14"
+  ],
+  "parity": {
+    "parity_ok": false,
+    "error": "ONNX model not found: artifacts/models/1755775496_model.onnx"
+  },
+  "native": {
+    "batch_1": {
+      "p50_latency_ms": 0.5385550002756645,
+      "p95_latency_ms": 9.168906550439706,
+      "p99_latency_ms": 12.00731377086413,
+      "mean_latency_ms": 2.062697399924218,
+      "throughput_qps": 484.8020848994812
+    },
+    "batch_32": {
+      "p50_latency_ms": 0.5434249997051666,
+      "p95_latency_ms": 4.159231199628265,
+      "p99_latency_ms": 4.865250900911655,
+      "mean_latency_ms": 1.3344319799580262,
+      "throughput_qps": 23980.240642169367
+    },
+    "batch_256": {
+      "p50_latency_ms": 0.6760000005670008,
+      "p95_latency_ms": 11.997578600949055,
+      "p99_latency_ms": 12.150839779824313,
+      "mean_latency_ms": 2.656581089977408,
+      "throughput_qps": 96364.4591786871
+    }
+  },
+  "onnx": null
+}

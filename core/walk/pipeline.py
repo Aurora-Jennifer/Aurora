@@ -106,12 +106,11 @@ class Pipeline:
         # Regime classification
         if volatility_level > 0.02:  # High volatility
             return "volatile"
-        elif trend_strength > 0.005 and price_consistency < 0.01:  # Strong trend
+        if trend_strength > 0.005 and price_consistency < 0.01:  # Strong trend
             return "trend"
-        elif price_consistency < 0.008:  # Low volatility, choppy
+        if price_consistency < 0.008:  # Low volatility, choppy
             return "chop"
-        else:
-            return "unknown"
+        return "unknown"
 
     def _trend_following_signals(
         self, returns: np.ndarray, price_ma_ratio: np.ndarray, zscore: np.ndarray

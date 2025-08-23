@@ -222,13 +222,12 @@ def turnover(positions: pd.Series, method: str = "absolute") -> float:
 
     if method == "absolute":
         return position_changes.mean()
-    elif method == "relative":
+    if method == "relative":
         total_positions = positions.abs().mean()
         if total_positions == 0:
             return 0.0
         return position_changes.mean() / total_positions
-    else:
-        raise ValueError(f"Unknown turnover method: {method}")
+    raise ValueError(f"Unknown turnover method: {method}")
 
 
 def hit_rate(returns: pd.Series) -> float:

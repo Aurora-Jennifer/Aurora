@@ -1,8 +1,18 @@
 # Trading System Documentation Index
 
-## 📁 **Documentation Organization**
+> Note: Legacy/archived docs have been moved to `attic/docs/`. See that folder for historical content retained for reference.
 
-This documentation is organized by category, date, and relevance to help you find the information you need quickly.
+## Purpose
+Central index for project documentation organized by category, date, and usage. For high-level project overview, see root `README.md`.
+
+## Entrypoints
+- Summaries: `docs/summaries/` (core, data_sanity, signals, strategies)
+- Runbooks: `docs/runbooks/`
+- Audit trail: `docs/audit/`
+
+## Do-not-touch
+- Public API contracts listed in summaries
+- Audit folders under `docs/audit/`
 
 ---
 
@@ -69,11 +79,6 @@ This documentation is organized by category, date, and relevance to help you fin
 ### **Technical Guides**
 - **`guides/REFACTORING_GUIDE.md`** - Code refactoring guidelines and best practices
 - **`guides/MULTI_ASSET_ANALYSIS_GUIDE.md`** - Multi-asset analysis guide
-
-### **Data Sanity & Guardrails**
-- **`GO_NOGO_GATE.md`** - Go/No-Go decision gates and validation
-- **`CURSOR_DATASANITY_GUARDRAILS.md`** - Data sanity guardrails for Cursor
-- **`DATASANITY_GUARDRAILS.md`** - General data sanity guardrails
 
 **Status**: 📖 **ACTIVE** - Essential for development and usage
 
@@ -161,7 +166,7 @@ This documentation is organized by category, date, and relevance to help you fin
 
 ### **By Topic**
 - **Composer**: Search in `sessions/` for recent composer work
-- **Data Sanity**: Search in `guides/` and root `docs/` for data validation
+- **Data Sanity**: Search `docs/summaries/data_sanity.md` and `docs/runbooks/datasanity_ops.md`
 - **Performance**: Search in `analysis/` and `reports/` for performance info
 - **Configuration**: Search in `guides/` for configuration options
 
@@ -188,5 +193,5 @@ If you can't find what you're looking for:
 3. **Search by topic** using the search tips
 4. **Check the main README.md** in the root directory for high-level overview
 
-**Last Updated**: August 17, 2025
+**Last Updated**: August 21, 2025
 **Organization**: By category, date, and relevance

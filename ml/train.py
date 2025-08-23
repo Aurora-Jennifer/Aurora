@@ -309,11 +309,9 @@ def _generate_predictions(model: Any, X_test: pd.DataFrame, task_type: str) -> n
         # For classification, return probability of positive class
         if hasattr(model, "predict_proba"):
             return model.predict_proba(X_test)[:, 1]
-        else:
-            return model.predict(X_test)
-    else:
-        # For regression, return raw predictions
         return model.predict(X_test)
+    # For regression, return raw predictions
+    return model.predict(X_test)
 
 
 def _calibrate_predictions(
@@ -433,11 +431,10 @@ def _get_feature_importance(model: Any, feature_cols: list[str]) -> pd.DataFrame
         else:
             return pd.DataFrame()
 
-        importance_df = pd.DataFrame(
+        return pd.DataFrame(
             {"feature": feature_cols, "importance": importance}
         ).sort_values("importance", ascending=False)
 
-        return importance_df
 
     except Exception as e:
         logger.warning(f"Could not extract feature importance: {e}")

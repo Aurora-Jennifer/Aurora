@@ -312,9 +312,8 @@ class RegimeDetector:
         dx = 100 * abs(di_plus - di_minus) / (di_plus + di_minus)
 
         # ADX
-        adx = dx.rolling(period).mean()
+        return dx.rolling(period).mean()
 
-        return adx
 
     def _calculate_atr(
         self, high: pd.Series, low: pd.Series, close: pd.Series, period: int = 14
@@ -325,8 +324,7 @@ class RegimeDetector:
         tr3 = abs(low - close.shift(1))
         tr = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
 
-        atr = tr.rolling(period).mean()
-        return atr
+        return tr.rolling(period).mean()
 
     def _calculate_price_efficiency(self, close: pd.Series, period: int = 20) -> float:
         """Calculate price efficiency (how much price moves in one direction)."""
@@ -340,8 +338,7 @@ class RegimeDetector:
         if total_movement > 0:
             efficiency = net_movement / total_movement
             return min(efficiency, 1.0)
-        else:
-            return 0.5
+        return 0.5
 
     def get_regime_adapted_features(
         self,
@@ -487,10 +484,9 @@ class RegimeAwareFeatureEngine:
         """Calculate trend consistency indicator."""
         # Percentage of days moving in the same direction
         returns = close.pct_change()
-        consistency = returns.rolling(20).apply(
+        return returns.rolling(20).apply(
             lambda x: (x > 0).sum() / len(x) if len(x) > 0 else 0.5
         )
-        return consistency
 
     def _calculate_chop_oscillation(self, close: pd.Series) -> pd.Series:
         """Calculate chop oscillation indicator."""
@@ -503,8 +499,7 @@ class RegimeAwareFeatureEngine:
         """Calculate mean reversion strength indicator."""
         # Distance from moving average
         ma = close.rolling(20).mean()
-        reversion_strength = (close - ma) / ma
-        return reversion_strength
+        return (close - ma) / ma
 
     def _calculate_volatility_regime(self, close: pd.Series) -> pd.Series:
         """Calculate volatility regime indicator."""
@@ -512,8 +507,7 @@ class RegimeAwareFeatureEngine:
         returns = close.pct_change()
         current_vol = returns.rolling(20).std()
         historical_vol = returns.rolling(252).std()
-        vol_regime = current_vol / historical_vol
-        return vol_regime
+        return current_vol / historical_vol
 
     def _calculate_volatility_persistence(self, close: pd.Series) -> pd.Series:
         """Calculate volatility persistence indicator."""
@@ -521,5 +515,4 @@ class RegimeAwareFeatureEngine:
         returns = close.pct_change()
         vol = returns.rolling(20).std()
         vol_threshold = vol.rolling(252).quantile(0.8)
-        persistence = (vol > vol_threshold).rolling(10).sum() / 10
-        return persistence
+        return (vol > vol_threshold).rolling(10).sum() / 10

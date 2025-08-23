@@ -335,8 +335,7 @@ def check_leakage_sentry() -> CheckResult:
                     "reasonable": weighted_sharpe <= 3.0,
                 },
             )
-        else:
-            return bad("leakage_sentry", {"error": "Could not parse Sharpe ratio"})
+        return bad("leakage_sentry", {"error": "Could not parse Sharpe ratio"})
 
     except Exception as e:
         return bad("leakage_sentry", {"exception": str(e)})
@@ -482,8 +481,7 @@ def check_benchmark_sanity() -> CheckResult:
                 )
 
             return ok("benchmark_sanity", {"bh_return": bh_return, "reasonable": True})
-        else:
-            return bad("benchmark_sanity", {"error": "Could not parse buy-and-hold return"})
+        return bad("benchmark_sanity", {"error": "Could not parse buy-and-hold return"})
 
     except Exception as e:
         return bad("benchmark_sanity", {"exception": str(e)})
@@ -556,8 +554,7 @@ def check_pnl_reconciliation() -> CheckResult:
 
         if basic_performance:
             return ok("pnl_reconciliation", performance_indicators)
-        else:
-            return bad("pnl_reconciliation", performance_indicators)
+        return bad("pnl_reconciliation", performance_indicators)
 
     except Exception as e:
         return bad("pnl_reconciliation", {"exception": str(e)})

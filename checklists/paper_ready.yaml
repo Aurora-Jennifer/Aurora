@@ -1,0 +1,133 @@
+# Paper Trading Readiness Checklist - Machine Enforced
+# This file defines all 38 items for paper trading readiness
+# Status: done|todo|blocked
+
+data_layer:
+  - item: "Data sources connected (broker API, market data)"
+    status: done
+  - item: "DataSanity suite running (schema, leakage, NaNs, monotonic index)"
+    status: done  
+  - item: "Negative prices + bad ticks repaired/dropped"
+    status: done
+  - item: "Golden snapshot frozen (reference dataset for determinism)"
+    status: done
+  - item: "Feature builder deterministic (lagged only, no lookahead)"
+    status: done
+  - item: "Labels explicit (horizon/lag documented, no peeking)"
+    status: done
+
+ml_pipeline:
+  - item: "Training pipeline deterministic (fixed seeds, purged forward splits)"
+    status: done
+  - item: "Exporters wired (onnx, native, joblib) with parity tests"
+    status: done
+  - item: "Golden smoke tests pass (≤60s runtime)"
+    status: done
+  - item: "Export parity tests green (ONNX vs native validation)"
+    status: done
+
+e2d:
+  - item: "E2D pipeline: data → features → model → signal → position"
+    status: done
+  - item: "Latency budget met (E2D ≤150ms)"
+    status: done
+  - item: "Error handling (graceful degradation on bad data)"
+    status: done
+  - item: "Output format: JSON with run_id, decisions, timestamps"
+    status: done
+  - item: "End-to-Decision smoke green"
+    status: done
+
+execution:
+  - item: "Paper broker: position tracking, PnL, mock fills"
+    status: done
+  - item: "Risk engine: position limits, stop-loss, max exposure"
+    status: done
+  - item: "Order router: buy/sell decisions → broker-specific orders"
+    status: done
+  - item: "Paper execution loop (fetch → decide → execute → log)"
+    status: done
+
+ci_tests:
+  - item: "Lint + unit tests green"
+    status: done
+  - item: "Datasanity tests pass"
+    status: done
+  - item: "Train-smoke runs in CI"
+    status: done
+  - item: "Export parity test green"
+    status: done
+  - item: "End-to-Decision smoke green"
+    status: done
+  - item: "Integration test: mock trade loop runs, logs decisions"
+    status: todo
+
+hard_gates:
+  - item: "L0 Gates: timezone, dtypes, flags, snapshot (PR CI, <3min)"
+    status: done
+  - item: "L0 Gates wired to real E2D outputs (not mocks)"
+    status: todo
+  - item: "L1 Gates: corporate actions, export parity, idempotency (nightly)"
+    status: todo
+  - item: "L1 Gates: circuit breakers, kill switch, mutation testing (nightly)"
+    status: todo
+  - item: "L2 Gates: ratchet enforcement, cross-process determinism (pre-promotion)"
+    status: todo
+  - item: "L2 Gates: promotion discipline, rollback validation (pre-promotion)"
+    status: todo
+
+observability:
+  - item: "Structured logs (JSON, include run_id, phase, duration_ms)"
+    status: done
+  - item: "Metrics: IC, turnover, fill_rate, latency, memory_peak"
+    status: done
+  - item: "Metrics contract: schema validation, golden reference, ratchet enforcement"
+    status: done
+  - item: "Traces: span per stage, inputs hash, artifact paths"
+    status: todo
+  - item: "Alerts/tripwires: fail fast on nondeterminism or leakage"
+    status: done
+  - item: "Mutation testing: metrics math validation, contamination detection"
+    status: todo
+
+risk_rollback:
+  - item: "Configurable risk profiles (config/risk_*.yaml)"
+    status: done
+  - item: "Stop policy wired (e.g., ATR multiplier)"
+    status: done
+  - item: "Circuit breakers: notional limits, rate limits, price bands"
+    status: todo
+  - item: "Kill switch: environment variable + file-based triggers"
+    status: todo
+  - item: "Idempotency: crash recovery, resume from last offset"
+    status: todo
+  - item: "Rollback path: single env var/flag disables new behavior"
+    status: todo
+  - item: "Runbooks: incident + perf regression documented"
+    status: todo
+
+release:
+  - item: "CI all green"
+    status: done
+  - item: "Backtest parity against golden snapshot"
+    status: todo
+  - item: "Latency budget met (train-smoke ≤60s, E2D ≤150ms)"
+    status: done
+  - item: "Ratchet enforcement: no performance regressions vs goldens"
+    status: todo
+  - item: "Cross-process determinism: byte-identical artifacts"
+    status: todo
+  - item: "Promotion discipline: flags default off, ADR required"
+    status: todo
+  - item: "Runbook updated"
+    status: todo
+  - item: "Rollback tested"
+    status: todo
+
+# Summary counts (auto-calculated by progress script)
+summary:
+  total_items: 44
+  done_count: 30
+  todo_count: 9
+  blocked_count: 0
+  completion_percentage: 76

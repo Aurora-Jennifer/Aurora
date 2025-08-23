@@ -16,7 +16,6 @@ import yaml
 
 _sys.path.append(_os.path.dirname(_os.path.dirname(__file__)))
 import contextlib
-
 from importlib import import_module
 
 CanaryConfig = import_module("core.execution.canary_limits").CanaryConfig

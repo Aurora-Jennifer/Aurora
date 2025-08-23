@@ -410,14 +410,13 @@ class ProfitLearner:
     def extract_trade_features(self, trade_data: dict[str, Any]) -> dict[str, float]:
         """Extract features specific to the trade."""
         try:
-            features = {
+            return {
                 "position_size": float(trade_data.get("position_size", 0.0)),
                 "entry_price": float(trade_data.get("entry_price", 0.0)),
                 "hold_duration": float(trade_data.get("hold_duration", 1)),
                 "strategy_confidence": float(trade_data.get("confidence", 0.5)),
                 "market_regime": float(trade_data.get("regime_confidence", 0.5)),
             }
-            return features
         except Exception as e:
             logger.error(f"Error extracting trade features: {e}")
             return {}

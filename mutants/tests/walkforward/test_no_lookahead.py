@@ -8,9 +8,9 @@ import logging
 import numpy as np
 import pandas as pd
 import pytest
+from scripts.walkforward_framework import build_feature_table, gen_walkforward
 
 from core.data_sanity import DataSanityError, DataSanityValidator
-from scripts.walkforward_framework import build_feature_table, gen_walkforward
 
 logger = logging.getLogger(__name__)
 

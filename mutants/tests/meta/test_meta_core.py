@@ -8,7 +8,7 @@ import pandas as pd
 import pytest
 
 from core.data_sanity import DataSanityError, DataSanityValidator
-from core.meta.invariance import invariance_score, additive_invariance_score
+from core.meta.invariance import additive_invariance_score, invariance_score
 from tests.factories import base_df
 from tests.helpers.assertions import assert_data_integrity, assert_verdict
 

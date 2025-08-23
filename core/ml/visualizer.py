@@ -397,7 +397,7 @@ class MLVisualizer:
             fontsize=10,
             verticalalignment="top",
             fontfamily="monospace",
-            bbox=dict(boxstyle="round,pad=0.3", facecolor="lightblue", alpha=0.7),
+            bbox={"boxstyle": "round,pad=0.3", "facecolor": "lightblue", "alpha": 0.7},
         )
 
         ax.set_title("Learning Summary")

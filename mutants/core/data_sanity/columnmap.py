@@ -8,11 +8,9 @@ _SYNONYMS = {
     "Low": {"Low", "low"},
     "Volume": {"Volume", "volume", "vol"}
 }
+from collections.abc import Callable
 from inspect import signature as _mutmut_signature
-from typing import Annotated
-from typing import Callable
-from typing import ClassVar
-
+from typing import Annotated, ClassVar
 
 MutantDict = Annotated[dict[str, Callable], "Mutant"]
 

@@ -1,0 +1,17 @@
+risk:
+  volatility_target_pct_day: 0.5
+  max_gross_exposure: 0.5
+  max_leverage: 1.5
+  max_symbol_weight: 0.10
+  max_positions: 12
+  max_order_notional: 250.0
+  slippage_bps: 5
+  fee_bps: 1
+  min_price: 2.0
+  ban_list: []
+  cooldown_after_fill_s: 30
+  intraday_dd_limit_pct: 1.0
+  daily_loss_limit_pct: 2.0
+  max_order_reject_rate: 0.15
+
+

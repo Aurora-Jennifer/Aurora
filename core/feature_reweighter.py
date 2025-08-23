@@ -182,10 +182,8 @@ class FeatureReweighter:
         rolling_std = feature_returns.rolling(self.rolling_window).std()
 
         if rolling_std.iloc[-1] > 0:
-            sharpe = rolling_mean.iloc[-1] / rolling_std.iloc[-1]
-            return sharpe
-        else:
-            return 0.0
+            return rolling_mean.iloc[-1] / rolling_std.iloc[-1]
+        return 0.0
 
     def _calculate_rolling_returns(self, feature: pd.Series, returns: pd.Series) -> float:
         """Calculate rolling returns for feature."""
@@ -268,7 +266,7 @@ class FeatureReweighter:
         sharpe_values = [perf["sharpe"] for perf in regime_perf.values()]
         returns_values = [perf["returns"] for perf in regime_perf.values()]
 
-        summary = {
+        return {
             "num_features": len(regime_perf),
             "avg_ic": np.mean(ic_values) if ic_values else 0.0,
             "avg_sharpe": np.mean(sharpe_values) if sharpe_values else 0.0,
@@ -276,7 +274,6 @@ class FeatureReweighter:
             "top_features": self._get_top_features(regime, 5),
         }
 
-        return summary
 
     def _get_top_features(self, regime: str, n: int = 5) -> list[dict]:
         """Get top performing features for a regime."""
@@ -421,9 +418,8 @@ class AdaptiveFeatureEngine:
 
         # Calculate trend strength
         ma = close.rolling(lookback).mean()
-        trend_strength = (close - ma) / ma
+        return (close - ma) / ma
 
-        return trend_strength
 
     def _calculate_adaptive_oscillation(self, close: pd.Series, regime_summary: dict) -> pd.Series:
         """Calculate adaptive oscillation for chop regime."""
@@ -445,9 +441,8 @@ class AdaptiveFeatureEngine:
         period = int(20 * (1 + avg_sharpe))
 
         ma = close.rolling(period).mean()
-        reversion = (close - ma) / ma
+        return (close - ma) / ma
 
-        return reversion
 
     def _calculate_adaptive_volatility(self, close: pd.Series, regime_summary: dict) -> pd.Series:
         """Calculate adaptive volatility."""
@@ -457,9 +452,8 @@ class AdaptiveFeatureEngine:
         period = int(15 * (1 + abs(avg_returns)))
 
         returns = close.pct_change()
-        volatility = returns.rolling(period).std()
+        return returns.rolling(period).std()
 
-        return volatility
 
     def _calculate_adaptive_risk(self, close: pd.Series, regime_summary: dict) -> pd.Series:
         """Calculate adaptive risk measure."""
@@ -469,9 +463,8 @@ class AdaptiveFeatureEngine:
         period = int(10 * (1 + avg_sharpe))
 
         returns = close.pct_change()
-        risk = returns.rolling(period).apply(lambda x: np.percentile(x, 5))  # 5th percentile
+        return returns.rolling(period).apply(lambda x: np.percentile(x, 5))  # 5th percentile
 
-        return risk
 
     def update_performance(
         self,

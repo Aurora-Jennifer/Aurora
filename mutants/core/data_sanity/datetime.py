@@ -1,12 +1,17 @@
-import pandas as pd
-from .errors import DataSanityError, estring
-from .codes import (TZ_NAIVE, TZ_NON_UTC, INDEX_NON_MONOTONIC,
-                    DUPLICATE_TSTAMPS, NO_VALID_DT_INDEX)
+from collections.abc import Callable
 from inspect import signature as _mutmut_signature
-from typing import Annotated
-from typing import Callable
-from typing import ClassVar
+from typing import Annotated, ClassVar
 
+import pandas as pd
+
+from .codes import (
+    DUPLICATE_TSTAMPS,
+    INDEX_NON_MONOTONIC,
+    NO_VALID_DT_INDEX,
+    TZ_NAIVE,
+    TZ_NON_UTC,
+)
+from .errors import DataSanityError, estring
 
 MutantDict = Annotated[dict[str, Callable], "Mutant"]
 

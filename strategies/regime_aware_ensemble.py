@@ -384,14 +384,13 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
             ensemble_weight /= total_weight
 
         # Blend signals
-        blended_signals = (
+        return (
             trend_weight * trend_signals
             + mean_reversion_weight * mean_reversion_signals
             + breakout_weight * breakout_signals
             + ensemble_weight * (trend_signals + mean_reversion_signals) / 2
         )
 
-        return blended_signals
 
     def _apply_confidence_filter(
         self, signals: pd.Series, regime_params: RegimeParams
@@ -440,8 +439,7 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
         gain = (delta.where(delta > 0, 0)).rolling(window=period).mean()
         loss = (-delta.where(delta < 0, 0)).rolling(window=period).mean()
         rs = gain / loss
-        rsi = 100 - (100 / (1 + rs))
-        return rsi
+        return 100 - (100 / (1 + rs))
 
     def _calculate_bollinger_bands(
         self, close: pd.Series, period: int = 20
@@ -461,8 +459,7 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
         tr2 = abs(high - close.shift(1))
         tr3 = abs(low - close.shift(1))
         tr = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
-        atr = tr.rolling(period).mean()
-        return atr
+        return tr.rolling(period).mean()
 
     def _calculate_trend_strength(self, close: pd.Series, period: int = 20) -> pd.Series:
         """Calculate trend strength using linear regression slope."""
@@ -483,15 +480,13 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
         """Calculate trend persistence."""
         # How long price stays above/below moving average
         ma = close.rolling(20).mean()
-        above_ma = (close > ma).rolling(10).sum() / 10
-        return above_ma
+        return (close > ma).rolling(10).sum() / 10
 
     def _calculate_oscillation_frequency(self, close: pd.Series) -> pd.Series:
         """Calculate oscillation frequency."""
         # Count of crosses above/below moving average
         ma = close.rolling(20).mean()
-        crosses = ((close > ma) != (close.shift(1) > ma)).rolling(10).sum()
-        return crosses
+        return ((close > ma) != (close.shift(1) > ma)).rolling(10).sum()
 
     def _calculate_mean_reversion_strength(self, close: pd.Series) -> pd.Series:
         """Calculate mean reversion strength."""
@@ -510,8 +505,7 @@ class RegimeAwareEnsembleStrategy(BaseStrategy):
         returns = close.pct_change()
         vol = returns.rolling(20).std()
         vol_threshold = vol.rolling(252).quantile(0.8)
-        persistence = (vol > vol_threshold).rolling(10).sum() / 10
-        return persistence
+        return (vol > vol_threshold).rolling(10).sum() / 10
 
     def get_regime_info(self) -> dict:
         """Get current regime information."""

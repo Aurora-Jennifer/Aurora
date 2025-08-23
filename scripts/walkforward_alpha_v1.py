@@ -7,14 +7,16 @@ Uses the trained Ridge regression model for predictions.
 import argparse
 import logging
 import sys
+from importlib import import_module
 from pathlib import Path
 
 import numpy as np
 
+from ml.trainers.train_linear import load_feature_data
+
 # Add project root to path
 sys.path.append(str(Path(__file__).parent.parent))
 
-from importlib import import_module
 
 metrics_stats = import_module("core.metrics.stats")
 (
@@ -37,8 +39,6 @@ setup_logging = import_module("core.utils").setup_logging
 Fold = import_module("core.walk.folds").Fold
 gen_walkforward = import_module("core.walk.folds").gen_walkforward
 create_ml_pipeline = import_module("core.walk.ml_pipeline").create_ml_pipeline
-from ml.trainers.train_linear import load_feature_data
-
 logger = setup_logging("logs/walkforward_alpha_v1.log", logging.INFO)
 
 

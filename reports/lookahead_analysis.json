@@ -1,0 +1,17 @@
+{
+  "data_path": "artifacts/snapshots/golden_ml_v1/SPY.parquet",
+  "issues_detected": 2,
+  "issues": [
+    "Rolling feature 'sma_10' may not be properly lagged",
+    "Rolling feature 'sma_20' may not be properly lagged"
+  ],
+  "fixes_applied": [
+    "Created synthetic timestamps",
+    "Sorted by (symbol, timestamp)"
+  ],
+  "suggested_fixes": [
+    "Add .shift(1) to rolling features to ensure proper lagging",
+    "Add .shift(1) to rolling features to ensure proper lagging"
+  ],
+  "status": "FAIL"
+}

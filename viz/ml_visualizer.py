@@ -209,7 +209,7 @@ class MLVisualizer(BaseVisualizer):
             0.95,
             f"Correlation: {corr:.3f}",
             transform=ax.transAxes,
-            bbox=dict(boxstyle="round", facecolor="white", alpha=0.8),
+            bbox={"boxstyle": "round", "facecolor": "white", "alpha": 0.8},
         )
 
     def _plot_confidence_distribution_simulation(self, ax: plt.Axes):

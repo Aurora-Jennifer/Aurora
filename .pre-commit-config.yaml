@@ -3,55 +3,53 @@ repos:
     rev: v0.6.9
     hooks:
       - id: ruff
-        args: [ "--fix" ]
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.11.2
+    hooks:
+      - id: mypy
+        args: [--strict, --ignore-missing-imports]
+        additional_dependencies: [types-all]
+
   - repo: https://github.com/PyCQA/bandit
-    rev: 1.7.9
+    rev: 1.7.10
     hooks:
       - id: bandit
-        args: [ "-r", "." ]
-repos:
-- repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.6.9
-  hooks:
-    - id: ruff
-    - id: ruff-format
-- repo: https://github.com/pre-commit/mirrors-mypy
-  rev: v1.10.0
-  hooks:
-    - id: mypy
-      additional_dependencies: [types-requests]
-repos:
+        args: [-r, ., -f, txt]
+        exclude: ^tests/
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v5.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
       - id: check-added-large-files
+        args: ['--maxkb=1000']
       - id: check-merge-conflict
-      - id: debug-statements
+      - id: forbid-new-submodules
 
-  - repo: https://github.com/psf/black
-    rev: 24.8.0
+  - repo: local
     hooks:
-      - id: black
+      - id: forbid-print-statements
+        name: Forbid print() statements
+        entry: grep -r "print(" --include="*.py" --exclude-dir=tests .
+        language: system
+        pass_filenames: false
+        always_run: true
+        
+      - id: require-todo-issue
+        name: Require TODO issue ID
+        entry: bash -c 'if grep -r "TODO" --include="*.py" . | grep -v "#.*TODO.*#[0-9]"; then echo "Found TODO without issue ID"; exit 1; fi'
+        language: system
+        pass_filenames: false
+        always_run: true
 
-  - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
-    hooks:
-      - id: isort
-        args: ["--profile", "black"]
-
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.5.6
-    hooks:
-      - id: ruff
-        args: ["--fix"]
-      - id: ruff-format
-
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.8.0
-    hooks:
-      - id: mypy
-        additional_dependencies: [types-requests, types-PyYAML]
-        args: ["--ignore-missing-imports"]
+      - id: test-quick-gates
+        name: Quick test gates
+        entry: make gates-quick
+        language: system
+        pass_filenames: false
+        stages: [commit]

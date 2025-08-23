@@ -52,7 +52,7 @@ def create_asset_specific_data(symbol: str, days: int = 100) -> pd.DataFrame:
     prices = base_price * np.exp(np.cumsum(returns))
 
     # Create OHLCV data
-    data = pd.DataFrame(
+    return pd.DataFrame(
         {
             "Date": dates,
             "Open": prices * (1 + np.random.normal(0, 0.001, days)),
@@ -63,7 +63,6 @@ def create_asset_specific_data(symbol: str, days: int = 100) -> pd.DataFrame:
         }
     )
 
-    return data
 
 
 def test_asset_class_detection():

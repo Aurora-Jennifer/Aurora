@@ -143,9 +143,8 @@ class BaseVisualizer:
                     data = json.load(f)
                 self.logger.info(f"Loaded JSON data from: {file_path}")
                 return data
-            else:
-                self.logger.warning(f"JSON file not found: {file_path}")
-                return None
+            self.logger.warning(f"JSON file not found: {file_path}")
+            return None
         except Exception as e:
             self.logger.error(f"Error loading JSON data from {file_path}: {e}")
             return None
@@ -166,9 +165,8 @@ class BaseVisualizer:
                 df = pd.read_csv(path)
                 self.logger.info(f"Loaded CSV data from: {file_path} ({len(df)} rows)")
                 return df
-            else:
-                self.logger.warning(f"CSV file not found: {file_path}")
-                return None
+            self.logger.warning(f"CSV file not found: {file_path}")
+            return None
         except Exception as e:
             self.logger.error(f"Error loading CSV data from {file_path}: {e}")
             return None

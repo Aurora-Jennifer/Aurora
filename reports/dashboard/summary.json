@@ -1,0 +1,11 @@
+{
+  "dashboard_path": "reports/dashboard/index.html",
+  "generated_at": "2025-08-21T16:22:21Z",
+  "artifacts_found": {
+    "parity": true,
+    "bench": true,
+    "e2d": true,
+    "ablation": false,
+    "backtest": true
+  }
+}

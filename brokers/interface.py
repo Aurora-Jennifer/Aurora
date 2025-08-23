@@ -1,7 +1,9 @@
 from __future__ import annotations
 
-from datetime import datetime
-from typing import Any, Protocol
+from typing import TYPE_CHECKING, Any, Protocol
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 
 class Broker(Protocol):
@@ -83,7 +85,7 @@ def get_broker(venue: str = "example") -> Broker:
         from .example_venue import ExampleVenueBroker
 
         return ExampleVenueBroker()
-    elif venue == "ibkr":
+    if venue == "ibkr":
         from pathlib import Path
 
         import yaml
@@ -106,8 +108,7 @@ def get_broker(venue: str = "example") -> Broker:
             qty_min=ibkr_cfg.get("ibkr", {}).get("qty_min", 1.0),
         )
         return IBKRBroker(config)
-    else:
-        raise ValueError(f"Unknown broker venue: {venue}")
+    raise ValueError(f"Unknown broker venue: {venue}")
 
 
 def normalize_order(symbol: str, side: str, qty: float, px: float | None = None) -> dict[str, Any]:

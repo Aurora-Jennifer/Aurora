@@ -191,9 +191,8 @@ class RiskGuardrails:
         """
         max_position_size = self.risk_limits["max_position_size"]
         max_position_value = capital * max_position_size
-        max_shares = int(max_position_value / price)
+        return int(max_position_value / price)
 
-        return max_shares
 
     def check_portfolio_risk(self, positions: dict, prices: dict, capital: float) -> dict:
         """
@@ -319,9 +318,8 @@ class RiskGuardrails:
 
         returns_array = np.array(returns)
         var_percentile = (1 - confidence_level) * 100
-        var = np.percentile(returns_array, var_percentile)
+        return np.percentile(returns_array, var_percentile)
 
-        return var
 
     def calculate_expected_shortfall(
         self, returns: list[float], confidence_level: float = 0.95
@@ -344,9 +342,8 @@ class RiskGuardrails:
 
         # Calculate expected shortfall
         tail_returns = returns_array[returns_array <= var]
-        expected_shortfall = np.mean(tail_returns) if len(tail_returns) > 0 else var
+        return np.mean(tail_returns) if len(tail_returns) > 0 else var
 
-        return expected_shortfall
 
     def get_risk_report(
         self, positions: dict, prices: dict, capital: float, daily_returns: list[dict]

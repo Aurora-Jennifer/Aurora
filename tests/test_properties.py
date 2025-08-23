@@ -151,7 +151,7 @@ class TestDataSanityProperties:
         validator = DataSanityValidator(profile="strict")
         # Create clean data with valid OHLC relationships
         dates = pd.date_range("2023-01-01", periods=data_size, freq="1min", tz=UTC)
-        
+
         # Generate realistic price data
         base_price = 100.0
         prices = [base_price]
@@ -159,7 +159,7 @@ class TestDataSanityProperties:
             change = np.random.uniform(-0.05, 0.05)
             new_price = prices[-1] * (1 + change)
             prices.append(max(new_price, 0.01))
-        
+
         data = pd.DataFrame(
             {
                 "Open": [p * (1 + np.random.uniform(-0.01, 0.01)) for p in prices],
@@ -170,7 +170,7 @@ class TestDataSanityProperties:
             },
             index=dates,
         )
-        
+
         # Ensure OHLC consistency
         data["High"] = data[["Open", "High", "Close"]].max(axis=1)
         data["Low"] = data[["Open", "Low", "Close"]].min(axis=1)

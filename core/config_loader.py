@@ -89,10 +89,9 @@ class ConfigLoader:
 
         if any(crypto in symbol_upper for crypto in ["BTC", "ETH"]):
             return "crypto"
-        elif any(etf in symbol_upper for etf in ["SPY", "QQQ"]):
+        if any(etf in symbol_upper for etf in ["SPY", "QQQ"]):
             return "etf"
-        else:
-            return "equity"
+        return "equity"
 
     def get_symbols(self, config: dict[str, Any]) -> list:
         """Get list of symbols from config."""

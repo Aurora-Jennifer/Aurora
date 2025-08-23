@@ -6,14 +6,14 @@ Verify that DataSanity validation is properly integrated and catches corruption.
 import numpy as np
 import pandas as pd
 import pytest
-
-from core.data_sanity import DataSanityValidator
 from scripts.walkforward_framework import (
     LeakageProofPipeline,
     build_feature_table,
     gen_walkforward,
     walkforward_run,
 )
+
+from core.data_sanity import DataSanityValidator
 
 
 def inject_nan_burst(df):

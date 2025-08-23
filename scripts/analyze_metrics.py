@@ -2,12 +2,12 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 import yaml
 
 
-def load_yaml(path: Path) -> Dict[str, Any]:
+def load_yaml(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
@@ -16,7 +16,7 @@ def warn(line: str) -> None:
     print(f"WARN: {line}")
 
 
-def analyze_fold(fold: Dict[str, Any], th: Dict[str, float]) -> None:
+def analyze_fold(fold: dict[str, Any], th: dict[str, float]) -> None:
     fid = fold.get("fold_id", "unknown")
     sharpe = fold.get("sharpe")
     mdd = fold.get("max_drawdown")

@@ -1,0 +1,28 @@
+{
+  "final_summary": {
+    "cash": 99849.985,
+    "positions": {
+      "SPY": 0.3333333333333333
+    },
+    "avg_prices": {
+      "SPY": 450.0
+    },
+    "total_trades": 1
+  },
+  "portfolio_value": 99999.985,
+  "total_return_pct": -1.4999999997655777e-05,
+  "total_trades": 1,
+  "trades": [
+    {
+      "timestamp": 1755877230.6388953,
+      "symbol": "SPY",
+      "quantity": 0.3333333333333333,
+      "price": 450.0,
+      "commission": 0.0045,
+      "slippage": 0.010499999999999999,
+      "total_cost": 150.01500000000001,
+      "cash_after": 99849.985,
+      "position_after": 0.3333333333333333
+    }
+  ]
+}

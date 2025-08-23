@@ -35,7 +35,6 @@ WF_SEED_DIFF = "WF_SEED_DIFF"
 
 class DataSanityError(Exception):
     """Exception raised for data sanity violations."""
-    pass
 
 
 def estring(code: str, detail: str) -> str:
@@ -55,29 +54,29 @@ def _has_future_shift(col: pd.Series) -> bool:
     s = pd.to_numeric(col, errors="coerce")
     if s.isna().all() or len(s) < 10:
         return False
-    
+
     # Look for specific patterns that indicate future leakage:
     # 1. Perfect correlation with future values (but not just monotonic sequences)
     fwd = s.shift(-1)
     corr_fwd = s.corr(fwd)
-    
+
     # Only flag if there's perfect correlation AND the values aren't just sequential
     if corr_fwd is not None and corr_fwd > 0.999:
         # Check if this is just a sequential/monotonic series (which is normal for prices)
         is_sequential = s.diff().std() < 1e-10  # Very low variance in differences
         is_monotonic = s.is_monotonic_increasing or s.is_monotonic_decreasing
-        
+
         # Only flag if it's NOT a simple sequential/monotonic pattern
         if not (is_sequential or is_monotonic):
             return True
-    
+
     # 2. Look for values that match exactly at different time offsets
     for offset in [1, 2, 3]:  # Check 1-3 period shifts
         shifted = s.shift(-offset)
         exact_matches = (s == shifted).sum()
         if exact_matches > len(s) * 0.5:  # More than 50% exact matches
             return True
-    
+
     return False
 
 
@@ -146,22 +145,22 @@ def assert_ohlc_invariants(df: pd.DataFrame, profile) -> pd.DataFrame:
     required = ("Open", "High", "Low", "Close")
     if not all(k in mapping for k in required):
         return df  # Not enough OHLC data to validate
-    
-    o, h, l, c = (df[mapping["Open"]], df[mapping["High"]], df[mapping["Low"]], df[mapping["Close"]])
-    neg = (o < 0).any() or (h < 0).any() or (l < 0).any() or (c < 0).any()
-    
+
+    o, h, low, c = (df[mapping["Open"]], df[mapping["High"]], df[mapping["Low"]], df[mapping["Close"]])
+    neg = (o < 0).any() or (h < 0).any() or (low < 0).any() or (c < 0).any()
+
     if neg and profile.strict:
         raise DataSanityError(estring(NEGATIVE_PRICES, "OHLC invariant violation: negative values present"))
-    
+
     if neg and profile.allow_repairs:
         df = df.copy()
         df[mapping["Open"]] = df[mapping["Open"]].clip(lower=0.0)
         df[mapping["High"]] = df[mapping["High"]].clip(lower=0.0)
         df[mapping["Low"]] = df[mapping["Low"]].clip(lower=0.0)
         df[mapping["Close"]] = df[mapping["Close"]].clip(lower=0.0)
-    
+
     # High >= max(Open,Close); Low <= min(Open,Close)
-    bad = (h < o.combine(c, max)) | (l > o.combine(c, min))
+    bad = (h < o.combine(c, max)) | (low > o.combine(c, min))
     if bad.any():
         if profile.strict:
             raise DataSanityError(estring(OHLC_INVARIANT, "OHLC relation violated"))
@@ -169,7 +168,7 @@ def assert_ohlc_invariants(df: pd.DataFrame, profile) -> pd.DataFrame:
             df = df.copy()
             df[mapping["High"]] = df[[mapping["High"], mapping["Open"], mapping["Close"]]].max(axis=1)
             df[mapping["Low"]] = df[[mapping["Low"], mapping["Open"], mapping["Close"]]].min(axis=1)
-    
+
     return df
 
 
@@ -179,7 +178,7 @@ def repair_nonfinite_ohlc(df: pd.DataFrame, profile) -> pd.DataFrame:
     cols = [mapping[k] for k in ("Open", "High", "Low", "Close", "Volume") if k in mapping]
     if not cols:
         return df
-    
+
     # Ensure numeric before checking isfinite
     df_numeric = df.copy()
     for col in cols:
@@ -187,15 +186,15 @@ def repair_nonfinite_ohlc(df: pd.DataFrame, profile) -> pd.DataFrame:
             df_numeric[col] = pd.to_numeric(df[col], errors="coerce")
         else:
             df_numeric[col] = df[col]
-    
+
     bad = ~np.isfinite(df_numeric[cols]).all(axis=None)
     if bad and not profile.allow_repairs:
         raise DataSanityError(estring(NONFINITE, f"Non-finite values in {cols}"))
-    
+
     if bad:
         df = df.copy()
         df[cols] = df_numeric[cols].ffill().bfill()
-    
+
     return df
 
 
@@ -224,19 +223,16 @@ class SanityProfile:
 def should_raise(profile: SanityProfile, flags: set[str], unrepaired_issues: set[str]) -> bool:
     if profile.strict and (flags or unrepaired_issues):
         return True
-    if profile.fail_on & (flags | unrepaired_issues):
-        return True
-    return False
+    return bool(profile.fail_on & (flags | unrepaired_issues))
 
 
 def _convert_flags_to_set(flags) -> set[str]:
     """Convert flags to set, handling both list and set inputs."""
     if isinstance(flags, set):
         return flags
-    elif isinstance(flags, list):
+    if isinstance(flags, list):
         return set(flags)
-    else:
-        return set()
+    return set()
 
 
 def _iter_chunks(n, chunk_size=1_000_000):
@@ -252,10 +248,7 @@ def fast_isfinite_nd(values) -> bool:
     try:
         return np.isfinite(values).all()
     except MemoryError:
-        for slc in _iter_chunks(values.shape[0]):
-            if not np.isfinite(values[slc]).all():
-                return False
-        return True
+        return all(np.isfinite(values[slc]).all() for slc in _iter_chunks(values.shape[0]))
 
 
 def validate_index(idx: pd.Index):
@@ -273,8 +266,7 @@ def validate_index(idx: pd.Index):
 def compute_returns(close: pd.Series) -> pd.Series:
     # Ensure float and aligned; first element NaN by definition
     c = pd.to_numeric(close, errors="coerce").astype("float64")
-    r = c.pct_change()
-    return r
+    return c.pct_change()
 
 
 def verify_returns_identity(close: pd.Series, r: pd.Series, atol=1e-9):
@@ -295,9 +287,8 @@ def coerce_numeric_cols(df: pd.DataFrame, profile: SanityProfile) -> pd.DataFram
     coerced = df.copy()
     need_coercion = set()
     for c in NUMERIC_PRICE_COLS:
-        if c in coerced:
-            if not pd.api.types.is_numeric_dtype(coerced[c]):
-                need_coercion.add(c)
+        if c in coerced and not pd.api.types.is_numeric_dtype(coerced[c]):
+            need_coercion.add(c)
     if need_coercion and profile.strict:
         raise DataSanityError(f"Non-numeric in numeric cols (strict): {sorted(need_coercion)}")
     if need_coercion and profile.allow_repairs:
@@ -457,16 +448,16 @@ class DataSanityValidator:
             profile: Profile to use ("default" or "strict")
         """
         self.config = self._load_config(config_path)
-        
+
         self.profile = profile
         self.profile_config = self._get_profile_config(profile)
-        
+
         # Update profile if repair_mode changes
         self._update_profile_for_repair_mode()
         self.repair_count = 0
         self.outlier_count = 0
         self.validation_failures = []
-        
+
         # Track original user columns to avoid scanning derived columns for lookahead
         self.original_columns = set()
         self.ignore_lookahead_columns = {"Returns"}  # Columns to ignore in lookahead detection
@@ -652,7 +643,7 @@ class DataSanityValidator:
         import time
 
         start_time = time.time()
-        
+
         # Update profile if repair_mode changed
         self._update_profile_for_repair_mode()
 
@@ -669,8 +660,7 @@ class DataSanityValidator:
                     validation_time=time.time() - start_time,
                 )
                 return data, result
-            else:
-                raise DataSanityError(f"{symbol}: Empty data not allowed in strict mode")
+            raise DataSanityError(f"{symbol}: Empty data not allowed in strict mode")
 
         original_shape = data.shape
         logger.info(f"Validating {symbol}: {original_shape[0]} rows, {original_shape[1]} columns")
@@ -687,7 +677,7 @@ class DataSanityValidator:
 
         # Capture original user columns before any modifications
         self.original_columns = set(data.columns)
-        
+
         # Make a copy to avoid modifying original
         clean_data = data.copy()
 
@@ -943,7 +933,7 @@ class DataSanityValidator:
             large_gaps = gaps > ts_config["max_gap_days"]
             if large_gaps.any():
                 gap_count = large_gaps.sum()
-                max_gap = gaps.max()
+                gaps.max()
                 flags.append(f"large_gaps_detected_{gap_count}")
 
         return data, repairs, flags
@@ -980,13 +970,12 @@ class DataSanityValidator:
                         raise DataSanityError(
                             f"{symbol}: Cannot convert string data to numeric in {col}"
                         ) from None
-                    else:
-                        # Try to extract numeric values from strings
-                        series = pd.to_numeric(
-                            series.str.extract(r"(\d+\.?\d*)")[0], errors="coerce"
-                        )
-                        data[col] = series
-                        repairs.append(f"extracted_numeric_from_string_in_{col}")
+                    # Try to extract numeric values from strings
+                    series = pd.to_numeric(
+                        series.str.extract(r"(\d+\.?\d*)")[0], errors="coerce"
+                    )
+                    data[col] = series
+                    repairs.append(f"extracted_numeric_from_string_in_{col}")
 
             # Check for negative prices
             negative_prices = series <= 0
@@ -1020,7 +1009,7 @@ class DataSanityValidator:
             if not pd.api.types.is_numeric_dtype(series):
                 # Always fail for strict validation - no coercion allowed
                 raise DataSanityError(f"{symbol}: Column {col} has non-numeric dtype: {series.dtype}")
-            
+
             non_finite = ~np.isfinite(series)
             if non_finite.any():
                 if self.profile_config.get("allow_ffill_nans", True):
@@ -1037,13 +1026,13 @@ class DataSanityValidator:
             allow_repairs=self.profile_config.get("allow_repairs", True),
             fail_on=set(self.profile_config.get("fail_on", []))
         )
-        
+
         flags_set = _convert_flags_to_set(flags)
         if should_raise(profile, flags_set, unrepaired):
             raise DataSanityError(
                 estring(NEGATIVE_PRICES, f"{symbol}: violations={sorted(flags_set)} unrepaired={sorted(unrepaired)}")
             )
-        
+
         return data, repairs, flags
 
     def _validate_price_data(self, data: pd.DataFrame, symbol: str) -> tuple[pd.DataFrame, list[str], list[str]]:
@@ -1066,16 +1055,15 @@ class DataSanityValidator:
                 # Try to coerce to numeric if repair mode allows
                 if self.config["repair_mode"] == "fail":
                     raise DataSanityError(f"{symbol}: Column {col} has non-numeric dtype: {series.dtype}")
-                else:
-                    # Try to coerce to numeric
-                    try:
-                        numeric_series = pd.to_numeric(series, errors='coerce')
-                        data[col] = numeric_series
-                        series = numeric_series
-                        repairs.append(f"coerced_{col}_to_numeric")
-                    except Exception:
-                        raise DataSanityError(f"{symbol}: Cannot coerce column {col} to numeric: {series.dtype}")
-            
+                # Try to coerce to numeric
+                try:
+                    numeric_series = pd.to_numeric(series, errors='coerce')
+                    data[col] = numeric_series
+                    series = numeric_series
+                    repairs.append(f"coerced_{col}_to_numeric")
+                except Exception as err:
+                    raise DataSanityError(f"{symbol}: Cannot coerce column {col} to numeric: {series.dtype}") from err
+
             non_finite = ~np.isfinite(series)
             if non_finite.any():
                 count = non_finite.sum()
@@ -1142,7 +1130,7 @@ class DataSanityValidator:
                 if not pd.api.types.is_numeric_dtype(series):
                     # Final cleanup - always fail if non-numeric at this stage
                     raise DataSanityError(f"{symbol}: Column {col} has non-numeric dtype at final cleanup: {series.dtype}")
-                
+
                 non_finite = ~np.isfinite(series)
                 if non_finite.any():
                     # Use median of finite values as fallback
@@ -1505,8 +1493,13 @@ class DataSanityValidator:
         # Calculate log returns
         returns = np.log(close_prices / close_prices.shift(1)) if returns_config["method"] == "log_close_to_close" else close_prices.pct_change()
 
-        # Handle missing values
-        returns = returns.ffill().bfill() if returns_config["fill_method"] == "forward" else returns.fillna(0)
+        # Handle missing values (NO LOOKAHEAD)
+        if returns_config["fill_method"] == "forward":
+            # Forward fill only (no backward fill to avoid lookahead)
+            returns = returns.ffill().fillna(0)
+        else:
+            # Default: fill with zero (no lookahead)
+            returns = returns.fillna(0)
 
         # Check for extreme returns
         max_return = self.config["price_limits"]["max_daily_return"]
@@ -1605,33 +1598,33 @@ class DataSanityValidator:
         """Detect potential lookahead contamination."""
         # Check user-provided columns (including user-provided Returns if any)
         columns_to_scan = self.original_columns.copy()
-        
+
         # If Returns was in original data (not created by us), check it for lookahead
         # If we created Returns during validation, ignore it
         if "Returns" in columns_to_scan:
             # Check if this Returns column has obvious lookahead contamination
             returns_series = data["Returns"]
-            
+
             # Look for actual lookahead: values that match future values exactly
             # This would catch cases like: data.loc[i, "Returns"] = data.loc[i+1, "Returns"]
             if len(returns_series) > 1:
                 for offset in [1, 2]:  # Check 1-2 period offsets
                     future_series = returns_series.shift(-offset)
                     exact_matches = (returns_series == future_series) & pd.notna(returns_series) & pd.notna(future_series)
-                    
+
                     # If we find exact matches with future values, that's suspicious
                     if exact_matches.any():
                         match_count = exact_matches.sum()
                         logger.warning(f"Potential lookahead contamination in Returns column: {match_count} exact matches with future values at offset {offset}")
                         return True
-        
+
         # Remove pipeline columns we trust (but not user-provided Returns which we checked above)
         user_feature_cols = columns_to_scan - {"Label", "Target", "y"}
-        
+
         # Skip lookahead detection if no user columns to scan
         if not user_feature_cols:
             return False
-            
+
         # Use centralized lookahead detection on user columns
         offenders = detect_lookahead(data, feature_cols=user_feature_cols)
         if offenders:
@@ -1663,29 +1656,28 @@ class DataSanityValidator:
         if missing_cols:
             if self.config["repair_mode"] == "fail":
                 raise DataSanityError(f"{symbol}: Missing required columns: {missing_cols}")
-            else:
-                # Try to repair by creating synthetic columns based on available data
-                if "Close" not in data.columns and "Open" in data.columns:
-                    # Use Open as Close if Close is missing
-                    data["Close"] = data["Open"]
-                    repairs.append("synthesized_close_from_open")
-                if "High" not in data.columns and "Close" in data.columns:
-                    # Use Close as High if High is missing
-                    data["High"] = data["Close"] * 1.01  # Small markup
-                    repairs.append("synthesized_high_from_close")
-                if "Low" not in data.columns and "Close" in data.columns:
-                    # Use Close as Low if Low is missing
-                    data["Low"] = data["Close"] * 0.99  # Small markdown
-                    repairs.append("synthesized_low_from_close")
-                if "Volume" not in data.columns:
-                    # Use default volume if missing
-                    data["Volume"] = 1000000
-                    repairs.append("synthesized_default_volume")
-                
-                # Re-check after repairs
-                still_missing = [col for col in required_cols if col not in data.columns]
-                if still_missing:
-                    raise DataSanityError(f"{symbol}: Cannot repair missing columns: {still_missing}")
+            # Try to repair by creating synthetic columns based on available data
+            if "Close" not in data.columns and "Open" in data.columns:
+                # Use Open as Close if Close is missing
+                data["Close"] = data["Open"]
+                repairs.append("synthesized_close_from_open")
+            if "High" not in data.columns and "Close" in data.columns:
+                # Use Close as High if High is missing
+                data["High"] = data["Close"] * 1.01  # Small markup
+                repairs.append("synthesized_high_from_close")
+            if "Low" not in data.columns and "Close" in data.columns:
+                # Use Close as Low if Low is missing
+                data["Low"] = data["Close"] * 0.99  # Small markdown
+                repairs.append("synthesized_low_from_close")
+            if "Volume" not in data.columns:
+                # Use default volume if missing
+                data["Volume"] = 1000000
+                repairs.append("synthesized_default_volume")
+
+            # Re-check after repairs
+            still_missing = [col for col in required_cols if col not in data.columns]
+            if still_missing:
+                raise DataSanityError(f"{symbol}: Cannot repair missing columns: {still_missing}")
 
         # 4. Verify data types
         expected_dtypes = {
@@ -1725,25 +1717,24 @@ class DataSanityValidator:
         if not data.index.is_monotonic_increasing:
             if self.config["repair_mode"] == "fail":
                 raise DataSanityError(f"{symbol}: Index is not monotonic after validation")
-            else:
-                # Try to repair by normalizing timezones and sorting
-                if isinstance(data.index, pd.DatetimeIndex):
-                    # Normalize mixed timezones
-                    if hasattr(data.index, 'tz') and data.index.tz is not None:
-                        # If timezone-aware, convert to UTC for consistency
-                        data.index = data.index.tz_convert('UTC')
-                    else:
-                        # If mixed naive/aware, convert all to naive
-                        if any(hasattr(ts, 'tz') and ts.tz is not None for ts in data.index):
-                            data.index = data.index.tz_localize(None, level=0)
-                    
-                    # Sort by index to ensure monotonicity
-                    data = data.sort_index()
-                    repairs.append("normalized_timezones_and_sorted_index")
-                    
-                    # Re-check
-                    if not data.index.is_monotonic_increasing:
-                        raise DataSanityError(f"{symbol}: Cannot repair non-monotonic index")
+            # Try to repair by normalizing timezones and sorting
+            if isinstance(data.index, pd.DatetimeIndex):
+                # Normalize mixed timezones
+                if hasattr(data.index, 'tz') and data.index.tz is not None:
+                    # If timezone-aware, convert to UTC for consistency
+                    data.index = data.index.tz_convert('UTC')
+                else:
+                    # If mixed naive/aware, convert all to naive
+                    if any(hasattr(ts, 'tz') and ts.tz is not None for ts in data.index):
+                        data.index = data.index.tz_localize(None, level=0)
+
+                # Sort by index to ensure monotonicity
+                data = data.sort_index()
+                repairs.append("normalized_timezones_and_sorted_index")
+
+                # Re-check
+                if not data.index.is_monotonic_increasing:
+                    raise DataSanityError(f"{symbol}: Cannot repair non-monotonic index")
 
         if data.index.has_duplicates:
             raise DataSanityError(f"{symbol}: Index has duplicates after validation")
@@ -1816,8 +1807,7 @@ class DataSanityValidator:
         # Return volume column
         if "Volume" in data.columns:
             return "Volume"
-        else:
-            return "Volume"  # Default fallback
+        return "Volume"  # Default fallback
 
     def _repair_ohlc_inconsistencies(self, data: pd.DataFrame) -> pd.DataFrame:
         """Repair OHLC inconsistencies."""
@@ -1844,8 +1834,7 @@ class DataSanityValidator:
 
         if self.config["repair_mode"] == "fail":
             raise DataSanityError(message)
-        else:
-            logger.warning(f"Validation failure: {message}")
+        logger.warning(f"Validation failure: {message}")
 
     def _log_repair(self, message: str):
         """Log a repair action."""
@@ -1947,9 +1936,8 @@ class DataSanityValidator:
         returns = close_prices.pct_change()
 
         # Fill NaN with 0 (first observation)
-        returns = returns.fillna(0.0)
+        return returns.fillna(0.0)
 
-        return returns
 
 
 class DataSanityWrapper:

@@ -25,7 +25,8 @@ def additive_invariance_score(df_base: pd.DataFrame, df_shift: pd.DataFrame) -> 
             dz = np.diff(s[col].to_numpy(dtype=np.float64))
             if dy.size < 2:  # not enough points to be meaningful
                 continue
-            y = _z(dy); z = _z(dz)
+            y = _z(dy)
+            z = _z(dz)
             scores.append(float(np.clip(np.dot(y, z) / (len(y)), -1.0, 1.0)))
     return float(np.mean(scores)) if scores else 0.0
 

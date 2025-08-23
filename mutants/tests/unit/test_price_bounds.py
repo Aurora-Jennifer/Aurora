@@ -1,8 +1,9 @@
-import pandas as pd
-import pytest
 from pathlib import Path
 
-from core.data_sanity import DataSanityValidator, DataSanityError
+import pandas as pd
+import pytest
+
+from core.data_sanity import DataSanityError, DataSanityValidator
 
 
 def _load_csv(p: Path) -> pd.DataFrame:

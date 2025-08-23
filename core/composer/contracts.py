@@ -59,19 +59,16 @@ class Strategy(ABC):
     @abstractmethod
     def predict(self, market_state: MarketState) -> StrategyPrediction:
         """Generate prediction for given market state."""
-        pass
 
     @property
     @abstractmethod
     def name(self) -> str:
         """Strategy name."""
-        pass
 
     @property
     @abstractmethod
     def description(self) -> str:
         """Strategy description."""
-        pass
 
 
 class RegimeExtractor(ABC):
@@ -80,13 +77,11 @@ class RegimeExtractor(ABC):
     @abstractmethod
     def extract(self, market_state: MarketState) -> RegimeFeatures:
         """Extract regime features from market state."""
-        pass
 
     @property
     @abstractmethod
     def name(self) -> str:
         """Extractor name."""
-        pass
 
 
 class Composer(ABC):
@@ -100,13 +95,11 @@ class Composer(ABC):
         regime_extractor: RegimeExtractor,
     ) -> ComposerOutput:
         """Compose strategy predictions into final signal."""
-        pass
 
     @property
     @abstractmethod
     def name(self) -> str:
         """Composer name."""
-        pass
 
 
 # Concrete implementations for common patterns
@@ -288,7 +281,7 @@ class SoftmaxComposer(Composer):
                 # Favor momentum strategies in trending markets
                 if "momentum" in pred.strategy_name.lower():
                     score += 0.2 * self.trend_bias
-            elif (regime_features.regime_type == "chop" and 
+            elif (regime_features.regime_type == "chop" and
                   ("mean" in pred.strategy_name.lower() or "reversion" in pred.strategy_name.lower())):
                     score += 0.2 * self.chop_bias
 

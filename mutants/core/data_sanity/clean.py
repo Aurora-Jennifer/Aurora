@@ -2,15 +2,16 @@
 Non-finite value handling and repair utilities.
 """
 
-import numpy as np, pandas as pd
-from .errors import DataSanityError, estring
-from .codes import NONFINITE, INVALID_DTYPE, PRICES_GT
-from .columnmap import map_ohlcv
+from collections.abc import Callable
 from inspect import signature as _mutmut_signature
-from typing import Annotated
-from typing import Callable
-from typing import ClassVar
+from typing import Annotated, ClassVar
 
+import numpy as np
+import pandas as pd
+
+from .codes import INVALID_DTYPE, NONFINITE
+from .columnmap import map_ohlcv
+from .errors import DataSanityError, estring
 
 MutantDict = Annotated[dict[str, Callable], "Mutant"]
 

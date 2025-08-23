@@ -1,34 +1,17 @@
-# config/features.yaml
-# Feature and label definitions for Alpha v1
-
 features:
-  # Momentum features (daily returns)
-  ret_1d: "1-day return (close-to-close)"
-  ret_5d: "5-day return (close-to-close)" 
-  ret_20d: "20-day return (close-to-close)"
-  sma_20_minus_50: "20-day SMA minus 50-day SMA (normalized)"
-  
-  # Volatility features
-  vol_10d: "10-day rolling volatility (std of returns)"
-  vol_20d: "20-day rolling volatility (std of returns)"
-  
-  # Oscillator features
-  rsi_14: "14-day RSI (0-100 scale)"
-  
-  # Liquidity features
-  volu_z_20d: "20-day z-scored volume (normalized)"
+  - { name: "ret_1d_lag1", tags: ["carry"] }
+  - { name: "sma_10", tags: ["trend"] }
+  - { name: "sma_20", tags: ["trend"] }
+  - { name: "vol_10", tags: ["vol"] }
+  - { name: "rsi_14", tags: ["momentum"] }
 
-labels:
-  ret_fwd_1d: "Next-day close-to-close return (target)"
+groups:
+  - "carry"
+  - "trend" 
+  - "vol"
+  - "momentum"
 
-# Feature engineering parameters
-params:
-  min_history_bars: 60  # Minimum bars required for feature calculation
-  lookback_days: 50     # Maximum lookback for rolling calculations
-  label_shift: 1        # Days to shift label forward (leakage guard)
-
-# Universe configuration
-universe:
-  symbols: ["SPY", "TSLA", "AAPL", "MSFT", "GOOGL"]  # Start with liquid names
-  min_volume: 1000000   # Minimum daily volume filter
-  min_price: 10.0       # Minimum price filter
+# Ablation settings
+ablation:
+  min_ic_improvement: 0.005  # Minimum IC improvement to flag as "harmful"
+  significance_level: 0.05   # p-value threshold for statistical significance

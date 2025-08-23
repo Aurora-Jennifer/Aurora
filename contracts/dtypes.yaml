@@ -1,0 +1,43 @@
+# Dtype & Finite Policy Contract
+# L0 Gate: PR CI, <3 min total
+
+spec:
+  name: "dtype_and_finite_policy"
+  level: "L0"
+  description: "Strict dtypes; no NaN/Inf after featuregen; no implicit upcasting"
+  
+requirements:
+  dtypes:
+    features:
+      - type: "float32"
+      - no_upcast: true
+    targets:
+      - type: "float32"
+      - no_upcast: true
+    ids_enums:
+      - type: ["int32", "category"]
+      - no_upcast: true
+      
+  finite_values:
+    - no_nan_after_featuregen: true
+    - no_inf_after_featuregen: true
+    - no_neg_inf_after_featuregen: true
+    
+  stage_consistency:
+    - no_implicit_upcast_between_stages: true
+    - schema_stage_n_json: true  # track schema per stage
+    
+validation:
+  - fail_on_nan_inf: true
+  - fail_on_dtype_violation: true
+  - fail_on_implicit_upcast: true
+
+tests:
+  - test_feature_dtypes_exact
+  - test_no_nan_inf_post_featuregen
+  - test_no_upcast_between_stages
+
+fail_messages:
+  nan_inf: "NaN/Inf detected after featuregen stage"
+  dtype_violation: "Feature dtype violation: expected {expected}, got {actual}"
+  upcast: "Implicit upcast detected between stages"

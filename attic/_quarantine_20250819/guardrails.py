@@ -205,9 +205,8 @@ class SystemHealthChecker:
             if broker.connect():
                 broker.disconnect()
                 return True
-            else:
-                logger.warning("IBKR connection failed")
-                return False
+            logger.warning("IBKR connection failed")
+            return False
 
         except Exception as e:
             logger.error(f"IBKR health check failed: {e}")

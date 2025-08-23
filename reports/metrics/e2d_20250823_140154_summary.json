@@ -1,0 +1,24 @@
+{
+  "run_id": "e2d_20250823_140154",
+  "start_time": "2025-08-23T14:01:54.522146",
+  "end_time": "2025-08-23T14:01:54.522146",
+  "total_measurements": 1,
+  "latency_summary": {
+    "mean_ms": 73.44115100204363,
+    "p95_ms": 73.44115100204363,
+    "max_ms": 73.44115100204363,
+    "min_ms": 73.44115100204363
+  },
+  "memory_summary": {
+    "mean_mb": 228.265625,
+    "max_mb": 228.265625,
+    "min_mb": 228.265625,
+    "peak_mb": 228.265625
+  },
+  "trading_summary": {
+    "total_orders": 0,
+    "total_fills": 0,
+    "total_rejections": 0,
+    "avg_fill_rate_pct": 0.0
+  }
+}

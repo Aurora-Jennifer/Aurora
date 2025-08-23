@@ -149,8 +149,7 @@ class PaperTradingEngine:
             if webhook_url:
                 discord_config = DiscordConfig(webhook_url=webhook_url, bot_name=bot_name)
                 return DiscordNotifier(discord_config)
-            else:
-                self.logger.warning("Discord enabled but no webhook URL provided")
+            self.logger.warning("Discord enabled but no webhook URL provided")
 
         return None
 
@@ -375,7 +374,7 @@ class PaperTradingEngine:
                 )
                 self.strategy = self._initialize_strategy_by_name(strategy_name, strategy_params)
 
-            strategy_info = {
+            return {
                 "strategy_name": strategy_name,
                 "strategy_params": strategy_params,
                 "expected_sharpe": expected_sharpe,
@@ -383,7 +382,6 @@ class PaperTradingEngine:
                 "selection_timestamp": pd.Timestamp.now(),
             }
 
-            return strategy_info
 
         except Exception as e:
             self.logger.error(f"Error selecting optimal strategy: {e}")
@@ -406,8 +404,7 @@ class PaperTradingEngine:
 
                 params = RegimeAwareEnsembleParams(**strategy_params)
                 return RegimeAwareEnsembleStrategy(params)
-            else:
-                return strategy_factory.create_strategy(strategy_name, strategy_params)
+            return strategy_factory.create_strategy(strategy_name, strategy_params)
         except Exception as e:
             self.logger.error(f"Error initializing strategy {strategy_name}: {e}")
             # Fallback to default regime-aware ensemble
@@ -807,8 +804,7 @@ class PaperTradingEngine:
         if strategy_name == "regime_aware_ensemble":
             params = RegimeAwareEnsembleParams(**strategy_params)
             return RegimeAwareEnsembleStrategy(params)
-        else:
-            return strategy_factory.create_strategy(strategy_name, strategy_params)
+        return strategy_factory.create_strategy(strategy_name, strategy_params)
 
     def _update_strategy_performance(
         self, strategy_info: dict[str, Any], performance_metrics: dict[str, float]

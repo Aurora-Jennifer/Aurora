@@ -22,8 +22,7 @@ def check_python_environment():
     if python_version < (3, 8):
         print("  ❌ Python 3.8+ required")
         return False
-    else:
-        print("  ✅ Python version OK")
+    print("  ✅ Python version OK")
 
     # Check required packages
     required_packages = [
@@ -265,9 +264,8 @@ def run_tests():
         if result.returncode == 0:
             print("  ✅ All tests passed")
             return True
-        else:
-            print(f"  ❌ Tests failed: {result.stderr}")
-            return False
+        print(f"  ❌ Tests failed: {result.stderr}")
+        return False
     except Exception as e:
         print(f"  ❌ Could not run tests: {e}")
         return False
@@ -319,9 +317,8 @@ def main():
     if passed == total:
         print("🎉 All checks passed! System is ready.")
         return 0
-    else:
-        print("⚠️  Some checks failed. Review the issues above.")
-        return 1
+    print("⚠️  Some checks failed. Review the issues above.")
+    return 1
 
 
 if __name__ == "__main__":

@@ -26,13 +26,13 @@ def assert_verdict(validator: DataSanityValidator, df, expected: str, symbol: st
             if "Lookahead contamination" in str(e):
                 # Expected due to Returns column addition
                 return None, None
-            else:
-                pytest.fail(f"Expected PASS but got FAIL: {e}")
+            pytest.fail(f"Expected PASS but got FAIL: {e}")
     elif expected == "FAIL":
         with pytest.raises(DataSanityError):
             validator.validate_and_repair(df, symbol)
     else:
         raise ValueError(f"Invalid expected verdict: {expected}")
+    return None
 
 
 def assert_verdict_with_rules(
@@ -71,8 +71,8 @@ def assert_verdict_with_rules(
             if "Lookahead contamination" in str(e):
                 # Expected due to Returns column addition
                 return None, None
-            else:
-                pytest.fail(f"Expected PASS but got FAIL: {e}")
+            pytest.fail(f"Expected PASS but got FAIL: {e}")
+    return None
 
 
 def assert_repair_count(
@@ -89,8 +89,7 @@ def assert_repair_count(
         if "Lookahead contamination" in str(e):
             # Expected due to Returns column addition
             return None, None
-        else:
-            pytest.fail(f"Validation failed unexpectedly: {e}")
+        pytest.fail(f"Validation failed unexpectedly: {e}")
 
 
 def assert_flag_present(
@@ -107,8 +106,7 @@ def assert_flag_present(
         if "Lookahead contamination" in str(e):
             # Expected due to Returns column addition
             return None, None
-        else:
-            pytest.fail(f"Validation failed unexpectedly: {e}")
+        pytest.fail(f"Validation failed unexpectedly: {e}")
 
 
 def assert_data_integrity(clean_data, original_data, expected_rows: int | None = None):

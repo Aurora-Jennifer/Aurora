@@ -101,9 +101,8 @@ class BasicRegimeExtractor(RegimeExtractor):
             return 0.0
 
         # Use tanh to bound between -1 and 1
-        trend_strength = np.tanh(slope / mean_price)
+        return np.tanh(slope / mean_price)
 
-        return trend_strength
 
     def _calculate_choppiness(self, prices: np.ndarray) -> float:
         """Calculate choppiness (ADX-like measure)."""
@@ -172,16 +171,15 @@ class BasicRegimeExtractor(RegimeExtractor):
             return "trend"
 
         # High choppiness (sideways market)
-        elif choppiness > self.chop_threshold:
+        if choppiness > self.chop_threshold:
             return "chop"
 
         # High volatility
-        elif volatility > self.volatility_threshold:
+        if volatility > self.volatility_threshold:
             return "volatile"
 
         # Default
-        else:
-            return "unknown"
+        return "unknown"
 
     @property
     def name(self) -> str:
@@ -357,20 +355,19 @@ class AdvancedRegimeExtractor(RegimeExtractor):
             return "trend"
 
         # High choppiness with low trend strength
-        elif choppiness > self.chop_threshold and abs(trend_strength) < self.trend_threshold * 0.5:
+        if choppiness > self.chop_threshold and abs(trend_strength) < self.trend_threshold * 0.5:
             return "chop"
 
         # High volatility
-        elif volatility > self.volatility_threshold:
+        if volatility > self.volatility_threshold:
             return "volatile"
 
         # Weak trend (trending but not strong)
-        elif abs(trend_strength) > self.trend_threshold * 0.5:
+        if abs(trend_strength) > self.trend_threshold * 0.5:
             return "weak_trend"
 
         # Default
-        else:
-            return "unknown"
+        return "unknown"
 
     @property
     def name(self) -> str:
@@ -391,7 +388,6 @@ def create_regime_extractor(extractor_type: str, **kwargs) -> RegimeExtractor:
     """
     if extractor_type == "basic":
         return BasicRegimeExtractor(**kwargs)
-    elif extractor_type == "advanced":
+    if extractor_type == "advanced":
         return AdvancedRegimeExtractor(**kwargs)
-    else:
-        raise ValueError(f"Unknown regime extractor type: {extractor_type}")
+    raise ValueError(f"Unknown regime extractor type: {extractor_type}")

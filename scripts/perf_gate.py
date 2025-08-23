@@ -59,9 +59,8 @@ def parse_perf_log(log_file: Path) -> list[dict]:
     # Try to parse as pytest report log format first
     if '{"event": "test_start"' in content:
         return _parse_report_log(content)
-    else:
-        # Parse as standard pytest output
-        return _parse_standard_output(content)
+    # Parse as standard pytest output
+    return _parse_standard_output(content)
 
 
 def _parse_report_log(content: str) -> list[dict]:
@@ -324,10 +323,9 @@ def main():
     if overall_passed:
         logger.info("✅ All performance thresholds passed!")
         return 0
-    else:
-        logger.error("❌ Performance thresholds failed!")
-        logger.error(f"Total failures: {len(all_failures)}")
-        return 1
+    logger.error("❌ Performance thresholds failed!")
+    logger.error(f"Total failures: {len(all_failures)}")
+    return 1
 
 
 if __name__ == "__main__":

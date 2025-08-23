@@ -1,0 +1,77 @@
+# Ratchet Configuration - Historical Thresholds
+# These thresholds can only get stricter over time (ratchet principle)
+# CI will fail if any threshold is relaxed
+
+# Last updated: 2025-08-23
+# Purpose: Prevent silent regressions and enforce quality gates
+
+thresholds:
+  # Performance & Latency
+  latency:
+    e2d_max_ms: 150.0  # End-to-decision max latency
+    smoke_max_seconds: 60.0  # Smoke test max runtime
+    export_parity_max_diff: 1e-6  # ONNX vs native max difference
+    
+  # Memory & Resources
+  memory:
+    peak_mb: 500.0  # Maximum memory usage
+    startup_mb: 200.0  # Startup memory baseline
+    
+  # Data Quality
+  data:
+    max_na_fraction: 0.05  # Maximum NaN fraction in features
+    min_history_bars: 120  # Minimum history required
+    max_price_deviation: 0.50  # Max price deviation from previous
+    
+  # Model Performance
+  model:
+    min_ic_threshold: 0.01  # Minimum IC for model acceptance
+    max_turnover: 0.20  # Maximum portfolio turnover
+    min_fill_rate: 0.80  # Minimum fill rate (80%)
+    
+  # Test Coverage
+  coverage:
+    unit_test_min: 0.80  # Minimum unit test coverage
+    integration_test_min: 0.60  # Minimum integration test coverage
+    mutation_score_min: 0.70  # Minimum mutation testing score
+    
+  # Security & Compliance
+  security:
+    max_secret_patterns: 0  # No secrets in code/logs
+    max_dependency_vulnerabilities: 0  # No known vulnerabilities
+    
+  # Determinism
+  determinism:
+    cross_process_identical: true  # Cross-process outputs must be identical
+    seed_reproducible: true  # Same seed must produce same results
+    
+  # Data Integrity
+  integrity:
+    no_lookahead_violations: true  # No lookahead contamination
+    no_label_shift: true  # No label shift around corporate events
+    monotonic_timestamps: true  # Timestamps must be monotonic per symbol
+
+# Ratchet enforcement
+enforcement:
+  # CI will fail if any threshold is relaxed
+  fail_on_relaxation: true
+  
+  # Changes require explicit justification
+  justification_required: true
+  
+  # Historical record of changes
+  change_log:
+    - date: "2025-08-23"
+      change: "Initial ratchet configuration"
+      justification: "Establish baseline thresholds for paper trading readiness"
+      
+# Validation rules
+validation:
+  # All thresholds must be numeric or boolean
+  type_check: true
+  
+  # New thresholds must be added with justification
+  new_threshold_justification: true
+  
+  # Threshold changes must be reviewed
+  review_required: true

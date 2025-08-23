@@ -4,6 +4,7 @@ Comprehensive data validation and repair for all market data sources.
 © 2025 Jennifer — Canary ID: aurora.lab:57c2a0f3
 """
 
+import contextlib
 import hashlib
 import logging
 import weakref
@@ -15,10 +16,9 @@ import numpy as np
 import pandas as pd
 import yaml
 
-logger = logging.getLogger(__name__)
-
-
 from .errors import DataSanityError
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -212,8 +212,19 @@ class DataSanityValidator:
             return idx.tz_localize(tz)
         return idx.tz_convert(tz)
 
-    def validate_dataframe_fast(self, df: pd.DataFrame, profile: str) -> SanityCheckResult:
+    def validate_dataframe_fast(self, df: pd.DataFrame, profile: str, trace=None) -> SanityCheckResult:
         import numpy as np
+        # Lazy imports to avoid hard deps in production
+        try:
+            from ._faults import disabled  # test-only env toggle
+        except Exception:  # pragma: no cover
+            def disabled(_code: str) -> bool:  # type: ignore
+                return False
+
+        def _hit(code: str, outcome: str, meta=None):
+            if trace is not None and hasattr(trace, "hit"):
+                with contextlib.suppress(Exception):
+                    trace.hit(code, outcome, meta or {})
 
         vio: list[SanityViolation] = []
         cfg_raw = self._get_profile_config(profile)
@@ -238,12 +249,26 @@ class DataSanityValidator:
                 pass
         # monotonic & duplicates
         require_monotonic = cfg.get("require_monotonic_dates", False) or enforced
-        if require_monotonic and idx is not None and not idx.is_monotonic_increasing:
-            vio.append(SanityViolation("NON_MONO_INDEX", "index not non-decreasing"))
+        if idx is not None:
+            if require_monotonic and not idx.is_monotonic_increasing:
+                if not disabled("NON_MONO_INDEX"):
+                    vio.append(SanityViolation("NON_MONO_INDEX", "index not non-decreasing"))
+                    _hit("NON_MONO_INDEX", "fail")
+                else:
+                    _hit("NON_MONO_INDEX", "pass", {"fault": "disabled"})
+            else:
+                _hit("NON_MONO_INDEX", "pass")
         forbid_duplicates = cfg.get("forbid_duplicates", False) or enforced
-        if forbid_duplicates and idx is not None and idx.has_duplicates:
-            n_dupes = int(idx.duplicated().sum())
-            vio.append(SanityViolation("DUP_TS", f"{n_dupes} duplicate stamps"))
+        if idx is not None:
+            if forbid_duplicates and idx.has_duplicates:
+                n_dupes = int(idx.duplicated().sum())
+                if not disabled("DUP_TS"):
+                    vio.append(SanityViolation("DUP_TS", f"{n_dupes} duplicate stamps"))
+                    _hit("DUP_TS", "fail", {"count": n_dupes})
+                else:
+                    _hit("DUP_TS", "pass", {"fault": "disabled"})
+            else:
+                _hit("DUP_TS", "pass")
         # numeric inf/nan
         nums = df.select_dtypes(include=[np.number])
         arr = (
@@ -252,15 +277,29 @@ class DataSanityValidator:
             else np.empty((len(df), 0))
         )
         forbid_inf = cfg.get("forbid_infinite", False) or enforced
-        if forbid_inf and arr.size and np.isinf(arr).any():
-            vio.append(SanityViolation("INF_VALUES", "infinite values present"))
+        if arr.size:
+            inf_present = bool(np.isinf(arr).any())
+            if forbid_inf and inf_present:
+                if not disabled("INF_VALUES"):
+                    vio.append(SanityViolation("INF_VALUES", "infinite values present"))
+                    _hit("INF_VALUES", "fail")
+                else:
+                    _hit("INF_VALUES", "pass", {"fault": "disabled"})
+            else:
+                _hit("INF_VALUES", "pass")
         max_nan = cfg.get("max_nan_pct", (0.0 if enforced else None))
-        if max_nan is not None and arr.size:
+        if arr.size:
             nan_pct = float(np.isnan(arr).mean())
-            if nan_pct > max_nan:
-                vio.append(
-                    SanityViolation("NAN_VALUES", f"NaN fraction {nan_pct:.4f} > {max_nan:.4f}")
-                )
+            if max_nan is not None and nan_pct > max_nan:
+                if not disabled("NAN_VALUES"):
+                    vio.append(
+                        SanityViolation("NAN_VALUES", f"NaN fraction {nan_pct:.4f} > {max_nan:.4f}")
+                    )
+                    _hit("NAN_VALUES", "fail", {"nan_pct": nan_pct, "max": max_nan})
+                else:
+                    _hit("NAN_VALUES", "pass", {"fault": "disabled"})
+            else:
+                _hit("NAN_VALUES", "pass")
         return SanityCheckResult(mode=mode, violations=vio, ok=(len(vio) == 0))
 
     def _get_default_config(self) -> dict:
@@ -337,6 +376,9 @@ class DataSanityValidator:
         """
         Validate and repair market data with strict invariants.
 
+        This is the v1 implementation. For v2, see the engine switch
+        in the public API.
+
         Args:
             data: DataFrame with OHLCV data
             symbol: Symbol name for logging
@@ -361,8 +403,7 @@ class DataSanityValidator:
                     validation_time=time.time() - start_time,
                 )
                 return data, result
-            else:
-                raise DataSanityError(f"{symbol}: Empty data not allowed in strict mode")
+            raise DataSanityError(f"{symbol}: Empty data not allowed in strict mode")
 
         original_shape = data.shape
         logger.info(f"Validating {symbol}: {original_shape[0]} rows, {original_shape[1]} columns")
@@ -388,7 +429,7 @@ class DataSanityValidator:
             # Transfer the guard and update its DataFrame ID to match the copy
             clean_data._sanity_guard = original_guard
             original_guard._df_id = id(clean_data)  # Update to new DataFrame ID
-            original_guard._df_hash = hash(str(clean_data.values.tobytes()))
+            original_guard._df_hash = hashlib.sha256(clean_data.values.tobytes()).hexdigest()[:8]
         else:
             # Attach guard if not present
             attach_guard(clean_data)
@@ -405,12 +446,29 @@ class DataSanityValidator:
         from .invariants import assert_ohlc_invariants
         clean_data = assert_ohlc_invariants(clean_data, self.profile_config)
 
-        # --- 4) Volume validation (strict non-negative) ---
-        clean_data, volume_repairs, volume_flags = self._validate_volume_data_strict(
-            clean_data, symbol
-        )
-        repairs.extend(volume_repairs)
-        flags.extend(volume_flags)
+        # --- 3.5) Staged validation (ingest stage) ---
+        from .registry import get_rule
+        stages_config = self.config.get("stages", {})
+        
+        # Run ingest stage validation
+        if "ingest" in stages_config:
+            ingest_rules = stages_config["ingest"].get("rules", [])
+            for rule_config in ingest_rules:
+                for rule_name, rule_params in rule_config.items():
+                    try:
+                        rule = get_rule(rule_name, rule_params)
+                        clean_data = rule.validate(clean_data)
+                    except ValueError as e:
+                        if self.profile_config.get("mode") == "fail":
+                            raise DataSanityError(f"{symbol}: {str(e)}")
+                        else:
+                            # Try to repair
+                            clean_data, rule_repairs = rule.validate_and_repair(clean_data)
+                            repairs.extend(rule_repairs)
+
+        # --- 4) Volume validation (now handled by staged rules) ---
+        # Volume validation moved to staged pipeline (ingest + post_adjust stages)
+        # Old _validate_volume_data_strict() call removed to eliminate duplication
 
         # --- 5) Outlier detection (only in lenient mode) ---
         if self.profile_config.get("allow_repairs", True):
@@ -490,6 +548,33 @@ class DataSanityValidator:
         self._log_validation_summary(symbol, original_shape, clean_data.shape)
 
         return clean_data, result
+
+    def validate_post_adjust(self, data: pd.DataFrame, symbol: str = "UNKNOWN") -> pd.DataFrame:
+        """
+        Run post-adjustment validation stage.
+        Call this after any transformations that could introduce data issues.
+        """
+        stages_config = self.config.get("stages", {})
+        
+        if "post_adjust" not in stages_config:
+            return data
+        
+        from .registry import get_rule
+        post_adjust_rules = stages_config["post_adjust"].get("rules", [])
+        
+        for rule_config in post_adjust_rules:
+            for rule_name, rule_params in rule_config.items():
+                try:
+                    rule = get_rule(rule_name, rule_params)
+                    data = rule.validate(data)
+                except ValueError as e:
+                    if self.profile_config.get("mode") == "fail":
+                        raise DataSanityError(f"{symbol}: {str(e)}")
+                    else:
+                        # Try to repair
+                        data, _ = rule.validate_and_repair(data)
+        
+        return data
 
     def _validate_time_series_strict(
         self, data: pd.DataFrame, symbol: str
@@ -625,13 +710,12 @@ class DataSanityValidator:
                         raise DataSanityError(
                             f"{symbol}: Cannot convert string data to numeric in {col}"
                         ) from None
-                    else:
-                        # Try to extract numeric values from strings
-                        series = pd.to_numeric(
-                            series.str.extract(r"(\d+\.?\d*)")[0], errors="coerce"
-                        )
-                        data[col] = series
-                        repairs.append(f"extracted_numeric_from_string_in_{col}")
+                    # Try to extract numeric values from strings
+                    series = pd.to_numeric(
+                        series.str.extract(r"(\d+\.?\d*)")[0], errors="coerce"
+                    )
+                    data[col] = series
+                    repairs.append(f"extracted_numeric_from_string_in_{col}")
 
             # Check for negative prices
             negative_prices = series <= 0
@@ -850,7 +934,17 @@ class DataSanityValidator:
     def _validate_volume_data_strict(
         self, data: pd.DataFrame, symbol: str
     ) -> tuple[pd.DataFrame, list[str], list[str]]:
-        """Validate volume data with strict profile rules."""
+        """Validate volume data with strict profile rules.
+        
+        DEPRECATED: Use staged pipeline with volume rule instead.
+        This method will be removed in a future version.
+        """
+        import warnings
+        warnings.warn(
+            "_validate_volume_data_strict is deprecated. Use staged pipeline with volume rule instead.",
+            DeprecationWarning,
+            stacklevel=2
+        )
         repairs = []
         flags = []
 
@@ -1075,8 +1169,13 @@ class DataSanityValidator:
         # Calculate log returns
         returns = np.log(close_prices / close_prices.shift(1)) if returns_config["method"] == "log_close_to_close" else close_prices.pct_change()
 
-        # Handle missing values
-        returns = returns.ffill().bfill() if returns_config["fill_method"] == "forward" else returns.fillna(0)
+        # Handle missing values (NO LOOKAHEAD - never use bfill)
+        if returns_config["fill_method"] == "forward":
+            # Forward fill only (no backward fill to avoid lookahead)
+            returns = returns.ffill().fillna(0.0)
+        else:
+            # Default: fill with zero (no lookahead)
+            returns = returns.fillna(0.0)
 
         # Check for extreme returns
         max_return = self.config["price_limits"]["max_daily_return"]
@@ -1112,8 +1211,13 @@ class DataSanityValidator:
         # Calculate log returns
         returns = np.log(close_prices / close_prices.shift(1)) if returns_config["method"] == "log_close_to_close" else close_prices.pct_change()
 
-        # Handle missing values
-        returns = returns.ffill().bfill() if returns_config["fill_method"] == "forward" else returns.fillna(0)
+        # Handle missing values (NO LOOKAHEAD - never use bfill)
+        if returns_config["fill_method"] == "forward":
+            # Forward fill only (no backward fill to avoid lookahead)
+            returns = returns.ffill().fillna(0.0)
+        else:
+            # Default: fill with zero (no lookahead)
+            returns = returns.fillna(0.0)
 
         # Check for extreme returns
         max_return = self.config["price_limits"]["max_daily_return"]
@@ -1209,15 +1313,33 @@ class DataSanityValidator:
         return data, repairs, flags
 
     def _detect_lookahead_contamination(self, data: pd.DataFrame) -> bool:
-        """Detect potential lookahead contamination."""
-        if "Returns" in data.columns and len(data) > 1:
-            # Detect simple future leakage: value equals next-step value at t
-            r = data["Returns"].to_numpy()
-            # Compare r[t] vs r[t+1]
-            eq_next = np.isfinite(r[:-1]) & np.isfinite(r[1:]) & (np.abs(r[:-1] - r[1:]) < 1e-12)
-            if eq_next.any():
-                return True
-        return False
+        """Detect potential lookahead contamination using improved logic."""
+        if "Returns" not in data.columns or len(data) < 2:
+            return False
+            
+        r = data["Returns"].to_numpy()
+        # Compare r[t] vs r[t+1]
+        eq_next = np.isfinite(r[:-1]) & np.isfinite(r[1:]) & (np.abs(r[:-1] - r[1:]) < 1e-12)
+        
+        if not eq_next.any():
+            return False
+            
+        # Check if this is legitimate (consecutive identical close prices)
+        if "Close" in data.columns:
+            c = data["Close"].to_numpy()
+            # Check if consecutive close prices are identical (which would create identical returns)
+            identical_closes = np.isfinite(c[:-1]) & np.isfinite(c[1:]) & (np.abs(c[:-1] - c[1:]) < 1e-12)
+            
+            # Check if returns are clipped at the same limit (winsorization artifact)
+            max_return = self.config["price_limits"]["max_daily_return"]
+            clipped_returns = (np.abs(r[:-1]) >= max_return) & (np.abs(r[1:]) >= max_return) & (np.sign(r[:-1]) == np.sign(r[1:]))
+            
+            # Flag when any equal-return event is NOT explained by identical closes OR winsorization
+            leak = eq_next & ~identical_closes & ~clipped_returns
+            return bool(leak.any())
+        
+        # Conservative: if we can't check close prices, assume any equal returns are suspicious
+        return True
 
     def _final_validation_checks(self, data: pd.DataFrame, symbol: str) -> pd.DataFrame:
         """Perform final validation checks with strict invariants."""
@@ -1226,12 +1348,11 @@ class DataSanityValidator:
         if len(data) < 1:
             raise DataSanityError(f"{symbol}: Insufficient data (need >= 1 row, got {len(data)})")
 
-        # 2. Check for lookahead contamination (basic check)
+        # 2. Check for lookahead contamination (using proper detector)
         if "Returns" in data.columns:
-            # Returns should not have future information
-            future_returns = data["Returns"].shift(-1).notna()
-            if future_returns.any():
-                self._log_repair(f"{symbol}: Potential lookahead contamination detected")
+            lookahead_detected = self._detect_lookahead_contamination(data)
+            if lookahead_detected:
+                self._log_repair(f"{symbol}: Lookahead contamination detected")
 
         # 3. Verify column schema
         required_cols = ["Open", "High", "Low", "Close", "Volume"]
@@ -1350,8 +1471,7 @@ class DataSanityValidator:
         # Return volume column
         if "Volume" in data.columns:
             return "Volume"
-        else:
-            return "Volume"  # Default fallback
+        return "Volume"  # Default fallback
 
     def _repair_ohlc_inconsistencies(self, data: pd.DataFrame) -> pd.DataFrame:
         """Repair OHLC inconsistencies."""
@@ -1378,8 +1498,7 @@ class DataSanityValidator:
 
         if self.config["repair_mode"] == "fail":
             raise DataSanityError(message)
-        else:
-            logger.warning(f"Validation failure: {message}")
+        logger.warning(f"Validation failure: {message}")
 
     def _log_repair(self, message: str):
         """Log a repair action."""
@@ -1481,9 +1600,8 @@ class DataSanityValidator:
         returns = close_prices.pct_change()
 
         # Fill NaN with 0 (first observation)
-        returns = returns.fillna(0.0)
+        return returns.fillna(0.0)
 
-        return returns
 
 
 class DataSanityWrapper:

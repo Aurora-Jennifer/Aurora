@@ -2,6 +2,7 @@
 File integrity helpers. Not enforced yet; import-ready only.
 """
 from __future__ import annotations
+
 import hashlib
 from pathlib import Path
 

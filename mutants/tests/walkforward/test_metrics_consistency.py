@@ -5,7 +5,6 @@ Verify that fold metrics aggregate correctly to summary metrics.
 
 import numpy as np
 import pandas as pd
-
 from scripts.walkforward_framework import (
     LeakageProofPipeline,
     build_feature_table,

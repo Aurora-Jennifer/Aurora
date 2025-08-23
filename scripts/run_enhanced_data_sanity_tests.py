@@ -237,9 +237,8 @@ def main():
     if success:
         print("\n🎉 All tests passed!")
         return 0
-    else:
-        print("\n💥 Some tests failed!")
-        return 1
+    print("\n💥 Some tests failed!")
+    return 1
 
 
 if __name__ == "__main__":

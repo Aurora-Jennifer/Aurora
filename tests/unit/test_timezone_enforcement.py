@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from core.data_sanity import DataSanityValidator, DataSanityError
+from core.data_sanity import DataSanityError, DataSanityValidator
 
 
 def test_naive_index_rejected_strict():

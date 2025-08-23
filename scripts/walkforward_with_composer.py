@@ -11,14 +11,14 @@ import sys
 import time
 from collections.abc import Iterator
 from dataclasses import dataclass
+
+# Import composer integration
+from importlib import import_module
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 import pandas as pd
-
-# Import composer integration
-from importlib import import_module
 
 ComposerIntegration = import_module("core.engine.composer_integration").ComposerIntegration
 
@@ -375,7 +375,7 @@ def run_walkforward_with_composer(
             f"Fold {fold.fold_id}: {len(test_data)} bars processed; "
             f"composer_used={fold_stats['composer_used']}, "
             f"holds={sum(v for k, v in fold_stats.items() if k != 'composer_used')}, "
-            f"causes={dict((k, v) for k, v in fold_stats.items() if v > 0 and k != 'composer_used')})"
+            f"causes={ {k: v for k, v in fold_stats.items() if v > 0 and k != 'composer_used'} })"
         )
 
         predictions = np.array(predictions)

@@ -1,0 +1,16 @@
+{
+  "ic": 0.1225813364094887,
+  "ic_std": 0.009892118484844087,
+  "ir": 12.391818456005964,
+  "turnover": 0.0005900165735997524,
+  "coverage": 0.004140786749482402,
+  "costs": {
+    "commission_bps": 5.0,
+    "half_spread_bps": 5.0,
+    "slippage_bps": 4.0,
+    "total_cost_bps": 10.002360066294399
+  },
+  "ic_after_costs": 0.12158110040285927,
+  "n_dates": 2,
+  "total_dates": 483
+}

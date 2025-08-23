@@ -1,0 +1,1 @@
+{"name":"weekend_bar_out_of_session","csv":"corpora/dirty/weekend_bar.csv","expect":"fail","codes":["NON_MONO_INDEX"]}

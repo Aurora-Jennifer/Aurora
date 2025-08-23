@@ -173,7 +173,7 @@ def test_data_usage_in_strategy_selection(test: DataIntegrityTest) -> bool:
     )
 
     # Validate that the system responds to different data patterns
-    strategies_used = set(r["strategy"] for r in results)
+    strategies_used = {r["strategy"] for r in results}
     test.assert_greater(
         len(strategies_used),
         1,
@@ -560,9 +560,8 @@ def main():
     if passed == total and len(test.errors) == 0:
         print("\n🎉 ALL TESTS PASSED - SYSTEM USES DATA CORRECTLY!")
         return 0
-    else:
-        print(f"\n❌ {total - passed} TESTS FAILED - SYSTEM HAS DATA ISSUES")
-        return 1
+    print(f"\n❌ {total - passed} TESTS FAILED - SYSTEM HAS DATA ISSUES")
+    return 1
 
 
 if __name__ == "__main__":

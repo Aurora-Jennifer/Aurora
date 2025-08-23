@@ -22,9 +22,9 @@ def build_features_for_symbol(
 ):
     """Build features for a given symbol."""
     try:
-        import yfinance as yf
-
         from importlib import import_module
+
+        import yfinance as yf
         build_features_parquet = import_module("core.data.features").build_features_parquet
 
         print(f"Building features for {symbol}...")
@@ -70,9 +70,8 @@ def run_walkforward_test(symbol: str, parquet_path: str, output_dir: str):
         if result.returncode == 0:
             print(f"  ✅ {symbol} completed successfully")
             return True
-        else:
-            print(f"  ❌ {symbol} failed: {result.stderr}")
-            return False
+        print(f"  ❌ {symbol} failed: {result.stderr}")
+        return False
 
     except Exception as e:
         print(f"  ❌ Error running {symbol}: {e}")

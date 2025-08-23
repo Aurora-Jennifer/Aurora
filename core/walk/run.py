@@ -121,9 +121,8 @@ def reweight(metrics_list: list[dict[str, Any]]) -> np.ndarray:
 
     # Normalize
     total = exp_weights.sum()
-    weights = exp_weights / total if total > 0 else np.ones_like(exp_weights) / len(exp_weights)
+    return exp_weights / total if total > 0 else np.ones_like(exp_weights) / len(exp_weights)
 
-    return weights
 
 
 def contiguous_trusted_span(

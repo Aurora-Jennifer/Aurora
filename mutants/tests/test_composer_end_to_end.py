@@ -5,11 +5,11 @@ End-to-end test for the refactored composer system.
 import numpy as np
 import pandas as pd
 import pytest
+from scripts.walkforward_with_composer import run_walkforward_with_composer
 
 from core.config import load_config
 from core.engine.composer_integration import ComposerIntegration
 from core.walk.folds import gen_walkforward
-from scripts.walkforward_with_composer import run_walkforward_with_composer
 
 
 def test_composer_end_to_end():

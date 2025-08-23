@@ -39,8 +39,7 @@ def generate_client_order_id(symbol: str, run_id: str | None = None) -> str:
 
     if run_id:
         return f"{run_id}-{symbol}-{timestamp}-{random_suffix}"
-    else:
-        return f"{timestamp}-{symbol}-{random_suffix}"
+    return f"{timestamp}-{symbol}-{random_suffix}"
 
 
 def is_seen(client_order_id: str) -> bool:

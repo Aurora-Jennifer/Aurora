@@ -121,9 +121,8 @@ class MultiAssetWalkforwardRunner:
                     asset_results = json.load(f)
                 self.results[asset_key] = asset_results
                 return asset_results
-            else:
-                print(f"⚠️  Results file not found: {results_file}")
-                return {}
+            print(f"⚠️  Results file not found: {results_file}")
+            return {}
 
         except subprocess.CalledProcessError as e:
             print(f"❌ Error running walkforward for {asset['name']}: {e}")

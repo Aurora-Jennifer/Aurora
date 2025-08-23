@@ -1,0 +1,38 @@
+{
+  "ok": false,
+  "failing_rules": [
+    {
+      "id": "non_null_all",
+      "msg": "nulls present",
+      "n": 1
+    },
+    {
+      "id": "finite_all",
+      "msg": "non-finite present",
+      "n": 1
+    },
+    {
+      "id": "rsi_bounds",
+      "msg": "rsi_14 outside [0,100]",
+      "n": 513
+    },
+    {
+      "id": "vol_nonneg",
+      "msg": "vol_10 < 0",
+      "n": 477
+    },
+    {
+      "id": "ret_reasonable_daily",
+      "msg": "ret_1d_lag1 outside soft range > 0.50% rows",
+      "n": 858
+    }
+  ],
+  "counts": {
+    "non_null_all": 1,
+    "finite_all": 1,
+    "rsi_bounds": 513,
+    "vol_nonneg": 477,
+    "ret_reasonable_daily": 0.858,
+    "no_duplicate_rows": 0
+  }
+}

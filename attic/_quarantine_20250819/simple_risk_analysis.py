@@ -44,8 +44,7 @@ def run_walkforward_analysis(symbol, start_date, end_date, config_file):
             results_file = "results/walkforward/results.json"
             if os.path.exists(results_file):
                 with open(results_file) as f:
-                    data = json.load(f)
-                return data
+                    return json.load(f)
         else:
             print(f"Error running walkforward for {symbol}: {result.stderr}")
             return None

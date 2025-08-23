@@ -204,9 +204,8 @@ def _compute_rsi(prices: pd.Series, window: int = 14) -> pd.Series:
     loss = (-delta.where(delta < 0, 0)).rolling(window=window, min_periods=window).mean()
 
     rs = gain / (loss + 1e-8)
-    rsi = 100 - (100 / (1 + rs))
+    return 100 - (100 / (1 + rs))
 
-    return rsi
 
 
 def _compute_macd(
@@ -260,9 +259,8 @@ def _compute_atr(df: pd.DataFrame, price_col: str, window: int = 14) -> pd.Serie
     true_range = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
 
     # ATR is the moving average of True Range
-    atr = true_range.rolling(window=window, min_periods=window).mean()
+    return true_range.rolling(window=window, min_periods=window).mean()
 
-    return atr
 
 
 def validate_features(df: pd.DataFrame) -> dict[str, Any]:

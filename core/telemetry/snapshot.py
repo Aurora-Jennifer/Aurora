@@ -85,7 +85,7 @@ class TelemetrySnapshot:
             current_regime = regime_history[-1].get("regime", "unknown")
             regime_confidence = regime_history[-1].get("confidence", 0.0)
 
-        snapshot = {
+        return {
             "timestamp": timestamp.isoformat(),
             "date": date_class.today().isoformat(),
             "capital": capital,
@@ -110,7 +110,6 @@ class TelemetrySnapshot:
             },
         }
 
-        return snapshot
 
     def save_snapshot(self, snapshot: dict, filename: str | None = None) -> str:
         """
@@ -186,9 +185,8 @@ class TelemetrySnapshot:
 
         # Save report
         filename = f"daily_report_{today.strftime('%Y-%m-%d')}.json"
-        filepath = self.save_snapshot(report, filename)
+        return self.save_snapshot(report, filename)
 
-        return filepath
 
     def generate_performance_report(
         self,
@@ -282,9 +280,8 @@ class TelemetrySnapshot:
 
         # Save report
         filename = f"performance_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-        filepath = self.save_snapshot(report, filename)
+        return self.save_snapshot(report, filename)
 
-        return filepath
 
     def log_system_health(
         self,
@@ -432,6 +429,5 @@ class TelemetrySnapshot:
 
         # Save dashboard data
         filename = f"dashboard_data_{datetime.now().strftime('%Y%m%d')}.json"
-        filepath = self.save_snapshot(dashboard_data, filename)
+        return self.save_snapshot(dashboard_data, filename)
 
-        return filepath

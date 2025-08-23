@@ -170,9 +170,8 @@ def _apply_asset_risk_overlay(
     )
 
     # 4. Calculate performance metrics
-    df = _calculate_performance_metrics(df, pos_col, ret_col)
+    return _calculate_performance_metrics(df, pos_col, ret_col)
 
-    return df
 
 
 def _apply_volatility_targeting(
@@ -327,9 +326,8 @@ def _calculate_drawdown(cumulative_returns: pd.Series) -> pd.Series:
     """
 
     running_max = cumulative_returns.expanding().max()
-    drawdown = (cumulative_returns - running_max) / running_max
+    return (cumulative_returns - running_max) / running_max
 
-    return drawdown
 
 
 def compute_risk_metrics(

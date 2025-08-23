@@ -38,7 +38,7 @@ def create_simple_data(symbol: str, days: int = 50) -> pd.DataFrame:
     prices = base_price * np.exp(np.cumsum(returns))
 
     # Create OHLCV data
-    data = pd.DataFrame(
+    return pd.DataFrame(
         {
             "Date": dates,
             "Open": prices * 0.999,
@@ -49,7 +49,6 @@ def create_simple_data(symbol: str, days: int = 50) -> pd.DataFrame:
         }
     )
 
-    return data
 
 
 def main():

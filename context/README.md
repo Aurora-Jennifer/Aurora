@@ -3,6 +3,10 @@
 ## **Purpose**
 These context files provide comprehensive information about the trading system codebase to enable better AI assistance and more accurate responses to development questions.
 
+See also:
+- Module summaries: `docs/summaries/` (core, engine, data_sanity, signals, strategies)
+- Runbooks: `docs/runbooks/` (e.g., `datasanity_ops.md`, `observability.md`)
+
 ## **Context Files Overview**
 
 ### **1. System Overview** (`01_SYSTEM_OVERVIEW.md`)
@@ -173,6 +177,6 @@ and are consistent with the system architecture (04_SYSTEM_ARCHITECTURE.md).
 
 ---
 
-**Last Updated**: August 17, 2025
+**Last Updated**: August 21, 2025
 **Purpose**: Enable better AI assistance and development efficiency
 **Maintenance**: Update as system evolves

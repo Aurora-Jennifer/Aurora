@@ -102,8 +102,7 @@ def load_config(config_path: str) -> dict:
     """Load training configuration."""
     try:
         with open(config_path) as f:
-            config = json.load(f)
-        return config
+            return json.load(f)
     except Exception as e:
         logger.error(f"Error loading config {config_path}: {e}")
         return {}

@@ -56,9 +56,8 @@ def run_backtest_analysis(symbol, start_date, end_date, profile_config):
                     metrics["initial_capital"] = float(initial_capital)
 
             return metrics
-        else:
-            print(f"Error running backtest for {symbol}: {result.stderr}")
-            return None
+        print(f"Error running backtest for {symbol}: {result.stderr}")
+        return None
 
     except subprocess.TimeoutExpired:
         print(f"Timeout running backtest for {symbol}")

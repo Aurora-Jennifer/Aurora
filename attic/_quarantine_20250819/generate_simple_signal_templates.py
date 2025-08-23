@@ -352,7 +352,7 @@ class SimpleSignalTemplateGenerator:
         trend_weight /= total_weight
         mean_rev_weight /= total_weight
 
-        template = {
+        return {
             "type": signal_type,
             "confidence": float(confidence),
             "market_regime": {
@@ -387,7 +387,6 @@ class SimpleSignalTemplateGenerator:
             },
         }
 
-        return template
 
     def _summarize_indicators(self, indicators: dict[str, pd.Series]) -> dict[str, float]:
         """

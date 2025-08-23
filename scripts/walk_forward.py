@@ -33,9 +33,8 @@ def run_backtest(start_date, end_date, symbols):
     if result.returncode == 0:
         print("✅ Success")
         return True
-    else:
-        print(f"❌ Failed: {result.stderr}")
-        return False
+    print(f"❌ Failed: {result.stderr}")
+    return False
 
 
 def main():

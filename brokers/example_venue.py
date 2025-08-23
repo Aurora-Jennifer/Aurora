@@ -153,8 +153,7 @@ class ExampleVenueBroker(Broker):
             data = response.json()
 
             # Parse broker timestamp
-            broker_time = datetime.fromisoformat(data.get("timestamp", "").replace("Z", "+00:00"))
-            return broker_time
+            return datetime.fromisoformat(data.get("timestamp", "").replace("Z", "+00:00"))
         except Exception:
             # Fallback to local time
             return datetime.now(UTC)

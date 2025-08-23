@@ -58,7 +58,7 @@ registry:
     )
     # Canary might fail due to missing data, but should not crash
     assert out.returncode in (0, 1, 2)
-    
+
     # Check if logs directory was created (even if empty)
     canary_dir = tmp_path / "logs/canary"
     if canary_dir.exists():

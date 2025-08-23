@@ -1,37 +1,44 @@
-import pytest
 import pandas as pd
-import numpy as np
-from hypothesis import given, strategies as st, settings, Verbosity
-from hypothesis.extra.pandas import data_frames, column, indexes
+import pytest
+from hypothesis import Verbosity, given, settings
+from hypothesis import strategies as st
+
+from core.data_sanity import DataSanityError, DataSanityValidator
 from tests.datasanity._golden import EXPECTED
-from tests.datasanity._mutate import inject_duplicates, inject_non_monotonic, inject_nans, inject_infs, inject_lookahead, inject_string_dtype
-from core.data_sanity import DataSanityValidator, DataSanityError
+from tests.datasanity._mutate import (
+    inject_duplicates,
+    inject_infs,
+    inject_lookahead,
+    inject_nans,
+    inject_string_dtype,
+)
+
 
 # Property test strategies
 @st.composite
 def clean_ohlcv_dataframes(draw):
     """Generate clean OHLCV DataFrames for property testing."""
     dates = pd.date_range("2023-01-01", periods=100, freq="D")
-    
+
     # Generate realistic price movements
     base_price = draw(st.floats(min_value=50, max_value=500))
     price_changes = draw(st.lists(
         st.floats(min_value=-0.05, max_value=0.05),  # ±5% daily changes
         min_size=100, max_size=100
     ))
-    
+
     # Build price series with realistic movements
     prices = [base_price]
     for change in price_changes[1:]:
         new_price = prices[-1] * (1 + change)
         prices.append(max(1.0, new_price))  # Ensure positive prices
-    
+
     # Generate OHLC from close prices with realistic spreads
     data = {
         "Close": prices,
         "Volume": [draw(st.floats(min_value=1000, max_value=1000000)) for _ in range(100)],
     }
-    
+
     # Generate realistic OHLC from close prices
     ohlc_data = []
     for i, close_price in enumerate(prices):
@@ -40,7 +47,7 @@ def clean_ohlcv_dataframes(draw):
         open_price = close_price + draw(st.floats(min_value=-spread, max_value=spread))
         high_price = max(open_price, close_price) + draw(st.floats(min_value=0, max_value=spread))
         low_price = min(open_price, close_price) - draw(st.floats(min_value=0, max_value=spread))
-        
+
         ohlc_data.append({
             "Open": max(0.1, open_price),
             "High": max(0.1, high_price),
@@ -48,13 +55,13 @@ def clean_ohlcv_dataframes(draw):
             "Close": max(0.1, close_price),
             "Volume": data["Volume"][i]
         })
-    
+
     df = pd.DataFrame(ohlc_data, index=dates)
-    
+
     # Ensure OHLC invariants
     df["High"] = df[["Open", "High", "Close"]].max(axis=1)
     df["Low"] = df[["Open", "Low", "Close"]].min(axis=1)
-    
+
     return df.astype({"Open": float, "High": float, "Low": float, "Close": float, "Volume": float})
 
 @st.composite

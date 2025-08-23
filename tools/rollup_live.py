@@ -15,7 +15,7 @@ def roll():
                 trades += 1
             syms.add(obj.get("symbol"))
     ts = datetime.now(UTC).strftime("%Y%m%d")
-    out = {"trades": trades, "symbols": sorted(list(syms))}
+    out = {"trades": trades, "symbols": sorted(syms)}
     Path("reports").mkdir(exist_ok=True)
     Path("docs/analysis").mkdir(parents=True, exist_ok=True)
     Path(f"reports/live_daily_{ts}.json").write_text(json.dumps(out, indent=2))

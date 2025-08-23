@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import contextlib
 import random
+from typing import TYPE_CHECKING
 
 import numpy as np
 import pandas as pd
 
-from .model_interface import Model
+if TYPE_CHECKING:
+    from .model_interface import Model
 
 
 def set_seeds(seed: int = 1337) -> None:
@@ -31,8 +33,7 @@ def build_features(prices: pd.DataFrame, feature_list: list[str]) -> pd.DataFram
         feats["ret_5d"] = df["Close"].pct_change(5)
     if "vol_10d" in feature_list:
         feats["vol_10d"] = df["Close"].pct_change().rolling(10).std()
-    F = pd.DataFrame(feats, index=df.index).dropna()
-    return F
+    return pd.DataFrame(feats, index=df.index).dropna()
 
 
 def _map_scores_to_weights(scores: np.ndarray, map_name: str, max_abs: float) -> np.ndarray:

@@ -1,0 +1,38 @@
+{
+  "profile": "golden_linear",
+  "baseline_ic": 0.01748469236620265,
+  "results": [
+    {
+      "group": "carry",
+      "baseline_ic": 0.01748469236620265,
+      "ablated_ic": 0.02967144604106558,
+      "ic_delta": 0.012186753674862928,
+      "p_value": 0.5,
+      "is_harmful": true
+    },
+    {
+      "group": "trend",
+      "baseline_ic": 0.01748469236620265,
+      "ablated_ic": 0.013481609138030745,
+      "ic_delta": -0.004003083228171906,
+      "p_value": 0.5,
+      "is_harmful": false
+    },
+    {
+      "group": "vol",
+      "baseline_ic": 0.01748469236620265,
+      "ablated_ic": 0.01084041161068968,
+      "ic_delta": -0.0066442807555129706,
+      "p_value": 0.5,
+      "is_harmful": false
+    },
+    {
+      "group": "momentum",
+      "baseline_ic": 0.01748469236620265,
+      "ablated_ic": 0.033856685499875756,
+      "ic_delta": 0.016371993133673105,
+      "p_value": 0.5,
+      "is_harmful": true
+    }
+  ]
+}

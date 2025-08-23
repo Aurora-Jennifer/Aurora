@@ -16,7 +16,7 @@ def pytest_configure(config: pytest.Config) -> None:
 
 @pytest.fixture(scope="session")
 def datasanity(request: pytest.FixtureRequest):
-    from core.data_sanity import DataSanityValidator, DataSanityError
+    from core.data_sanity import DataSanityError, DataSanityValidator
 
     class DS:
         Error = DataSanityError

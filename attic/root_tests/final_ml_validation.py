@@ -465,9 +465,8 @@ def main():
         if success:
             print("\n🎉 ML VALIDATION COMPLETE - ALL SYSTEMS OPERATIONAL!")
             return 0
-        else:
-            print("\n⚠️ ML VALIDATION COMPLETE - SOME ISSUES DETECTED")
-            return 1
+        print("\n⚠️ ML VALIDATION COMPLETE - SOME ISSUES DETECTED")
+        return 1
 
     except Exception as e:
         print(f"\n❌ Error in ML validation: {e}")

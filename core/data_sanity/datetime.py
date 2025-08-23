@@ -1,7 +1,8 @@
 import pandas as pd
+
+from .codes import DUPLICATE_TSTAMPS, INDEX_NON_MONOTONIC, NO_VALID_DT_INDEX, TZ_NAIVE, TZ_NON_UTC
 from .errors import DataSanityError, estring
-from .codes import (TZ_NAIVE, TZ_NON_UTC, INDEX_NON_MONOTONIC,
-                    DUPLICATE_TSTAMPS, NO_VALID_DT_INDEX)
+
 
 def _coerce_any_to_utc_index(idx_like) -> pd.DatetimeIndex:
     idx = pd.to_datetime(idx_like, errors="coerce", utc=True)

@@ -1,0 +1,22 @@
+{
+  "profile": "config/profiles/golden_xgb_v2.yaml",
+  "period": "2019-01-01 to 2020-12-31",
+  "metrics": {
+    "sharpe": 0.26699074203371914,
+    "max_dd": -0.15211172511840462,
+    "cagr": 0.024330585204318744,
+    "vol": 0.1532357238587898,
+    "hit_rate": 0.5198412698412699,
+    "avg_win": 0.007515734891419377,
+    "avg_loss": -0.007798750009525355,
+    "turnover": 2.5,
+    "slippage_budget": 0.001
+  },
+  "acceptance": {
+    "sharpe_ok": false,
+    "max_dd_ok": false,
+    "turnover_ok": true,
+    "slippage_ok": true
+  },
+  "all_passed": false
+}

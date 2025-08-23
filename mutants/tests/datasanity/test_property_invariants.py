@@ -1,11 +1,18 @@
-import pytest
 import pandas as pd
-import numpy as np
-from hypothesis import given, strategies as st, settings, Verbosity
-from hypothesis.extra.pandas import data_frames, column, indexes
+import pytest
+from hypothesis import Verbosity, given, settings
+from hypothesis import strategies as st
+
+from core.data_sanity import DataSanityError, DataSanityValidator
 from tests.datasanity._golden import EXPECTED
-from tests.datasanity._mutate import inject_duplicates, inject_non_monotonic, inject_nans, inject_infs, inject_lookahead, inject_string_dtype
-from core.data_sanity import DataSanityValidator, DataSanityError
+from tests.datasanity._mutate import (
+    inject_duplicates,
+    inject_infs,
+    inject_lookahead,
+    inject_nans,
+    inject_string_dtype,
+)
+
 
 # Property test strategies
 @st.composite

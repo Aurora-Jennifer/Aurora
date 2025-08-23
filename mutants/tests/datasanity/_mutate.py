@@ -1,5 +1,5 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 
 def inject_duplicates(df: pd.DataFrame, n: int = 2) -> pd.DataFrame:

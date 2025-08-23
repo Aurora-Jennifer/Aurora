@@ -19,7 +19,7 @@ def create_test_data(seed=42):
     """Create consistent test data for reproducibility tests."""
     np.random.seed(seed)
     dates = pd.date_range("2020-01-01", periods=100, freq="D", tz="UTC")
-    data = pd.DataFrame(
+    return pd.DataFrame(
         {
             "Open": np.random.randn(100).cumsum() + 100,
             "High": np.random.randn(100).cumsum() + 102,
@@ -29,7 +29,6 @@ def create_test_data(seed=42):
         },
         index=dates,
     )
-    return data
 
 
 def run_walkforward_test(data, model_seed=42):

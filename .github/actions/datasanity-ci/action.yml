@@ -1,0 +1,83 @@
+name: "DataSanity CI kit"
+description: "Sentry, traces/heatmap, perf contract, flakiness, artifacts"
+inputs:
+  perf_budget_ms_small:
+    description: "Absolute perf budget (ms) for small DF"
+    default: "20.0"
+  fs_runs:
+    description: "Flakiness scout runs"
+    default: "5"
+  trace_glob:
+    description: "Glob for trace jsons"
+    default: "artifacts/traces/*.json"
+runs:
+  using: "composite"
+  steps:
+    - name: DataSanity Sentry (non-blocking)
+      shell: bash
+      run: |
+        set -e
+        if [ -f bin/ds_sentry.py ]; then
+          python bin/ds_sentry.py || echo "[SENTRY] non-blocking failure"
+        else
+          echo "bin/ds_sentry.py not found; skipping"
+        fi
+
+    - name: Emit rule traces (non-blocking)
+      shell: bash
+      run: |
+        mkdir -p artifacts/traces
+        pytest tests/datasanity -m "sanity or contract" -p tests.plugins.trace_emit -- --emit-traces \
+          || echo "[TRACES] non-blocking failure"
+
+    - name: Trace heatmap (non-blocking)
+      shell: bash
+      run: |
+        if [ -f bin/trace_summary.py ]; then
+          python bin/trace_summary.py | tee artifacts/trace_heatmap.tsv || echo "[HEATMAP] non-blocking failure"
+        else
+          echo "bin/trace_summary.py not found; skipping"
+        fi
+
+    - name: Step summary (non-blocking)
+      shell: bash
+      run: |
+        if [ -f bin/gha_summary.py ]; then
+          python bin/gha_summary.py || echo "[SUMMARY] non-blocking failure"
+        else
+          echo "bin/gha_summary.py not found; skipping"
+        fi
+
+    - name: Perf contract (absolute budgets)
+      shell: bash
+      env:
+        DS_PERF_BUDGET_MS_SMALL: ${{ inputs.perf_budget_ms_small }}
+      run: |
+        pytest tests/datasanity/test_perf_contract.py -q
+
+    - name: Flakiness scout (datasanity only)
+      shell: bash
+      env:
+        FS_TARGET: "tests/datasanity -m 'sanity or contract'"
+        FS_RUNS: ${{ inputs.fs_runs }}
+      run: |
+        python bin/flaky_scout.py
+
+    - name: Train-readiness (non-blocking)
+      shell: bash
+      run: |
+        pytest tests/train_readiness -m sanity -q || echo "[TRAIN-READINESS] non-blocking failure"
+
+    - name: Upload DataSanity artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: datasanity-artifacts
+        path: |
+          artifacts/traces
+          artifacts/trace_heatmap.tsv
+    - name: Gatekeeper (Ready to Train) — non-blocking
+      shell: bash
+      run: |
+        python bin/gatekeeper.py --target train || echo "[GATEKEEPER] non-blocking failure"
+

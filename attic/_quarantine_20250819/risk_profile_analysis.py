@@ -61,9 +61,8 @@ def run_walkforward_analysis(symbol, start_date, end_date, config_file, output_d
                     metrics["hit_rate"] = float(line.split(":")[1].strip())
 
             return metrics
-        else:
-            print(f"Error running walkforward for {symbol}: {result.stderr}")
-            return None
+        print(f"Error running walkforward for {symbol}: {result.stderr}")
+        return None
 
     except subprocess.TimeoutExpired:
         print(f"Timeout running walkforward for {symbol}")

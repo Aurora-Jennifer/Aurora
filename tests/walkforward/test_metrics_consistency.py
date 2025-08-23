@@ -18,7 +18,7 @@ def create_test_data(seed=42):
     """Create consistent test data for metrics tests."""
     np.random.seed(seed)
     dates = pd.date_range("2020-01-01", periods=100, freq="D", tz="UTC")
-    data = pd.DataFrame(
+    return pd.DataFrame(
         {
             "Open": np.random.randn(100).cumsum() + 100,
             "High": np.random.randn(100).cumsum() + 102,
@@ -28,7 +28,6 @@ def create_test_data(seed=42):
         },
         index=dates,
     )
-    return data
 
 
 def run_walkforward_test(data, model_seed=42):
@@ -72,7 +71,7 @@ def aggregate_fold_metrics(results):
         trade_counts.append(len(trades))
 
     # Calculate aggregate statistics
-    summary = {
+    return {
         "mean_sharpe": np.mean(sharpe_scores),
         "mean_sortino": np.mean(sortino_scores),
         "mean_max_dd": np.mean(max_dds),
@@ -92,7 +91,6 @@ def aggregate_fold_metrics(results):
         "std_total_return": np.std(total_returns),
     }
 
-    return summary
 
 
 def test_fold_metrics_aggregate_to_summary():

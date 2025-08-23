@@ -1,5 +1,5 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 
 def inject_duplicates(df: pd.DataFrame, n: int = 2) -> pd.DataFrame:
@@ -32,11 +32,7 @@ def inject_lookahead(df: pd.DataFrame, shift: int = 1) -> pd.DataFrame:
     return out
 
 
-def inject_duplicates(df, frac=0.01):
-    """Inject duplicate timestamps into DataFrame."""
-    n = max(1, int(len(df)*frac))
-    pick = df.sample(n, replace=False).index
-    return pd.concat([df, df.loc[pick]]).sort_index()
+
 
 
 def inject_nans(df, cols=None, frac=0.05):

@@ -31,7 +31,7 @@ if trades["timestamp"].isna().any():
     ok = False
 
 # No duplicates by (timestamp, symbol, trade_id)
-if set(["timestamp", "symbol", "trade_id"]).issubset(trades.columns):
+if {"timestamp", "symbol", "trade_id"}.issubset(trades.columns):
     dups = trades.duplicated(subset=["timestamp", "symbol", "trade_id"]).sum()
     if dups > 0:
         print(f"FAIL: duplicate (timestamp, symbol, trade_id) rows: {dups}")

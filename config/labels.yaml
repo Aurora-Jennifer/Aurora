@@ -1,0 +1,6 @@
+target:
+  name: ret_1d_forward
+  horizon_bars: 1
+  align: close_to_close
+  metric: sharpe
+

@@ -24,7 +24,7 @@ def create_synthetic_dataset() -> pd.DataFrame:
     dates = pd.date_range("2020-01-01", periods=100, freq="D", tz="UTC")
 
     # Generate synthetic features and labels
-    features = pd.DataFrame(
+    return pd.DataFrame(
         {
             "ret_1d": np.random.randn(100) * 0.01,
             "ret_5d": np.random.randn(100) * 0.02,
@@ -40,7 +40,6 @@ def create_synthetic_dataset() -> pd.DataFrame:
         index=dates,
     )
 
-    return features
 
 
 def test_alpha_eval_metrics_calculation():

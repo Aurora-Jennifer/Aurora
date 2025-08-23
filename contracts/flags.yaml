@@ -1,0 +1,46 @@
+# Flags Default-Off Contract
+# L0 Gate: PR CI, <3 min total
+
+spec:
+  name: "flags_default_off"
+  level: "L0"
+  description: "All FEATURE_* / EXPERIMENT_* / PROMO_* flags must default to off"
+  
+requirements:
+  flag_patterns:
+    - pattern: "FEATURE_.*"
+      default: "off"
+    - pattern: "EXPERIMENT_.*"
+      default: "off"
+    - pattern: "PROMO_.*"
+      default: "off"
+    - pattern: "FLAG_.*"
+      default: "off"
+      
+  promotion_discipline:
+    - require_pr_for_default_change: true
+    - require_adr_reference: true
+    - require_test_evidence: true
+    
+  off_values:
+    - 0
+    - false
+    - "0"
+    - "false"
+    - "off"
+    - "disabled"
+    
+validation:
+  - fail_on_flag_default_on: true
+  - fail_on_missing_adr: true
+  - fail_on_missing_test_evidence: true
+
+tests:
+  - test_flags_default_off
+  - test_promotion_flags_require_adr
+  - test_flag_changes_require_pr
+
+fail_messages:
+  flag_on: "Flag {flag} defaults to ON - must default to OFF"
+  missing_adr: "Promotion flag {flag} missing ADR reference"
+  missing_test: "Flag change {flag} missing test evidence"

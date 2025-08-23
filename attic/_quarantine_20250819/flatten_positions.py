@@ -11,12 +11,14 @@ import os
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 # Add project root to path
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-from brokers.interface import Broker
+
+if TYPE_CHECKING:
+    from brokers.interface import Broker
 
 
 def get_broker() -> Broker:
@@ -27,7 +29,7 @@ def get_broker() -> Broker:
         from brokers.example_venue import ExampleVenueBroker
 
         return ExampleVenueBroker()
-    elif venue == "ibkr":
+    if venue == "ibkr":
         import yaml
 
         from brokers.ibkr import IBKRBroker, IBKRConfig
@@ -48,8 +50,7 @@ def get_broker() -> Broker:
             qty_min=ibkr_cfg.get("ibkr", {}).get("qty_min", 1.0),
         )
         return IBKRBroker(config)
-    else:
-        raise ValueError(f"Unknown broker venue: {venue}")
+    raise ValueError(f"Unknown broker venue: {venue}")
 
 
 def flatten_all_positions(broker: Broker, dry_run: bool = False) -> dict[str, Any]:

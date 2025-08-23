@@ -1,0 +1,25 @@
+{
+  "exp_id": 1755774754,
+  "profile": "golden_linear",
+  "snapshot": "golden_ml_v1",
+  "features": [
+    "ret_1d_lag1",
+    "sma_10",
+    "sma_20",
+    "vol_10",
+    "rsi_14"
+  ],
+  "model": {
+    "kind": "ridge",
+    "alpha": 1.0
+  },
+  "metrics": {
+    "r2": -0.062302690637979996,
+    "ic": 0.03870117603077533,
+    "duration_sec": 0.002025127410888672,
+    "rows": 966,
+    "cols": 5
+  },
+  "onnx": {},
+  "oof_predictions_path": "artifacts/models/1755774754/preds_oof.parquet"
+}

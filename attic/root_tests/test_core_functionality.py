@@ -717,9 +717,8 @@ def main():
         print("✅ Performance benchmarks met")
         print("\n🚀 System ready for live trading deployment!")
         return 0
-    else:
-        print(f"\n⚠️ {total - passed} tests failed. Please review issues above.")
-        return 1
+    print(f"\n⚠️ {total - passed} tests failed. Please review issues above.")
+    return 1
 
 
 if __name__ == "__main__":

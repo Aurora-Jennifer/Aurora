@@ -103,12 +103,11 @@ def test_adversarial_replay() -> dict[str, Any]:
                     else "Performance degraded as expected"
                 ),
             }
-        else:
-            return {
-                "test": "adversarial_replay",
-                "passed": False,
-                "error": "Could not parse backtest results",
-            }
+        return {
+            "test": "adversarial_replay",
+            "passed": False,
+            "error": "Could not parse backtest results",
+        }
 
     except Exception as e:
         return {"test": "adversarial_replay", "passed": False, "error": str(e)}
@@ -230,12 +229,11 @@ def test_zero_fee_guard() -> dict[str, Any]:
                     else "Zero fees didn't improve performance - fees may not be wired correctly"
                 ),
             }
-        else:
-            return {
-                "test": "zero_fee_guard",
-                "passed": False,
-                "error": "Could not parse backtest results",
-            }
+        return {
+            "test": "zero_fee_guard",
+            "passed": False,
+            "error": "Could not parse backtest results",
+        }
 
     except Exception as e:
         return {"test": "zero_fee_guard", "passed": False, "error": str(e)}
@@ -332,12 +330,11 @@ def test_consistency_audit() -> dict[str, Any]:
                     else "Results are inconsistent - system may not be deterministic"
                 ),
             }
-        else:
-            return {
-                "test": "consistency_audit",
-                "passed": False,
-                "error": "Could not parse backtest results",
-            }
+        return {
+            "test": "consistency_audit",
+            "passed": False,
+            "error": "Could not parse backtest results",
+        }
 
     except Exception as e:
         return {"test": "consistency_audit", "passed": False, "error": str(e)}

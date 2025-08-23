@@ -1,0 +1,111 @@
+# Paper Trading Gate Configuration
+# Hard checks that prevent circular progress and enforce operational discipline
+
+gates:
+  # Environment & Reproducibility
+  - id: env_fingerprint
+    desc: Runtime and dependencies match locked manifest
+    command: pytest tests/ops/test_environment_fingerprint.py
+    required: true
+    timeout_minutes: 5
+
+  - id: determinism_cross_process
+    desc: Two fresh processes yield byte-identical artifacts given same manifest
+    command: pytest tests/determinism/test_cross_process.py
+    required: true
+    timeout_minutes: 10
+
+  # Data & Time Contracts
+  - id: timezone_contract
+    desc: Timestamps tz-aware UTC; market-hours respected; monotonic per symbol
+    command: pytest tests/contracts/test_time_calendar_contract.py
+    required: true
+    timeout_minutes: 5
+
+  - id: vendor_events
+    desc: Corporate actions/halts normalized; no label shift around events
+    command: pytest tests/contracts/test_vendor_events_normalization.py
+    required: true
+    timeout_minutes: 5
+
+  - id: dtype_numeric_policy
+    desc: Stable dtypes; no NaN/Inf post-stage; no implicit casts
+    command: pytest tests/contracts/test_numeric_dtype_policy.py
+    required: true
+    timeout_minutes: 5
+
+  # Model & Export Integrity
+  - id: parity_edge_suite
+    desc: Export parity on adversarial edge-cases
+    command: pytest tests/parity/test_export_parity_edges.py
+    required: true
+    timeout_minutes: 10
+
+  - id: split_purge_integrity
+    desc: Forward-only splits with purge gap; no overlap
+    command: pytest tests/contracts/test_split_purge_integrity.py
+    required: true
+    timeout_minutes: 5
+
+  # Safety & Risk
+  - id: order_circuit_breakers
+    desc: Safety rails prevent pathological orders; kill-switch works
+    command: pytest tests/risk/test_circuit_breakers.py
+    required: true
+    timeout_minutes: 5
+
+  - id: idempotency_recovery
+    desc: Exactly-once decisions; crash/restart produces no duplicates
+    command: pytest tests/integration/test_idempotent_recovery.py
+    required: true
+    timeout_minutes: 15
+
+  # Observability & Telemetry
+  - id: telemetry_schema_pii
+    desc: Logs match JSON schema and are PII-scrubbed
+    command: pytest tests/contracts/test_telemetry_schema_pii.py
+    required: true
+    timeout_minutes: 5
+
+  # Promotion & Release
+  - id: promotion_flag_defaults
+    desc: All new feature flags default off; promotion checklist attached
+    command: pytest tests/ops/test_flag_defaults_and_promotion.py
+    required: true
+    timeout_minutes: 5
+
+  - id: snapshot_immutability
+    desc: Golden snapshot is write-protected and hash-verified
+    command: pytest tests/contracts/test_snapshot_immutability.py
+    required: true
+    timeout_minutes: 5
+
+  # Quality Assurance
+  - id: mutation_score_floor
+    desc: Mutation testing passes minimum score on critical modules
+    command: pytest -q --maxfail=1 -k mutation_critical
+    required: true
+    timeout_minutes: 20
+
+# Gate enforcement policy
+policy:
+  # Ratchet: thresholds can only get stricter
+  ratchet_file: config/ratchet.yaml
+  
+  # Gate changes require dedicated PR
+  gate_change_required:
+    - label: "Gate Change"
+    - reviewer_checklist: true
+    - justification_required: true
+  
+  # Bug rule: defects add failing tests before fixes
+  defect_rule:
+    - add_failing_test_first: true
+    - gate_only_gets_stricter: true
+  
+  # Promotion path
+  promotion_path:
+    - shadow: "FLAG_SHADOW_MODE=1"
+    - paper: "FLAG_PAPER_MODE=1" 
+    - live: "FLAG_LIVE_MODE=1"
+    - all_default_off: true

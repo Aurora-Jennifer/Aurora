@@ -1,102 +1,122 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "aurora-trader"
 version = "0.1.0"
-description = "Aurora Trading System"
-authors = [{name = "Jennifer", email = "jennifer@aurora.com"}]
-readme = "README.md"
-requires-python = ">=3.11"
+description = "Production-grade ML trading system"
 dependencies = [
     "pandas>=2.0.0",
     "numpy>=1.24.0",
-    "yfinance>=0.2.0",
-    "pyyaml>=6.0",
+    "scikit-learn>=1.3.0",
+    "xgboost>=2.0.0",
+    "onnx>=1.14.0",
+    "onnxruntime>=1.16.0",
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
-    "hypothesis>=6.0.0",
-    "mutmut>=3.0.0",
+    "pytest-benchmark>=4.0.0",
+    "hypothesis>=6.80.0",
+    "ruff>=0.6.0",
+    "mypy>=1.5.0",
+    "bandit>=1.7.5",
+    "pip-audit>=2.6.0",
 ]
 
-[project.optional-dependencies]
-dev = [
-    "ruff>=0.1.0",
-    "bandit>=1.7.0",
-    "pip-audit>=1.0.0",
-]
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
 
-[project.scripts]
-trading-bot = "enhanced_paper_trading:main"
-
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["core*", "scripts*", "tests*", "utils*"]
-
-[tool.black]
-line-length = 88
-target-version = ['py38']
-include = '\.pyi?$'
-extend-exclude = '''
-/(
-  # directories
-  \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | build
-  | dist
-)/
-'''
-
-[tool.isort]
-profile = "black"
-multi_line_output = 3
-line_length = 88
-known_first_party = ["core", "strategies", "features", "brokers"]
+# Ignore missing imports for now
+ignore_missing_imports = true
 
 [tool.ruff]
 target-version = "py311"
-line-length = 88
-select = ["E", "F", "I", "UP", "B", "SIM"]
-ignore = ["E501", "B008", "B006"]
-
-[tool.ruff.lint]
-extend-select = ["E","F","I","B","UP","SIM"]
-ignore = ["E203","E266"]
+line-length = 100
 exclude = [
-    "attic/",
-    "docs/",
-    "tests/",
-    "*.md",
-    "*.txt",
-    "*.json",
-    "*.yaml",
-    "*.yml"
+    "mutants",
+    "attic",
+    "**/__pycache__",
+    "**/.git",
+    "**/.venv",
+    "**/venv",
+    "**/.env",
+]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings  
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "SIM", # flake8-simplify
+    "C4",  # flake8-comprehensions
+    "PIE", # flake8-pie
+    "T20", # flake8-print
+    "RET", # flake8-return
+    "TCH", # flake8-type-checking
+]
+ignore = [
+    "E501",  # Line too long (handled by formatter)
+    "T201",  # Print statements (allowed in scripts)
 ]
 
-[tool.ruff.format]
-
-[tool.ruff.lint.per-file-ignores]
-"__init__.py" = ["F401"]
+[tool.ruff.per-file-ignores]
+"tests/**/*.py" = ["T201"]  # Allow prints in tests
+"scripts/**/*.py" = ["T201"]  # Allow prints in scripts
 
 [tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers --strict-config"
 testpaths = ["tests"]
-python_files = ["test_*.py", "*_test.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
-addopts = [
-    "--strict-markers",
-    "--strict-config",
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "e2e: marks tests as end-to-end tests",
+    "benchmark: marks tests as benchmarks",
+    "smoke: deterministic minimum-path tests",
+    "quarantine: unstable/flaky; excluded from CI by default",
+    "sanity: data sanity validation tests",
 ]
 
-[tool.mutmut]
-paths_to_mutate = ["core/data_sanity"]
-tests_dir = "tests"
-runner = "python -m pytest tests/ -q"
-backup = false
-CI = true
-dict_synonyms = ["Struct", "NamedStruct"]
+[tool.coverage.run]
+source = ["core", "scripts", "oms"]
+omit = [
+    "tests/*",
+    "mutants/*",
+    "attic/*",
+    "*/conftest.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.bandit]
+exclude_dirs = ["tests", "mutants", "attic"]
+skips = ["B101", "B601"]  # Skip assert_used and shell=True (controlled usage)
+
+[tool.bandit.assert_used]
+skips = ["**/tests/**/*.py"]

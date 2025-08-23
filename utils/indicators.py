@@ -125,12 +125,11 @@ def winsorize(
     """
     if isinstance(data, pd.Series):
         return pd.Series(stats.mstats.winsorize(data, limits=limits))
-    else:
-        return pd.DataFrame(
-            stats.mstats.winsorize(data, limits=limits, axis=axis),
-            index=data.index,
-            columns=data.columns,
-        )
+    return pd.DataFrame(
+        stats.mstats.winsorize(data, limits=limits, axis=axis),
+        index=data.index,
+        columns=data.columns,
+    )
 
 
 def normalize(
@@ -154,28 +153,25 @@ def normalize(
             min_val = data.min()
             max_val = data.max()
             return (data - min_val) / (max_val - min_val + 1e-8)
-        else:
-            rolling_min = data.rolling(window=window, min_periods=window // 2).min()
-            rolling_max = data.rolling(window=window, min_periods=window // 2).max()
-            return (data - rolling_min) / (rolling_max - rolling_min + 1e-8)
+        rolling_min = data.rolling(window=window, min_periods=window // 2).min()
+        rolling_max = data.rolling(window=window, min_periods=window // 2).max()
+        return (data - rolling_min) / (rolling_max - rolling_min + 1e-8)
 
-    elif method == "zscore":
+    if method == "zscore":
         return zscore(data, window=window)
 
-    elif method == "robust":
+    if method == "robust":
         if window is None:
             median_val = data.median()
             mad_val = np.median(np.abs(data - median_val))
             return (data - median_val) / (mad_val + 1e-8)
-        else:
-            median_series = data.rolling(window=window, min_periods=window // 2).median()
-            rolling_mad = data.rolling(window=window, min_periods=window // 2).apply(
-                lambda x: np.median(np.abs(x - x.median()))
-            )
-            return (data - median_series) / (rolling_mad + 1e-8)
+        median_series = data.rolling(window=window, min_periods=window // 2).median()
+        rolling_mad = data.rolling(window=window, min_periods=window // 2).apply(
+            lambda x: np.median(np.abs(x - x.median()))
+        )
+        return (data - median_series) / (rolling_mad + 1e-8)
 
-    else:
-        raise ValueError(f"Unknown normalization method: {method}")
+    raise ValueError(f"Unknown normalization method: {method}")
 
 
 def rsi(prices: pd.Series, window: int = 14, fill_method: str = "ffill") -> pd.Series:
@@ -199,10 +195,9 @@ def rsi(prices: pd.Series, window: int = 14, fill_method: str = "ffill") -> pd.S
 
     if fill_method == "ffill":
         return rsi.ffill()
-    elif fill_method == "bfill":
+    if fill_method == "bfill":
         return rsi.bfill()
-    else:
-        return rsi
+    return rsi
 
 
 def macd(
@@ -248,9 +243,8 @@ def atr(high: pd.Series, low: pd.Series, close: pd.Series, window: int = 14) -> 
     tr3 = abs(low - close.shift(1))
 
     true_range = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
-    atr = true_range.rolling(window=window, min_periods=window).mean()
+    return true_range.rolling(window=window, min_periods=window).mean()
 
-    return atr
 
 
 def bollinger_bands(
@@ -412,9 +406,8 @@ def adx(high: pd.Series, low: pd.Series, close: pd.Series, period: int = 14) -> 
 
     # ADX
     dx = 100 * abs(di_plus - di_minus) / (di_plus + di_minus)
-    adx = dx.rolling(window=period).mean()
+    return dx.rolling(window=period).mean()
 
-    return adx
 
 
 def roc(prices: pd.Series, period: int = 10) -> pd.Series:
@@ -460,9 +453,8 @@ def mfi(
     positive_mf = positive_flow.rolling(window=period).sum()
     negative_mf = negative_flow.rolling(window=period).sum()
 
-    mfi = 100 - (100 / (1 + positive_mf / (negative_mf + 1e-8)))
+    return 100 - (100 / (1 + positive_mf / (negative_mf + 1e-8)))
 
-    return mfi
 
 
 def stochastic(
@@ -510,9 +502,8 @@ def williams_r(high: pd.Series, low: pd.Series, close: pd.Series, period: int = 
     highest_high = high.rolling(window=period).max()
     lowest_low = low.rolling(window=period).min()
 
-    williams_r = -100 * ((highest_high - close) / (highest_high - lowest_low + 1e-8))
+    return -100 * ((highest_high - close) / (highest_high - lowest_low + 1e-8))
 
-    return williams_r
 
 
 def cci(high: pd.Series, low: pd.Series, close: pd.Series, period: int = 20) -> pd.Series:
@@ -534,9 +525,8 @@ def cci(high: pd.Series, low: pd.Series, close: pd.Series, period: int = 20) -> 
         lambda x: np.mean(np.abs(x - x.mean()))
     )
 
-    cci = (typical_price - sma_tp) / (0.015 * mean_deviation)
+    return (typical_price - sma_tp) / (0.015 * mean_deviation)
 
-    return cci
 
 
 def obv(close: pd.Series, volume: pd.Series) -> pd.Series:

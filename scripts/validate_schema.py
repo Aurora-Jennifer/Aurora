@@ -1,19 +1,19 @@
-import sys
 import json
+import sys
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 import pandas as pd
 import yaml
 
 
-def load_yaml(path: Path) -> Dict[str, Any]:
+def load_yaml(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
-def validate_columns(df: pd.DataFrame, spec: List[Dict[str, str]]) -> List[str]:
-    errors: List[str] = []
+def validate_columns(df: pd.DataFrame, spec: list[dict[str, str]]) -> list[str]:
+    errors: list[str] = []
     for col in spec:
         name = col["name"]
         dtype = col["dtype"]
@@ -31,7 +31,7 @@ def validate_columns(df: pd.DataFrame, spec: List[Dict[str, str]]) -> List[str]:
     return errors
 
 
-def main(argv: List[str]) -> int:
+def main(argv: list[str]) -> int:
     # Minimal validator: checks schema file exists and is well-formed.
     root = Path(__file__).resolve().parents[1]
     schema_path = root / "config" / "data_schema.yaml"

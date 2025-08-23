@@ -203,11 +203,9 @@ class StrategySelector:
                 with open(performance_file) as f:
                     performance_data = json.load(f)
 
-                regime_data = performance_data.get(regime_name, {})
-                return regime_data
-            else:
-                # Return default metrics if no performance data available
-                return self._get_default_regime_metrics(regime_name)
+                return performance_data.get(regime_name, {})
+            # Return default metrics if no performance data available
+            return self._get_default_regime_metrics(regime_name)
 
         except Exception as e:
             logger.error(f"Error loading regime performance metrics: {e}")
@@ -296,9 +294,8 @@ class StrategySelector:
             )
 
             # Ensure reasonable bounds
-            final_score = np.clip(final_score, 0.1, 2.0)
+            return np.clip(final_score, 0.1, 2.0)
 
-            return final_score
 
         except Exception as e:
             logger.error(f"Error calculating strategy score: {e}")
@@ -309,10 +306,9 @@ class StrategySelector:
         # High volatility strategies perform better in volatile markets
         if strategy_name in ["mean_reversion", "regime_aware_ensemble"]:
             return 1.0 + volatility * 2.0  # Boost in high volatility
-        elif strategy_name in ["momentum", "sma_crossover"]:
+        if strategy_name in ["momentum", "sma_crossover"]:
             return 1.0 - volatility * 1.5  # Reduce in high volatility
-        else:
-            return 1.0
+        return 1.0
 
     def _calculate_strategy_adjustment(
         self, strategy_name: str, regime_name: str, volatility: float

@@ -1,5 +1,4 @@
 import pandas as pd
-
 import scripts.multi_walkforward_report as mwr
 
 

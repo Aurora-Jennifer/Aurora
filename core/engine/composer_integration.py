@@ -322,7 +322,6 @@ class ComposerIntegration:
             if asset_class and asset_class in self.config.get("assets", {}):
                 self.config["assets"][asset_class]
                 # Could apply asset-specific scoring adjustments here
-                pass
 
             return {
                 "composite_score": score,

@@ -40,5 +40,4 @@ def check_caps(symbol: str, qty: float, px: float, day_used: float, cfg: CanaryC
     d1 = enforce_per_trade_notional(symbol, qty, px, cfg)
     if d1.action != "OK":
         return d1
-    d2 = enforce_daily_notional(symbol, day_used, abs(qty * px), cfg)
-    return d2
+    return enforce_daily_notional(symbol, day_used, abs(qty * px), cfg)

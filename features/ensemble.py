@@ -248,9 +248,8 @@ class SignalCombiner:
             agreement = (feature_signs == combined_sign.values.reshape(-1, 1)).mean(axis=1)
 
         # Combine components (average of signal strength and agreement)
-        confidence = (signal_strength + agreement) / 2
+        return (signal_strength + agreement) / 2
 
-        return confidence
 
     def get_feature_summary(self) -> pd.DataFrame:
         """Get summary statistics for all features."""
@@ -357,10 +356,9 @@ class RegimeSwitcher:
         """
         if method == "adx":
             return self._detect_adx_regime()
-        elif method == "volatility":
+        if method == "volatility":
             return self._detect_volatility_regime()
-        else:
-            raise ValueError(f"Unknown regime detection method: {method}")
+        raise ValueError(f"Unknown regime detection method: {method}")
 
     def _detect_adx_regime(self) -> pd.Series:
         """Detect regime using ADX indicator."""

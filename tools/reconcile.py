@@ -143,14 +143,13 @@ class PnLReconciler:
         if pnl_difference <= self.tolerance:
             print("✅ RECONCILIATION PASS - Difference within tolerance")
             return True
-        else:
-            print("❌ RECONCILIATION FAIL - Difference exceeds tolerance")
-            print("\nPossible causes:")
-            print("  - Fees/slippage not properly accounted for")
-            print("  - Date mismatch between trading and IBKR data")
-            print("  - Different initial capital assumptions")
-            print("  - Missing trades or fills")
-            return False
+        print("❌ RECONCILIATION FAIL - Difference exceeds tolerance")
+        print("\nPossible causes:")
+        print("  - Fees/slippage not properly accounted for")
+        print("  - Date mismatch between trading and IBKR data")
+        print("  - Different initial capital assumptions")
+        print("  - Missing trades or fills")
+        return False
 
     def reconcile_daily_returns(self, trading_returns: list[dict], ibkr_deltas: list[dict]) -> bool:
         """Reconcile daily returns between trading system and IBKR."""

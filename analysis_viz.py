@@ -106,9 +106,8 @@ class TradingAnalysisVisualizer:
                 df = pd.read_csv(importance_file)
                 logger.info(f"Loaded persistence data: {len(df)} records")
                 return df
-            else:
-                logger.warning("No persistence data found")
-                return None
+            logger.warning("No persistence data found")
+            return None
         except Exception as e:
             logger.error(f"Error loading persistence data: {e}")
             return None
@@ -134,9 +133,8 @@ class TradingAnalysisVisualizer:
             if performance_data:
                 logger.info(f"Loaded performance data from {len(performance_data)} sources")
                 return performance_data
-            else:
-                logger.warning("No performance data files found")
-                return None
+            logger.warning("No performance data files found")
+            return None
 
         except Exception as e:
             logger.error(f"Error loading performance data: {e}")
@@ -439,7 +437,7 @@ class TradingAnalysisVisualizer:
             f"Total Trades: {cumulative_trades[-1]:,}",
             transform=ax.transAxes,
             verticalalignment="top",
-            bbox=dict(boxstyle="round", facecolor=self.colors["light"], alpha=0.8),
+            bbox={"boxstyle": "round", "facecolor": self.colors["light"], "alpha": 0.8},
         )
 
     def _plot_model_performance_simulation(self, ax):
@@ -528,7 +526,7 @@ class TradingAnalysisVisualizer:
             fontsize=12,
             verticalalignment="top",
             fontfamily="monospace",
-            bbox=dict(boxstyle="round", facecolor=self.colors["light"], alpha=0.8),
+            bbox={"boxstyle": "round", "facecolor": self.colors["light"], "alpha": 0.8},
         )
         ax.set_title("Learning Summary", fontweight="bold")
         ax.axis("off")
@@ -710,7 +708,7 @@ class TradingAnalysisVisualizer:
             xy=(dates[max_dd_idx], max_dd),
             xytext=(10, 10),
             textcoords="offset points",
-            bbox=dict(boxstyle="round", facecolor=self.colors["light"], alpha=0.8),
+            bbox={"boxstyle": "round", "facecolor": self.colors["light"], "alpha": 0.8},
         )
 
     def _plot_monthly_returns_simulation(self, ax):
@@ -1055,7 +1053,7 @@ class TradingAnalysisVisualizer:
             fontsize=12,
             verticalalignment="top",
             fontfamily="monospace",
-            bbox=dict(boxstyle="round", facecolor=self.colors["light"], alpha=0.8),
+            bbox={"boxstyle": "round", "facecolor": self.colors["light"], "alpha": 0.8},
         )
         ax.set_title("System Summary Statistics", fontweight="bold")
         ax.axis("off")

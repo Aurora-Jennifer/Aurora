@@ -98,8 +98,7 @@ class IBKRDataProvider:
                     data = wrapper.load_and_validate(str(cache_path), symbol)
                     logger.debug(f"Loaded {symbol} data from cache with validation")
                     return data
-                else:
-                    logger.debug(f"Cache for {symbol} is stale, will refresh")
+                logger.debug(f"Cache for {symbol} is stale, will refresh")
 
             return None
 
@@ -154,9 +153,8 @@ class IBKRDataProvider:
 
                 logger.info(f"Successfully fetched {symbol} data from yfinance")
                 return data
-            else:
-                logger.warning(f"No data available from yfinance for {symbol}")
-                return None
+            logger.warning(f"No data available from yfinance for {symbol}")
+            return None
 
         except Exception as e:
             logger.error(f"Failed to fetch data from yfinance for {symbol}: {e}")

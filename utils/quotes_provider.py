@@ -1,10 +1,12 @@
 from __future__ import annotations
 
-from collections import deque
-from collections.abc import Callable
-from datetime import UTC, datetime
 import time
-from typing import Any, Protocol
+from collections import deque
+from datetime import UTC, datetime
+from typing import TYPE_CHECKING, Any, Protocol
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 class QuoteProvider(Protocol):
@@ -92,6 +94,7 @@ def get_quote_provider(provider_type: str = "dummy") -> QuoteProvider:
     # Optional rate limiting from config/base.yaml
     try:
         from pathlib import Path
+
         import yaml
 
         base_cfg = yaml.safe_load(Path("config/base.yaml").read_text()) or {}

@@ -1,12 +1,12 @@
-from .errors import DataSanityError, estring
+from collections.abc import Callable
+from inspect import signature as _mutmut_signature
+from typing import Annotated, ClassVar
+
+import pandas as pd
+
 from .codes import NEGATIVE_PRICES, OHLC_INVARIANT
 from .columnmap import map_ohlcv
-import pandas as pd
-from inspect import signature as _mutmut_signature
-from typing import Annotated
-from typing import Callable
-from typing import ClassVar
-
+from .errors import DataSanityError, estring
 
 MutantDict = Annotated[dict[str, Callable], "Mutant"]
 

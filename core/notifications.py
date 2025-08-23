@@ -49,9 +49,8 @@ class DiscordNotifier:
             if response.status_code == 204:
                 self.logger.info("Discord notification sent successfully")
                 return True
-            else:
-                self.logger.error(f"Discord notification failed: {response.status_code}")
-                return False
+            self.logger.error(f"Discord notification failed: {response.status_code}")
+            return False
 
         except Exception as e:
             self.logger.error(f"Discord notification error: {e}")

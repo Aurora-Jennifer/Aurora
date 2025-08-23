@@ -313,7 +313,7 @@ class SignalTemplateGenerator:
         avg_win_rate = np.mean([m["win_rate"] for m in fold_metrics]) if fold_metrics else 0
 
         # Generate template
-        template = {
+        return {
             "type": "regime_aware_ensemble",
             "confidence": min(1.0, max(0.0, avg_sharpe / 2.0)),  # Normalize confidence
             "signal_ratios": {
@@ -338,7 +338,6 @@ class SignalTemplateGenerator:
             },
         }
 
-        return template
 
     def generate_all_templates(self) -> dict[str, Any]:
         """

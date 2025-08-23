@@ -1,6 +1,10 @@
+import os
 import pathlib
+import socket
 import typing as t
+from datetime import UTC
 
+import numpy as np
 import pandas as pd
 import pytest
 
@@ -16,7 +20,7 @@ def pytest_configure(config: pytest.Config) -> None:
 
 @pytest.fixture(scope="session")
 def datasanity(request: pytest.FixtureRequest):
-    from core.data_sanity import DataSanityValidator, DataSanityError
+    from core.data_sanity import DataSanityError, DataSanityValidator
 
     class DS:
         Error = DataSanityError
@@ -48,19 +52,6 @@ def load_clean_df() -> t.Callable[[str, str], pd.DataFrame]:
 
     return _load
 
-"""
-Fixtures for DataSanity test suite.
-"""
-
-import os
-import pathlib
-import socket
-from datetime import UTC
-
-import numpy as np
-import pandas as pd
-import pytest
-
 
 def pytest_collection_modifyitems(config, items):
     """Skip attic/quarantine tests by default."""
@@ -85,25 +76,25 @@ def no_network():
     # Only enforce when tests explicitly require offline or for whole suite
     if os.getenv("AURORA_TEST_OFFLINE", "1") != "1":
         return
-    
+
     def guard(*a, **k):
         raise RuntimeError("Network access is forbidden in tests")
-    
+
     # Store original functions to restore later
     original_socket = socket.socket
     original_urlopen = None
-    
+
     try:
         import urllib.request as _u
         original_urlopen = _u.urlopen
         _u.urlopen = guard
     except Exception:
         pass
-    
+
     socket.socket = guard
-    
+
     yield
-    
+
     # Restore original functions
     socket.socket = original_socket
     if original_urlopen:
@@ -184,9 +175,8 @@ def mk_ts():
         data["Low"] = data[["Open", "Low", "Close"]].min(axis=1)
 
         # Ensure all values are finite and positive
-        data = data.clip(lower=0.01)  # Minimum price of 1 cent
+        return data.clip(lower=0.01)  # Minimum price of 1 cent
 
-        return data
 
     return _mk_ts
 
@@ -197,8 +187,7 @@ def strict_validator():
     from core.data_sanity import DataSanityValidator
 
     # Create validator with strict profile
-    validator = DataSanityValidator(profile="strict")
-    return validator
+    return DataSanityValidator(profile="strict")
 
 
 @pytest.fixture
@@ -207,5 +196,4 @@ def default_validator():
     from core.data_sanity import DataSanityValidator
 
     # Create validator with default profile
-    validator = DataSanityValidator(profile="default")
-    return validator
+    return DataSanityValidator(profile="default")

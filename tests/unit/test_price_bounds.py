@@ -1,13 +1,13 @@
-import pandas as pd
-import pytest
 from pathlib import Path
 
-from core.data_sanity import DataSanityValidator, DataSanityError
+import pandas as pd
+import pytest
+
+from core.data_sanity import DataSanityError, DataSanityValidator
 
 
 def _load_csv(p: Path) -> pd.DataFrame:
-    df = pd.read_csv(p, parse_dates=["timestamp"]).set_index("timestamp")
-    return df
+    return pd.read_csv(p, parse_dates=["timestamp"]).set_index("timestamp")
 
 
 def test_extreme_price_rejected_strict():

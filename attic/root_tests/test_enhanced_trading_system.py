@@ -249,9 +249,8 @@ def main():
     if passed == total:
         print("✅ All tests passed! Enhanced trading system is ready.")
         return 0
-    else:
-        print("❌ Some tests failed. Please review the issues above.")
-        return 1
+    print("❌ Some tests failed. Please review the issues above.")
+    return 1
 
 
 if __name__ == "__main__":

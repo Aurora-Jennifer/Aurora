@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aurora Trading Platform - Verification Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .header { background: #f0f0f0; padding: 20px; border-radius: 5px; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .metric { display: inline-block; margin: 10px; padding: 10px; background: #f9f9f9; border-radius: 3px; }
+        .status-pass { color: green; font-weight: bold; }
+        .status-fail { color: red; font-weight: bold; }
+        .warning { color: orange; font-weight: bold; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .chart { margin: 20px 0; padding: 10px; background: #f9f9f9; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 Aurora Trading Platform</h1>
+        <h2>Verification Dashboard</h2>
+        <p>Generated: Thu Aug 21 11:22:21 AM CDT 2025</p>
+    </div>
+    
+    <div class="section">
+        <h2>📊 ONNX Parity & Performance</h2>
+
+        <div class="metric">
+            <strong>Parity Status:</strong> ✅ PASS<br>
+            <strong>Max |Δ|:</strong> 2.24e-08<br>
+            <strong>Rows:</strong> 966
+        </div>
+
+        <div class="metric">
+            <strong>ONNX Latency:</strong> <span style="color: green">0.03 ms</span><br>
+            <strong>Batch Size:</strong> 32
+        </div>
+
+    </div>
+    
+    <div class="section">
+        <h2>⚡ End-to-Decision (E2D)</h2>
+
+        <div class="metric">
+            <strong>Latency:</strong> <span style="color: green">35.39 ms</span><br>
+            <strong>Decisions:</strong> 1<br>
+            <strong>DataSanity:</strong> ❌ FAIL
+        </div>
+
+    </div>
+    
+    <div class="section">
+        <h2>🔬 Feature Ablations</h2>
+
+    </div>
+    
+    <div class="section">
+        <h2>📈 Backtest Results</h2>
+
+        <div class="metric">
+            <strong>Sharpe:</strong> 0.267 ❌ FAIL<br>
+            <strong>Max DD:</strong> -15.2% ❌ FAIL<br>
+            <strong>IC:</strong> 0.000 ❌ FAIL
+        </div>
+        <div class="metric">
+            <strong>CAGR:</strong> 2.4%<br>
+            <strong>Vol:</strong> 15.3%<br>
+            <strong>Hit Rate:</strong> 52.0%
+        </div>
+        <div class="metric">
+            <strong>Turnover:</strong> 2.5x ✅ PASS<br>
+            <strong>Avg Win:</strong> 0.008<br>
+            <strong>Avg Loss:</strong> -0.008
+        </div>
+
+    </div>
+    
+    <div class="section">
+        <h2>🎯 Overall Status</h2>
+
+        <div class="metric">
+            <strong>Overall:</strong> 2/6 checks passed<br>
+            <strong>Status:</strong> ❌ FAIL
+        </div>
+        
+        <table>
+            <tr><th>Check</th><th>Status</th></tr>
+
+            <tr>
+                <td>ONNX Parity</td>
+                <td>✅ PASS</td>
+            </tr>
+
+            <tr>
+                <td>E2D Latency</td>
+                <td>✅ PASS</td>
+            </tr>
+
+            <tr>
+                <td>DataSanity</td>
+                <td>❌ FAIL</td>
+            </tr>
+
+            <tr>
+                <td>Backtest Sharpe</td>
+                <td>❌ FAIL</td>
+            </tr>
+
+            <tr>
+                <td>Backtest Max DD</td>
+                <td>❌ FAIL</td>
+            </tr>
+
+            <tr>
+                <td>Backtest IC</td>
+                <td>❌ FAIL</td>
+            </tr>
+
+        </table>
+    </div>
+    
+    <div class="section">
+        <h2>📋 Quick Actions</h2>
+        <p>
+            <a href="artifacts/e2d/last/summary.json">📄 E2D Summary</a> |
+            <a href="reports/experiments/parity.json">🔍 Parity Details</a> |
+            <a href="reports/backtest/backtest.json">📊 Backtest Data</a> |
+            <a href="reports/experiments/ablation_results.json">🧬 Ablation Results</a>
+        </p>
+    </div>
+    
+</body>
+</html>

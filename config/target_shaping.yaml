@@ -1,0 +1,17 @@
+shaping:
+  method: "rank"        # rank | winsorize | zscore
+  rank_window: 252      # rolling cross-sectional or time-wise
+  winsor_limits: [0.01, 0.99]
+  zscore_window: 252    # for z-score normalization
+
+# Target shaping options
+options:
+  # For rank method
+  rank_type: "time_series"  # time_series | cross_sectional
+  rank_method: "percentile"  # percentile | zscore
+  
+  # For winsorize method
+  winsorize_symmetric: true
+  
+  # For zscore method
+  zscore_robust: false  # use median/mad instead of mean/std

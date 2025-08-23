@@ -269,8 +269,7 @@ class TestDataSanityEnforcement:
 
     def create_config_with_profile(self, profile: str) -> DataSanityValidator:
         """Create validator with specific profile."""
-        validator = DataSanityValidator(profile=profile)
-        return validator
+        return DataSanityValidator(profile=profile)
 
     @pytest.mark.data_sanity
     @pytest.mark.guard
@@ -981,7 +980,7 @@ class TestDataSanityEnforcement:
         if len(set(prices)) < 3:
             # Add some variation if we have too many identical values
             prices = [p + i * 0.01 for i, p in enumerate(prices)]
-        
+
         dates = pd.date_range("2023-01-01", periods=len(prices), freq="D", tz=UTC)
 
         data = pd.DataFrame(

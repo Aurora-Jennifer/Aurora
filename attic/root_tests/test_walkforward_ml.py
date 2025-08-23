@@ -449,9 +449,8 @@ def main():
             print("\n✅ Walk-forward analysis completed successfully!")
             print("📊 Check results/walkforward_ml_results.json for detailed results")
             return 0
-        else:
-            print("\n❌ Walk-forward analysis failed")
-            return 1
+        print("\n❌ Walk-forward analysis failed")
+        return 1
 
     except Exception as e:
         print(f"\n❌ Error in walk-forward analysis: {e}")

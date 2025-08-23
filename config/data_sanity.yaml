@@ -70,6 +70,59 @@ price_limits:
   max_daily_return: 0.3 # Maximum allowed daily return (30%)
   max_volume: 1000000000000  # Maximum allowed volume (1T shares)
 
+# Staged validation configuration
+stages:
+  ingest:
+    rules:
+      - price_positivity:
+          allow_negative_prices: false
+          allow_zero_prices: false
+          cols: ["Open", "High", "Low", "Close"]
+      - ohlc_consistency:
+          strict: true
+          cols: ["Open", "High", "Low", "Close"]
+      - finite_numbers:
+          allow_nan: false
+          allow_inf: false
+          allow_complex: false
+          cols: ["Open", "High", "Low", "Close", "Volume"]
+      - volume:
+          allow_negative_volume: false
+          allow_zero_volume: false
+          max_volume: 1000000000000
+          repair_mode: "warn"
+  
+  post_adjust:
+    rules:
+      - price_positivity:
+          allow_negative_prices: false
+          allow_zero_prices: false
+          cols: ["Open", "High", "Low", "Close"]
+      - ohlc_consistency:
+          strict: true
+          cols: ["Open", "High", "Low", "Close"]
+      - finite_numbers:
+          allow_nan: false
+          allow_inf: false
+          allow_complex: false
+          cols: ["Open", "High", "Low", "Close", "Volume"]
+      - volume:
+          allow_negative_volume: false
+          allow_zero_volume: false
+          max_volume: 1000000000000
+          repair_mode: "warn"
+      - lookahead_contamination:
+          fail: false  # Start with warning, not fatal
+          eps_zero_return: 0.0
+          min_zero_run: 2
+          max_suspicious_rate: 0.001
+
+# Legacy configuration (for backward compatibility)
+price_positivity:
+  allow_negative_prices: false
+  allow_zero_prices: false
+  price_cols: ["Open", "High", "Low", "Close"]
+
 # OHLC validation
 ohlc_validation:
   max_high_low_spread: 0.4  # Maximum high-low spread as % of close (40%)
@@ -97,7 +150,7 @@ time_series:
 returns:
   method: "log_close_to_close"  # Always use log returns from close prices
   min_periods: 2               # Minimum periods for return calculation
-  fill_method: "forward"       # How to handle missing returns
+  fill_method: "zero"          # Fill missing returns with zero (no lookahead)
 
 # Logging
 logging:

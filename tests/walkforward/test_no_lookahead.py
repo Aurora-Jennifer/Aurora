@@ -215,10 +215,10 @@ def test_data_sanity_in_folds():
     # Create clean data with proper OHLC relationships
     dates = pd.date_range("2020-01-01", periods=100, freq="D", tz="UTC")
     np.random.seed(42)  # For deterministic test data
-    
+
     # Generate base prices
     base_prices = np.random.randn(100).cumsum() + 100
-    
+
     # Create OHLC with proper relationships
     data = pd.DataFrame(
         {
@@ -230,7 +230,7 @@ def test_data_sanity_in_folds():
         },
         index=dates,
     )
-    
+
     # Ensure OHLC relationships are maintained
     data["High"] = np.maximum(data["High"], np.maximum(data["Open"], data["Close"]))
     data["Low"] = np.minimum(data["Low"], np.minimum(data["Open"], data["Close"]))
@@ -271,10 +271,10 @@ def test_no_global_state_leakage():
     # Create data with proper OHLC relationships
     dates = pd.date_range("2020-01-01", periods=100, freq="D", tz="UTC")
     np.random.seed(42)  # For deterministic test data
-    
+
     # Generate base prices
     base_prices = np.random.randn(100).cumsum() + 100
-    
+
     # Create OHLC with proper relationships
     data = pd.DataFrame(
         {
@@ -286,7 +286,7 @@ def test_no_global_state_leakage():
         },
         index=dates,
     )
-    
+
     # Ensure OHLC relationships are maintained
     data["High"] = np.maximum(data["High"], np.maximum(data["Open"], data["Close"]))
     data["Low"] = np.minimum(data["Low"], np.minimum(data["Open"], data["Close"]))

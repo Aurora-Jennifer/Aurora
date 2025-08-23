@@ -84,9 +84,8 @@ def migrate_file(file_path: str) -> bool:
                 f.write(content)
             print(f"Migrated {file_path}")
             return True
-        else:
-            print(f"No changes needed for {file_path}")
-            return False
+        print(f"No changes needed for {file_path}")
+        return False
 
     except Exception as e:
         print(f"Error migrating {file_path}: {e}")

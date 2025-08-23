@@ -1,0 +1,39 @@
+# Golden Snapshot Immutability Contract
+# L0 Gate: PR CI, <3 min total
+
+spec:
+  name: "snapshot_immutability"
+  level: "L0"
+  description: "Golden snapshot dir read-only; manifest.json with sha256 per file"
+  
+requirements:
+  filesystem:
+    - snapshot_dir_readonly: true
+    - filesystem_acl_check: true
+    - no_write_permissions: true
+    
+  manifest:
+    - manifest_json_exists: true
+    - sha256_per_file: true
+    - total_bytes_recorded: true
+    - hash_must_match: true
+    
+  content:
+    - files_unchanged: true
+    - hashes_unchanged: true
+    - structure_unchanged: true
+    
+validation:
+  - fail_on_writable: true
+  - fail_on_hash_mismatch: true
+  - fail_on_missing_manifest: true
+
+tests:
+  - test_snapshot_ro_acl
+  - test_manifest_hashes_match
+  - test_snapshot_content_unchanged
+
+fail_messages:
+  writable: "Golden snapshot directory is writable - should be read-only"
+  hash_mismatch: "File {file} hash mismatch: expected {expected}, got {actual}"
+  missing_manifest: "Missing manifest.json in snapshot directory"

@@ -5,9 +5,9 @@ These functions inject specific data quality issues to test that DataSanity
 correctly detects and reports violations.
 """
 
+
 import numpy as np
 import pandas as pd
-from typing import List, Optional, Union
 
 
 def inject_lookahead(df: pd.DataFrame, col: str = "Close", shift: int = -1) -> pd.DataFrame:
@@ -35,7 +35,7 @@ def inject_lookahead(df: pd.DataFrame, col: str = "Close", shift: int = -1) -> p
 
 
 def inject_nans(df: pd.DataFrame, frac: float = 0.02, 
-                cols: Optional[List[str]] = None) -> pd.DataFrame:
+                cols: list[str] | None = None) -> pd.DataFrame:
     """
     Inject NaN values into specified columns.
     
@@ -62,7 +62,7 @@ def inject_nans(df: pd.DataFrame, frac: float = 0.02,
 
 
 def inject_infs(df: pd.DataFrame, frac: float = 0.02,
-                cols: Optional[List[str]] = None) -> pd.DataFrame:
+                cols: list[str] | None = None) -> pd.DataFrame:
     """
     Inject infinite values into specified columns.
     
@@ -142,7 +142,7 @@ def inject_tz_mess(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def inject_extreme_prices(df: pd.DataFrame, multiplier: float = 1000000.0,
-                         cols: Optional[List[str]] = None) -> pd.DataFrame:
+                         cols: list[str] | None = None) -> pd.DataFrame:
     """
     Inject extreme price values.
     
@@ -165,7 +165,7 @@ def inject_extreme_prices(df: pd.DataFrame, multiplier: float = 1000000.0,
     return df
 
 
-def inject_negative_prices(df: pd.DataFrame, cols: Optional[List[str]] = None) -> pd.DataFrame:
+def inject_negative_prices(df: pd.DataFrame, cols: list[str] | None = None) -> pd.DataFrame:
     """
     Inject negative price values.
     

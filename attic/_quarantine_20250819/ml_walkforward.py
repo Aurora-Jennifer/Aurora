@@ -228,9 +228,8 @@ class MLWalkforwardAnalyzer:
         if self.unified_model:
             # Train on multiple assets simultaneously
             return self._run_unified_training(start_date, end_date)
-        else:
-            # Train on single asset (current approach)
-            return self._run_single_asset_training(start_date, end_date)
+        # Train on single asset (current approach)
+        return self._run_single_asset_training(start_date, end_date)
 
     def _run_unified_training(self, start_date: str, end_date: str) -> dict:
         """Train unified model on multiple assets simultaneously."""

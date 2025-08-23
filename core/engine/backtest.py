@@ -282,10 +282,8 @@ class BacktestEngine:
         if all_data:
             # Combine all symbol data
             combined_data = pd.concat(all_data, ignore_index=False)
-            combined_data = combined_data.sort_index()
-            return combined_data
-        else:
-            return None
+            return combined_data.sort_index()
+        return None
 
     def _get_trading_dates_from_data(self, data: pd.DataFrame) -> list[date]:
         """Extract trading dates from data."""
@@ -373,8 +371,7 @@ class BacktestEngine:
 
             if all_data:
                 return pd.concat(all_data, ignore_index=False)
-            else:
-                return None
+            return None
 
         except Exception as e:
             self.logger.error(f"Error getting historical data: {e}")
@@ -429,10 +426,8 @@ class BacktestEngine:
 
             if all_data is not None and not all_data.empty:
                 # Filter to symbol and current date
-                symbol_data = all_data[all_data["Symbol"] == symbol]
-                return symbol_data
-            else:
-                return pd.DataFrame()
+                return all_data[all_data["Symbol"] == symbol]
+            return pd.DataFrame()
 
         except Exception as e:
             self.logger.error(f"Error getting current market data: {e}")
@@ -794,11 +789,10 @@ class BacktestEngine:
             return pd.DataFrame()
 
         # Filter to backtest period
-        backtest_ledger = ledger[
+        return ledger[
             (ledger["date"] >= self.start_date) & (ledger["date"] <= self.end_date)
         ]
 
-        return backtest_ledger
 
     def _get_trades_in_backtest_window(self) -> list[dict]:
         """Get trades that occurred during the backtest window."""
@@ -942,7 +936,7 @@ class BacktestEngine:
         """Format results summary for display."""
         summary = results.get("summary", {})
 
-        summary_text = f"""
+        return f"""
 📊 BACKTEST SUMMARY
 {"=" * 50}
 📅 Period: {results["backtest_info"]["start_date"]} to {results["backtest_info"]["end_date"]}
@@ -958,7 +952,6 @@ Max Drawdown: {summary["max_drawdown_pct"]:.2f}%
 Total Trades: {summary["total_trades"]}
 """
 
-        return summary_text
 
     def get_last_summary(self) -> dict:
         """Get summary of last backtest run."""
@@ -1003,9 +996,8 @@ Total Trades: {summary["total_trades"]}
         portfolio_metrics = self._calculate_portfolio_metrics(None)
 
         # Generate results
-        results = self._generate_results(trade_metrics, portfolio_metrics)
+        return self._generate_results(trade_metrics, portfolio_metrics)
 
-        return results
 
 
 # Lightweight wrapper for tests and parity with smoke gates

@@ -106,7 +106,7 @@ import json
 
 class TradingAPIClient:
     """Client for the trading system API."""
-    
+
     def __init__(self, base_url: str, api_token: str):
         self.base_url = base_url.rstrip('/')
         self.api_token = api_token
@@ -114,28 +114,28 @@ class TradingAPIClient:
             'Authorization': f'Bearer {api_token}',
             'Content-Type': 'application/json'
         }
-    
+
     def predict_signal(self, market_data: Dict) -> Dict:
         """Get trading signal prediction."""
         url = f"{self.base_url}/predict"
         response = requests.post(url, json=market_data, headers=self.headers)
         response.raise_for_status()
         return response.json()
-    
+
     def validate_data(self, market_data: Dict) -> Dict:
         """Validate market data."""
         url = f"{self.base_url}/validate"
         response = requests.post(url, json=market_data, headers=self.headers)
         response.raise_for_status()
         return response.json()
-    
+
     def get_capabilities(self) -> Dict:
         """Get system capabilities."""
         url = f"{self.base_url}/capabilities"
         response = requests.get(url, headers=self.headers)
         response.raise_for_status()
         return response.json()
-    
+
     def health_check(self) -> Dict:
         """Check API health."""
         url = f"{self.base_url}/health"
@@ -146,7 +146,7 @@ class TradingAPIClient:
 # Example usage
 if __name__ == "__main__":
     client = TradingAPIClient("http://localhost:8000", "demo_token_placeholder")
-    
+
     # Example market data
     market_data = {
         "market_data": {
@@ -159,16 +159,16 @@ if __name__ == "__main__":
             "timestamps": ["2025-01-01", "2025-01-02", "2025-01-03"]
         }
     }
-    
+
     try:
         # Test prediction
         result = client.predict_signal(market_data)
         print(f"Prediction: {result}")
-        
+
         # Test validation
         validation = client.validate_data(market_data)
         print(f"Validation: {validation}")
-        
+
     except Exception as e:
         print(f"Error: {e}")
 '''
@@ -206,21 +206,21 @@ def generate_sample_data(symbol: str, days: int = 30):
             "timestamps": []
         }
     }
-    
+
     current_price = base_price
     start_date = datetime.now() - timedelta(days=days)
-    
+
     for i in range(days):
         # Generate realistic price movements
         change = random.uniform(-0.02, 0.02)  # ±2% daily change
         current_price *= (1 + change)
-        
+
         # OHLC data
         open_price = current_price
         high_price = current_price * random.uniform(1.0, 1.01)
         low_price = current_price * random.uniform(0.99, 1.0)
         close_price = current_price * random.uniform(0.995, 1.005)
-        
+
         data["market_data"]["open"].append(round(open_price, 2))
         data["market_data"]["high"].append(round(high_price, 2))
         data["market_data"]["low"].append(round(low_price, 2))
@@ -229,14 +229,14 @@ def generate_sample_data(symbol: str, days: int = 30):
         data["market_data"]["timestamps"].append(
             (start_date + timedelta(days=i)).strftime("%Y-%m-%d")
         )
-    
+
     return data
 
 def run_demo():
     """Run the trading system demo."""
     print("🚀 Advanced Trading System Demo")
     print("=" * 50)
-    
+
     # API configuration
     base_url = "http://localhost:8000"
     api_token = "demo_token_placeholder"
@@ -244,7 +244,7 @@ def run_demo():
         'Authorization': f'Bearer {api_token}',
         'Content-Type': 'application/json'
     }
-    
+
     try:
         # Health check
         print("1. Health Check...")
@@ -254,7 +254,7 @@ def run_demo():
         else:
             print("   ❌ API health check failed")
             return
-        
+
         # Get capabilities
         print("\\n2. System Capabilities...")
         response = requests.get(f"{base_url}/capabilities", headers=headers)
@@ -265,15 +265,15 @@ def run_demo():
         else:
             print("   ❌ Could not retrieve capabilities")
             return
-        
+
         # Generate sample data
         print("\\n3. Generating Sample Data...")
         sample_data = generate_sample_data("SPY", days=30)
         print(f"   Generated {len(sample_data['market_data']['close'])} days of data")
-        
+
         # Test prediction
         print("\\n4. Signal Prediction...")
-        response = requests.post(f"{base_url}/predict", 
+        response = requests.post(f"{base_url}/predict",
                                json=sample_data, headers=headers)
         if response.status_code == 200:
             prediction = response.json()
@@ -283,10 +283,10 @@ def run_demo():
             print(f"   Processing time: {prediction['processing_time_ms']:.2f}ms")
         else:
             print("   ❌ Prediction failed")
-        
+
         # Test validation
         print("\\n5. Data Validation...")
-        response = requests.post(f"{base_url}/validate", 
+        response = requests.post(f"{base_url}/validate",
                                json=sample_data, headers=headers)
         if response.status_code == 200:
             validation = response.json()
@@ -298,11 +298,11 @@ def run_demo():
             print(f"   Validation time: {validation['validation_time_ms']:.2f}ms")
         else:
             print("   ❌ Validation failed")
-        
+
         print("\\n✅ Demo completed successfully!")
         print("\\nThis demonstrates the trading system's capabilities")
         print("without exposing the underlying algorithms or source code.")
-        
+
     except requests.exceptions.ConnectionError:
         print("❌ Could not connect to API server")
         print("   Make sure the server is running on http://localhost:8000")

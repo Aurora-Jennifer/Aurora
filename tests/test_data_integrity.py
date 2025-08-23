@@ -261,9 +261,8 @@ class TestDataSanity:
             data.loc[data.index[5], "Returns"] = data.loc[data.index[6], "Returns"]  # Lookahead
 
         # Set Date as index for validation
-        data = data.set_index("Date")
+        return data.set_index("Date")
 
-        return data
 
     def create_test_data(
         self, size: int = 100, freq: str = "D", clean: bool = True
@@ -308,8 +307,7 @@ class TestDataSanity:
     def create_config_with_profile(self, profile: str) -> DataSanityValidator:
         """Create validator with specific profile."""
         # Create a new validator with the specific profile
-        validator = DataSanityValidator(profile=profile)
-        return validator
+        return DataSanityValidator(profile=profile)
 
     @pytest.mark.data_sanity
     @pytest.mark.validation

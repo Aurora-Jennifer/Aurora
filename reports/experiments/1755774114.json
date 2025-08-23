@@ -1,0 +1,36 @@
+{
+  "exp_id": 1755774114,
+  "profile": "golden_xgb",
+  "snapshot": "golden_ml_v1",
+  "features": [
+    "ret_1d_lag1",
+    "sma_10",
+    "sma_20",
+    "vol_10",
+    "rsi_14"
+  ],
+  "model": {
+    "kind": "xgboost",
+    "n_estimators": 100,
+    "max_depth": 3,
+    "learning_rate": 0.1,
+    "random_state": 42
+  },
+  "metrics": {
+    "r2": -0.005392761565102155,
+    "ic": 0.10305392833429647,
+    "duration_sec": 0.23984193801879883,
+    "rows": 966,
+    "cols": 5
+  },
+  "onnx": {
+    "exported": true,
+    "path": "artifacts/models/1755774114_model.onnx",
+    "parity": {
+      "parity_ok": true,
+      "max_diff": 0.0,
+      "mean_diff": 0.0,
+      "tolerance": 1e-05
+    }
+  }
+}

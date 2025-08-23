@@ -1,0 +1,15 @@
+datasanity:
+  validate_p95_ms_per_10k: 85000   # tune after CI runs
+  smoke_wall_s: 60
+  sanity_wall_s: 300
+  nightly_wall_s: 1800
+training:
+  determinism_required: true
+  export_parity_required: true
+
+adapter_smoke:
+  max_time_s: 5
+  max_ram_mb: 256
+  min_rows: 1
+  max_p95_latency_ms_per_1k: 5000
+

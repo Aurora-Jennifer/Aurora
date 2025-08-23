@@ -26,10 +26,9 @@ class FakeIB:
         symbol = contract.symbol
         if symbol == "SPY":
             return _Ticker(450.0, 450.1)
-        elif symbol == "TSLA":
+        if symbol == "TSLA":
             return _Ticker(250.0, 250.1)
-        else:
-            return _Ticker(100.0, 100.1)
+        return _Ticker(100.0, 100.1)
 
     def sleep(self, duration):
         pass

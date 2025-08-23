@@ -97,3 +97,16 @@ observability:
   promotion:
     require_schema: true
     forbid_drift: true
+
+datasanity:
+  engine: v1  # v1|v2
+  profile: walkforward_ci
+  telemetry:
+    enabled: true
+    output_dir: artifacts/ds_runs
+
+training:
+  profile: ci
+  snapshot_manifest: artifacts/snapshots/golden_ml_v1/manifest.json
+  enforce_leakage_guards: true
+  export_parity_check: true

@@ -44,7 +44,7 @@ def rollup(df: pd.DataFrame) -> dict:
 
     df["slip_bps_real"] = (df["px_fill"] - df["px_theory"]) / df["px_theory"] * 1e4
     notional = df["notional"].abs().sum()
-    out = {
+    return {
         "trades": int(len(df)),
         "symbols": sorted(df["symbol"].astype(str).unique().tolist()),
         "slippage_bps_median": float(df["slip_bps_real"].median()),
@@ -53,7 +53,6 @@ def rollup(df: pd.DataFrame) -> dict:
         "start": df["dt"].min().isoformat(),
         "end": df["dt"].max().isoformat(),
     }
-    return out
 
 
 def write_reports(summary: dict, out_prefix: str):

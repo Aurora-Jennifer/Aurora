@@ -39,9 +39,8 @@ class Momentum(BaseStrategy):
         momentum = close.pct_change(self.lookback_period)
 
         # Generate signals (1 = long when momentum > threshold, 0 = flat)
-        signals = (momentum > self.threshold).astype(int)
+        return (momentum > self.threshold).astype(int)
 
-        return signals
 
     def get_default_params(self) -> MomentumParams:
         """Return default momentum parameters."""
