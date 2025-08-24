@@ -7,8 +7,9 @@ Optionally enforces session hours if your calendar util is available.
 """
 
 import importlib
-import numpy as np
+
 import pandas as pd
+
 
 def _is_utc_index(idx: pd.Index) -> bool:
     try:
@@ -59,7 +60,7 @@ def test_optional_market_hours_if_calendar_available(features_df: pd.DataFrame):
     if symbol_col:
         bad = []
         for sym, chunk in features_df.groupby(symbol_col, dropna=False):
-            mask = chunk.index.to_series().apply(lambda t: bool(cal_mod.is_session(t, sym)))
+            mask = chunk.index.to_series().apply(lambda t, sym=sym: bool(cal_mod.is_session(t, sym)))
             if not mask.all():
                 bad.append((sym, (~mask).sum()))
         assert not bad, f"Off-session rows found: {bad}"

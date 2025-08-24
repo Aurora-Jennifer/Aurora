@@ -3,9 +3,9 @@ Safe mathematical functions for financial calculations.
 Handles edge cases like zero/negative values that could cause numerical issues.
 """
 
+
 import numpy as np
 import pandas as pd
-from typing import Union
 
 
 def log_returns_from_close(close: pd.Series) -> pd.Series:
@@ -25,7 +25,7 @@ def log_returns_from_close(close: pd.Series) -> pd.Series:
 
     with np.errstate(divide="ignore", invalid="ignore"):
         lr = np.log(safe / safe.shift(1))
-    
+
     return lr
 
 
@@ -47,9 +47,9 @@ def log_returns_pct(close: pd.Series) -> pd.Series:
         return np.log1p(r)
 
 
-def safe_divide(numerator: Union[pd.Series, np.ndarray], 
-                denominator: Union[pd.Series, np.ndarray],
-                fill_value: float = np.nan) -> Union[pd.Series, np.ndarray]:
+def safe_divide(numerator: pd.Series | np.ndarray,
+                denominator: pd.Series | np.ndarray,
+                fill_value: float = np.nan) -> pd.Series | np.ndarray:
     """
     Safe division that handles zero denominators.
     
@@ -63,18 +63,18 @@ def safe_divide(numerator: Union[pd.Series, np.ndarray],
     """
     with np.errstate(divide="ignore", invalid="ignore"):
         result = numerator / denominator
-    
+
     # Replace inf and -inf with fill_value
     if isinstance(result, pd.Series):
         result = result.replace([np.inf, -np.inf], fill_value)
     else:
         result = np.where(np.isinf(result), fill_value, result)
-    
+
     return result
 
 
-def safe_log(x: Union[pd.Series, np.ndarray], 
-             fill_value: float = np.nan) -> Union[pd.Series, np.ndarray]:
+def safe_log(x: pd.Series | np.ndarray,
+             fill_value: float = np.nan) -> pd.Series | np.ndarray:
     """
     Safe logarithm that handles non-positive values.
     
@@ -87,11 +87,11 @@ def safe_log(x: Union[pd.Series, np.ndarray],
     """
     with np.errstate(divide="ignore", invalid="ignore"):
         result = np.log(x)
-    
+
     # Replace inf, -inf, and nan with fill_value
     if isinstance(result, pd.Series):
         result = result.replace([np.inf, -np.inf, np.nan], fill_value)
     else:
         result = np.where(~np.isfinite(result), fill_value, result)
-    
+
     return result

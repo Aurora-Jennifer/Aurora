@@ -9,10 +9,12 @@ Usage:
   python -u scripts/fix_golden_snapshot.py artifacts/snapshots/golden_ml_v1
 """
 from __future__ import annotations
-import sys, os
+
+import sys
 from pathlib import Path
-import pandas as pd
+
 import numpy as np
+import pandas as pd
 
 SNAP = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("artifacts/snapshots/golden_ml_v1")
 FEATURE_FILES = ("features.parquet", "X.parquet")  # will fix first one found
@@ -49,7 +51,7 @@ def load_df(p: Path) -> pd.DataFrame:
     arr = df.select_dtypes(include=[np.number]).to_numpy()
     if not np.isfinite(arr).all():
         bad = np.where(~np.isfinite(arr))
-        raise SystemExit(f"Non-finite values detected at positions {list(zip(*bad))[:5]}")
+        raise SystemExit(f"Non-finite values detected at positions {list(zip(*bad, strict=False))[:5]}")
     return df
 
 def main():
@@ -59,7 +61,8 @@ def main():
     for name in FEATURE_FILES:
         p = SNAP / name
         if p.exists():
-            src = p; break
+            src = p
+            break
     if src is None:
         raise SystemExit(f"No feature file found in {SNAP} among {FEATURE_FILES}")
     df = load_df(src)

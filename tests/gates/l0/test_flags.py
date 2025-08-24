@@ -5,12 +5,12 @@ Tests: all FEATURE_* / EXPERIMENT_* / PROMO_* flags default to off
 
 import os
 import re
+
 import pytest
 import yaml
-from pathlib import Path
 
 # Load contract
-with open("contracts/flags.yaml", "r") as f:
+with open("contracts/flags.yaml") as f:
     CONTRACT = yaml.safe_load(f)
 
 
@@ -22,7 +22,7 @@ class MockSettings:
         self.EXPERIMENT_ALPHA = 0
         self.PROMO_LIVE_TRADING = "off"
         self.FLAG_DETERMINISTIC = "disabled"
-        
+
         # Non-flag settings
         self.DATABASE_URL = "sqlite:///test.db"
         self.LOG_LEVEL = "INFO"
@@ -48,13 +48,13 @@ def test_flags_default_off(settings):
     """Test that all feature/experiment/promo flags default to off"""
     flag_patterns = [
         r'^FEATURE_.*',
-        r'^EXPERIMENT_.*', 
+        r'^EXPERIMENT_.*',
         r'^PROMO_.*',
         r'^FLAG_.*'
     ]
-    
+
     off_values = CONTRACT['requirements']['off_values']
-    
+
     # Get all attributes that match flag patterns
     flags = []
     for attr_name in dir(settings):
@@ -62,7 +62,7 @@ def test_flags_default_off(settings):
             if re.match(pattern, attr_name):
                 flags.append(attr_name)
                 break
-    
+
     # Check each flag defaults to off
     for flag in flags:
         flag_value = getattr(settings, flag)
@@ -97,13 +97,13 @@ def test_environment_variables_flags_default_off():
     """Test that environment variables don't have flags defaulting to on"""
     flag_patterns = [
         r'^FEATURE_.*',
-        r'^EXPERIMENT_.*', 
+        r'^EXPERIMENT_.*',
         r'^PROMO_.*',
         r'^FLAG_.*'
     ]
-    
+
     off_values = CONTRACT['requirements']['off_values']
-    
+
     # Check environment variables
     for env_var, value in os.environ.items():
         for pattern in flag_patterns:
@@ -119,15 +119,15 @@ def test_flag_patterns_are_comprehensive():
     """Test that flag patterns cover all flag types"""
     expected_patterns = [
         r'^FEATURE_.*',
-        r'^EXPERIMENT_.*', 
+        r'^EXPERIMENT_.*',
         r'^PROMO_.*',
         r'^FLAG_.*'
     ]
-    
+
     contract_patterns = [req['pattern'] for req in CONTRACT['requirements']['flag_patterns']]
-    
+
     assert len(contract_patterns) == len(expected_patterns), "Flag patterns not comprehensive"
-    
+
     for expected in expected_patterns:
         assert any(re.match(expected, pattern) for pattern in contract_patterns), f"Missing pattern: {expected}"
 
@@ -135,8 +135,8 @@ def test_flag_patterns_are_comprehensive():
 def test_off_values_are_comprehensive():
     """Test that off values cover all off states"""
     expected_off_values = [0, False, "0", "false", "off", "disabled"]
-    
+
     contract_off_values = CONTRACT['requirements']['off_values']
-    
+
     for expected in expected_off_values:
         assert expected in contract_off_values, f"Missing off value: {expected}"

@@ -3,6 +3,26 @@ Status: 🚧 in progress (75% complete - L0 Gates implemented and operational)
 
 ---
 
+## Operational Commands (current)
+```bash
+# Deterministic smoke (also validates reports/run.json lineage via CI)
+make smoke
+
+# Smoke-marked tests only (stable env)
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q -m smoke
+
+# Focused walkforward tests
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q tests -k walkforward
+
+# Comprehensive readiness checks and report
+python scripts/readiness_check.py
+
+# Walkforward smoke runner
+python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO
+```
+
+---
+
 ## 1. Data Layer
 - [x] ✅ Data sources connected (broker API, market data)
 - [x] ✅ DataSanity suite running (schema, leakage, NaNs, monotonic index)
@@ -39,11 +59,12 @@ Status: 🚧 in progress (75% complete - L0 Gates implemented and operational)
 ---
 
 ## 5. CI / Test Gates
-- [x] ✅ Lint + unit tests green
+- [x] ✅ Smoke job green (blocking)
 - [x] ✅ Datasanity tests pass
-- [x] ✅ Train-smoke runs in CI
+- [x] ✅ Smoke runs in CI via Makefile target (`smoke`) with deterministic env
 - [x] ✅ Export parity test green
 - [x] ✅ End-to-Decision smoke green
+- [x] ✅ Lineage validation enforced for `reports/run.json`
 - [ ] 🚧 Integration test: mock trade loop runs, logs decisions
 
 ---

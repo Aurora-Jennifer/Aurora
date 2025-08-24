@@ -1,7 +1,7 @@
 import json
+import pathlib
 import subprocess
 import sys
-import pathlib
 
 PROFILE = "golden_xgb_v2"
 RUN_DIR = pathlib.Path("artifacts/run_ci")

@@ -1,0 +1,24 @@
+{
+  "run_id": "paper_20250823_161358",
+  "start_time": "2025-08-23T16:13:58.173314",
+  "end_time": "2025-08-23T16:14:49.980440",
+  "total_measurements": 6,
+  "latency_summary": {
+    "mean_ms": 44.88480494595194,
+    "p95_ms": 70.08593963473686,
+    "max_ms": 80.14069499768084,
+    "min_ms": 36.81138004889718
+  },
+  "memory_summary": {
+    "mean_mb": 191.078125,
+    "max_mb": 191.265625,
+    "min_mb": 190.6953125,
+    "peak_mb": 191.265625
+  },
+  "trading_summary": {
+    "total_orders": 0,
+    "total_fills": 0,
+    "total_rejections": 0,
+    "avg_fill_rate_pct": 0.0
+  }
+}

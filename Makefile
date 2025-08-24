@@ -1,6 +1,6 @@
 # Makefile for Trading System with DataSanity Enforcement
 
-.PHONY: help install test test-full integ sanity falsify bench-sanity clean coverage lint lint-changed format promote wf smoke type datasanity golden bless_golden quality configcheck lock audit pre-push mut mut-results mut-report canary canary-smoke canary-rollup daily daily-shadow live live-shadow live-eod maintenance live-rollup reconcile reconcile-dry-run flatten-dry-run go-nogo go-nogo-custom block-live allow-live freeze-snapshot train-e0 train-e1 train-e2 eval-e0 eval-e1 eval-e2 test-onnx-parity smoke-adapter smoke-adapter-onnx verify-functional paper shadow ops-check recon e2e e2e-smoke gate-data gate-signal gate-parity gate-pnl gate-wf parity serve-smoke rollback drift-check train-smoke e2d e2d-gate paper-smoke demo-15m dashboard backtest-smoke backtest-full ds mut-full
+.PHONY: help install test test-full test-wf test-smoke integ sanity falsify bench-sanity clean coverage lint lint-changed format promote wf smoke type datasanity golden bless_golden quality configcheck lock audit pre-push mut mut-results mut-report canary canary-smoke canary-rollup daily daily-shadow live live-shadow live-eod maintenance live-rollup reconcile reconcile-dry-run flatten-dry-run go-nogo go-nogo-custom block-live allow-live freeze-snapshot train-e0 train-e1 train-e2 eval-e0 eval-e1 eval-e2 test-onnx-parity smoke-adapter smoke-adapter-onnx verify-functional paper shadow ops-check recon e2e e2e-smoke gate-data gate-signal gate-parity gate-pnl gate-wf parity serve-smoke rollback drift-check train-smoke e2d e2d-gate paper-smoke demo-15m dashboard backtest-smoke backtest-full ds mut-full
 
 # Default target
 .DEFAULT_GOAL := e2e
@@ -26,13 +26,20 @@ install:
 
 # Run all tests
 test:
-	pytest -q --ignore=mutants
+	PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q tests
 
 test-full:
-	pytest -m "not quarantine" -q --ignore=mutants
+	PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -m "not quarantine" -q tests
+
+# Standardized test helpers (stable env)
+test-wf:
+	PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q tests -k walkforward
+
+test-smoke:
+	PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q -m smoke
 
 integ:
-	pytest tests/integration -q --ignore=mutants
+	PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest tests/integration -q
 
 # Run DataSanity tests only
 sanity:

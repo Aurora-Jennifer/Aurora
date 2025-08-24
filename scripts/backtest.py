@@ -29,12 +29,19 @@ def max_dd(eq):
 
 def main():
     ap = argparse.ArgumentParser(description="Backtest harness")
+    # Current flags
     ap.add_argument("--smoke", action="store_true", help="Smoke test mode")
     ap.add_argument("--profile", default="config/profiles/golden_xgb_v2.yaml", help="Profile path")
     ap.add_argument("--snapshot", help="Snapshot path (e.g., artifacts/snapshots/golden_ml_v1)")
     ap.add_argument("--start", default="2019-01-01", help="Start date")
     ap.add_argument("--end", default="2020-12-31", help="End date")
     ap.add_argument("--report", default="reports/backtest/backtest.json", help="Report path")
+    # Legacy aliases (backwards compat)
+    ap.add_argument("--start-date", dest="start", help=argparse.SUPPRESS)
+    ap.add_argument("--end-date", dest="end", help=argparse.SUPPRESS)
+    ap.add_argument("--config", dest="profile", help=argparse.SUPPRESS)
+    ap.add_argument("--symbols", dest="universe", nargs="+", help=argparse.SUPPRESS)
+    ap.set_defaults(universe=None)
     args = ap.parse_args()
 
     if args.smoke:

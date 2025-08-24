@@ -1,0 +1,96 @@
+{
+  "timestamp": "2025-08-23T20:20:13Z",
+  "passed": false,
+  "checks": [
+    {
+      "name": "env_versions",
+      "passed": true,
+      "details": {
+        "numpy": "2.2.6",
+        "pandas": "2.3.1",
+        "polars": "1.32.2",
+        "numba": "0.61.2",
+        "yfinance": "0.2.65",
+        "python": "3.13"
+      }
+    },
+    {
+      "name": "unit_tests",
+      "passed": false,
+      "details": {
+        "exit_code": 2,
+        "passed": false,
+        "total_tests": 0,
+        "passed_tests": 0,
+        "failed_tests": 0,
+        "stdout_tail": [
+          "ERROR tests/walkforward/test_datasanity_nan_walkforward.py",
+          "ERROR tests/walkforward/test_datasanity_non_mono.py",
+          "ERROR tests/walkforward/test_fold_integrity.py",
+          "ERROR tests/walkforward/test_metrics_consistency.py",
+          "ERROR tests/walkforward/test_no_lookahead.py",
+          "ERROR tests/walkforward/test_repro_and_parallel.py",
+          "ERROR tests/walkforward/test_short_fold_policy.py",
+          "ERROR tests/walkforward/test_smoke_determinism.py",
+          "!!!!!!!!!!!!!!!!!!! Interrupted: 12 errors during collection !!!!!!!!!!!!!!!!!!!",
+          "677 deselected, 123 warnings, 12 errors in 1.48s"
+        ],
+        "stderr_tail": []
+      }
+    },
+    {
+      "name": "backtest_smoke",
+      "passed": false,
+      "details": {
+        "exit_code": 2,
+        "stderr": "usage: backtest.py [-h] [--smoke] [--profile PROFILE] [--snapshot SNAPSHOT]\n                   [--start START] [--end END] [--report REPORT]\nbacktest.py: error: unrecognized arguments: --start-date 2024-01-02 --end-date 2024-01-31 --config config/smoke_test_config.json --symbols SPY\n"
+      }
+    },
+    {
+      "name": "walk_forward_integrity",
+      "passed": false,
+      "details": {
+        "exit_code": 1,
+        "stderr": "Traceback (most recent call last):\n  File \"/home/Jennifer/secure/aurora_plain/trader/scripts/multi_walkforward_report.py\", line 45, in <module>\n    from scripts.walkforward_framework import (\n    ...<4 lines>...\n    )\nImportError: cannot import name 'LeakageProofPipeline' from 'scripts.walkforward_framework' (/home/Jennifer/secure/aurora_plain/trader/scripts/walkforward_framework.py)\n"
+      }
+    },
+    {
+      "name": "leakage_sentry",
+      "passed": false,
+      "details": {
+        "exit_code": 1,
+        "stderr": "Traceback (most recent call last):\n  File \"/home/Jennifer/secure/aurora_plain/trader/scripts/multi_walkforward_report.py\", line 45, in <module>\n    from scripts.walkforward_framework import (\n    ...<4 lines>...\n    )\nImportError: cannot import name 'LeakageProofPipeline' from 'scripts.walkforward_framework' (/home/Jennifer/secure/aurora_plain/trader/scripts/walkforward_framework.py)\n"
+      }
+    },
+    {
+      "name": "risk_invariants",
+      "passed": false,
+      "details": {
+        "exit_code": 2,
+        "stderr": "usage: backtest.py [-h] [--smoke] [--profile PROFILE] [--snapshot SNAPSHOT]\n                   [--start START] [--end END] [--report REPORT]\nbacktest.py: error: unrecognized arguments: --start-date 2024-01-02 --end-date 2024-01-31 --config config/risk_test_config.json --symbols SPY\n"
+      }
+    },
+    {
+      "name": "benchmark_sanity",
+      "passed": false,
+      "details": {
+        "exit_code": 2,
+        "stderr": "usage: backtest.py [-h] [--smoke] [--profile PROFILE] [--snapshot SNAPSHOT]\n                   [--start START] [--end END] [--report REPORT]\nbacktest.py: error: unrecognized arguments: --start-date 2024-01-02 --end-date 2024-01-31 --config config/bh_test_config.json --symbols SPY\n"
+      }
+    },
+    {
+      "name": "pnl_reconciliation",
+      "passed": false,
+      "details": {
+        "exit_code": 2,
+        "stderr": "usage: backtest.py [-h] [--smoke] [--profile PROFILE] [--snapshot SNAPSHOT]\n                   [--start START] [--end END] [--report REPORT]\nbacktest.py: error: unrecognized arguments: --start-date 2024-01-02 --end-date 2024-01-31 --config config/pnl_test_config.json --symbols SPY\n"
+      }
+    }
+  ],
+  "summary": {
+    "total_checks": 8,
+    "passed_checks": 1,
+    "failed_checks": 7,
+    "pass_rate": 12.5
+  }
+}

@@ -9,8 +9,11 @@ Env knobs:
 """
 
 from __future__ import annotations
-import os, subprocess
+
+import os
+import subprocess
 from pathlib import Path
+
 import pandas as pd
 import pytest
 
@@ -41,7 +44,7 @@ def features_path(e2d_out_dir: Path) -> Path:
     golden_features = Path("artifacts/snapshots/golden_ml_v1/features.parquet")
     if golden_features.exists():
         return golden_features
-    
+
     # Fallback to E2D output if golden features don't exist
     candidates = [
         e2d_out_dir / "features.parquet",

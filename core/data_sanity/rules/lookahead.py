@@ -3,10 +3,10 @@ Lookahead Contamination Rule for DataSanity
 Detects future information leakage in data.
 """
 
-import pandas as pd
-import numpy as np
 from dataclasses import dataclass
-from typing import List, Tuple
+
+import pandas as pd
+
 from ..lookahead_detector import detect_lookahead_with_context
 
 
@@ -27,7 +27,7 @@ class LookaheadContaminationRule:
         if "Returns" in df.columns and len(df) > 1:
             returns = df["Returns"]
             close_prices = df.get("Close", None)
-            
+
             # Use the improved lookahead detector
             result = detect_lookahead_with_context(
                 returns=returns,
@@ -35,7 +35,7 @@ class LookaheadContaminationRule:
                 eps=self.cfg.eps_zero_return,
                 min_run=self.cfg.min_zero_run
             )
-            
+
             # Check if the suspicious rate exceeds our threshold
             if result["suspicious_match_rate"] > self.cfg.max_suspicious_rate:
                 if self.cfg.fail:
@@ -45,23 +45,21 @@ class LookaheadContaminationRule:
                         f"threshold: {self.cfg.max_suspicious_rate:.4f}, "
                         f"suspicious: {result['n_suspicious']}/{result['n_total']})"
                     )
-                else:
-                    # Just flag it
-                    return df
-        
+                # Just flag it
+                return df
+
         return df
 
-    def validate_and_repair(self, df: pd.DataFrame) -> Tuple[pd.DataFrame, List[str]]:
+    def validate_and_repair(self, df: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
         """Validate and optionally repair lookahead contamination."""
         try:
             return self.validate(df), []
-        except ValueError as e:
+        except ValueError:
             if self.cfg.fail:
                 raise
-            else:
-                # In non-fail mode, we could attempt repairs
-                # For now, just return the data as-is with a flag
-                return df, ["lookahead_contamination_detected"]
+            # In non-fail mode, we could attempt repairs
+            # For now, just return the data as-is with a flag
+            return df, ["lookahead_contamination_detected"]
 
 
 def create_lookahead_contamination_rule(config: dict) -> LookaheadContaminationRule:

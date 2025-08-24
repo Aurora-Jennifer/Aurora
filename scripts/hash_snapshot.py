@@ -4,8 +4,11 @@ Compute sha256 over all files in a snapshot dir (path arguments allowed).
 Writes HASH.txt by default.
 """
 from __future__ import annotations
-import hashlib, sys
+
+import hashlib
+import sys
 from pathlib import Path
+
 
 def dir_sha256(root: Path) -> str:
     h = hashlib.sha256()

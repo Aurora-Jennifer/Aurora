@@ -14,7 +14,7 @@ graph TD
 Entrypoints:
 - `core/data_sanity/api.py` — DataSanity API (engine switch facade, telemetry, metrics)
 - `core/engine/` — strategy engines and execution plumbing
-- `core/walkforward/` — fold builder, pipeline orchestration
+- `core/walk/` — fold builder, pipeline orchestration
 
 Do-not-touch:
 - Contracts under `core/data_sanity/main.py` and public symbols exported by `core/data_sanity/api.py`

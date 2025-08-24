@@ -42,12 +42,21 @@ except Exception:  # fallback when package import fails
 
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from scripts.walkforward_framework import (
-    LeakageProofPipeline,
-    build_feature_table,
-    gen_walkforward,
-    walkforward_run,
-)
+
+def _wf():
+    # Lazy import to avoid circular dependencies with compat shim
+    from scripts.walkforward_framework_compat import (
+        LeakageProofPipeline,
+        build_feature_table,
+        gen_walkforward,
+        walkforward_run,
+    )
+    return {
+        "LeakageProofPipeline": LeakageProofPipeline,
+        "build_feature_table": build_feature_table,
+        "gen_walkforward": gen_walkforward,
+        "walkforward_run": walkforward_run,
+    }
 
 # Data sanity (fast pre-check for smoke)
 try:
@@ -217,7 +226,8 @@ def run_for_symbol_profile(
     datasanity_profile: str = "walkforward",
 ) -> tuple[list[dict], list[int], int]:
     data = load_data(symbol, start, end)
-    X, y, prices = build_feature_table(data, warmup_days=warmup_days)
+    WF = _wf()
+    X, y, prices = WF["build_feature_table"](data, warmup_days=warmup_days)
     n = len(X)
     if train_days is not None and test_days is not None:
         train_len, test_len = int(train_days), int(test_days)
@@ -225,7 +235,7 @@ def run_for_symbol_profile(
     else:
         train_len, test_len, stride = choose_fold_params(n, target_folds)
     folds = list(
-        gen_walkforward(
+        WF["gen_walkforward"](
             n=n,
             train_len=train_len,
             test_len=test_len,
@@ -254,9 +264,9 @@ def run_for_symbol_profile(
     if len(folds) > target_folds:
         folds = folds[:target_folds]
 
-    pipeline = LeakageProofPipeline(X, y)
+    pipeline = WF["LeakageProofPipeline"](X, y)
     # Use stricter CI profile for smoke/validation runs.
-    results = walkforward_run(
+    results = WF["walkforward_run"](
         pipeline,
         folds,
         prices,
@@ -557,10 +567,11 @@ def main():
         ordered = non_crypto + crypto
         # For smoke, ensure ≥1 fold by adapting windows if needed
         if args.smoke:
+            WF = _wf()  # Get walkforward functions
             probe_symbol = ordered[0]
             data_probe = load_data(probe_symbol, eff_start, eff_end)
             # Use small warmup to maximize available bars
-            X_probe, _, _ = build_feature_table(data_probe, warmup_days=10)
+            X_probe, _, _ = WF["build_feature_table"](data_probe, warmup_days=10)
             n_probe = len(X_probe)
             if eff_train + eff_test > n_probe:
                 # Adapt windows conservatively

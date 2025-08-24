@@ -3,9 +3,10 @@ L0 Gate: Timezone Contract
 Ensures all timestamps are UTC and bars are within market hours.
 """
 
+from pathlib import Path
+
 import pandas as pd
 import pytest
-from pathlib import Path
 
 
 def test_timestamps_are_utc(e2d_output):
@@ -20,7 +21,7 @@ def test_timestamps_are_utc(e2d_output):
             df = pd.read_parquet(output_path / "data.parquet")
         else:
             pytest.skip("No data.parquet found in E2D output")
-    
+
     # Check that index has timezone info
     assert df.index.tz is not None, "DataFrame index must have timezone info"
     assert str(df.index.tz) == "UTC", f"Expected UTC timezone, got {df.index.tz}"
@@ -37,7 +38,7 @@ def test_bars_within_market_hours(e2d_output, market_calendar):
             df = pd.read_parquet(output_path / "data.parquet")
         else:
             pytest.skip("No data.parquet found in E2D output")
-    
+
     # Simple market hours check (9:30 AM - 4:00 PM ET, Monday-Friday)
     # Convert to UTC (ET is UTC-5 or UTC-4 depending on DST)
     # For simplicity, check 14:30-21:00 UTC (covers both EST/EDT)
@@ -47,15 +48,15 @@ def test_bars_within_market_hours(e2d_output, market_calendar):
         if timestamp.weekday() >= 5:  # Saturday = 5, Sunday = 6
             bad_bars.append(timestamp)
             continue
-        
+
         # Check if it's within market hours (14:30-21:00 UTC)
         hour = timestamp.hour
         minute = timestamp.minute
         time_minutes = hour * 60 + minute
-        
+
         if time_minutes < 14 * 60 + 30 or time_minutes > 21 * 60:  # Before 14:30 or after 21:00
             bad_bars.append(timestamp)
-    
+
     assert len(bad_bars) == 0, f"Found {len(bad_bars)} out-of-hours bars: {bad_bars[:5]}"
 
 
@@ -69,7 +70,7 @@ def test_timestamp_monotonicity(e2d_output):
             df = pd.read_parquet(output_path / "data.parquet")
         else:
             pytest.skip("No data.parquet found in E2D output")
-    
+
     # Check that index is monotonically increasing
     assert df.index.is_monotonic_increasing, "Timestamps must be monotonically increasing"
 
@@ -90,5 +91,5 @@ def market_calendar():
             # This would be implemented with actual market calendar logic
             # For now, return empty index as placeholder
             return pd.DatetimeIndex([])
-    
+
     return MarketCalendar()

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "contracts/run_report.schema.json",
+  "title": "Run Report (Aurora)",
+  "type": "object",
+  "required": [
+    "run_id",
+    "phase",
+    "decision",
+    "config_hash",
+    "started_at",
+    "finished_at",
+    "metrics",
+    "lineage"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 8 },
+    "phase": { "type": "string" },
+    "decision": { "type": "string" },
+    "config_hash": { "type": "string", "minLength": 8 },
+    "started_at": { "type": "string" },
+    "finished_at": { "type": "string" },
+    "metrics": {
+      "type": "object",
+      "required": ["latency_ms"],
+      "properties": {
+        "latency_ms": { "type": "number", "minimum": 0 }
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "required": ["data_snapshot", "source_path", "timestamp_utc"],
+      "properties": {
+        "data_snapshot": { "type": "string" },
+        "source_path": { "type": "string" },
+        "timestamp_utc": { "type": "string" }
+      }
+    }
+  },
+  "additionalProperties": true
+}
+

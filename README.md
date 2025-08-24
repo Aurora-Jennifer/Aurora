@@ -1,13 +1,15 @@
 # Aurora Trader — Project README
 
+<!-- Update OWNER/REPO once you push this branch -->
+![CI](https://github.com/OWNER/REPO/actions/workflows/ci.yml/badge.svg)
+
 ## Purpose
 Deterministic, guardrail-first trading research and paper/live framework with DataSanity validation, walkforward orchestration, and strict CI discipline.
 
 ## Entrypoints
 - `scripts/multi_walkforward_report.py` — smoke/backtest runner
 - `core/data_sanity/api.py` — DataSanity validation API (engine switch + telemetry)
-- `apps/walk_cli.py` — CLI entry for walk/experiment flows
-- `Makefile` — common targets: `smoke`, `test`, `test-full`, `integ`, `lint`, `canary`
+- `Makefile` — common targets: `smoke`, `test`, `test-full`, `integ`, `lint`
 
 ## Do-not-touch
 - Contracts under `core/data_sanity/main.py` and public API of `core/data_sanity/api.py`
@@ -23,7 +25,12 @@ Smoke: ![Smoke](https://img.shields.io/github/actions/workflow/status/Aurora-jen
 
 ## Quick Start
 ```bash
-make smoke           # deterministic smoke
-pytest -q            # tests
-python scripts/canary_datasanity.py --profiles walkforward_smoke -v
+# Deterministic smoke + lineage validation
+make smoke
+
+# Focused walkforward tests (stable env)
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q tests -k walkforward
+
+# Smoke-marked tests only
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q -m smoke
 ```

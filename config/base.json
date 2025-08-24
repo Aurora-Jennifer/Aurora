@@ -85,6 +85,16 @@
     "auto_adjust": false
   },
 
+  "guards": {
+    "price": {
+      "jump_limit_frac": 0.30,
+      "band_lookback_bars": 90,
+      "band_frac": 0.80,
+      "warmup_bars": 30,
+      "absurd_max": 1000000
+    }
+  },
+
   "logging": {
     "level": "INFO",
     "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",

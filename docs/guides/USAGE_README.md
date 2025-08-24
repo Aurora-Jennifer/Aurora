@@ -10,16 +10,12 @@ This guide provides detailed instructions for using the Advanced Trading System 
 python -c "from core.utils import setup_logging; from core.sim.simulate import simulate_orders_numba; print('✅ System ready!')"
 ```
 
-### 2. Run Your First Backtest
+### 2. Run Your First Backtest (smoke)
 ```bash
-# Quick 6-month backtest to verify everything works
-python scripts/walkforward_framework.py \
-  --start-date 2023-01-01 \
-  --end-date 2023-06-01 \
-  --train-len 60 \
-  --test-len 30 \
-  --stride 30 \
-  --perf-mode RELAXED
+# Deterministic smoke backtest (current CLI)
+python scripts/backtest.py --smoke --start 2024-01-02 --end 2024-01-31 \
+  --profile config/profiles/golden_xgb_v2.yaml \
+  --report reports/backtest/backtest.json
 ```
 
 ### 3. Check Results
@@ -32,38 +28,22 @@ cat results/walkforward/latest_oos_summary.json
 
 ### 1. Comprehensive Backtesting
 
-#### Quick Backtest (Recommended for testing)
+#### Quick Walkforward (Recommended for testing)
 ```bash
-python scripts/walkforward_framework.py \
-  --start-date 2023-01-01 \
-  --end-date 2023-12-31 \
-  --train-len 126 \
-  --test-len 63 \
-  --stride 63 \
-  --perf-mode RELAXED
+python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO
 ```
 
 #### Full Historical Backtest (Production)
 ```bash
-python scripts/walkforward_framework.py \
-  --start-date 2020-01-01 \
-  --end-date 2024-12-31 \
-  --train-len 252 \
-  --test-len 63 \
-  --stride 63 \
-  --perf-mode RELAXED
+python scripts/backtest.py --start 2020-01-01 --end 2024-12-31 \
+  --profile config/profiles/golden_xgb_v2.yaml \
+  --report reports/backtest/backtest_full.json
 ```
 
-#### Thorough Backtest with Data Validation
+#### Thorough Walkforward with Data Validation
 ```bash
-python scripts/walkforward_framework.py \
-  --start-date 2020-01-01 \
-  --end-date 2024-12-31 \
-  --train-len 252 \
-  --test-len 63 \
-  --stride 63 \
-  --validate-data \
-  --perf-mode STRICT
+python scripts/multi_walkforward_report.py --validate-data --log-level INFO \
+  --report reports/walkforward/wf_report.json
 ```
 
 ### 2. Machine Learning Training
@@ -128,7 +108,7 @@ python cli/paper.py --config config/enhanced_paper_trading_config.json
 
 #### Paper Trading with Specific Date Range
 ```bash
-python cli/paper.py --start-date 2024-01-01 --end-date 2024-03-31
+python cli/paper.py --start 2024-01-01 --end 2024-03-31
 ```
 
 ### 5. Performance Testing
@@ -183,14 +163,14 @@ Results are stored in `artifacts/multi_symbol/`:
 
 ### Run All Tests
 ```bash
-# Complete test suite (94% success rate)
-python -m pytest tests/ -v
+# Smoke-marked tests (stable env)
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q -m smoke
 
-# Core functionality tests only
-python -m pytest tests/ -k "not data_sanity" -v
+# Focused walkforward tests
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q tests -k walkforward
 
-# With coverage report
-python -m pytest tests/ --cov=core --cov-report=html
+# Full suite (may include deferred areas)
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q
 ```
 
 ### System Health Check
@@ -259,14 +239,15 @@ pip install -r requirements.txt
 
 #### 2. Performance Issues
 ```bash
-# Solution: Use RELAXED mode
-python scripts/walkforward_framework.py --perf-mode RELAXED
+# Solution: use smoke and focused tests
+make smoke
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q -m smoke
 ```
 
 #### 3. DataSanity Errors
 ```bash
-# Solution: Disable data validation for performance
-python scripts/walkforward_framework.py --validate-data False
+# Solution: run smoke without validation, or fix upstream data issues
+python scripts/multi_walkforward_report.py --smoke --log-level INFO
 ```
 
 #### 4. Test Failures
@@ -278,9 +259,9 @@ python -m pytest tests/ -k "not data_sanity" -v
 
 #### 5. No Trades Generated
 ```bash
-# Check signal thresholds in config
-# Try different date ranges
-python scripts/walkforward_framework.py --start-date 2022-01-01 --end-date 2024-01-01
+# Check signal thresholds in config, and try a different date range
+python scripts/backtest.py --start 2022-01-01 --end 2024-01-01 \
+  --profile config/profiles/golden_xgb_v2.yaml
 ```
 
 ### Health Check Commands
@@ -382,17 +363,19 @@ python -m pytest tests/ -k "not data_sanity" -q
 
 ### Common Commands Reference
 ```bash
-# Quick backtest
-python scripts/walkforward_framework.py --start-date 2023-01-01 --end-date 2023-06-01
+# Smoke run (deterministic)
+make smoke
 
-# ML training
-python scripts/train_with_persistence.py --symbol SPY --enable-persistence
+# Walkforward smoke
+python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO
 
-# Multi-asset test
-python scripts/multi_symbol_test.py
+# Backtest (current CLI)
+python scripts/backtest.py --start 2024-01-02 --end 2024-01-31 \
+  --profile config/profiles/golden_xgb_v2.yaml \
+  --report reports/backtest/backtest.json
 
-# System check
-python scripts/preflight.py
+# Tests
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q -m smoke
 ```
 
 ---

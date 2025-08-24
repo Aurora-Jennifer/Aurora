@@ -8,9 +8,10 @@ Create/update via your snapshot pipeline (outside of tests).
 """
 
 from __future__ import annotations
-import hashlib, os
+
+import hashlib
+import os
 from pathlib import Path
-import pytest
 
 HASH_FILE_NAME = "HASH.txt"
 

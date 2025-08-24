@@ -449,7 +449,7 @@ class DataSanityValidator:
         # --- 3.5) Staged validation (ingest stage) ---
         from .registry import get_rule
         stages_config = self.config.get("stages", {})
-        
+
         # Run ingest stage validation
         if "ingest" in stages_config:
             ingest_rules = stages_config["ingest"].get("rules", [])
@@ -461,10 +461,9 @@ class DataSanityValidator:
                     except ValueError as e:
                         if self.profile_config.get("mode") == "fail":
                             raise DataSanityError(f"{symbol}: {str(e)}")
-                        else:
-                            # Try to repair
-                            clean_data, rule_repairs = rule.validate_and_repair(clean_data)
-                            repairs.extend(rule_repairs)
+                        # Try to repair
+                        clean_data, rule_repairs = rule.validate_and_repair(clean_data)
+                        repairs.extend(rule_repairs)
 
         # --- 4) Volume validation (now handled by staged rules) ---
         # Volume validation moved to staged pipeline (ingest + post_adjust stages)
@@ -555,13 +554,13 @@ class DataSanityValidator:
         Call this after any transformations that could introduce data issues.
         """
         stages_config = self.config.get("stages", {})
-        
+
         if "post_adjust" not in stages_config:
             return data
-        
+
         from .registry import get_rule
         post_adjust_rules = stages_config["post_adjust"].get("rules", [])
-        
+
         for rule_config in post_adjust_rules:
             for rule_name, rule_params in rule_config.items():
                 try:
@@ -570,10 +569,9 @@ class DataSanityValidator:
                 except ValueError as e:
                     if self.profile_config.get("mode") == "fail":
                         raise DataSanityError(f"{symbol}: {str(e)}")
-                    else:
-                        # Try to repair
-                        data, _ = rule.validate_and_repair(data)
-        
+                    # Try to repair
+                    data, _ = rule.validate_and_repair(data)
+
         return data
 
     def _validate_time_series_strict(
@@ -1316,28 +1314,28 @@ class DataSanityValidator:
         """Detect potential lookahead contamination using improved logic."""
         if "Returns" not in data.columns or len(data) < 2:
             return False
-            
+
         r = data["Returns"].to_numpy()
         # Compare r[t] vs r[t+1]
         eq_next = np.isfinite(r[:-1]) & np.isfinite(r[1:]) & (np.abs(r[:-1] - r[1:]) < 1e-12)
-        
+
         if not eq_next.any():
             return False
-            
+
         # Check if this is legitimate (consecutive identical close prices)
         if "Close" in data.columns:
             c = data["Close"].to_numpy()
             # Check if consecutive close prices are identical (which would create identical returns)
             identical_closes = np.isfinite(c[:-1]) & np.isfinite(c[1:]) & (np.abs(c[:-1] - c[1:]) < 1e-12)
-            
+
             # Check if returns are clipped at the same limit (winsorization artifact)
             max_return = self.config["price_limits"]["max_daily_return"]
             clipped_returns = (np.abs(r[:-1]) >= max_return) & (np.abs(r[1:]) >= max_return) & (np.sign(r[:-1]) == np.sign(r[1:]))
-            
+
             # Flag when any equal-return event is NOT explained by identical closes OR winsorization
             leak = eq_next & ~identical_closes & ~clipped_returns
             return bool(leak.any())
-        
+
         # Conservative: if we can't check close prices, assume any equal returns are suspicious
         return True
 

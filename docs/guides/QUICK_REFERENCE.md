@@ -14,12 +14,7 @@ from ib_insync import IB, Ticker, Contract
 ```
 
 ### 2. Logging Error
-```bash
-# Error: cannot import name 'get_logger'
-# Fix: Add to core/enhanced_logging.py
-def get_logger(name: str) -> logging.Logger:
-    return logging.getLogger(name)
-```
+Use existing logging utilities; do not create files via heredocs. Reference the codebase's logging helpers.
 
 ### 3. Missing Environment Variables
 ```bash
@@ -54,10 +49,7 @@ echo "from ib_insync import IB, Ticker, Contract" >> brokers/ibkr_broker.py
 ```
 
 ### Fix Logging
-```bash
-# Add function to core/enhanced_logging.py
-echo "def get_logger(name: str) -> logging.Logger: return logging.getLogger(name)" >> core/enhanced_logging.py
-```
+Avoid shell one-liners that modify source. Open the relevant module and implement properly with tests.
 
 ### Set Environment Variables
 ```bash
@@ -79,25 +71,26 @@ python scripts/preflight.py
 STRUCTURED_LOGS=1 RUN_ID=$(date +%Y%m%d-%H%M%S) MAX_POSITION_PCT=0.15 python scripts/go_nogo.py
 ```
 
-### Test Backtesting
+### Test Backtesting (smoke)
 ```bash
-python cli/backtest.py --start 2024-01-01 --end 2024-01-31 --symbols SPY --fast
+python scripts/backtest.py --smoke --start 2024-01-02 --end 2024-01-31 \
+  --profile config/profiles/golden_xgb_v2.yaml \
+  --report reports/backtest/backtest.json
 ```
 
 ### Test Walkforward
 ```bash
-python scripts/walkforward_framework.py --symbol SPY --train-len 60 --test-len 20
+python scripts/multi_walkforward_report.py --smoke --validate-data --log-level INFO
 ```
 
 ### Test All Imports
 ```bash
-python -c "
-from core.engine.paper import PaperTradingEngine
+python - <<'PY'
 from core.engine.backtest import BacktestEngine
-from strategies.regime_aware_ensemble import RegimeAwareEnsembleStrategy
-from core.regime_detector import RegimeDetector
+from core.engine.composer_integration import ComposerIntegration
+from core.regime.basic import BasicRegimeExtractor
 print('✅ Core imports work')
-"
+PY
 ```
 
 ## 📊 Current Performance
@@ -121,18 +114,17 @@ print('✅ Core imports work')
 - `config/ibkr_config.json` - IBKR settings
 
 ### Core Components
-- `core/engine/paper.py` - Paper trading engine
 - `core/engine/backtest.py` - Backtesting engine
-- `core/regime_detector.py` - Regime detection
-- `strategies/regime_aware_ensemble.py` - Main strategy
+- `core/walk/` - Fold builder and orchestration
+- `core/regime/basic.py` - Regime extractor
 
 ### Scripts
 - `scripts/preflight.py` - System validation
 - `scripts/go_nogo.py` - Production readiness check
-- `scripts/walkforward_framework.py` - Walkforward analysis
+- `scripts/multi_walkforward_report.py` - Walkforward analysis (smoke/report)
 
 ### Tests
-- `tests/` - Test suite (45 failed out of 448)
+- `tests/` - Test suite
 - `scripts/falsification_tests.py` - Data validation tests
 
 ## 🚀 Next Steps
