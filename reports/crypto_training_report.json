@@ -1,0 +1,50 @@
+{
+  "training_config": {
+    "symbols": [
+      "BTC-USD",
+      "ETH-USD"
+    ],
+    "start_date": "2020-01-01",
+    "end_date": "2024-12-31",
+    "model_type": "ridge",
+    "timestamp": "2025-08-24T08:57:11.544877"
+  },
+  "metrics": {
+    "cv_mse_mean": 0.0026640528230392575,
+    "cv_mse_std": 0.0004412961352954057,
+    "cv_r2_mean": -0.07408440516577959,
+    "cv_r2_std": 0.14203137904237928,
+    "final_mse": 0.0024305255748948477,
+    "final_r2": 0.016646161849370622,
+    "n_samples": 3612,
+    "n_features": 11,
+    "model_type": "ridge",
+    "feature_names": [
+      "returns_1",
+      "returns_5",
+      "sma_ratio",
+      "volatility",
+      "volume_ratio",
+      "volatility_24h",
+      "momentum_4h",
+      "volume_surge",
+      "range_expansion",
+      "symbol_BTC-USD",
+      "symbol_ETH-USD"
+    ]
+  },
+  "model_path": "models/crypto_v1.onnx",
+  "feature_names": [
+    "returns_1",
+    "returns_5",
+    "sma_ratio",
+    "volatility",
+    "volume_ratio",
+    "volatility_24h",
+    "momentum_4h",
+    "volume_surge",
+    "range_expansion",
+    "symbol_BTC-USD",
+    "symbol_ETH-USD"
+  ]
+}

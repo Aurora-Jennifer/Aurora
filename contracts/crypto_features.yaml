@@ -1,0 +1,152 @@
+# Crypto Features Data Contract
+# Defines the expected schema for crypto trading data and features
+
+metadata:
+  name: "Crypto Features Contract"
+  version: "1.0"
+  description: "Data schema contract for crypto model features and targets"
+  created: "2025-08-24"
+  asset_class: "crypto"
+
+# Input data requirements
+inputs:
+  required_columns:
+    - timestamp
+    - symbol
+    - close
+    - volume
+    - returns_1h
+    - target_1h
+    - predictions
+  
+  optional_columns:
+    - returns_1h_lag1
+    - returns_1h_lag2
+    - volatility_24h
+    - price_momentum_12h
+    - volume_momentum_6h
+    - open
+    - high
+    - low
+
+# Data type specifications
+dtypes:
+  timestamp: "datetime64[ns]"
+  symbol: "string"
+  close: "float64"
+  volume: "float64"
+  returns_1h: "float64"
+  returns_1h_lag1: "float64"
+  returns_1h_lag2: "float64"
+  volatility_24h: "float64"
+  price_momentum_12h: "float64"
+  volume_momentum_6h: "float64"
+  target_1h: "float64"
+  predictions: "float64"
+
+# Value constraints
+constraints:
+  close:
+    min: 0.0001
+    max: 1000000
+    description: "Price must be positive and reasonable"
+  
+  volume:
+    min: 0
+    max: 1000000000000
+    description: "Volume must be non-negative"
+  
+  returns_1h:
+    min: -0.5
+    max: 0.5
+    description: "Hourly returns should be within reasonable bounds"
+  
+  volatility_24h:
+    min: 0
+    max: 1.0
+    description: "24h volatility should be non-negative and reasonable"
+  
+  target_1h:
+    min: -0.5
+    max: 0.5
+    description: "Target returns should be within reasonable bounds"
+  
+  predictions:
+    min: -1.0
+    max: 1.0
+    description: "Model predictions should be bounded"
+
+# Data quality requirements
+quality:
+  no_missing_data:
+    columns: ["timestamp", "symbol", "close", "volume", "target_1h", "predictions"]
+    tolerance: 0.0
+    description: "Core columns must have no missing values"
+  
+  monotonic_time:
+    column: "timestamp"
+    ascending: true
+    description: "Timestamps must be monotonically increasing"
+  
+  unique_timestamps:
+    columns: ["timestamp", "symbol"]
+    description: "Each symbol should have unique timestamps"
+  
+  reasonable_price_changes:
+    column: "returns_1h"
+    max_abs: 0.3
+    description: "Hourly returns should not exceed 30%"
+
+# Feature engineering specifications
+features:
+  core_features:
+    - returns_1h
+    - returns_1h_lag1
+    - returns_1h_lag2
+    - volatility_24h
+    - price_momentum_12h
+    - volume_momentum_6h
+  
+  target:
+    column: "target_1h"
+    type: "regression"
+    horizon: "1h"
+    description: "1-hour forward return"
+  
+  predictions:
+    column: "predictions"
+    type: "regression"
+    range: [-1.0, 1.0]
+    description: "Model prediction for target_1h"
+
+# Validation rules
+validation:
+  min_samples: 100
+  max_missing_ratio: 0.05
+  outlier_detection:
+    method: "iqr"
+    multiplier: 3.0
+    columns: ["returns_1h", "target_1h", "predictions"]
+  
+  correlation_checks:
+    target_prediction_min: 0.05
+    description: "Predictions should have some correlation with targets"
+
+# Asset-specific rules for crypto
+crypto_specific:
+  symbols:
+    pattern: "^[A-Z]{3,5}USDT?$"
+    examples: ["BTCUSDT", "ETHUSDT", "ADAUSDT"]
+  
+  market_hours:
+    description: "Crypto markets are 24/7"
+    continuous: true
+  
+  typical_volatility:
+    daily: 0.03
+    weekly: 0.08
+    description: "Expected volatility ranges for crypto assets"
+  
+  volume_characteristics:
+    min_daily: 1000000
+    description: "Minimum daily volume for liquid crypto pairs"

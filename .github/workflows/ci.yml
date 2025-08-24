@@ -121,5 +121,59 @@ jobs:
           echo "### Mutation Testing Results" >> $GITHUB_STEP_SUMMARY
           echo "Metamorphic tests verify DataSanity detects data corruption correctly." >> $GITHUB_STEP_SUMMARY
 
+  crypto-smoke:
+    name: Crypto Model Smoke (advisory)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    timeout-minutes: 10
+    env:
+      PYTHONHASHSEED: "0"
+      TZ: "UTC"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11", cache: "pip" }
+      - run: pip install -r requirements.txt
+      - name: Run crypto golden snapshot tests
+        run: |
+          pytest tests/test_crypto_golden_snapshot.py -v || true
+      - name: Run crypto contract validation
+        run: |
+          pytest tests/test_crypto_contract_and_determinism.py -v || true
+      - name: Test model router with crypto assets
+        run: |
+          python tools/test_asset_routing.py || true
+      - name: Summary
+        if: always()
+        run: |
+          echo "### Crypto Model Smoke Results" >> $GITHUB_STEP_SUMMARY
+          echo "Tests crypto model infrastructure and golden snapshots." >> $GITHUB_STEP_SUMMARY
+
+  crypto-parity:
+    name: Crypto ONNX Parity (advisory)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    timeout-minutes: 10
+    env:
+      PYTHONHASHSEED: "0"
+      TZ: "UTC"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11", cache: "pip" }
+      - run: pip install -r requirements.txt
+      - run: pip install onnx onnxruntime
+      - name: Run ONNX export and parity tests
+        run: |
+          pytest tests/test_crypto_export_parity.py -v || true
+      - name: Run crypto metrics validation
+        run: |
+          pytest tests/test_crypto_metrics.py -v || true
+      - name: Summary
+        if: always()
+        run: |
+          echo "### Crypto ONNX Parity Results" >> $GITHUB_STEP_SUMMARY
+          echo "Validates ONNX export and model metrics for crypto models." >> $GITHUB_STEP_SUMMARY
+
 
 

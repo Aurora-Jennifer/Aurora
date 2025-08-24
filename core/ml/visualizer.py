@@ -8,6 +8,13 @@ import warnings
 from datetime import datetime
 from pathlib import Path
 
+# Force non-interactive backend to prevent GUI windows
+import os
+os.environ.setdefault('MPLBACKEND', 'Agg')
+
+import matplotlib
+matplotlib.use('Agg')  # Force non-interactive backend
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -19,6 +26,9 @@ warnings.filterwarnings("ignore", category=UserWarning)
 # Set style for better-looking plots
 plt.style.use("seaborn-v0_8")
 sns.set_palette("husl")
+
+# Disable interactive mode
+plt.ioff()
 
 logger = logging.getLogger(__name__)
 
@@ -91,7 +101,8 @@ class MLVisualizer:
             plots["learning_progress"] = str(plot_path)
             logger.info(f"Saved learning progress plot: {plot_path}")
 
-        plt.show()
+        # plt.show()  # DISABLED: Never show GUI in trading system
+        plt.close(fig)  # Free memory
         return plots
 
     def create_prediction_analysis_plots(
@@ -137,7 +148,8 @@ class MLVisualizer:
             plots["prediction_analysis"] = str(plot_path)
             logger.info(f"Saved prediction analysis plot: {plot_path}")
 
-        plt.show()
+        # plt.show()  # DISABLED: Never show GUI in trading system
+        plt.close(fig)  # Free memory
         return plots
 
     def create_strategy_performance_plots(
@@ -179,7 +191,8 @@ class MLVisualizer:
             plots["strategy_performance"] = str(plot_path)
             logger.info(f"Saved strategy performance plot: {plot_path}")
 
-        plt.show()
+        # plt.show()  # DISABLED: Never show GUI in trading system
+        plt.close(fig)  # Free memory
         return plots
 
     def create_risk_analysis_plots(self, profit_learner, save_plots: bool = True) -> dict[str, str]:
@@ -223,7 +236,8 @@ class MLVisualizer:
             plots["risk_analysis"] = str(plot_path)
             logger.info(f"Saved risk analysis plot: {plot_path}")
 
-        plt.show()
+        # plt.show()  # DISABLED: Never show GUI in trading system
+        plt.close(fig)  # Free memory
         return plots
 
     def create_comprehensive_report(

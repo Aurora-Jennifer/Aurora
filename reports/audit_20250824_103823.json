@@ -1,0 +1,241 @@
+{
+  "timestamp": "2025-08-24T10:38:23.090865",
+  "overall_score": 4.75,
+  "verdict": "\ud83d\udfe0 PROTOTYPE: Core logic works, infrastructure is shaky",
+  "results": {
+    "Architecture": {
+      "tests": [
+        {
+          "test": "Import core.data_sanity.api",
+          "passed": true,
+          "details": "",
+          "score": null
+        },
+        {
+          "test": "Import core.engine.backtest",
+          "passed": false,
+          "details": "cannot import name 'ensure_directories' from 'core.utils' (/home/Jennifer/secure/aurora_plain/trader/core/utils/__init__.py)",
+          "score": null
+        },
+        {
+          "test": "Import core.walk.ml_pipeline",
+          "passed": true,
+          "details": "",
+          "score": null
+        },
+        {
+          "test": "Import core.risk.guardrails",
+          "passed": true,
+          "details": "",
+          "score": null
+        },
+        {
+          "test": "Import core.model_router",
+          "passed": true,
+          "details": "",
+          "score": null
+        },
+        {
+          "test": "Import core.config_loader",
+          "passed": true,
+          "details": "",
+          "score": null
+        },
+        {
+          "test": "Module System",
+          "passed": true,
+          "details": "5/6 modules importable",
+          "score": 8
+        }
+      ],
+      "score": 8,
+      "total": 1
+    },
+    "Data Sanity": {
+      "tests": [
+        {
+          "test": "Engine loads",
+          "passed": false,
+          "details": "cannot import name 'DataSanityEngine' from 'core.data_sanity.api' (/home/Jennifer/secure/aurora_plain/trader/core/data_sanity/api.py)",
+          "score": 0
+        }
+      ],
+      "score": 0,
+      "total": 1
+    },
+    "Models": {
+      "tests": [
+        {
+          "test": "Found artifacts/models/linear_v1.pkl",
+          "passed": true,
+          "details": "",
+          "score": null
+        },
+        {
+          "test": "Load artifacts/models/linear_v1.pkl",
+          "passed": true,
+          "details": "",
+          "score": null
+        },
+        {
+          "test": "Found artifacts/models/latest.onnx",
+          "passed": true,
+          "details": "",
+          "score": null
+        },
+        {
+          "test": "Load artifacts/models/latest.onnx",
+          "passed": true,
+          "details": "ONNX (assumed working)",
+          "score": null
+        },
+        {
+          "test": "Found models/universal_v1.pkl",
+          "passed": true,
+          "details": "",
+          "score": null
+        },
+        {
+          "test": "Load models/universal_v1.pkl",
+          "passed": true,
+          "details": "",
+          "score": null
+        },
+        {
+          "test": "Found artifacts/models/dummy_v1.pkl",
+          "passed": false,
+          "details": "",
+          "score": null
+        },
+        {
+          "test": "Model System",
+          "passed": true,
+          "details": "3/4 models working",
+          "score": 7
+        }
+      ],
+      "score": 7,
+      "total": 1
+    },
+    "Backtesting": {
+      "tests": [
+        {
+          "test": "Engine loads",
+          "passed": false,
+          "details": "cannot import name 'ensure_directories' from 'core.utils' (/home/Jennifer/secure/aurora_plain/trader/core/utils/__init__.py)",
+          "score": 0
+        }
+      ],
+      "score": 0,
+      "total": 1
+    },
+    "Execution": {
+      "tests": [
+        {
+          "test": "Paper runner exists",
+          "passed": true,
+          "details": "",
+          "score": null
+        },
+        {
+          "test": "Paper adapter loads",
+          "passed": false,
+          "details": "cannot import name 'PaperTradingAdapter' from 'oms.paper_adapter' (/home/Jennifer/secure/aurora_plain/trader/oms/paper_adapter.py)",
+          "score": 2
+        }
+      ],
+      "score": 2,
+      "total": 1
+    },
+    "Config": {
+      "tests": [
+        {
+          "test": "Found config/base.yaml",
+          "passed": true,
+          "details": "",
+          "score": null
+        },
+        {
+          "test": "Found config/base.json",
+          "passed": true,
+          "details": "",
+          "score": null
+        },
+        {
+          "test": "Found contracts/dtypes.yaml",
+          "passed": true,
+          "details": "",
+          "score": null
+        },
+        {
+          "test": "Config loader works",
+          "passed": true,
+          "details": "",
+          "score": 8
+        }
+      ],
+      "score": 8,
+      "total": 1
+    },
+    "CI/CD": {
+      "tests": [
+        {
+          "test": "Found .github/workflows/ci.yml",
+          "passed": true,
+          "details": "",
+          "score": null
+        },
+        {
+          "test": "Found pytest.ini",
+          "passed": true,
+          "details": "",
+          "score": null
+        },
+        {
+          "test": "Found Makefile",
+          "passed": true,
+          "details": "",
+          "score": null
+        },
+        {
+          "test": "Test Coverage",
+          "passed": true,
+          "details": "Found 123 test files",
+          "score": 10
+        }
+      ],
+      "score": 10,
+      "total": 1
+    },
+    "Operations": {
+      "tests": [
+        {
+          "test": "Found logs/",
+          "passed": true,
+          "details": "",
+          "score": null
+        },
+        {
+          "test": "Found reports/",
+          "passed": true,
+          "details": "",
+          "score": null
+        },
+        {
+          "test": "Kill switch mechanism",
+          "passed": true,
+          "details": "",
+          "score": 6
+        },
+        {
+          "test": "Monitoring scripts",
+          "passed": false,
+          "details": "Found 0 monitoring scripts",
+          "score": 0
+        }
+      ],
+      "score": 6,
+      "total": 2
+    }
+  }
+}

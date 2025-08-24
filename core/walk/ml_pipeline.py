@@ -35,16 +35,32 @@ class MLPipeline:
             raise FileNotFoundError(f"Model not found: {self.model_path}")
 
         with open(self.model_path, "rb") as f:
-            self.model = pickle.load(f)  # nosec B301  # trusted local artifact; not user-supplied data
+            model_data = pickle.load(f)  # nosec B301  # trusted local artifact; not user-supplied data
+            
+        # Handle both direct model and dictionary format
+        if isinstance(model_data, dict):
+            self.model = model_data['model']
+            self.scaler = model_data.get('scaler')
+            self.model_type = model_data.get('model_type', 'unknown')
+        else:
+            self.model = model_data
+            self.scaler = None
+            self.model_type = 'unknown'
 
-        logger.info(f"Loaded Alpha v1 model from {self.model_path}")
+        logger.info(f"Loaded Alpha v1 model from {self.model_path} (type: {self.model_type})")
 
     def _load_feature_config(self):
         """Load feature configuration."""
         config_path = Path("config/features.yaml")
         if config_path.exists():
             self.feature_config = yaml.safe_load(config_path.read_text())
-            self.feature_names = list(self.feature_config["features"].keys())
+            # Handle both list and dict formats
+            if isinstance(self.feature_config["features"], list):
+                # List format: extract feature names
+                self.feature_names = [feature["name"] for feature in self.feature_config["features"]]
+            else:
+                # Dict format: use keys
+                self.feature_names = list(self.feature_config["features"].keys())
         else:
             # Fallback to default features
             self.feature_names = [

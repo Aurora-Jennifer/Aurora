@@ -1,0 +1,113 @@
+# Asset Classification Configuration
+# Used by ModelRouter to classify symbols and route to appropriate models
+# 
+# Format: asset_class → list of symbols or patterns
+
+crypto:
+  # Major crypto pairs (Binance format)
+  - BTCUSDT
+  - ETHUSDT
+  - BNBUSDT
+  - ADAUSDT
+  - SOLUSDT
+  - DOGEUSDT
+  - MATICUSDT
+  - LINKUSDT
+  
+  # IBKR crypto format  
+  - BTC-USD
+  - ETH-USD
+  - ADA-USD
+  - SOL-USD
+  - DOGE-USD
+  - LINK-USD
+  - LTC-USD
+  - XRP-USD
+
+equities:
+  # Major ETFs and indices
+  - SPY
+  - QQQ
+  - IWM
+  - VTI
+  - EFA
+  - EEM
+  
+  # FAANG + major tech
+  - AAPL
+  - MSFT
+  - GOOGL
+  - AMZN
+  - TSLA
+  - NVDA
+  - META
+  - NFLX
+  
+  # Other major equities
+  - JPM
+  - JNJ
+  - PG
+  - KO
+  - DIS
+  - V
+  - MA
+
+options:
+  # Options naming patterns
+  - SPY_options
+  - QQQ_options
+  - AAPL_options
+  - TSLA_options
+
+# Pattern matching rules (regex)
+patterns:
+  crypto:
+    - ".*USDT$"      # Binance USDT pairs
+    - ".*-USD$"      # IBKR crypto format
+    - "BTC.*"        # BTC derivatives
+    - "ETH.*"        # ETH derivatives
+    
+  equities:
+    - "^[A-Z]{1,5}$" # Standard equity symbols
+    
+  options:
+    - ".*_options$"
+    - ".*_PUT$"
+    - ".*_CALL$"
+
+# Model registry paths
+models:
+  universal: "models/universal_v1.pkl"
+  crypto: "models/crypto_v1.onnx"
+  equities: "models/equities_v1.onnx"  
+  options: "models/options_v1.onnx"
+
+# Feature configuration per asset class
+features:
+  crypto:
+    feature_list:
+      - "volatility_24h"
+      - "funding_rate"
+      - "social_sentiment"
+      - "orderbook_imbalance" 
+      - "retail_flow_proxy"
+    refresh_freq: "4h"
+    
+  equities:
+    feature_list:
+      - "earnings_surprise"
+      - "sector_rotation"
+      - "institutional_flow"
+      - "options_flow"
+      - "analyst_revisions"
+    refresh_freq: "daily"
+    
+  options:
+    feature_list:
+      - "implied_volatility"
+      - "time_to_expiry"
+      - "delta"
+      - "gamma"
+      - "vega"
+      - "theta"
+    refresh_freq: "hourly"

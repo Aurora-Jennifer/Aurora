@@ -1,0 +1,71 @@
+# Asset-Specific Model Registry Configuration
+# 
+# This configuration defines asset classes and their corresponding models.
+# Feature flag: FLAG_ASSET_SPECIFIC_MODELS (default: 0)
+
+# Asset Classification Rules
+asset_classes:
+  crypto:
+    symbols: ["BTC-USD", "ETH-USD", "DOGE-USD", "ADA-USD", "SOL-USD"]
+    patterns: ["-USD", "-USDT", "BTC", "ETH", "DOGE"]
+    model_path: "models/asset_specific/crypto_v1.onnx"
+    features:
+      - "volatility_24h"
+      - "funding_rate" 
+      - "social_sentiment"
+      - "orderbook_imbalance"
+      - "retail_flow_proxy"
+    refresh_freq: "4h"  # Higher frequency for 24/7 markets
+    description: "Cryptocurrency models optimized for 24/7 trading, retail sentiment"
+    
+  equities:
+    symbols: ["SPY", "QQQ", "AAPL", "TSLA", "NVDA", "MSFT", "GOOGL", "AMZN"]
+    patterns: ["^[A-Z]{1,5}$"]  # Standard equity symbols
+    model_path: "models/asset_specific/equity_v1.onnx"
+    features:
+      - "earnings_surprise"
+      - "sector_rotation"
+      - "institutional_flow"
+      - "options_flow"
+      - "analyst_revisions"
+    refresh_freq: "daily"  # Business day cadence
+    description: "Equity models with earnings cycles, sector rotation, institutional flow"
+    
+  options:
+    symbols: ["SPY_options", "QQQ_options", "AAPL_options"]
+    patterns: ["_OPTIONS", "_PUT", "_CALL"]
+    model_path: "models/asset_specific/options_v1.onnx"
+    features:
+      - "implied_volatility"
+      - "time_to_expiry"
+      - "delta"
+      - "gamma"
+      - "vega"
+      - "theta"
+      - "volatility_surface"
+    refresh_freq: "hourly"  # Greeks change rapidly
+    description: "Options models with Greeks, volatility surface, time decay"
+
+# Fallback Configuration
+fallback:
+  model_path: "models/universal_v1.onnx"
+  description: "Universal model for all asset classes (current system)"
+  
+# Feature Flags
+feature_flags:
+  asset_specific_models: false  # Default: disabled
+  debug_routing: false
+  log_predictions: false
+  
+# Risk Management
+risk:
+  max_model_load_time_ms: 5000
+  prediction_timeout_ms: 100
+  fallback_on_error: true
+  cache_models: true
+  
+# Validation
+validation:
+  require_parity_tests: true
+  min_accuracy_threshold: 0.6
+  max_latency_ms: 150
