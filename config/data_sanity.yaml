@@ -91,6 +91,8 @@ stages:
           allow_zero_volume: false
           max_volume: 1000000000000
           repair_mode: "warn"
+      - corporate_actions:
+          actions_dir: "data/corporate_actions"
   
   post_adjust:
     rules:
@@ -116,6 +118,8 @@ stages:
           eps_zero_return: 0.0
           min_zero_run: 2
           max_suspicious_rate: 0.001
+      - corporate_actions:
+          actions_dir: "data/corporate_actions"
 
 # Legacy configuration (for backward compatibility)
 price_positivity:

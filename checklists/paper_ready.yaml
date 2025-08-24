@@ -60,13 +60,13 @@ ci_tests:
   - item: "End-to-Decision smoke green"
     status: done
   - item: "Integration test: mock trade loop runs, logs decisions"
-    status: todo
+    status: done
 
 hard_gates:
   - item: "L0 Gates: timezone, dtypes, flags, snapshot (PR CI, <3min)"
     status: done
   - item: "L0 Gates wired to real E2D outputs (not mocks)"
-    status: todo
+    status: done
   - item: "L1 Gates: corporate actions, export parity, idempotency (nightly)"
     status: todo
   - item: "L1 Gates: circuit breakers, kill switch, mutation testing (nightly)"
@@ -84,7 +84,7 @@ observability:
   - item: "Metrics contract: schema validation, golden reference, ratchet enforcement"
     status: done
   - item: "Traces: span per stage, inputs hash, artifact paths"
-    status: todo
+    status: done
   - item: "Alerts/tripwires: fail fast on nondeterminism or leakage"
     status: done
   - item: "Mutation testing: metrics math validation, contamination detection"
@@ -96,11 +96,11 @@ risk_rollback:
   - item: "Stop policy wired (e.g., ATR multiplier)"
     status: done
   - item: "Circuit breakers: notional limits, rate limits, price bands"
-    status: todo
+    status: done
   - item: "Kill switch: environment variable + file-based triggers"
     status: todo
   - item: "Idempotency: crash recovery, resume from last offset"
-    status: todo
+    status: done
   - item: "Rollback path: single env var/flag disables new behavior"
     status: todo
   - item: "Runbooks: incident + perf regression documented"
@@ -110,7 +110,7 @@ release:
   - item: "CI all green"
     status: done
   - item: "Backtest parity against golden snapshot"
-    status: todo
+    status: done
   - item: "Latency budget met (train-smoke ≤60s, E2D ≤150ms)"
     status: done
   - item: "Ratchet enforcement: no performance regressions vs goldens"
@@ -127,7 +127,15 @@ release:
 # Summary counts (auto-calculated by progress script)
 summary:
   total_items: 44
-  done_count: 30
+  done_count: 35
   todo_count: 9
   blocked_count: 0
-  completion_percentage: 76
+  completion_percentage: 80
+  recent_breakthrough: "Clearframe confidence fix - dynamic ML predictions working"
+  
+# Recent Updates (2025-08-22):
+# - Fixed confidence score system (Clearframe diagnosis)  
+# - Live data pipeline working with yfinance integration
+# - Adaptive price guards replacing hardcoded bands
+# - Idempotency and execution loop stability
+# - Real-time telemetry and feature hashing

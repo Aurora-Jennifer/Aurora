@@ -1,0 +1,58 @@
+# Live 1-minute trading profile for yfinance
+# Ensures live data feed, not historical replay
+
+data:
+  provider: yfinance
+  symbols: ["SPY", "QQQ"]
+  interval: 1m
+  period: 5d                # yahoo live-compatible window
+  live: true                # <- assert live path
+  backfill_bars: 200
+  timezone: America/New_York
+  use_adjusted: true        # ok for features
+
+ingest:
+  market_hours_only: true
+  align_to_bar_close_ms: 250
+  strict_monotonic_index: true
+
+risk:
+  trade_mode: paper
+  max_qty_per_symbol: 1
+  notional_cap_day: 2000
+  require_live_data: true   # <- blocks submits if stale
+
+runner:
+  symbols: ["SPY", "QQQ"]
+  loop_seconds: 1
+
+# Use aggressive ML model for live
+ml:
+  model_path: "models/aggressive_xgb_v2.onnx"
+  confidence_threshold: 0.45
+  rebalance_threshold: 0.02
+
+# Risk management for live trading
+limits:
+  max_position_size: 0.02  # 2% of portfolio
+  daily_loss_limit: 0.01  # 1% daily stop
+  max_leverage: 1.0
+
+# Price guards - live data specific
+guards:
+  price:
+    jump_limit_frac: 0.05    # 5% max jump (tighter for live)
+    band_lookback_bars: 390  # ~1 trading day for 1m bars
+    band_frac: 0.02          # 2% band (tighter than historical)
+    warmup_bars: 50          # faster warmup for live
+    absurd_max: 1000         # absolute ceiling
+
+# Notifications for live mode
+notifications:
+  enabled: true
+  slack_webhook: "${SLACK_WEBHOOK_URL}"
+  alerts:
+    - trade_executed
+    - risk_cap_triggered
+    - data_stale
+    - price_anomaly

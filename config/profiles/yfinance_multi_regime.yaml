@@ -1,0 +1,88 @@
+# YFinance Multi-Regime Profile - 25 Years of Market History
+# Drives: expanded universe, regime variety, crash periods coverage
+
+data:
+  snapshot: "data/training/yfinance/"
+  symbols: ["SPY", "QQQ", "IWM", "TLT", "GLD", "VXX", "AAPL", "MSFT", "GOOGL", "BRK-B", "JNJ", "XOM"]
+  lookback_days: 252
+  min_history_bars: 120
+  regime_coverage:
+    dot_com_crash: true
+    financial_crisis: true
+    covid_crash: true
+    rate_hike_selloff: true
+    steady_growth: true
+    post_covid_bull: true
+
+features:
+  id: "e6_lag_core_v1"
+  groups:
+    - "carry"
+    - "trend" 
+    - "vol"
+    - "momentum"
+  ablation:
+    min_ic_improvement: 0.005
+    significance_level: 0.05
+
+model:
+  id: "xgb_v2"
+  kind: "xgboost"
+  params:
+    n_estimators: 100
+    max_depth: 3
+    learning_rate: 0.1
+    colsample_bytree: 1.0
+    random_state: 42
+  cv:
+    scheme: "purged_kfold"
+    n_splits: 5
+    purge_gap: "5d"
+  grid:
+    max_depth: [3, 4]
+    n_estimators: [100, 200, 400]
+    colsample_bytree: [0.6, 0.8, 1.0]
+  export:
+    onnx: true
+    opset: 13
+  evaluation:
+    min_ic_after_costs: 0.05
+    max_turnover: 2.5
+
+risk:
+  max_positions: 3  # Increased for multi-asset universe
+  max_dollar: 6000  # Scaled up for 3 positions
+  max_dd_bp: 150
+  stop_bp: 50
+  vol_target: 0.15
+  max_leverage: 1.0
+  daily_loss_limit: 0.03
+
+exec:
+  mode: "paper"
+  venue: "alpaca"
+  account: "SIM"
+  slippage_bps: 1.0
+  commission_bps: 0.3
+
+runtime:
+  heartbeat_s: 60
+  cooldown_s: 0
+  kill_switch: "SERVE_KILL"
+  dry_run: false
+
+budgets:
+  train_secs_small: 120.0  # Increased for larger universe
+  peak_mem_mb: 768        # Increased for multi-asset
+  walltime_s: 120
+  e2d_latency_p95_ms: 200  # Slightly more tolerance
+
+datasanity:
+  price_positivity:
+    allow_negative_prices: false
+    allow_zero_prices: false
+    price_cols: ["Open", "High", "Low", "Close"]
+  regime_validation:
+    require_crash_periods: true
+    min_regime_coverage: 6  # All major regimes represented
+

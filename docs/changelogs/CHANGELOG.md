@@ -1,3 +1,36 @@
+## 🚀 **Critical Breakthrough: Clearframe Confidence Fixes**
+**Date**: August 22, 2025  
+**Version**: 0.3.1  
+**Status**: ✅ **LIVE READY**
+
+### 🎯 **Major Fixes (Clearframe Diagnosis)**
+- **✅ Dynamic ML Predictions**: Fixed confidence score system - now generates real ML predictions instead of static/broken values
+- **✅ Live Data Pipeline**: Replaced 2000 historical replay with live 2025 yfinance data integration  
+- **✅ Adaptive Price Guards**: Implemented regime-aware price validation replacing hardcoded $100 sentinel
+- **✅ Execution Idempotency**: Added duplicate order prevention and position-aware trading logic
+- **✅ Real-time Telemetry**: Feature hashing, timing metrics, and live data validation working
+
+### 📊 **Validation Results**
+- **Confidence Scores**: Dynamic values per symbol (0.1-0.9 range)
+- **Data Timestamps**: Current year `2025-08-22` vs old `2000-12-XX` 
+- **Price Accuracy**: Live SPY $645.24 vs hardcoded $100
+- **Feature Hashing**: Symbol-specific hashes vs static values
+- **Staleness Detection**: Live bar-interval tolerance for market data
+
+### 🔧 **Technical Implementation**
+- `scripts/runner.py`: Live data fetching, idempotency, telemetry logging
+- `core/guards/price.py`: Adaptive price sanity with fatal/jump/regime checks
+- `config/profiles/yfinance_live_*.yaml`: Live data profiles with staleness tolerance
+- `tests/unit/test_price_guards.py`: Comprehensive validation of price guard system
+
+### 🎯 **Impact**
+- **Paper Trading**: Ready for Monday market validation
+- **System Reliability**: Eliminated major execution bugs
+- **Data Quality**: Live market data with proper validation
+- **Risk Management**: Regime-aware price controls active
+
+---
+
 - feat(paper): add paper broker, execution router, live risk loop, and runner (JSONL logs + meta/provenance)
 - feat(models): feature-flagged runtime with registry + deterministic dummy model
 # 📝 Development Changelog

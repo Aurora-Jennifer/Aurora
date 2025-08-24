@@ -1,0 +1,55 @@
+# Live demo profile - relaxed staleness for after-hours testing
+# Shows confidence scores working with live (but possibly stale) data
+
+data:
+  provider: yfinance
+  symbols: ["SPY", "QQQ"]
+  interval: 1m
+  period: 5d
+  live: true                # Assert live path
+  backfill_bars: 200
+  timezone: America/New_York
+  use_adjusted: true
+
+ingest:
+  market_hours_only: false   # Allow after-hours for demo
+  align_to_bar_close_ms: 250
+  strict_monotonic_index: true
+
+risk:
+  trade_mode: paper
+  max_qty_per_symbol: 1
+  notional_cap_day: 2000
+  require_live_data: false   # Relaxed for demo
+  max_dollar: 1000           # For e2d risk engine
+  stop_bp: 200               # 2% stop loss
+  daily_loss_limit: 500      # $500 daily loss limit
+
+runner:
+  symbols: ["SPY", "QQQ"]
+  loop_seconds: 1
+  allow_stale_demo: true     # Demo flag
+
+# Features configuration 
+features:
+  groups: ["price", "volume", "volatility", "momentum"]
+
+# Use aggressive ML model for live
+ml:
+  model_path: "models/aggressive_xgb_v2.onnx"
+  confidence_threshold: 0.45
+  rebalance_threshold: 0.02
+
+# Relaxed staleness for after-hours demo  
+demo:
+  max_staleness_hours: 48    # Allow 2-day-old data for demo
+  note: "After market hours demo - shows live fetching with relaxed staleness"
+
+# Price guards - demo tolerances
+guards:
+  price:
+    jump_limit_frac: 0.10    # 10% (relaxed for demo)
+    band_lookback_bars: 390
+    band_frac: 0.05          # 5% band (demo)
+    warmup_bars: 50
+    absurd_max: 1000

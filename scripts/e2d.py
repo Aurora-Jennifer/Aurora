@@ -4,7 +4,6 @@ E2D: End-to-Decision - System reality check
 Flows: raw snapshot → features → model → signal → position decision (no broker)
 """
 import argparse
-import contextlib
 import json
 import sys
 import time
@@ -19,8 +18,8 @@ import pandas as pd
 import yaml
 
 from core.data_sanity import DataSanityValidator
-from core.ml.build_features import build_matrix
 from core.metrics.comprehensive import create_metrics_collector
+from core.ml.build_features import build_matrix
 
 
 class E2DRunner:
@@ -31,7 +30,7 @@ class E2DRunner:
         self.profile = self._load_profile()
         self.trace_events = []
         self.decisions = []
-        
+
         # Initialize comprehensive metrics
         run_id = f"e2d_{pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')}"
         self.metrics = create_metrics_collector(run_id)
@@ -62,6 +61,7 @@ class E2DRunner:
 
         # Load from golden snapshot
         snapshot_path = self.profile["data"]["snapshot"]
+        # When loading from snapshot, use symbols from config
         symbols = self.profile["data"]["symbols"]
 
         dfs = []
@@ -89,47 +89,49 @@ class E2DRunner:
             import yaml
             with open("config/data_sanity.yaml") as f:
                 base_config = yaml.safe_load(f)
-            
+
             # Override with profile datasanity config if present
             if "datasanity" in self.profile:
                 base_config.update(self.profile["datasanity"])
-            
+
             # Create temporary config file
             import tempfile
             with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
                 yaml.dump(base_config, f)
                 temp_config_path = f.name
-            
+
             validator = DataSanityValidator(config_path=temp_config_path, profile="default")
-            
+
             # Verify rule registry
             from core.data_sanity.registry import RULES
             required_rules = {"price_positivity", "ohlc_consistency", "finite_numbers"}
             missing_rules = required_rules - set(RULES.keys())
             if missing_rules:
                 raise SystemExit(f"[E2D] FATAL: DataSanity rules not registered: {missing_rules}")
-            
+
             # Run ingest stage validation
             print(f"[E2D][DataSanity] ingest: starting (rows={len(df)})", flush=True)
-            validated_df, result = validator.validate_and_repair(df, symbol="SPY")
-            
+            # Use the actual symbol from the data, not hardcoded SPY
+            symbol = df.get('symbol', 'UNKNOWN').iloc[0] if 'symbol' in df.columns and len(df) > 0 else 'UNKNOWN'
+            validated_df, result = validator.validate_and_repair(df, symbol=symbol)
+
             # Log ingest results
             neg_count = sum(1 for r in result.repairs if "non_positive_prices" in r)
             print(f"[E2D][DataSanity] ingest: OK (rows={len(validated_df)}, neg={neg_count}, zeros=0)", flush=True)
-            
+
             # Run post-adjustment validation (after any transformations)
             print(f"[E2D][DataSanity] post_adjust: starting (rows={len(validated_df)})", flush=True)
             try:
-                validated_df = validator.validate_post_adjust(validated_df, symbol="SPY")
+                validated_df = validator.validate_post_adjust(validated_df, symbol=symbol)
                 print(f"[E2D][DataSanity] post_adjust: OK (rows={len(validated_df)}, neg=0, zeros=0)", flush=True)
             except Exception as e:
                 print(f"[E2D][DataSanity] post_adjust: FATAL - {str(e)}", flush=True)
                 raise SystemExit(f"[E2D] FATAL: DataSanity post-adjust validation failed: {str(e)}")
-            
+
             # Clean up temp file
             import os
             os.unlink(temp_config_path)
-            
+
             # Extract validation results
             failing_rules = []
             if result.flags:
@@ -285,8 +287,8 @@ class E2DRunner:
             # 5. Inference
             predictions = self._infer(model_info, X)
 
-            # 6. Risk engine decisions
-            symbols = self.profile["data"]["symbols"]
+            # 6. Risk engine decisions - Use symbols from actual data
+            symbols = df['symbol'].unique().tolist() if 'symbol' in df.columns else self.profile["data"]["symbols"]
             for i, symbol in enumerate(symbols):
                 if i < len(predictions):
                     signal = predictions[i]
@@ -296,7 +298,7 @@ class E2DRunner:
             # 7. Record comprehensive metrics
             total_time = (time.perf_counter() - start_time) * 1000
             self.metrics.record_latency(total_time)
-            
+
             # Log comprehensive metrics
             self.metrics.log_metrics({
                 "n_decisions": len(self.decisions),
@@ -304,21 +306,21 @@ class E2DRunner:
                 "datasanity_ok": ds_ok,
                 "failing_rules_count": len(failing_rules)
             })
-            
+
             # Save metrics summary
             self.metrics.save_summary()
-            
+
             # Save contract-compliant metrics to expected artifact location
             contract_metrics = self.metrics.get_current_metrics()
             artifact_dir = Path("artifacts") / self.metrics.run_id
             artifact_dir.mkdir(parents=True, exist_ok=True)
-            
+
             metrics_file = artifact_dir / "metrics.json"
             with open(metrics_file, "w") as f:
                 json.dump(contract_metrics, f, indent=2)
-            
+
             print(f"[E2D] 📊 Contract metrics: {metrics_file}")
-            
+
             self._trace("e2d", "complete", total_time, {
                 "n_decisions": len(self.decisions),
                 "total_latency_ms": total_time
@@ -352,15 +354,15 @@ def main():
     # Set determinism switches for reproducible results
     import numpy as np
     np.seterr(all="raise")  # Strict error handling for tests/smoke
-    
+
     # Load and log configuration
     import yaml
     with open(args.profile) as f:
         cfg = yaml.safe_load(f)
-    
+
     print(f"[E2D] Profile: {args.profile}")
     print(f"[E2D] DataSanity config: {cfg.get('datasanity', 'NOT_FOUND')}")
-    
+
     # Verify DataSanity configuration
     if "datasanity" not in cfg:
         print("[E2D] WARNING: No datasanity config found in profile")
