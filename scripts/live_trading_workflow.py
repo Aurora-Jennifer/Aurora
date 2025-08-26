@@ -35,12 +35,8 @@ from scripts.paper_runner import main as paper_main
 
 def setup_logging():
     """Setup basic logging."""
-    import logging
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(levelname)s - %(message)s'
-    )
-    return logging.getLogger(__name__)
+    from core.utils import setup_logging as core_setup_logging
+    return core_setup_logging("logs/live_trading_workflow.log", logging.INFO)
 
 
 def download_live_data(symbols: List[str], days: int = 252) -> Dict[str, pd.DataFrame]:
