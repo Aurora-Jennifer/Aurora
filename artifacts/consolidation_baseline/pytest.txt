@@ -1,0 +1,599 @@
+
+==================================== ERRORS ====================================
+___ ERROR collecting attic/_quarantine_20250819/test_asset_class_composer.py ___
+ImportError while importing test module '/home/Jennifer/secure/trader/attic/_quarantine_20250819/test_asset_class_composer.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../../miniconda3/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../aurora_plain/trader/attic/_quarantine_20250819/test_asset_class_composer.py:20: in <module>
+    from core.engine.composer_integration import ComposerIntegration
+core/engine/composer_integration.py:15: in <module>
+    from ..composer.registry import build_composer_system
+core/composer/registry.py:14: in <module>
+    from ..utils import _last, _safe_len
+E   ImportError: cannot import name '_last' from 'core.utils' (/home/Jennifer/secure/trader/core/utils/__init__.py)
+_____ ERROR collecting attic/_quarantine_20250819/test_composer_system.py ______
+ImportError while importing test module '/home/Jennifer/secure/trader/attic/_quarantine_20250819/test_composer_system.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../../miniconda3/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../aurora_plain/trader/attic/_quarantine_20250819/test_composer_system.py:20: in <module>
+    from core.composer.registry import build_composer_system
+core/composer/registry.py:14: in <module>
+    from ..utils import _last, _safe_len
+E   ImportError: cannot import name '_last' from 'core.utils' (/home/Jennifer/secure/trader/core/utils/__init__.py)
+________________________ ERROR collecting mutants/tests ________________________
+../../miniconda3/lib/python3.13/site-packages/pluggy/_manager.py:169: in register
+    hook._maybe_apply_history(hookimpl)
+../../miniconda3/lib/python3.13/site-packages/pluggy/_hooks.py:581: in _maybe_apply_history
+    res = self._hookexec(self.name, [method], kwargs, False)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../miniconda3/lib/python3.13/site-packages/pluggy/_manager.py:120: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../aurora_plain/trader/mutants/tests/conftest.py:9: in pytest_addoption
+    parser.addoption("--datasanity-profile", action="store", default="walkforward_ci")
+../../miniconda3/lib/python3.13/site-packages/_pytest/config/argparsing.py:102: in addoption
+    self._anonymous.addoption(*opts, **attrs)
+../../miniconda3/lib/python3.13/site-packages/_pytest/config/argparsing.py:403: in addoption
+    raise ValueError(f"option names {conflict} already added")
+E   ValueError: option names {'--datasanity-profile'} already added
+______________ ERROR collecting tests/test_composer_end_to_end.py ______________
+ImportError while importing test module '/home/Jennifer/secure/trader/tests/test_composer_end_to_end.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../../miniconda3/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../aurora_plain/trader/tests/test_composer_end_to_end.py:10: in <module>
+    from core.engine.composer_integration import ComposerIntegration
+core/engine/composer_integration.py:15: in <module>
+    from ..composer.registry import build_composer_system
+core/composer/registry.py:14: in <module>
+    from ..utils import _last, _safe_len
+E   ImportError: cannot import name '_last' from 'core.utils' (/home/Jennifer/secure/trader/core/utils/__init__.py)
+_____________ ERROR collecting tests/test_composer_refactoring.py ______________
+ImportError while importing test module '/home/Jennifer/secure/trader/tests/test_composer_refactoring.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../../miniconda3/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../aurora_plain/trader/tests/test_composer_refactoring.py:11: in <module>
+    from core.composer.registry import build_composer_system
+core/composer/registry.py:14: in <module>
+    from ..utils import _last, _safe_len
+E   ImportError: cannot import name '_last' from 'core.utils' (/home/Jennifer/secure/trader/core/utils/__init__.py)
+______________ ERROR collecting tests/unit/test_demo_features.py _______________
+ImportError while importing test module '/home/Jennifer/secure/trader/tests/unit/test_demo_features.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../../miniconda3/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/unit/test_demo_features.py:13: in <module>
+    from core.ml.build_features import build_demo_features, build_matrix, validate_features
+E   ImportError: cannot import name 'build_demo_features' from 'core.ml.build_features' (/home/Jennifer/secure/trader/core/ml/build_features.py)
+=============================== warnings summary ===============================
+../../miniconda3/lib/python3.13/site-packages/eventkit/util.py:21
+  /home/Jennifer/miniconda3/lib/python3.13/site-packages/eventkit/util.py:21: DeprecationWarning: There is no current event loop
+    return asyncio.get_event_loop_policy().get_event_loop()
+
+../aurora_plain/trader/attic/_quarantine_20250819/test_walkforward_performance.py:23
+  /home/Jennifer/secure/aurora_plain/trader/attic/_quarantine_20250819/test_walkforward_performance.py:23: DeprecationWarning: `scripts.walkforward_framework` is deprecated; import from `scripts.multi_walkforward_report` instead.
+    from scripts.walkforward_framework import (
+
+attic/root_tests/test_paper_engine.py:26
+  /home/Jennifer/secure/trader/attic/root_tests/test_paper_engine.py:26: PytestCollectionWarning: cannot collect test class 'TestPaperTradingEngine' because it has a __init__ constructor (from: attic/root_tests/test_data_integrity.py)
+    class TestPaperTradingEngine:
+
+attic/root_tests/test_paper_engine.py:26
+  /home/Jennifer/secure/trader/attic/root_tests/test_paper_engine.py:26: PytestCollectionWarning: cannot collect test class 'TestPaperTradingEngine' because it has a __init__ constructor (from: attic/root_tests/test_meaningful_validation.py)
+    class TestPaperTradingEngine:
+
+attic/root_tests/test_paper_engine.py:26
+  /home/Jennifer/secure/trader/attic/root_tests/test_paper_engine.py:26: PytestCollectionWarning: cannot collect test class 'TestPaperTradingEngine' because it has a __init__ constructor (from: attic/root_tests/test_paper_engine.py)
+    class TestPaperTradingEngine:
+
+../aurora_plain/trader/tests/datasanity/test_dirty_corpus.py:15
+  /home/Jennifer/secure/aurora_plain/trader/tests/datasanity/test_dirty_corpus.py:15: PytestUnknownMarkWarning: Unknown pytest.mark.quarantine - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.quarantine
+
+../aurora_plain/trader/tests/datasanity/test_metamorphic.py:20
+  /home/Jennifer/secure/aurora_plain/trader/tests/datasanity/test_metamorphic.py:20: PytestUnknownMarkWarning: Unknown pytest.mark.rule_DUP_TS - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.rule_DUP_TS
+
+../aurora_plain/trader/tests/datasanity/test_mutations.py:28
+  /home/Jennifer/secure/aurora_plain/trader/tests/datasanity/test_mutations.py:28: PytestUnknownMarkWarning: Unknown pytest.mark.datasanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.datasanity
+
+../aurora_plain/trader/tests/datasanity/test_mutations.py:52
+  /home/Jennifer/secure/aurora_plain/trader/tests/datasanity/test_mutations.py:52: PytestUnknownMarkWarning: Unknown pytest.mark.mutation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.mutation
+
+../aurora_plain/trader/tests/datasanity/test_mutations.py:77
+  /home/Jennifer/secure/aurora_plain/trader/tests/datasanity/test_mutations.py:77: PytestUnknownMarkWarning: Unknown pytest.mark.mutation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.mutation
+
+../aurora_plain/trader/tests/datasanity/test_mutations.py:91
+  /home/Jennifer/secure/aurora_plain/trader/tests/datasanity/test_mutations.py:91: PytestUnknownMarkWarning: Unknown pytest.mark.mutation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.mutation
+
+../aurora_plain/trader/tests/datasanity/test_mutations.py:105
+  /home/Jennifer/secure/aurora_plain/trader/tests/datasanity/test_mutations.py:105: PytestUnknownMarkWarning: Unknown pytest.mark.mutation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.mutation
+
+../aurora_plain/trader/tests/datasanity/test_mutations.py:119
+  /home/Jennifer/secure/aurora_plain/trader/tests/datasanity/test_mutations.py:119: PytestUnknownMarkWarning: Unknown pytest.mark.mutation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.mutation
+
+../aurora_plain/trader/tests/datasanity/test_mutations.py:135
+  /home/Jennifer/secure/aurora_plain/trader/tests/datasanity/test_mutations.py:135: PytestUnknownMarkWarning: Unknown pytest.mark.mutation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.mutation
+
+../aurora_plain/trader/tests/datasanity/test_mutations.py:149
+  /home/Jennifer/secure/aurora_plain/trader/tests/datasanity/test_mutations.py:149: PytestUnknownMarkWarning: Unknown pytest.mark.mutation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.mutation
+
+../aurora_plain/trader/tests/datasanity/test_mutations.py:163
+  /home/Jennifer/secure/aurora_plain/trader/tests/datasanity/test_mutations.py:163: PytestUnknownMarkWarning: Unknown pytest.mark.mutation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.mutation
+
+../aurora_plain/trader/tests/datasanity/test_mutations.py:177
+  /home/Jennifer/secure/aurora_plain/trader/tests/datasanity/test_mutations.py:177: PytestUnknownMarkWarning: Unknown pytest.mark.mutation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.mutation
+
+../aurora_plain/trader/tests/datasanity/test_mutations.py:191
+  /home/Jennifer/secure/aurora_plain/trader/tests/datasanity/test_mutations.py:191: PytestUnknownMarkWarning: Unknown pytest.mark.mutation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.mutation
+
+../aurora_plain/trader/tests/datasanity/test_mutations.py:209
+  /home/Jennifer/secure/aurora_plain/trader/tests/datasanity/test_mutations.py:209: PytestUnknownMarkWarning: Unknown pytest.mark.mutation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.mutation
+
+../aurora_plain/trader/tests/datasanity/test_mutations.py:232
+  /home/Jennifer/secure/aurora_plain/trader/tests/datasanity/test_mutations.py:232: PytestUnknownMarkWarning: Unknown pytest.mark.mutation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.mutation
+
+../aurora_plain/trader/tests/datasanity/test_mutations.py:246
+  /home/Jennifer/secure/aurora_plain/trader/tests/datasanity/test_mutations.py:246: PytestUnknownMarkWarning: Unknown pytest.mark.mutation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.mutation
+
+../aurora_plain/trader/tests/datasanity/test_rules_targeted.py:8
+  /home/Jennifer/secure/aurora_plain/trader/tests/datasanity/test_rules_targeted.py:8: PytestUnknownMarkWarning: Unknown pytest.mark.rule_NON_MONO_INDEX - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.rule_NON_MONO_INDEX
+
+../aurora_plain/trader/tests/datasanity/test_rules_targeted.py:24
+  /home/Jennifer/secure/aurora_plain/trader/tests/datasanity/test_rules_targeted.py:24: PytestUnknownMarkWarning: Unknown pytest.mark.rule_INF_VALUES - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.rule_INF_VALUES
+
+../aurora_plain/trader/tests/datasanity/test_rules_targeted.py:35
+  /home/Jennifer/secure/aurora_plain/trader/tests/datasanity/test_rules_targeted.py:35: PytestUnknownMarkWarning: Unknown pytest.mark.rule_NAN_VALUES - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.rule_NAN_VALUES
+
+../aurora_plain/trader/tests/e2e/test_end_to_end.py:19
+  /home/Jennifer/secure/aurora_plain/trader/tests/e2e/test_end_to_end.py:19: PytestUnknownMarkWarning: Unknown pytest.mark.e2e - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.e2e
+
+../aurora_plain/trader/tests/test_data_integrity.py:312
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:312: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_integrity.py:313
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:313: PytestUnknownMarkWarning: Unknown pytest.mark.validation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.validation
+
+../aurora_plain/trader/tests/test_data_integrity.py:346
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:346: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_integrity.py:347
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:347: PytestUnknownMarkWarning: Unknown pytest.mark.validation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.validation
+
+../aurora_plain/trader/tests/test_data_integrity.py:362
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:362: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_integrity.py:363
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:363: PytestUnknownMarkWarning: Unknown pytest.mark.validation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.validation
+
+../aurora_plain/trader/tests/test_data_integrity.py:391
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:391: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_integrity.py:392
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:392: PytestUnknownMarkWarning: Unknown pytest.mark.validation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.validation
+
+../aurora_plain/trader/tests/test_data_integrity.py:408
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:408: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_integrity.py:433
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:433: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_integrity.py:462
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:462: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_integrity.py:463
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:463: PytestUnknownMarkWarning: Unknown pytest.mark.validation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.validation
+
+../aurora_plain/trader/tests/test_data_integrity.py:492
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:492: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_integrity.py:529
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:529: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_integrity.py:530
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:530: PytestUnknownMarkWarning: Unknown pytest.mark.perf - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.perf
+
+../aurora_plain/trader/tests/test_data_integrity.py:562
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:562: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_integrity.py:563
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:563: PytestUnknownMarkWarning: Unknown pytest.mark.perf - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.perf
+
+../aurora_plain/trader/tests/test_data_integrity.py:587
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:587: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_integrity.py:588
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:588: PytestUnknownMarkWarning: Unknown pytest.mark.stress - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.stress
+
+../aurora_plain/trader/tests/test_data_integrity.py:607
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:607: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_integrity.py:608
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:608: PytestUnknownMarkWarning: Unknown pytest.mark.validation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.validation
+
+../aurora_plain/trader/tests/test_data_integrity.py:634
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:634: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_integrity.py:635
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:635: PytestUnknownMarkWarning: Unknown pytest.mark.edge_case - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.edge_case
+
+../aurora_plain/trader/tests/test_data_integrity.py:659
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:659: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_integrity.py:660
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:660: PytestUnknownMarkWarning: Unknown pytest.mark.falsification - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.falsification
+
+../aurora_plain/trader/tests/test_data_integrity.py:818
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:818: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_integrity.py:819
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:819: PytestUnknownMarkWarning: Unknown pytest.mark.network - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.network
+
+../aurora_plain/trader/tests/test_data_integrity.py:820
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:820: PytestUnknownMarkWarning: Unknown pytest.mark.flaky - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.flaky
+
+../aurora_plain/trader/tests/test_data_integrity.py:851
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:851: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_integrity.py:877
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:877: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_integrity.py:878
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:878: PytestUnknownMarkWarning: Unknown pytest.mark.edge_case - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.edge_case
+
+../aurora_plain/trader/tests/test_data_integrity.py:901
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:901: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_integrity.py:902
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:902: PytestUnknownMarkWarning: Unknown pytest.mark.edge_case - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.edge_case
+
+../aurora_plain/trader/tests/test_data_integrity.py:923
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:923: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_integrity.py:924
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_integrity.py:924: PytestUnknownMarkWarning: Unknown pytest.mark.edge_case - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.edge_case
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:274
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:274: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:275
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:275: PytestUnknownMarkWarning: Unknown pytest.mark.guard - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.guard
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:303
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:303: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:304
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:304: PytestUnknownMarkWarning: Unknown pytest.mark.guard - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.guard
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:328
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:328: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:351
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:351: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:368
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:368: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:393
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:393: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:419
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:419: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:445
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:445: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:446
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:446: PytestUnknownMarkWarning: Unknown pytest.mark.perf - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.perf
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:483
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:483: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:484
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:484: PytestUnknownMarkWarning: Unknown pytest.mark.perf - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.perf
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:511
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:511: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:512
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:512: PytestUnknownMarkWarning: Unknown pytest.mark.stress - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.stress
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:535
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:535: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:573
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:573: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:587
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:587: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:602
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:602: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:656
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:656: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:689
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:689: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:690
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:690: PytestUnknownMarkWarning: Unknown pytest.mark.edge_case - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.edge_case
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:710
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:710: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:711
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:711: PytestUnknownMarkWarning: Unknown pytest.mark.falsification - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.falsification
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:861
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:861: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:892
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:892: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:917
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:917: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:946
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:946: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:971
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:971: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1014
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1014: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1015
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1015: PytestUnknownMarkWarning: Unknown pytest.mark.edge_case - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.edge_case
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1113
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1113: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1114
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1114: PytestUnknownMarkWarning: Unknown pytest.mark.perf - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.perf
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1135
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1135: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1136
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1136: PytestUnknownMarkWarning: Unknown pytest.mark.network - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.network
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1137
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1137: PytestUnknownMarkWarning: Unknown pytest.mark.flaky - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.flaky
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1170
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1170: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1192
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1192: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1212
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1212: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1213
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1213: PytestUnknownMarkWarning: Unknown pytest.mark.acceptance - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.acceptance
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1242
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1242: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1243
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1243: PytestUnknownMarkWarning: Unknown pytest.mark.validation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.validation
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1257
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1257: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1258
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1258: PytestUnknownMarkWarning: Unknown pytest.mark.validation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.validation
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1270
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1270: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1271
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1271: PytestUnknownMarkWarning: Unknown pytest.mark.perf - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.perf
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1295
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1295: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1296
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1296: PytestUnknownMarkWarning: Unknown pytest.mark.perf - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.perf
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1320
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1320: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1321
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1321: PytestUnknownMarkWarning: Unknown pytest.mark.stress - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.stress
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1339
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1339: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1340
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1340: PytestUnknownMarkWarning: Unknown pytest.mark.memory - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.memory
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1366
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1366: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1403
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1403: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1431
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1431: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1447
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1447: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1448
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1448: PytestUnknownMarkWarning: Unknown pytest.mark.acceptance - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.acceptance
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1474
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1474: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1475
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1475: PytestUnknownMarkWarning: Unknown pytest.mark.corruption - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.corruption
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1557
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1557: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1558
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1558: PytestUnknownMarkWarning: Unknown pytest.mark.repair - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.repair
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1599
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1599: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1600
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1600: PytestUnknownMarkWarning: Unknown pytest.mark.unit - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.unit
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1629
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1629: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1630
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1630: PytestUnknownMarkWarning: Unknown pytest.mark.memory - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.memory
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1717
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1717: PytestUnknownMarkWarning: Unknown pytest.mark.data_sanity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.data_sanity
+
+../aurora_plain/trader/tests/test_data_sanity_enforcement.py:1718
+  /home/Jennifer/secure/aurora_plain/trader/tests/test_data_sanity_enforcement.py:1718: PytestUnknownMarkWarning: Unknown pytest.mark.edge_case - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.edge_case
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR attic/_quarantine_20250819/test_asset_class_composer.py
+ERROR attic/_quarantine_20250819/test_composer_system.py
+ERROR mutants/tests - ValueError: option names {'--datasanity-profile'} alrea...
+ERROR tests/test_composer_end_to_end.py
+ERROR tests/test_composer_refactoring.py
+ERROR tests/unit/test_demo_features.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 6 errors during collection !!!!!!!!!!!!!!!!!!!!
+127 warnings, 6 errors in 2.02s
