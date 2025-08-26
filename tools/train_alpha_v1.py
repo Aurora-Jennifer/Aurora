@@ -17,9 +17,8 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 def setup_logging():
     """Setup logging configuration."""
-    logging.basicConfig(
-        level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    )
+    from core.utils import setup_logging as core_setup_logging
+    return core_setup_logging("logs/train_alpha_v1.log", logging.INFO)
 
 
 def main():

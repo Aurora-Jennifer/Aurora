@@ -1,0 +1,104 @@
+# Professional experiment profiles for systematic signal discovery
+# Each profile defines a complete experimental setup with statistical guardrails
+
+# Basic momentum investigation
+momentum_discovery:
+  name: "momentum_discovery"
+  hypothesis: "Multi-timeframe momentum features provide predictive signal for equity returns"
+  feature_families: ["momentum_basic", "momentum_extended"]
+  tickers: ["SPY", "QQQ", "IWM"]
+  discovery_start: "2020-01-01"
+  discovery_end: "2023-06-30"
+  confirmation_start: "2023-07-01"
+  confirmation_end: "2024-12-31"
+  trial_budget: 150
+  cost_bps: 5.0
+  min_ic_threshold: 0.02
+  min_sharpe_threshold: 0.5
+  random_seed: 42
+  parallel_jobs: 4
+
+# Volatility regime analysis
+volatility_regimes:
+  name: "volatility_regimes"
+  hypothesis: "Volatility-based features perform differently across market regimes"
+  feature_families: ["volatility_focus", "combined_signals"]
+  tickers: ["SPY", "VIX"]
+  discovery_start: "2019-01-01"
+  discovery_end: "2022-12-31"
+  confirmation_start: "2023-01-01"
+  confirmation_end: "2024-12-31"
+  trial_budget: 100
+  cost_bps: 3.0
+  min_ic_threshold: 0.025
+  min_sharpe_threshold: 0.6
+  random_seed: 123
+  parallel_jobs: 2
+
+# Cross-asset momentum
+cross_asset_momentum:
+  name: "cross_asset_momentum"
+  hypothesis: "Momentum signals generalize across equity and crypto asset classes"
+  feature_families: ["momentum_basic", "momentum_extended", "combined_signals"]
+  tickers: ["SPY", "QQQ", "BTC-USD", "ETH-USD"]
+  discovery_start: "2021-01-01"
+  discovery_end: "2023-12-31"
+  confirmation_start: "2024-01-01"
+  confirmation_end: "2024-12-31"
+  trial_budget: 200
+  cost_bps: 8.0  # Higher costs for crypto
+  min_ic_threshold: 0.03
+  min_sharpe_threshold: 0.4
+  random_seed: 456
+  parallel_jobs: 6
+
+# High-frequency features (daily to weekly)
+high_frequency_signals:
+  name: "high_frequency_signals"
+  hypothesis: "Short-term technical features capture intraday to weekly patterns"
+  feature_families: ["momentum_basic", "volatility_focus"]
+  tickers: ["SPY"]
+  discovery_start: "2022-01-01"
+  discovery_end: "2023-06-30"
+  confirmation_start: "2023-07-01"
+  confirmation_end: "2024-06-30"
+  trial_budget: 75
+  cost_bps: 2.0  # Lower costs for higher frequency
+  min_ic_threshold: 0.015
+  min_sharpe_threshold: 0.3
+  random_seed: 789
+  parallel_jobs: 3
+
+# Conservative validation (strict thresholds)
+conservative_validation:
+  name: "conservative_validation"
+  hypothesis: "Conservative thresholds identify only robust, institutionally viable signals"
+  feature_families: ["momentum_extended", "combined_signals"]
+  tickers: ["SPY", "QQQ", "IWM", "EFA", "EEM"]
+  discovery_start: "2018-01-01"
+  discovery_end: "2022-12-31"
+  confirmation_start: "2023-01-01"
+  confirmation_end: "2024-12-31"
+  trial_budget: 300
+  cost_bps: 10.0  # High cost assumption
+  min_ic_threshold: 0.05  # Very strict
+  min_sharpe_threshold: 1.0  # Very strict
+  random_seed: 999
+  parallel_jobs: 8
+
+# Quick validation (for rapid iteration)
+quick_validation:
+  name: "quick_validation"
+  hypothesis: "Rapid feature validation for development workflow"
+  feature_families: ["momentum_basic"]
+  tickers: ["SPY"]
+  discovery_start: "2023-01-01"
+  discovery_end: "2023-09-30"
+  confirmation_start: "2023-10-01"
+  confirmation_end: "2024-03-31"
+  trial_budget: 25
+  cost_bps: 5.0
+  min_ic_threshold: 0.01
+  min_sharpe_threshold: 0.2
+  random_seed: 111
+  parallel_jobs: 2

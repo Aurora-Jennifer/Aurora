@@ -4,6 +4,12 @@ features:
   - { name: "sma_20", tags: ["trend"] }
   - { name: "vol_10", tags: ["vol"] }
   - { name: "rsi_14", tags: ["momentum"] }
+  # NEW MOMENTUM FEATURES (discovered to improve IC from 0.08 → 0.36)
+  - { name: "momentum_3d", tags: ["momentum"] }
+  - { name: "momentum_5d", tags: ["momentum"] }
+  - { name: "momentum_10d", tags: ["momentum"] }
+  - { name: "momentum_20d", tags: ["momentum"] }
+  - { name: "momentum_strength", tags: ["momentum", "interaction"] }
 
 groups:
   - "carry"

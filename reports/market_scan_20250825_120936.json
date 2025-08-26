@@ -1,0 +1,74 @@
+{
+  "timestamp": "2025-08-25 12:09:35",
+  "opportunities": [
+    {
+      "symbol": "TSLA",
+      "metrics": {
+        "current_price": 347.30999755859375,
+        "price_change_1d": 2.1469920247350283,
+        "price_change_5d": 3.6251324035469823,
+        "volatility_20d": 2.3249337763642557,
+        "volume_ratio": 0.6719743819673867,
+        "price_vs_sma20": 6.501853196539842,
+        "price_vs_sma50": 7.8458463642181675,
+        "rsi": 71.61903817516912
+      },
+      "opportunity": {
+        "score": 6.0,
+        "reasons": [
+          "positive_1d",
+          "positive_5d",
+          "above_sma20",
+          "above_sma50",
+          "moderate_vol"
+        ],
+        "recommendation": "BUY"
+      }
+    },
+    {
+      "symbol": "QQQ",
+      "metrics": {
+        "current_price": 571.969970703125,
+        "price_change_1d": 1.5427391269485335,
+        "price_change_5d": -0.9301375104013188,
+        "volatility_20d": 0.9551964140779221,
+        "volume_ratio": 1.092196819613164,
+        "price_vs_sma20": 0.3825909877225975,
+        "price_vs_sma50": 2.6053748033551205,
+        "rsi": 57.41753627023482
+      },
+      "opportunity": {
+        "score": 4.5,
+        "reasons": [
+          "positive_1d",
+          "above_sma20",
+          "above_sma50",
+          "healthy_rsi"
+        ],
+        "recommendation": "BUY"
+      }
+    },
+    {
+      "symbol": "SPY",
+      "metrics": {
+        "current_price": 644.75,
+        "price_change_1d": -0.08677961920818822,
+        "price_change_5d": 0.22540218164870396,
+        "volatility_20d": 0.7552420793947111,
+        "volume_ratio": 0.34963806426271854,
+        "price_vs_sma20": 1.1881270080549067,
+        "price_vs_sma50": 3.0075486268456464,
+        "rsi": 70.82915372376695
+      },
+      "opportunity": {
+        "score": 4.0,
+        "reasons": [
+          "positive_5d",
+          "above_sma20",
+          "above_sma50"
+        ],
+        "recommendation": "BUY"
+      }
+    }
+  ]
+}

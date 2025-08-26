@@ -19,8 +19,8 @@ import contextlib
 from core.ml.build_features import build_matrix
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+from core.utils import setup_logging
+logger = setup_logging("logs/serve_adapter.log", logging.INFO)
 
 
 class ModelAdapter:

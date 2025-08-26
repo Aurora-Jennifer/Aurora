@@ -1,0 +1,75 @@
+{
+  "timestamp": "2025-08-25 12:12:13",
+  "opportunities": [
+    {
+      "symbol": "TSLA",
+      "metrics": {
+        "current_price": 340.010009765625,
+        "price_change_1d": 6.2166209505171155,
+        "price_change_5d": 2.8587888059129707,
+        "volatility_20d": 2.367987303428024,
+        "volume_ratio": 1.1741795128830184,
+        "price_vs_sma20": 4.611705292742263,
+        "price_vs_sma50": 5.764299205862122,
+        "rsi": 68.63861127902942
+      },
+      "opportunity": {
+        "score": 7.0,
+        "reasons": [
+          "positive_1d",
+          "positive_5d",
+          "above_sma20",
+          "above_sma50",
+          "healthy_rsi",
+          "moderate_vol"
+        ],
+        "recommendation": "BUY"
+      }
+    },
+    {
+      "symbol": "QQQ",
+      "metrics": {
+        "current_price": 572.5800170898438,
+        "price_change_1d": 0.10665706557440036,
+        "price_change_5d": -0.7849401980038806,
+        "volatility_20d": 0.9533661746206722,
+        "volume_ratio": 0.4441418897684836,
+        "price_vs_sma20": 0.4505188398334914,
+        "price_vs_sma50": 2.57158290600763,
+        "rsi": 62.35199010307258
+      },
+      "opportunity": {
+        "score": 4.5,
+        "reasons": [
+          "positive_1d",
+          "above_sma20",
+          "above_sma50",
+          "healthy_rsi"
+        ],
+        "recommendation": "BUY"
+      }
+    },
+    {
+      "symbol": "SPY",
+      "metrics": {
+        "current_price": 644.7999877929688,
+        "price_change_1d": -0.07903329679603832,
+        "price_change_5d": 0.23317270767346798,
+        "volatility_20d": 0.7551628508180788,
+        "volume_ratio": 0.3513620050221302,
+        "price_vs_sma20": 1.1955752265497388,
+        "price_vs_sma50": 3.0153703132573595,
+        "rsi": 70.91716214227522
+      },
+      "opportunity": {
+        "score": 4.0,
+        "reasons": [
+          "positive_5d",
+          "above_sma20",
+          "above_sma50"
+        ],
+        "recommendation": "BUY"
+      }
+    }
+  ]
+}

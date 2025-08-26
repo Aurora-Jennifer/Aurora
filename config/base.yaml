@@ -1,112 +1,128 @@
-engine:
+assets:
+  crypto:
+    composer_params:
+      family: momentum-v3
+      min_conf: 0.62
+      temperature: 0.65
+      tie_break: vol_adj
+      top_k: 2
+    eligible_strategies:
+    - mom_fast
+    - breakout_adx
+    - trend_follow_x
+  equity:
+    composer_params:
+      family: blend-v2
+      min_conf: 0.45
+      temperature: 0.85
+      tie_break: risk_first
+      top_k: 3
+    eligible_strategies:
+    - mean_rev_basic
+    - carry_blend
+    - momentum_balanced
+    - seasonal_edge
+  etf:
+    composer_params:
+      family: conservative-v1
+      min_conf: 0.5
+      temperature: 0.75
+      tie_break: sharpe_first
+      top_k: 2
+    eligible_strategies:
+    - low_vol_carry
+    - mean_rev_basic
+composer:
+  blender: softmax_blender
+  hold_on_nan: true
   min_history_bars: 120
-  max_na_fraction: 0.05
-  rng_seed: 42
-
-walkforward:
-  fold_length: 252
-  step_size: 63
-  allow_truncated_final_fold: false
-
+  params:
+    chop_bias: 1.1
+    min_confidence: 0.1
+    temperature: 1.0
+    trend_bias: 1.2
+  regime_extractor: basic_kpis
+  use_composer: true
 data:
-  source: yfinance
   auto_adjust: false
   cache: true
   returns:
     type: percent
-
-risk:
-  pos_size_method: vol_target
-  vol_target: 0.15
-  max_drawdown: 0.20
-  daily_loss_limit: 0.03
-  max_leverage: 1.0
-  slippage_bps: 5
-  fee_bps: 1
-  max_gross_exposure: 1.0
-  max_position_pct: 1.0
-  rate_limit:
-    max_requests_per_minute: 120
-
-composer:
-  use_composer: true
-  regime_extractor: basic_kpis
-  blender: softmax_blender
-  min_history_bars: 120
-  hold_on_nan: true
-  params:
-    temperature: 1.0
-    trend_bias: 1.2
-    chop_bias: 1.1
-    min_confidence: 0.10
-
-tickers:
-  - SPY
-
-# Asset-class orchestration for composer (runtime)
-assets:
-  crypto:
-    eligible_strategies:
-      - mom_fast
-      - breakout_adx
-      - trend_follow_x
-    composer_params:
-      family: momentum-v3
-      temperature: 0.65
-      top_k: 2
-      min_conf: 0.62
-      tie_break: "vol_adj"
-  equity:
-    eligible_strategies:
-      - mean_rev_basic
-      - carry_blend
-      - momentum_balanced
-      - seasonal_edge
-    composer_params:
-      family: blend-v2
-      temperature: 0.85
-      top_k: 3
-      min_conf: 0.45
-      tie_break: "risk_first"
-  etf:
-    eligible_strategies:
-      - low_vol_carry
-      - mean_rev_basic
-    composer_params:
-      family: conservative-v1
-      temperature: 0.75
-      top_k: 2
-      min_conf: 0.50
-      tie_break: "sharpe_first"
-
-# Optional model runtime (feature-flagged)
-models:
-  enable: true
-  selected: "dummy_v1"
-  input_features: ["ret_1d", "ret_5d", "vol_10d"]
-  score_to_weight: "tanh"    # {linear|tanh|softmax}
-  max_abs_weight: 0.5
-  min_history_bars: 60
-
-observability:
-  thresholds:
-    sharpe_min: 0.5
-    drawdown_max: 0.3
-    winrate_min: 0.45
-    vol_max: 0.6
-  promotion:
-    require_schema: true
-    forbid_drift: true
-
+  source: yfinance
 datasanity:
-  engine: v1  # v1|v2
+  engine: v1
   profile: walkforward_ci
   telemetry:
     enabled: true
     output_dir: artifacts/ds_runs
-
+engine:
+  max_na_fraction: 0.05
+  min_history_bars: 120
+  rng_seed: 42
+flags:
+  altdata_v1: false
+  enable_bt_gates: false
+  enable_oms_v1: false
+  enable_realtime_data: false
+  enable_risk_v2: true
+  exec_sim_v2: false
+  features_v2: false
+  model_zoo: false
+  pm_v1: false
+  show_reality_check_on_start: true
+models:
+  enable: true
+  input_features:
+  - ret_1d_lag1
+  - sma_10
+  - sma_20
+  - vol_10
+  - rsi_14
+  - momentum_3d
+  - momentum_5d
+  - momentum_10d
+  - momentum_20d
+  - momentum_strength
+  max_abs_weight: 0.5
+  min_history_bars: 60
+  score_to_weight: tanh
+  selected: linear_v2_10f
+observability:
+  promotion:
+    forbid_drift: true
+    require_schema: true
+  thresholds:
+    drawdown_max: 0.3
+    sharpe_min: 0.5
+    vol_max: 0.6
+    winrate_min: 0.45
+risk:
+  daily_loss_limit: 0.03
+  fee_bps: 1
+  max_drawdown: 0.2
+  max_gross_exposure: 1.0
+  max_leverage: 1.0
+  max_position_pct: 1.0
+  pos_size_method: vol_target
+  rate_limit:
+    max_requests_per_minute: 120
+  slippage_bps: 5
+  v2:
+    atr_multiplier: 2.0
+    atr_window: 14
+    max_position_pct: 10
+    min_trade_notional: 50
+    per_trade_risk_bps: 10
+    portfolio_max_gross_pct: 100
+  vol_target: 0.15
+tickers:
+- SPY
 training:
-  profile: ci
-  snapshot_manifest: artifacts/snapshots/golden_ml_v1/manifest.json
   enforce_leakage_guards: true
   export_parity_check: true
+  profile: ci
+  snapshot_manifest: artifacts/snapshots/golden_ml_v1/manifest.json
+walkforward:
+  allow_truncated_final_fold: false
+  fold_length: 252
+  step_size: 63

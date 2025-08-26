@@ -178,7 +178,8 @@ def check_trading_halted() -> bool:
 if __name__ == "__main__":
     import asyncio
     
-    logging.basicConfig(level=logging.INFO)
+    from core.utils import setup_logging
+    setup_logging("logs/realtime_feed.log", logging.INFO)
     
     feed = RealtimeFeed("BTCUSDT", "1m", testnet=True)
     

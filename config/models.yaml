@@ -52,4 +52,23 @@ registry:
     max_missing_pct: 0.01
     training_stats: {}
 
+  linear_v2_10f:
+    kind: "pickle"
+    path: "models/linear_v2_10f.pkl"
+    metadata:
+      version: "2.0.0"
+      trained_on: "SPY,TSLA"
+      preprocess: "zscore"
+      feature_order: ["ret_1d_lag1", "sma_10", "sma_20", "vol_10", "rsi_14", "momentum_3d", "momentum_5d", "momentum_10d", "momentum_20d", "momentum_strength"]
+      expected_features:
+        names: ["ret_1d_lag1", "sma_10", "sma_20", "vol_10", "rsi_14", "momentum_3d", "momentum_5d", "momentum_10d", "momentum_20d", "momentum_strength"]
+        order_matters: true
+        allow_missing: false
+        zscore: false
+        max_abs_z: 8.0
+    psi_warn: 0.10
+    psi_fail: 0.25
+    max_missing_pct: 0.01
+    training_stats: {}
+
 

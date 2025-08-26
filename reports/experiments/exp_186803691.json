@@ -1,0 +1,35 @@
+{
+  "exp_id": 186803691,
+  "config": {
+    "model": {
+      "type": "xgboost",
+      "random_seed": 113,
+      "n_estimators": 50,
+      "max_depth": 3
+    },
+    "data": {
+      "symbol": "SPY",
+      "start_date": "2023-01-01",
+      "end_date": "2023-09-30"
+    },
+    "features": [
+      "momentum_3d",
+      "momentum_5d",
+      "momentum_10d"
+    ],
+    "costs": {
+      "transaction_bps": 5.0
+    },
+    "random_seed": 113
+  },
+  "metrics": {
+    "ic": 0.01850010208446732,
+    "sharpe": 0.8798254216998813,
+    "annual_return": 0.11137990883691981,
+    "max_drawdown": 0.06785734329254943,
+    "total_trades": 50,
+    "win_rate": 0.4789481218317813
+  },
+  "runtime_seconds": 4.696846008300781e-05,
+  "timestamp": 1756121186.804007
+}

@@ -1,0 +1,208 @@
+{
+  "experiment_profile": {
+    "name": "quick_validation",
+    "hypothesis": "Rapid feature validation for development workflow",
+    "feature_families": [
+      "momentum_basic"
+    ],
+    "tickers": [
+      "SPY"
+    ],
+    "discovery_start": "2023-01-01",
+    "discovery_end": "2023-09-30",
+    "confirmation_start": "2023-10-01",
+    "confirmation_end": "2024-03-31",
+    "trial_budget": 25,
+    "cost_bps": 5.0,
+    "min_ic_threshold": 0.01,
+    "min_sharpe_threshold": 0.2,
+    "random_seed": 111,
+    "parallel_jobs": 2
+  },
+  "timestamp": "2025-08-25T06:26:27.106363",
+  "num_results": 4,
+  "results": [
+    {
+      "config_id": "cfg_0001",
+      "ticker": "SPY",
+      "feature_set": "momentum_basic",
+      "model_type": "ridge",
+      "ic_stats": {
+        "mean_ic": -0.06361997880552275,
+        "ic_std": 0.2017008903256805,
+        "t_stat": -1.9420362568773728,
+        "p_value": 0.053369919430232615,
+        "confidence_interval": [
+          -0.17772137646609426,
+          0.03536498584840954
+        ],
+        "hit_rate": 0.42105263157894735,
+        "num_observations": 252,
+        "method": "pearson"
+      },
+      "sharpe": 0.2052191361919814,
+      "max_drawdown": 0.1888505989998768,
+      "annual_return": 0.16752700223162167,
+      "total_trades": 222,
+      "metadata": {
+        "config": {
+          "config_id": "cfg_0001",
+          "ticker": "SPY",
+          "feature_set": "momentum_basic",
+          "features": [
+            "momentum_3d",
+            "momentum_5d",
+            "momentum_10d"
+          ],
+          "model_config": {
+            "model_type": "ridge",
+            "alpha": 0.1
+          },
+          "cost_bps": 5.0,
+          "random_seed": 112
+        },
+        "experiment_id": 186523663,
+        "phase": "discovery",
+        "runtime_seconds": 0.0002617835998535156
+      },
+      "timestamp": "2025-08-25T06:26:26.803372"
+    },
+    {
+      "config_id": "cfg_0000",
+      "ticker": "SPY",
+      "feature_set": "momentum_basic",
+      "model_type": "ridge",
+      "ic_stats": {
+        "mean_ic": -0.10089258204756646,
+        "ic_std": 0.15773754420781272,
+        "t_stat": -3.099036733136468,
+        "p_value": 0.0021867348476525272,
+        "confidence_interval": [
+          -0.18857790627117843,
+          0.008665336764217138
+        ],
+        "hit_rate": 0.32456140350877194,
+        "num_observations": 252,
+        "method": "pearson"
+      },
+      "sharpe": 0.7152957580198943,
+      "max_drawdown": 0.12156941622700367,
+      "annual_return": 0.30448306645557816,
+      "total_trades": 258,
+      "metadata": {
+        "config": {
+          "config_id": "cfg_0000",
+          "ticker": "SPY",
+          "feature_set": "momentum_basic",
+          "features": [
+            "momentum_3d",
+            "momentum_5d",
+            "momentum_10d"
+          ],
+          "model_config": {
+            "model_type": "ridge",
+            "alpha": 1.0
+          },
+          "cost_bps": 5.0,
+          "random_seed": 111
+        },
+        "experiment_id": 186523664,
+        "phase": "discovery",
+        "runtime_seconds": 0.0002598762512207031
+      },
+      "timestamp": "2025-08-25T06:26:26.811505"
+    },
+    {
+      "config_id": "cfg_0003",
+      "ticker": "SPY",
+      "feature_set": "momentum_basic",
+      "model_type": "xgboost",
+      "ic_stats": {
+        "mean_ic": 0.012921437779888993,
+        "ic_std": 0.1652426344954801,
+        "t_stat": 0.035485341159090245,
+        "p_value": 0.9717239193430134,
+        "confidence_interval": [
+          -0.08803291802631212,
+          0.109412022422173
+        ],
+        "hit_rate": 0.49122807017543857,
+        "num_observations": 252,
+        "method": "pearson"
+      },
+      "sharpe": 0.8399649637634464,
+      "max_drawdown": 0.2516711861556654,
+      "annual_return": -0.019216463204788647,
+      "total_trades": 298,
+      "metadata": {
+        "config": {
+          "config_id": "cfg_0003",
+          "ticker": "SPY",
+          "feature_set": "momentum_basic",
+          "features": [
+            "momentum_3d",
+            "momentum_5d",
+            "momentum_10d"
+          ],
+          "model_config": {
+            "model_type": "xgboost",
+            "n_estimators": 100,
+            "max_depth": 6
+          },
+          "cost_bps": 5.0,
+          "random_seed": 114
+        },
+        "experiment_id": 186811788,
+        "phase": "discovery",
+        "runtime_seconds": 4.696846008300781e-05
+      },
+      "timestamp": "2025-08-25T06:26:27.088136"
+    },
+    {
+      "config_id": "cfg_0002",
+      "ticker": "SPY",
+      "feature_set": "momentum_basic",
+      "model_type": "xgboost",
+      "ic_stats": {
+        "mean_ic": -0.013356593709015922,
+        "ic_std": 0.20351496855163387,
+        "t_stat": -0.498393278131768,
+        "p_value": 0.6186894250101351,
+        "confidence_interval": [
+          -0.12222797479936001,
+          0.09200124655285559
+        ],
+        "hit_rate": 0.5219298245614035,
+        "num_observations": 252,
+        "method": "pearson"
+      },
+      "sharpe": 0.8798254216998813,
+      "max_drawdown": 0.06785734329254943,
+      "annual_return": 0.11137990883691981,
+      "total_trades": 50,
+      "metadata": {
+        "config": {
+          "config_id": "cfg_0002",
+          "ticker": "SPY",
+          "feature_set": "momentum_basic",
+          "features": [
+            "momentum_3d",
+            "momentum_5d",
+            "momentum_10d"
+          ],
+          "model_config": {
+            "model_type": "xgboost",
+            "n_estimators": 50,
+            "max_depth": 3
+          },
+          "cost_bps": 5.0,
+          "random_seed": 113
+        },
+        "experiment_id": 186803691,
+        "phase": "discovery",
+        "runtime_seconds": 4.696846008300781e-05
+      },
+      "timestamp": "2025-08-25T06:26:27.103233"
+    }
+  ]
+}

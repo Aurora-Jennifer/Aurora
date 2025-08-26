@@ -50,12 +50,8 @@ DEFAULT_SYMBOLS = [
 
 def setup_logging():
     """Configure logging for data acquisition."""
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s [%(levelname)s] %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
-    )
-    return logging.getLogger(__name__)
+    from core.utils import setup_logging as core_setup_logging
+    return core_setup_logging("logs/fetch_yfinance.log", logging.INFO)
 
 
 def classify_regime(date: str) -> str:

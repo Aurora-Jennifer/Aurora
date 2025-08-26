@@ -35,8 +35,8 @@ plt.rcParams["axes.spines.top"] = False
 plt.rcParams["axes.spines.right"] = False
 
 # Set up logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-logger = logging.getLogger(__name__)
+from core.utils import setup_logging
+logger = setup_logging("logs/analysis_viz.log", logging.INFO)
 
 
 class TradingAnalysisVisualizer:

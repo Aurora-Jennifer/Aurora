@@ -295,7 +295,8 @@ def validate_weights(weights: CompositeWeights) -> bool:
 
 if __name__ == "__main__":
     # Example usage
-    logging.basicConfig(level=logging.INFO)
+    from core.utils import setup_logging
+    setup_logging("logs/weight_tuner.log", logging.INFO)
 
     # Test weight tuning
     best_weights, best_score = tune_weights(

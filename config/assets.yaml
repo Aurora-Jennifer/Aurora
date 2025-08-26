@@ -77,7 +77,7 @@ patterns:
 
 # Model registry paths
 models:
-  universal: "models/universal_v1.pkl"
+  universal: "models/linear_v1.pkl"
   crypto: "models/crypto_v1.onnx"
   equities: "models/equities_v1.onnx"  
   options: "models/options_v1.onnx"

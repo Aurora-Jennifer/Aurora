@@ -1,0 +1,350 @@
+2025-08-25 05:09:30,693 - core.utils - INFO - Running 2 experiments
+2025-08-25 05:09:30,693 - core.utils - INFO - Running experiment 1756116570_000
+2025-08-25 05:09:30,693 - core.utils - INFO - Config: {
+  "data_snapshot": "golden_ml_v1",
+  "symbols": [
+    "SPY"
+  ],
+  "start": "2019-01-01",
+  "end": "2020-12-31",
+  "horizon_bars": 1,
+  "purge_gap_bars": 10,
+  "features": [
+    {
+      "name": "ret_1d_lag1"
+    },
+    {
+      "name": "sma_10"
+    },
+    {
+      "name": "sma_20"
+    },
+    {
+      "name": "vol_10"
+    },
+    {
+      "name": "rsi_14"
+    }
+  ],
+  "model": {
+    "kind": "ridge",
+    "alpha": 1.0
+  },
+  "budgets": {
+    "train_secs_small": 1.0,
+    "peak_mem_mb": 256
+  }
+}
+2025-08-25 05:09:33,193 - core.utils - INFO - Experiment 1/2: IC/R²=0.0000
+2025-08-25 05:09:33,193 - core.utils - INFO - Running experiment 1756116573_001
+2025-08-25 05:09:33,193 - core.utils - INFO - Config: {
+  "data_snapshot": "golden_ml_v1",
+  "symbols": [
+    "SPY"
+  ],
+  "start": "2019-01-01",
+  "end": "2020-12-31",
+  "horizon_bars": 1,
+  "purge_gap_bars": 10,
+  "features": [
+    {
+      "name": "ret_1d_lag1"
+    },
+    {
+      "name": "sma_10"
+    },
+    {
+      "name": "sma_20"
+    },
+    {
+      "name": "vol_10"
+    },
+    {
+      "name": "rsi_14"
+    }
+  ],
+  "model": {
+    "kind": "ridge",
+    "alpha": 1.0
+  },
+  "budgets": {
+    "train_secs_small": 1.0,
+    "peak_mem_mb": 256
+  }
+}
+2025-08-25 05:09:35,655 - core.utils - INFO - Experiment 2/2: IC/R²=0.0000
+2025-08-25 05:18:50,277 - core.utils - INFO - Running 1 experiments
+2025-08-25 05:18:50,277 - core.utils - INFO - Running experiment 1756117130_000
+2025-08-25 05:18:50,277 - core.utils - INFO - Config: {
+  "budgets": {
+    "peak_mem_mb": 256,
+    "train_secs_small": 1.0
+  },
+  "data_snapshot": "golden_ml_v1",
+  "end": "2020-12-31",
+  "features": [
+    {
+      "name": "ret_1d_lag1"
+    },
+    {
+      "name": "sma_10"
+    },
+    {
+      "name": "sma_20"
+    },
+    {
+      "name": "vol_10"
+    },
+    {
+      "name": "rsi_14"
+    }
+  ],
+  "horizon_bars": 1,
+  "model": {
+    "kind": "ridge",
+    "alpha": 0.5
+  },
+  "purge_gap_bars": 10,
+  "start": "2019-01-01",
+  "symbols": [
+    "SPY"
+  ]
+}
+2025-08-25 05:18:52,712 - core.utils - INFO - Experiment 1/1: IC/R²=0.0000
+2025-08-25 05:19:01,058 - core.utils - ERROR - Analysis failed: Experiment 1756117130_000 not found
+2025-08-25 05:19:12,405 - core.utils - INFO - IC report saved to reports/ic_analysis/ic_report_1755773927.json
+2025-08-25 06:26:36,007 - core.utils - INFO - Running 1 experiments
+2025-08-25 06:26:36,007 - core.utils - INFO - Running experiment 1756121196_000
+2025-08-25 06:26:36,007 - core.utils - INFO - Config: {
+  "data_snapshot": "golden_ml_v1",
+  "symbols": [
+    "SPY"
+  ],
+  "horizon_bars": 1,
+  "purge_gap_bars": 10,
+  "features": [
+    {
+      "name": "ret_1d_lag1"
+    },
+    {
+      "name": "sma_10"
+    },
+    {
+      "name": "sma_20"
+    },
+    {
+      "name": "vol_10"
+    },
+    {
+      "name": "rsi_14"
+    }
+  ],
+  "model": {
+    "kind": "xgboost",
+    "n_estimators": 100
+  },
+  "budgets": {
+    "train_secs_small": 30.0,
+    "peak_mem_mb": 512
+  }
+}
+2025-08-25 06:26:38,490 - core.utils - INFO - Experiment 1/1: IC/R²=0.0000
+2025-08-25 06:28:56,512 - core.utils - INFO - Running 1 experiments
+2025-08-25 06:28:56,513 - core.utils - INFO - Running experiment 1756121336_000
+2025-08-25 06:28:56,513 - core.utils - INFO - Config: {
+  "data_snapshot": "golden_ml_v1",
+  "symbols": [
+    "SPY",
+    "QQQ"
+  ],
+  "horizon_bars": 1,
+  "purge_gap_bars": 10,
+  "features": [
+    {
+      "name": "ret_1d_lag1"
+    },
+    {
+      "name": "sma_10"
+    },
+    {
+      "name": "sma_20"
+    },
+    {
+      "name": "vol_10"
+    },
+    {
+      "name": "rsi_14"
+    }
+  ],
+  "model": {
+    "kind": "ridge",
+    "alpha": 1.0
+  },
+  "budgets": {
+    "train_secs_small": 30.0,
+    "peak_mem_mb": 512
+  }
+}
+2025-08-25 06:28:59,029 - core.utils - INFO - Experiment 1/1: IC/R²=0.0000
+2025-08-25 06:46:09,429 - core.utils - INFO - Running 1 experiments
+2025-08-25 06:46:09,430 - core.utils - INFO - Running experiment 1756122369_000
+2025-08-25 06:46:09,430 - core.utils - INFO - Config: {
+  "data_snapshot": "golden_ml_v1",
+  "symbols": [
+    "SPY"
+  ],
+  "horizon_bars": 1,
+  "purge_gap_bars": 10,
+  "features": [
+    {
+      "name": "ret_1d_lag1"
+    },
+    {
+      "name": "sma_10"
+    },
+    {
+      "name": "sma_20"
+    },
+    {
+      "name": "vol_10"
+    },
+    {
+      "name": "rsi_14"
+    }
+  ],
+  "model": {
+    "kind": "ridge"
+  },
+  "budgets": {
+    "train_secs_small": 30.0,
+    "peak_mem_mb": 512
+  }
+}
+2025-08-25 06:46:11,868 - core.utils - INFO - Experiment 1/1: IC/R²=0.0000
+2025-08-25 06:52:07,927 - core.utils - INFO - Running 1 experiments
+2025-08-25 06:52:07,927 - core.utils - INFO - Running experiment 1756122727_000
+2025-08-25 06:52:07,927 - core.utils - INFO - Config: {
+  "data_snapshot": "golden_ml_v1",
+  "symbols": [
+    "SPY",
+    "TSLA"
+  ],
+  "horizon_bars": 1,
+  "purge_gap_bars": 10,
+  "features": [
+    {
+      "name": "ret_1d_lag1"
+    },
+    {
+      "name": "sma_10"
+    },
+    {
+      "name": "sma_20"
+    },
+    {
+      "name": "vol_10"
+    },
+    {
+      "name": "rsi_14"
+    }
+  ],
+  "model": {
+    "kind": "ridge",
+    "alpha": 1.0
+  },
+  "budgets": {
+    "train_secs_small": 30.0,
+    "peak_mem_mb": 512
+  }
+}
+2025-08-25 06:52:10,407 - core.utils - INFO - Experiment 1/1: IC/R²=0.0000
+2025-08-25 06:58:13,380 - core.utils - INFO - Running 1 experiments
+2025-08-25 06:58:13,380 - core.utils - INFO - Running experiment 1756123093_000
+2025-08-25 06:58:13,381 - core.utils - INFO - Config: {
+  "data_snapshot": "golden_ml_v1",
+  "symbols": [
+    "SPY",
+    "TSLA"
+  ],
+  "horizon_bars": 1,
+  "purge_gap_bars": 10,
+  "features": [
+    {
+      "name": "ret_1d_lag1"
+    },
+    {
+      "name": "sma_10"
+    },
+    {
+      "name": "sma_20"
+    },
+    {
+      "name": "vol_10"
+    },
+    {
+      "name": "rsi_14"
+    }
+  ],
+  "model": {
+    "kind": "ridge",
+    "alpha": 1.0
+  },
+  "budgets": {
+    "train_secs_small": 30.0,
+    "peak_mem_mb": 512
+  }
+}
+2025-08-25 06:58:15,829 - core.utils - INFO - Experiment 1/1: IC/R²=0.0000
+2025-08-25 07:07:30,825 - core.utils - INFO - Running 1 experiments
+2025-08-25 07:07:30,825 - core.utils - INFO - Running experiment 1756123650_000
+2025-08-25 07:07:30,825 - core.utils - INFO - Config: {
+  "budgets": {
+    "peak_mem_mb": 256,
+    "train_secs_small": 1.0
+  },
+  "data_snapshot": "golden_ml_v1",
+  "end": "2020-12-31",
+  "features": [
+    {
+      "name": "ret_1d_lag1"
+    },
+    {
+      "name": "sma_10"
+    },
+    {
+      "name": "sma_20"
+    },
+    {
+      "name": "vol_10"
+    },
+    {
+      "name": "rsi_14"
+    },
+    {
+      "name": "momentum_3d"
+    },
+    {
+      "name": "momentum_5d"
+    },
+    {
+      "name": "momentum_10d"
+    },
+    {
+      "name": "momentum_20d"
+    },
+    {
+      "name": "momentum_strength"
+    }
+  ],
+  "horizon_bars": 1,
+  "model": {
+    "kind": "ridge"
+  },
+  "purge_gap_bars": 10,
+  "start": "2019-01-01",
+  "symbols": [
+    "SPY",
+    "QQQ"
+  ]
+}
+2025-08-25 07:07:33,307 - core.utils - INFO - Experiment 1/1: IC/R²=0.0000

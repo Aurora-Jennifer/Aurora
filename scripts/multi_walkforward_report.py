@@ -504,7 +504,8 @@ def main():
         pass
 
     # Logging level
-    logging.basicConfig(level=getattr(logging, args.log_level, logging.INFO))
+    from core.utils import setup_logging
+    setup_logging("logs/multi_walkforward_report.log", getattr(logging, args.log_level, logging.INFO))
 
     # Resolve effective params
     symbols = _normalize_symbols(args.symbols)

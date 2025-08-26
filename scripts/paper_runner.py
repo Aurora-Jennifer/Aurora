@@ -75,6 +75,18 @@ def main(argv: list[str] | None = None):
 
     print("✅ Initialized paper broker and metadata")
     print()
+    
+    # Reality check banner (if enabled)
+    try:
+        cfg = yaml.safe_load(Path("config/base.yaml").read_text())
+        if cfg.get("flags", {}).get("show_reality_check_on_start", False):
+            print("=== REALITY CHECK ===")
+            print("To be actually valuable, add:")
+            print("• Realtime data • OMS • Risk v2 • Proper BT • Better features/models")
+            print("See docs/REALITY_CHECK.md")
+            print()
+    except Exception:
+        pass
 
     # Optional model runtime (feature-flagged)
     STATE = Path("reports/runner_state.json")
@@ -145,6 +157,17 @@ def main(argv: list[str] | None = None):
                     
                 F = build_features(df, feats_list)
                 print(f"    📊 Built {F.shape[1]} features")
+                try:
+                    print(f"    🧮 Feature rows after dropna: {len(F)}")
+                except Exception:
+                    pass
+                # Diagnostics: show expected vs built for alignment
+                try:
+                    built_cols = list(F.columns)
+                    print(f"    🔎 Expected order: {feat_order}")
+                    print(f"    🔎 Built columns: {built_cols}")
+                except Exception:
+                    pass
                 
                 w = infer_weights(
                     model,
@@ -154,6 +177,31 @@ def main(argv: list[str] | None = None):
                     float(models_cfg.get("max_abs_weight", 0.5)),
                     min_bars,
                 )
+                
+                # Apply risk v2 layer if enabled
+                if isinstance(w, dict) and "status" not in w:
+                    from ml.runtime import apply_risk_layer
+                    
+                    # Create decision context for risk layer
+                    decision = {"symbol": sym, "weight": float(next(iter(w.values())))}
+                    context = {
+                        "bars": {sym: df},
+                        "account": {"equity": args.cash},
+                        "positions": prev_weights or {},
+                        "portfolio": {"gross_weight": sum(abs(w) for w in (prev_weights or {}).values())}
+                    }
+                    
+                    decision = apply_risk_layer(decision, context, cfg)
+                    w = {0: decision["weight"]}
+                    
+                    # Log risk telemetry
+                    if "risk" in decision:
+                        risk_info = decision["risk"]
+                        print(f"    🛡️  Risk: ATR={risk_info.get('atr', 'N/A'):.4f}, "
+                              f"Stop={risk_info.get('stop', 'N/A'):.2f}, "
+                              f"Action={risk_info.get('action', 'N/A')}")
+                        if risk_info.get("veto"):
+                            print(f"    ⚠️  Risk veto: {risk_info.get('reason', 'unknown')}")
                 # map index 0 weight to symbol for now
                 if isinstance(w, dict) and "status" not in w:
                     # use first weight
@@ -162,7 +210,11 @@ def main(argv: list[str] | None = None):
                     print(f"    🎯 Weight: {weight:.3f}")
                 else:
                     model_fallbacks += 1
-                    print(f"    ⚠️  Fallback (no valid weight)")
+                    # Print detailed fallback reason if available
+                    if isinstance(w, dict) and "status" in w:
+                        print(f"    ⚠️  Fallback ({w.get('status')}): {w.get('reason')}")
+                    else:
+                        print(f"    ⚠️  Fallback (no valid weight)")
                     
             print(f"📊 Total weights: {len(weights_by_symbol)} symbols, {model_fallbacks} fallbacks")
             

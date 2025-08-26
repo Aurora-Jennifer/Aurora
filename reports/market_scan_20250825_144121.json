@@ -1,0 +1,53 @@
+{
+  "timestamp": "2025-08-25 14:41:00",
+  "opportunities": [
+    {
+      "symbol": "TSLA",
+      "metrics": {
+        "current_price": 348.1773986816406,
+        "price_change_1d": 2.4021024915253486,
+        "price_change_5d": 3.883934502117592,
+        "volatility_20d": 2.3359925498416567,
+        "volume_ratio": 0.983342248802477,
+        "price_vs_sma20": 6.753642336429122,
+        "price_vs_sma50": 8.109365922011014,
+        "rsi": 71.89221149704298
+      },
+      "opportunity": {
+        "score": 6.0,
+        "reasons": [
+          "positive_1d",
+          "positive_5d",
+          "above_sma20",
+          "above_sma50",
+          "moderate_vol"
+        ],
+        "recommendation": "BUY"
+      }
+    },
+    {
+      "symbol": "GOOG",
+      "metrics": {
+        "current_price": 209.6199951171875,
+        "price_change_1d": 1.4028608162536704,
+        "price_change_5d": 2.6090371561123815,
+        "volatility_20d": 1.4280490479933965,
+        "volume_ratio": 0.8661356316801909,
+        "price_vs_sma20": 4.665558975412809,
+        "price_vs_sma50": 11.298594373088577,
+        "rsi": 76.56017249471157
+      },
+      "opportunity": {
+        "score": 6.0,
+        "reasons": [
+          "positive_1d",
+          "positive_5d",
+          "above_sma20",
+          "above_sma50",
+          "moderate_vol"
+        ],
+        "recommendation": "BUY"
+      }
+    }
+  ]
+}

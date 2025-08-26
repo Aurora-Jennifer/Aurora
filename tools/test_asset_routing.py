@@ -21,8 +21,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from core.model_router import AssetClassifier, AssetSpecificModelRouter
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
-logger = logging.getLogger(__name__)
+from core.utils import setup_logging
+logger = setup_logging("logs/test_asset_routing.log", logging.INFO)
 
 
 def test_asset_classification():

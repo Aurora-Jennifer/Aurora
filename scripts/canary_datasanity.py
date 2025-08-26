@@ -242,7 +242,8 @@ def main():
 
     # Setup logging
     level = logging.DEBUG if args.verbose else logging.INFO
-    logging.basicConfig(level=level, format="%(asctime)s - %(levelname)s - %(message)s")
+    from core.utils import setup_logging
+    setup_logging("logs/canary_datasanity.log", level)
 
     # Load corpus
     logging.info("Loading canary corpus...")

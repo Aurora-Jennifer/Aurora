@@ -1,0 +1,34 @@
+{
+  "exp_id": 186523663,
+  "config": {
+    "model": {
+      "type": "ridge",
+      "random_seed": 112,
+      "alpha": 0.1
+    },
+    "data": {
+      "symbol": "SPY",
+      "start_date": "2023-01-01",
+      "end_date": "2023-09-30"
+    },
+    "features": [
+      "momentum_3d",
+      "momentum_5d",
+      "momentum_10d"
+    ],
+    "costs": {
+      "transaction_bps": 5.0
+    },
+    "random_seed": 112
+  },
+  "metrics": {
+    "ic": 0.034777308100847164,
+    "sharpe": 0.2052191361919814,
+    "annual_return": 0.16752700223162167,
+    "max_drawdown": 0.1888505989998768,
+    "total_trades": 222,
+    "win_rate": 0.5393893863914423
+  },
+  "runtime_seconds": 0.0002617835998535156,
+  "timestamp": 1756121186.5243428
+}

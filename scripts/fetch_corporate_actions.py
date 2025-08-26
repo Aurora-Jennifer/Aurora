@@ -14,8 +14,8 @@ import pandas as pd
 import yfinance as yf
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
-logger = logging.getLogger(__name__)
+from core.utils import setup_logging
+logger = setup_logging("logs/fetch_corporate_actions.log", logging.INFO)
 
 # Add parent directory to path for imports
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))

@@ -293,9 +293,8 @@ def main():
 
     # Setup logging
     log_level = logging.DEBUG if args.verbose else logging.INFO
-    logging.basicConfig(
-        level=log_level, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    )
+    from core.utils import setup_logging
+    setup_logging("logs/perf_gate.log", log_level)
 
     logger.info(f"Running performance gate with mode: {args.mode}")
 

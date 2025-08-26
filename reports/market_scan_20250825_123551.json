@@ -1,0 +1,98 @@
+{
+  "timestamp": "2025-08-25 12:35:50",
+  "opportunities": [
+    {
+      "symbol": "TSLA",
+      "metrics": {
+        "current_price": 347.3949890136719,
+        "price_change_1d": 2.1719887756061818,
+        "price_change_5d": 3.6504908753662413,
+        "volatility_20d": 2.3259578588167424,
+        "volume_ratio": 0.7405293544563388,
+        "price_vs_sma20": 6.526527470010479,
+        "price_vs_sma50": 7.8716683263208465,
+        "rsi": 71.64603922345619
+      },
+      "opportunity": {
+        "score": 6.0,
+        "reasons": [
+          "positive_1d",
+          "positive_5d",
+          "above_sma20",
+          "above_sma50",
+          "moderate_vol"
+        ],
+        "recommendation": "BUY"
+      }
+    },
+    {
+      "symbol": "GOOG",
+      "metrics": {
+        "current_price": 210.16000366210938,
+        "price_change_1d": 1.664087858500718,
+        "price_change_5d": 2.8733714664892496,
+        "volatility_20d": 1.4387375928013126,
+        "volume_ratio": 0.6911714980523213,
+        "price_vs_sma20": 4.921046109994753,
+        "price_vs_sma50": 11.578915744544505,
+        "rsi": 77.02112337173779
+      },
+      "opportunity": {
+        "score": 6.0,
+        "reasons": [
+          "positive_1d",
+          "positive_5d",
+          "above_sma20",
+          "above_sma50",
+          "moderate_vol"
+        ],
+        "recommendation": "BUY"
+      }
+    },
+    {
+      "symbol": "QQQ",
+      "metrics": {
+        "current_price": 572.2899780273438,
+        "price_change_1d": 0.05594827361747878,
+        "price_change_5d": -0.8351973534615809,
+        "volatility_20d": 0.9532560764883301,
+        "volume_ratio": 0.46416543444967767,
+        "price_vs_sma20": 0.40219024653718183,
+        "price_vs_sma50": 2.5206908532497962,
+        "rsi": 62.13157431101331
+      },
+      "opportunity": {
+        "score": 4.5,
+        "reasons": [
+          "positive_1d",
+          "above_sma20",
+          "above_sma50",
+          "healthy_rsi"
+        ],
+        "recommendation": "BUY"
+      }
+    },
+    {
+      "symbol": "SPY",
+      "metrics": {
+        "current_price": 644.4899291992188,
+        "price_change_1d": -0.12708130394346595,
+        "price_change_5d": 0.18497457311206222,
+        "volatility_20d": 0.7557182082833841,
+        "volume_ratio": 0.37031594075843893,
+        "price_vs_sma20": 1.1493753216111013,
+        "price_vs_sma50": 2.9668544437044364,
+        "rsi": 70.37477548550085
+      },
+      "opportunity": {
+        "score": 4.0,
+        "reasons": [
+          "positive_5d",
+          "above_sma20",
+          "above_sma50"
+        ],
+        "recommendation": "BUY"
+      }
+    }
+  ]
+}

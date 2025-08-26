@@ -23,8 +23,8 @@ from importlib import import_module
 
 get_data_sanity_wrapper = import_module("core.data_sanity").get_data_sanity_wrapper
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+from core.utils import setup_logging
+logger = setup_logging("logs/falsify_data_sanity.log", logging.INFO)
 
 
 class DataSanityFalsifier:

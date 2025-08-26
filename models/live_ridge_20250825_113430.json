@@ -1,0 +1,22 @@
+{
+  "model_type": "ridge",
+  "feature_order": [
+    "ret_1d_lag1",
+    "sma_10",
+    "sma_20",
+    "vol_10",
+    "rsi_14",
+    "momentum_3d",
+    "momentum_5d",
+    "momentum_10d",
+    "momentum_20d",
+    "momentum_strength"
+  ],
+  "n_features": 10,
+  "n_samples": 262,
+  "trained_at": "2025-08-25T11:34:30.627478",
+  "symbols": [
+    "SPY",
+    "TSLA"
+  ]
+}

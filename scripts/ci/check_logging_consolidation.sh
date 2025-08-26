@@ -6,8 +6,8 @@ set -euo pipefail
 
 echo "🔍 Checking logging consolidation contract..."
 
-# Find violations of ad-hoc logging setup
-violations=$(git ls-files '*.py' | xargs grep -nE 'basicConfig\(|StreamHandler\(|FileHandler\(|Formatter\(' || true)
+# Find violations of ad-hoc logging setup (excluding allowed exceptions)
+violations=$(git ls-files '*.py' | grep -v 'attic/' | grep -v 'tests/' | grep -v 'mutants/tests/' | grep -v 'core/enhanced_logging.py' | grep -v 'core/utils.py' | grep -v 'core/utils/__init__.py' | grep -v 'utils/logging.py' | xargs grep -nE 'basicConfig\(|StreamHandler\(|FileHandler\(|Formatter\(' || true)
 
 if [[ -n "$violations" ]]; then
     echo "❌ Logging consolidation violation(s) found:"

@@ -19,8 +19,8 @@ import subprocess
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
-logger = logging.getLogger(__name__)
+from core.utils import setup_logging
+logger = setup_logging("logs/test_adapter_isolation.log", logging.INFO)
 
 
 def test_imports_dont_break_existing():

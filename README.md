@@ -23,6 +23,16 @@ Smoke: ![Smoke](https://img.shields.io/github/actions/workflow/status/Aurora-jen
 - Runbooks: `docs/runbooks/` (e.g., `datasanity_ops.md`)
 - Audit: `docs/audit/`
 
+## Reality Check
+
+**Before you get too excited:** This is a retail-grade trading system. It won't make you rich.
+
+- 📊 **What it does:** Basic technical analysis, paper trading, opportunity scoring
+- 🚨 **What it doesn't:** Real-time data, institutional features, sophisticated models
+- 🗺️ **Improvement roadmap:** See [docs/REALITY_CHECK.md](docs/REALITY_CHECK.md)
+
+**Bottom line:** Good for learning, not for consistent profits.
+
 ## Quick Start
 ```bash
 # Deterministic smoke + lineage validation

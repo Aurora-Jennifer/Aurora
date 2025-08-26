@@ -314,7 +314,8 @@ if __name__ == "__main__":
     import logging
 
     # Set up logging
-    logging.basicConfig(level=logging.INFO)
+    from core.utils import setup_logging
+    setup_logging("logs/regime_features.log", logging.INFO)
 
     # Create sample data
     dates = pd.date_range("2023-01-01", periods=500, freq="D")

@@ -1,0 +1,74 @@
+{
+  "timestamp": "2025-08-25 12:12:43",
+  "opportunities": [
+    {
+      "symbol": "TSLA",
+      "metrics": {
+        "current_price": 347.3026123046875,
+        "price_change_1d": 2.1448199551799663,
+        "price_change_5d": 3.622928902584599,
+        "volatility_20d": 2.324845402950288,
+        "volume_ratio": 0.6771080390033534,
+        "price_vs_sma20": 6.499709117992958,
+        "price_vs_sma50": 7.8436025758237715,
+        "rsi": 71.61668951541616
+      },
+      "opportunity": {
+        "score": 6.0,
+        "reasons": [
+          "positive_1d",
+          "positive_5d",
+          "above_sma20",
+          "above_sma50",
+          "moderate_vol"
+        ],
+        "recommendation": "BUY"
+      }
+    },
+    {
+      "symbol": "QQQ",
+      "metrics": {
+        "current_price": 572.6199951171875,
+        "price_change_1d": 0.11364659813581923,
+        "price_change_5d": -0.7780129175272932,
+        "volatility_20d": 0.953391924233348,
+        "volume_ratio": 0.4444455957828913,
+        "price_vs_sma20": 0.4571801008285803,
+        "price_vs_sma50": 2.5785976156917245,
+        "rsi": 62.38217043827334
+      },
+      "opportunity": {
+        "score": 4.5,
+        "reasons": [
+          "positive_1d",
+          "above_sma20",
+          "above_sma50",
+          "healthy_rsi"
+        ],
+        "recommendation": "BUY"
+      }
+    },
+    {
+      "symbol": "SPY",
+      "metrics": {
+        "current_price": 644.8099975585938,
+        "price_change_1d": -0.07748214065977921,
+        "price_change_5d": 0.23472871044278865,
+        "volatility_20d": 0.7551474622074907,
+        "volume_ratio": 0.35186585656555297,
+        "price_vs_sma20": 1.1970666820835918,
+        "price_vs_sma50": 3.016936557594807,
+        "rsi": 70.93481160665101
+      },
+      "opportunity": {
+        "score": 4.0,
+        "reasons": [
+          "positive_5d",
+          "above_sma20",
+          "above_sma50"
+        ],
+        "recommendation": "BUY"
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "start_time": "2025-08-25T11:34:34.851456",
+  "end_time": "2025-08-25T11:39:45.866954",
+  "symbols": [
+    "SPY"
+  ],
+  "trades": [],
+  "final_positions": {
+    "SPY": 0.0
+  },
+  "model_used": "models/live_ridge_20250825_113430.pkl"
+}

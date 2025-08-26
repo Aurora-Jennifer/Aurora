@@ -37,8 +37,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from core.ml.build_features import build_matrix
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+from core.utils import setup_logging
+logger = setup_logging("logs/train_crypto.log", logging.INFO)
 
 
 class CryptoModelTrainer:
