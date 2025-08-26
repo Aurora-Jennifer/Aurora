@@ -27,7 +27,7 @@ import yaml
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.stats.ic_validator import ICValidator, ICResult
-from scripts.train import run_training_experiment
+from scripts.training.train import run_training_experiment
 
 
 @dataclass

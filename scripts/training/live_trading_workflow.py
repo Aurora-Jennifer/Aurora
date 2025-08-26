@@ -30,7 +30,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from core.ml.build_features import build_matrix
 from ml.runtime import build_features, infer_weights
-from scripts.paper_runner import main as paper_main
+from scripts.core.paper_runner import main as paper_main
 
 
 def setup_logging():

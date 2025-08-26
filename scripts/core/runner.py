@@ -23,7 +23,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from core.metrics.comprehensive import create_metrics_collector
 from core.guards.price import price_sane, extract_rolling_prices, has_corporate_action_today
-from scripts.e2d import E2DRunner
+from scripts.core.e2d import E2DRunner
 from brokers.realtime_feed import RealtimeFeed, is_realtime_enabled, check_trading_halted
 
 

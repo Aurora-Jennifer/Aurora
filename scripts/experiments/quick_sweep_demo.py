@@ -28,7 +28,7 @@ def main():
     
     # Import after path setup
     try:
-        from scripts.config_sweep import ConfigSweepRunner
+        from scripts.experiments.config_sweep import ConfigSweepRunner
     except ImportError as e:
         print(f"❌ Import error: {e}")
         print("Please ensure all dependencies are installed")
