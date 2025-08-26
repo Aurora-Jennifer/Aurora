@@ -1,5 +1,5 @@
 {
-  "timestamp": "20250826T011039Z",
+  "timestamp": "20250826T012037Z",
   "status": "OK",
   "folds": 1,
   "symbols": [
@@ -8,7 +8,7 @@
     "BTC-USD"
   ],
   "trades": 0,
-  "duration_s": 0.643,
+  "duration_s": 0.587,
   "sharpe": 0.0,
   "max_drawdown": 0.0,
   "fold_summaries": [
@@ -17,7 +17,7 @@
       "sharpe": 0.0,
       "max_drawdown": 0.0,
       "trades": 0,
-      "duration_ms": 643
+      "duration_ms": 586
     }
   ],
   "risk_costs": {
