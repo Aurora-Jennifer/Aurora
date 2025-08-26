@@ -1,8 +1,8 @@
 {
-  "run_id": "2025-08-25T164906Z",
-  "profile": "risk_balanced",
+  "run_id": "2025-08-26T004650Z",
+  "profile": "dev",
   "symbols": [
     "SPY"
   ],
-  "start": "2025-08-25T164906Z"
+  "start": "2025-08-26T004650Z"
 }

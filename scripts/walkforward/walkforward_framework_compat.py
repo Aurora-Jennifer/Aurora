@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import importlib
 
-_IMPL = importlib.import_module("scripts.walk_core")
+_IMPL = importlib.import_module("scripts.walkforward.walk_core")
 
 
 # Map legacy names -> actual attribute names in the implementation module
