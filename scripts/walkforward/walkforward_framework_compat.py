@@ -1,12 +1,13 @@
 """
 Compatibility exports for legacy imports:
-from scripts.walkforward_framework import LeakageProofPipeline, ...
-This module re-exports implementations from scripts.multi_walkforward_report.
+from scripts.walkforward_framework_compat import LeakageProofPipeline, ...
+This module re-exports implementations from scripts.walk_core.
 """
 from __future__ import annotations
 
 import importlib
 
+# Import from walk_core instead of the deprecated walkforward_framework
 _IMPL = importlib.import_module("scripts.walkforward.walk_core")
 
 
@@ -25,7 +26,7 @@ def __getattr__(name: str):  # pragma: no cover - thin adapter
     if hasattr(_IMPL, target):
         return getattr(_IMPL, target)
     raise AttributeError(
-        f"[compat] `{name}` not found. Update ALIASES or migrate imports away from scripts.walkforward_framework."
+        f"[compat] `{name}` not found. Update ALIASES or migrate imports away from scripts.walkforward_framework_compat."
     )
 
 # Materialize attributes so `from ... import Name` works without __all__
