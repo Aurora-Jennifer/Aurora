@@ -1,0 +1,16 @@
+[Unit]
+Description=Paper Trading Main Execution
+After=network.target paper-preflight.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/Jennifer/secure/trader
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+Environment=PYTHONUNBUFFERED=1
+Environment=TZ=America/Chicago
+ExecStart=/bin/bash -lc 'source ~/.config/paper-trading.env && ./daily_paper_trading.sh trading'
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
