@@ -10,8 +10,8 @@ def test_alpaca_auth():
     print("="*40)
     
     # Your credentials
-    api_key = "PK4LGVF9BG8IX0DHS7VO"
-    secret_key = "Qt1fh7cS6UgfwDZpQx87YHiDXt3mOIYSdmu"
+    api_key = "PK230OJYUL2MKA2O6G9T"
+    secret_key = "HaZ9FkKaXJdK1HFxp6Vr3449nMXUgPWvbyZhMpPn"
     
     # Test different endpoints
     endpoints = [

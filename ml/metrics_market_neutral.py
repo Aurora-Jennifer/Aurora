@@ -95,8 +95,6 @@ def capm_metrics(strat_ret: pd.Series, mkt_ret: pd.Series, horizon: int = 5):
     alpha_se = float(ols.bse[0])
     alpha_t = alpha / alpha_se if alpha_se > 0 else np.nan
 
-    # FIXED: Information Ratio vs market using alpha t-statistic approach
-    # The issue: OLS residuals (strategy - beta*market) have mean zero by construction
     # Solution: Use the regression alpha's t-statistic as the IR measure
     # This represents the risk-adjusted active return (alpha) relative to its uncertainty
     
