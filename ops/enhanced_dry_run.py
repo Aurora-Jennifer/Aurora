@@ -98,6 +98,43 @@ def create_enhanced_mock_data(feature_date, num_symbols=50, lookback_days=60):
     return df
 
 
+def check_data_coverage():
+    """Check that we have 100% data coverage for the universe."""
+    try:
+        import pandas as pd
+        
+        # Check if prices file exists
+        prices_path = Path("data/latest/prices.parquet")
+        if not prices_path.exists():
+            print("❌ No price data found - run data fetch first")
+            return False
+            
+        # Count symbols in universe
+        universe_path = Path("data/universe/top300.txt")
+        if not universe_path.exists():
+            print("❌ No universe file found")
+            return False
+            
+        with open(universe_path) as f:
+            universe_symbols = sum(1 for line in f if line.strip())
+        
+        # Count symbols in data
+        df = pd.read_parquet(prices_path)
+        data_symbols = df['symbol'].nunique()
+        
+        # Check coverage
+        if data_symbols != universe_symbols:
+            print(f"❌ Data coverage mismatch: {data_symbols}/{universe_symbols} symbols")
+            return False
+            
+        print(f"✅ Data coverage: {data_symbols}/{universe_symbols} symbols (100%)")
+        return True
+        
+    except Exception as e:
+        print(f"❌ Data coverage check failed: {e}")
+        return False
+
+
 def run_enhanced_dry_run():
     """Run enhanced dry-run with proper feature pipeline integration."""
     
@@ -105,6 +142,12 @@ def run_enhanced_dry_run():
     
     print("🚀 ENHANCED DRY-RUN WITH FEATURE PIPELINE FIX")
     print("=" * 55)
+    
+    # Step 0: Check data coverage first
+    print("\n📊 Step 0: Data coverage validation...")
+    if not check_data_coverage():
+        print("❌ PREFLIGHT FAILED: Insufficient data coverage")
+        return {'status': 'error', 'error': 'Data coverage check failed'}
     
     # Step 1: Get proper date alignment
     print("\n📅 Step 1: Date alignment...")
