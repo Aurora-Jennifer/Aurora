@@ -1,0 +1,42 @@
+extends: "configs/defaults.yaml"
+
+# Production configuration - strictest settings
+runtime:
+  allow_legacy_paths: false
+  fail_fast_on_nan: true
+  single_decision_core: true
+  kill_switch_env: "ENABLE_ORDERS"
+  kill_switch_value_required: "true"
+
+order_routing:
+  enable_orders: true
+  venue: "broker.prod"  # Replace with actual broker
+  max_retries: 3
+  timeout: 30.0
+
+decision:
+  tau_threshold: 0.0001  # Validated τ from research
+  use_advantage_gating: true
+
+model:
+  params_cap: 50000  # Production cap
+
+risk:
+  max_position_notional: 100000
+  daily_loss_limit_pct: 2.0
+  per_trade_cost_cap_bps: 20
+  max_symbol_weight: 0.3
+  max_orders_per_min: 10
+  max_drawdown: 0.15
+
+monitoring:
+  dashboard: "live-trade"
+  alerts: true
+  pagerduty_service: "aurora-live"
+  log_level: "WARNING"
+
+logging:
+  level: "WARNING"  # Minimal logging in production
+  include_code_hash: true
+  include_config_hash: true
+  structured: true

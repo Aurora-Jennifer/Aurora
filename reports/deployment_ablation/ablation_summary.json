@@ -1,0 +1,8 @@
+{
+  "total_experiments": 1026,
+  "baseline_sharpe": 0.0,
+  "critical_features": 5,
+  "total_feature_families": 8,
+  "max_delta_sharpe": 0.3725657989947565,
+  "min_delta_sharpe": -0.42845513908524036
+}

@@ -55,7 +55,7 @@ def export_to_onnx(model_path: str, sample_data: pd.DataFrame, output_path: str 
     if output_path is None:
         output_path = model_path.replace('.pkl', '.onnx')
     
-    print(f"\n📦 Exporting model to ONNX...")
+    print("\n📦 Exporting model to ONNX...")
     print(f"  📂 Input: {model_path}")
     print(f"  📂 Output: {output_path}")
     
@@ -78,7 +78,7 @@ def export_to_onnx(model_path: str, sample_data: pd.DataFrame, output_path: str 
         with open(output_path, 'wb') as f:
             f.write(onnx_model.SerializeToString())
         
-        print(f"  ✅ ONNX export successful!")
+        print("  ✅ ONNX export successful!")
         print(f"  📊 Model size: {Path(output_path).stat().st_size / 1024:.1f} KB")
         
         return output_path
@@ -94,7 +94,7 @@ def export_to_onnx(model_path: str, sample_data: pd.DataFrame, output_path: str 
 def validate_onnx_parity(original_path: str, onnx_path: str, test_data: pd.DataFrame):
     """Validate that ONNX model produces identical predictions to original."""
     
-    print(f"\n🔍 Validating ONNX parity...")
+    print("\n🔍 Validating ONNX parity...")
     
     try:
         import pickle
@@ -164,8 +164,8 @@ def demo_complete_pipeline():
     
     # Summary
     print("\n📋 Pipeline Summary:")
-    print(f"  ✅ Model training: Success")
-    print(f"  ✅ ONNX export: Success") 
+    print("  ✅ Model training: Success")
+    print("  ✅ ONNX export: Success") 
     print(f"  {'✅' if is_parity else '❌'} Parity validation: {'Success' if is_parity else 'Failed'}")
     
     if is_parity:

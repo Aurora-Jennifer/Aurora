@@ -1,0 +1,76 @@
+# Multi-Asset Universe Configuration
+# 20 "memey tech" tickers with per-asset costs and market proxies
+
+universe:
+  - AAPL
+  - MSFT
+  - NVDA
+  - AMD
+  - AMZN
+  - GOOGL
+  - META
+  - TSLA
+  - AVGO
+  - SMCI
+  - PLTR
+  - COIN
+  - SOFI
+  - HOOD
+  - SNAP
+  - SHOP
+  - RIVN
+  - LCID
+  - NIO
+  - GME
+
+# Market proxy for excess return calculations
+market_proxy: QQQ
+
+# Cross-asset proxies for additional features (robust, liquid ETFs)
+cross_proxies:
+  - TLT    # Treasury bonds
+  - UUP    # Dollar proxy (more reliable than DXY)
+  - VIXY   # Volatility proxy
+  - HYG    # Credit/high yield proxy
+  - BITO   # Bitcoin proxy (for crypto exposure like COIN)
+
+# Per-asset roundtrip costs (commission + slippage in basis points)
+costs_bps:
+  default: 3
+  GME: 8      # High volatility, wide spreads
+  COIN: 6     # Crypto exposure, higher volatility
+  RIVN: 6     # EV startup, higher volatility
+  LCID: 6     # EV startup, higher volatility
+  NIO: 6      # Chinese EV, higher volatility
+  HOOD: 5     # Brokerage, moderate volatility
+  SMCI: 5     # AI hardware, moderate volatility
+  PLTR: 4     # Data analytics, moderate volatility
+  SOFI: 4     # Fintech, moderate volatility
+  SNAP: 4     # Social media, moderate volatility
+  SHOP: 4     # E-commerce, moderate volatility
+
+# Data configuration
+data:
+  start_date: "2023-01-01"
+  end_date: "2024-12-31"
+  min_data_days: 200  # Minimum days required for training
+
+# Walkforward configuration
+walkforward:
+  fold_length: 63
+  step_size: 63  # Non-overlapping folds
+  min_train_days: 200
+  min_test_days: 21
+
+# Gating criteria
+gate:
+  threshold_delta_vs_baseline: 0.1
+  min_folds: 5
+  max_fail_rate: 0.3
+
+# Output configuration
+output:
+  out_dir: "universe_results"
+  save_per_asset_csvs: true
+  save_leaderboard: true
+  log_level: "INFO"

@@ -1,0 +1,16 @@
+SHELL=/bin/bash
+CRON_TZ=America/Chicago
+PATH=/usr/local/bin:/usr/bin:/bin
+
+# Paper Trading Automation - 20-Day Validation
+# Preflight 08:00 CT (Mon-Fri)
+0 8 * * 1-5 cd /home/Jennifer/secure/trader && source ~/.config/paper-trading.env && ./daily_paper_trading.sh preflight >> logs/cron_preflight.log 2>&1
+
+# Status every 30 min 09:00-15:00 CT (Mon-Fri)  
+*/30 9-15 * * 1-5 cd /home/Jennifer/secure/trader && source ~/.config/paper-trading.env && ./daily_paper_trading.sh status >> logs/cron_status.log 2>&1
+
+# EOD 15:10 CT (Mon-Fri)
+10 15 * * 1-5 cd /home/Jennifer/secure/trader && source ~/.config/paper-trading.env && ./daily_paper_trading.sh eod >> logs/cron_eod.log 2>&1
+
+# EOD data fetch 16:30 CT (Mon-Fri) - Ready for next day
+30 16 * * 1-5 cd /home/Jennifer/secure/trader && source ~/.config/paper-trading.env && python3 tools/fetch_bars_alpaca.py --symbols-file data/universe/top300.txt --start $(date -d "yesterday" +\%Y-\%m-\%d) --end $(date -d "yesterday" +\%Y-\%m-\%d) --timeframe 1Day --feed iex --out data/latest/prices.parquet >> logs/cron_fetch.log 2>&1

@@ -24,11 +24,11 @@ class TestDemoFeatures:
         close_prices = 100 + np.cumsum(np.random.randn(n_days) * 0.02)
         
         return pd.DataFrame({
-            'close': close_prices,
-            'volume': np.random.lognormal(10, 0.5, n_days),
-            'high': close_prices * (1 + np.random.uniform(0, 0.02, n_days)),
-            'low': close_prices * (1 - np.random.uniform(0, 0.02, n_days)),
-            'open': close_prices + np.random.randn(n_days) * 0.5
+            'Close': close_prices,
+            'Volume': np.random.lognormal(10, 0.5, n_days),
+            'High': close_prices * (1 + np.random.uniform(0, 0.02, n_days)),
+            'Low': close_prices * (1 - np.random.uniform(0, 0.02, n_days)),
+            'Open': close_prices + np.random.randn(n_days) * 0.5
         }, index=dates)
     
     def test_build_demo_features_basic(self):
@@ -137,7 +137,7 @@ class TestDemoFeatures:
         """Test handling of edge cases."""
         
         # Empty dataframe
-        empty_data = pd.DataFrame(columns=['close', 'volume', 'high', 'low', 'open'])
+        empty_data = pd.DataFrame(columns=['Close', 'Volume', 'High', 'Low', 'Open'])
         
         with pytest.raises((ValueError, IndexError)):
             build_matrix(empty_data)

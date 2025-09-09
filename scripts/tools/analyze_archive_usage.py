@@ -13,9 +13,8 @@ import os
 import re
 import subprocess
 from pathlib import Path
-from typing import Set, Dict, List
 
-def get_archive_files() -> Set[str]:
+def get_archive_files() -> set[str]:
     """Get all files in scripts/archive/"""
     archive_dir = Path("scripts/archive")
     if not archive_dir.exists():
@@ -27,12 +26,12 @@ def get_archive_files() -> Set[str]:
             files.add(file.name)
     return files
 
-def check_makefile_references() -> Set[str]:
+def check_makefile_references() -> set[str]:
     """Check which archive files are referenced in Makefile"""
     used = set()
     
     try:
-        with open("Makefile", "r") as f:
+        with open("Makefile") as f:
             content = f.read()
         
         # Find all script references
@@ -46,7 +45,7 @@ def check_makefile_references() -> Set[str]:
     
     return used
 
-def check_ci_references() -> Set[str]:
+def check_ci_references() -> set[str]:
     """Check which archive files are referenced in CI workflows"""
     used = set()
     
@@ -56,7 +55,7 @@ def check_ci_references() -> Set[str]:
     
     for yml_file in ci_dir.glob("*.yml"):
         try:
-            with open(yml_file, "r") as f:
+            with open(yml_file) as f:
                 content = f.read()
             
             # Find all script references
@@ -70,7 +69,7 @@ def check_ci_references() -> Set[str]:
     
     return used
 
-def check_python_imports() -> Set[str]:
+def check_python_imports() -> set[str]:
     """Check which archive files are imported in Python code"""
     used = set()
     
@@ -93,7 +92,7 @@ def check_python_imports() -> Set[str]:
     
     return used
 
-def check_direct_references() -> Set[str]:
+def check_direct_references() -> set[str]:
     """Check for direct file references (not imports)"""
     used = set()
     
@@ -115,7 +114,7 @@ def check_direct_references() -> Set[str]:
     
     return used
 
-def analyze_usage() -> Dict[str, List[str]]:
+def analyze_usage() -> dict[str, list[str]]:
     """Analyze usage of archive files"""
     archive_files = get_archive_files()
     
@@ -147,7 +146,7 @@ def main():
     
     results = analyze_usage()
     
-    print(f"📊 SUMMARY:")
+    print("📊 SUMMARY:")
     print(f"   Total archive files: {len(results['used']) + len(results['unused'])}")
     print(f"   Used files: {len(results['used'])}")
     print(f"   Unused files: {len(results['unused'])}")

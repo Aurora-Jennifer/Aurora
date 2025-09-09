@@ -1,0 +1,17 @@
+{
+  "trading_results": {
+    "model_name": "SPY_profit_optimized",
+    "initial_value": 10000,
+    "final_value": 10068.085427744445,
+    "total_return": 0.006808542774444504,
+    "buy_hold_return": 0.023170790017679792,
+    "excess_return": -0.01636224724323529,
+    "sharpe_ratio": -7.576447669362333,
+    "max_drawdown": 0.0039904410117072705,
+    "win_rate": 0.3,
+    "total_trades": 10,
+    "avg_trade": -252.55664311021013,
+    "final_cash": 7474.433568897901,
+    "final_shares": 3.995643145114185,
+    "trades": [
+      

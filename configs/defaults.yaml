@@ -1,0 +1,77 @@
+version: 1
+seed:
+  global: 1337
+  dataloader: 42
+  model_init: 999
+
+data:
+  lookback_days: 810
+  align_missing: "drop_row"     # drop_row | ffill | bfill
+  featureset: "v3-core"
+  symbols: ["SPY", "QQQ"]
+
+costs:
+  commission_bps: 1.0
+  slippage_bps: 3.0
+  total_bps: 4.0
+
+decision:
+  tau_threshold: 0.0001         # τ
+  hold_on_uncertain: true
+  action_space: [-1, 0, 1]      # SELL, HOLD, BUY
+  apply_cost_on_change_only: true
+  use_advantage_gating: true
+  temperature: 1.0
+  gate_on: "adv"                # adv | prob_gap | edge_bp
+
+model:
+  arch: "mlp_256_128_64_3"
+  params: 42000
+  checkpoint: null
+  d_in: 128
+  params_cap: 50000
+  per_symbol_heads: false
+
+features:
+  topk_supervised: 128
+  use_pca: true
+  winsor_p: 0.01
+
+train:
+  lr: 0.001
+  warm_start_lr: 0.001
+  batch_size: 64
+  epochs_max: 25
+
+folds:
+  lookback_days: 400
+  test_days: 120
+  n_folds: 3
+  purge_days: 5
+
+eval:
+  folds: 3
+  train_window_days: 400
+  test_window_days: 30
+  metrics: ["sharpe", "return", "mdd", "turnover"]
+
+runtime:
+  fail_fast_on_nan: true
+  single_decision_core: true
+  allow_legacy_paths: false
+  kill_switch_env: "ENABLE_ORDERS"
+  kill_switch_value_required: "true"
+
+logging:
+  level: "INFO"
+  include_code_hash: true
+  include_config_hash: true
+  structured: true
+
+risk:
+  max_position_notional: 100000
+  daily_loss_limit_pct: 2.0
+  per_trade_cost_cap_bps: 20
+  max_symbol_weight: 0.3
+  max_orders_per_min: 10
+  max_drawdown: 0.15

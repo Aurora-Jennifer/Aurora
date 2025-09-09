@@ -1,0 +1,200 @@
+{
+  "trading_results": {
+    "model_name": "SPY_profit_optimized",
+    "initial_value": 10000,
+    "final_value": 10061.457287981724,
+    "total_return": 0.006145728798172422,
+    "buy_hold_return": 0.023170790017679792,
+    "excess_return": -0.01702506121950737,
+    "sharpe_ratio": -10.220412630176428,
+    "max_drawdown": 0.005716968820963848,
+    "win_rate": 0.1,
+    "total_trades": 10,
+    "avg_trade": -298.79996463887403,
+    "final_cash": 7012.00035361126,
+    "final_shares": 4.6978323843189225,
+    "trades": [
+      {
+        "timestamp": {},
+        "action": "BUY",
+        "price": 634.7371929016114,
+        "quantity": 0.3517320970026774,
+        "value": 223.2574439048767,
+        "commission": 1.0,
+        "net_value": -224.2574439048767
+      },
+      {
+        "timestamp": {},
+        "action": "BUY",
+        "price": 637.4185255737304,
+        "quantity": 0.7498641909232855,
+        "value": 477.97732695885895,
+        "commission": 1.0,
+        "net_value": -478.97732695885895
+      },
+      {
+        "timestamp": {},
+        "action": "BUY",
+        "price": 637.258472442627,
+        "quantity": 0.5340001449141732,
+        "value": 340.29611663214746,
+        "commission": 1.0,
+        "net_value": -341.29611663214746
+      },
+      {
+        "timestamp": {},
+        "action": "BUY",
+        "price": 635.5776397705079,
+        "quantity": 0.507386654440262,
+        "value": 322.483612280196,
+        "commission": 1.0,
+        "net_value": -323.483612280196
+      },
+      {
+        "timestamp": {},
+        "action": "BUY",
+        "price": 634.7772519836426,
+        "quantity": 0.9072489863446698,
+        "value": 575.9010184168147,
+        "commission": 1.0,
+        "net_value": -576.9010184168147
+      },
+      {
+        "timestamp": {},
+        "action": "BUY",
+        "price": 632.3960570983887,
+        "quantity": 0.6102059771379494,
+        "value": 385.89185395990876,
+        "commission": 1.0,
+        "net_value": -386.89185395990876
+      },
+      {
+        "timestamp": {},
+        "action": "BUY",
+        "price": 622.0308306884766,
+        "quantity": 0.4174025089685896,
+        "value": 259.6372293851861,
+        "commission": 1.0,
+        "net_value": -260.6372293851861
+      },
+      {
+        "timestamp": {},
+        "action": "SELL",
+        "price": 630.8543979187011,
+        "quantity": 0.2261625115128505,
+        "value": 142.6756150322206,
+        "commission": 1.0,
+        "net_value": 141.6756150322206
+      },
+      {
+        "timestamp": {},
+        "action": "BUY",
+        "price": 628.2839556884766,
+        "quantity": 0.6013406898557536,
+        "value": 377.8127073390102,
+        "commission": 1.0,
+        "net_value": -378.8127073390102
+      },
+      {
+        "timestamp": {},
+        "action": "BUY",
+        "price": 643.011347442627,
+        "quantity": 0.24481364624441218,
+        "value": 157.4179525439621,
+        "commission": 1.0,
+        "net_value": -158.4179525439621
+      }
+    ],
+    "daily_returns": [
+      -0.0001407802720545078,
+      -0.0002754091569531738,
+      -0.00066630428227636,
+      -0.0009665209739030615,
+      -0.0018117626470198957,
+      -0.005716968820963848,
+      -0.0019705418636111064,
+      -0.0033219647355661438,
+      -0.0011800366306455544,
+      -0.001416059669716924,
+      0.0007792753066654768,
+      -0.000560647810653879,
+      0.00234392414697665,
+      0.0010303091164156875,
+      2.8069120396687942e-05,
+      -0.0007064196817105396,
+      -0.0007719219755602578,
+      -0.002404625184946382,
+      -0.003199932678668346,
+      -0.00439756245675996,
+      0.00016840999525987585,
+      -0.0013284106481602721,
+      -7.0173290347981e-05,
+      0.0006174278886711301,
+      0.0010704666801945653,
+      -0.0018071225552785909,
+      -0.004039163733032119,
+      -0.0024188355067964284,
+      9.33971645215407e-05
+    ]
+  },
+  "exploration_stats": {
+    "exploration_rate": 0.1,
+    "total_trades": 0,
+    "successful_trades": 0,
+    "success_rate": 0.0,
+    "action_performance": {
+      "BUY": {
+        "count": 0,
+        "avg_reward": 0,
+        "success_rate": 0
+      },
+      "SELL": {
+        "count": 0,
+        "avg_reward": 0,
+        "success_rate": 0
+      },
+      "HOLD": {
+        "count": 0,
+        "avg_reward": 0,
+        "success_rate": 0
+      }
+    }
+  },
+  "profit_analysis": {
+    "avg_buy_profit": -0.008570907919667659,
+    "avg_sell_profit": 0.028484987464325966,
+    "avg_hold_profit": 0.0,
+    "max_buy_profit": 0.2223903250694275,
+    "max_sell_profit": 0.3336434370279312,
+    "max_hold_profit": 0.0,
+    "profitable_buy_opportunities": 13,
+    "profitable_sell_opportunities": 17,
+    "profitable_hold_opportunities": 0,
+    "total_samples": 30
+  },
+  "overall_success_rate": 0.1,
+  "avg_reward": 0.006145728798172422,
+  "reward_std": 0.0017695888434407139,
+  "safety_validation": {
+    "is_safe_to_deploy": false,
+    "stability_results": {
+      "is_stable": false,
+      "reason": "Insufficient data: 30 < 50",
+      "stability_score": 0.0
+    },
+    "recommendations": [
+      "Model is not stable - do not deploy",
+      "Low stability score - consider more training data",
+      "Low accuracy - consider feature engineering",
+      "Insufficient validation windows - need more data"
+    ],
+    "config": {
+      "max_position_size": 0.3,
+      "max_daily_trades": 5,
+      "min_confidence_threshold": 0.6,
+      "max_drawdown_limit": 0.15,
+      "volatility_threshold": 0.05,
+      "min_trades_for_validation": 50
+    }
+  }
+}

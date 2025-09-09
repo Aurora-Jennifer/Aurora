@@ -9,18 +9,17 @@ Information Coefficient (IC), hit rates, and other trading-relevant measures.
 import logging
 import numpy as np
 import pandas as pd
-from typing import Dict, List, Any, Optional, Union
+from typing import Any
 from scipy import stats
-import warnings
 
 logger = logging.getLogger(__name__)
 
 
 def information_coefficient(
-    predictions: Union[np.ndarray, pd.Series],
-    actuals: Union[np.ndarray, pd.Series],
+    predictions: np.ndarray | pd.Series,
+    actuals: np.ndarray | pd.Series,
     method: str = 'spearman'
-) -> Dict[str, float]:
+) -> dict[str, float]:
     """
     Calculate Information Coefficient between predictions and actual returns.
     
@@ -79,10 +78,10 @@ def information_coefficient(
 
 
 def hit_rate(
-    predictions: Union[np.ndarray, pd.Series],
-    actuals: Union[np.ndarray, pd.Series],
+    predictions: np.ndarray | pd.Series,
+    actuals: np.ndarray | pd.Series,
     threshold: float = 0.0
-) -> Dict[str, float]:
+) -> dict[str, float]:
     """
     Calculate hit rate (directional accuracy).
     
@@ -140,11 +139,11 @@ def hit_rate(
 
 
 def crypto_specific_metrics(
-    predictions: Union[np.ndarray, pd.Series],
-    actuals: Union[np.ndarray, pd.Series],
-    timestamps: Optional[Union[pd.DatetimeIndex, np.ndarray]] = None,
-    symbol: Optional[str] = None
-) -> Dict[str, Any]:
+    predictions: np.ndarray | pd.Series,
+    actuals: np.ndarray | pd.Series,
+    timestamps: pd.DatetimeIndex | np.ndarray | None = None,
+    symbol: str | None = None
+) -> dict[str, Any]:
     """
     Calculate comprehensive crypto-specific evaluation metrics.
     
@@ -248,7 +247,7 @@ def crypto_specific_metrics(
     return metrics
 
 
-def _create_empty_metrics(symbol: Optional[str], n_valid: int, n_total: int) -> Dict[str, Any]:
+def _create_empty_metrics(symbol: str | None, n_valid: int, n_total: int) -> dict[str, Any]:
     """Create empty metrics structure for insufficient data cases."""
     return {
         'symbol': symbol,
@@ -285,7 +284,7 @@ def _analyze_time_patterns(
     predictions: np.ndarray,
     actuals: np.ndarray,
     timestamps: np.ndarray
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Analyze time-based patterns in predictions vs actuals."""
     try:
         # Convert to pandas for easier time analysis
@@ -336,7 +335,7 @@ def _analyze_time_patterns(
         return {}
 
 
-def _calculate_quality_score(metrics: Dict[str, Any]) -> float:
+def _calculate_quality_score(metrics: dict[str, Any]) -> float:
     """
     Calculate overall quality score (0-100) based on multiple factors.
     
@@ -384,9 +383,9 @@ def _calculate_quality_score(metrics: Dict[str, Any]) -> float:
 
 
 def batch_evaluate_crypto_models(
-    results_dict: Dict[str, Dict[str, np.ndarray]],
-    output_path: Optional[str] = None
-) -> Dict[str, Dict[str, Any]]:
+    results_dict: dict[str, dict[str, np.ndarray]],
+    output_path: str | None = None
+) -> dict[str, dict[str, Any]]:
     """
     Batch evaluation of multiple crypto models/symbols.
     
@@ -436,9 +435,9 @@ def batch_evaluate_crypto_models(
     return all_metrics
 
 
-def _create_evaluation_summary(all_metrics: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
+def _create_evaluation_summary(all_metrics: dict[str, dict[str, Any]]) -> dict[str, Any]:
     """Create summary statistics across all evaluated symbols."""
-    symbols = [k for k in all_metrics.keys() if not k.startswith('_')]
+    symbols = [k for k in all_metrics if not k.startswith('_')]
     
     if not symbols:
         return {'n_symbols': 0}
@@ -480,7 +479,7 @@ def _create_evaluation_summary(all_metrics: Dict[str, Dict[str, Any]]) -> Dict[s
 
 
 def create_crypto_metrics_report(
-    metrics: Dict[str, Any], 
+    metrics: dict[str, Any], 
     output_path: str,
     include_plots: bool = False
 ) -> None:
@@ -492,7 +491,6 @@ def create_crypto_metrics_report(
         output_path: Path for the markdown report
         include_plots: Whether to generate and include plots
     """
-    import json
     from datetime import datetime
     
     # Determine if single symbol or batch
@@ -507,7 +505,7 @@ def create_crypto_metrics_report(
     if is_batch:
         # Batch report
         summary = metrics['_summary']
-        symbols = [k for k in metrics.keys() if not k.startswith('_')]
+        symbols = [k for k in metrics if not k.startswith('_')]
         
         report_lines.extend([
             f"## Summary ({summary['n_symbols']} symbols)",

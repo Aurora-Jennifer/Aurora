@@ -1,0 +1,13 @@
+{
+  "symbol": "SPY",
+  "model_type": "multi_symbol",
+  "training_date": "20250904_233252",
+  "lookback_days": 200,
+  "min_trades": 50,
+  "features_count": 114,
+  "training_time": 4.693908,
+  "validation_reward": 0,
+  "validation_accuracy": 0,
+  "sharpe_ratio": 0,
+  "success_rate": 0
+}

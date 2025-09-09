@@ -1,0 +1,25 @@
+name: trader
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - pip
+  - numpy>=1.24.0,<2.0
+  - pandas>=2.0.0,<3.0
+  - scipy>=1.10.0,<2.0
+  - scikit-learn>=1.3.0,<2.0
+  - matplotlib>=3.7.0,<4.0
+  - seaborn>=0.12.0,<1.0
+  - yfinance>=0.2.0,<1.0
+  - lightgbm>=4.0.0,<5.0
+  - xgboost>=1.7.0,<2.0
+  - pyyaml>=6.0,<7.0
+  - pytest>=7.0.0,<8.0
+  - pytest-cov>=4.0.0,<5.0
+  - pytest-benchmark>=4.0.0,<5.0
+  - pip:
+    - torch>=2.0.0,<3.0
+    - torchvision>=0.15.0,<1.0
+    - optuna>=3.0.0,<4.0
+    - wandb>=0.15.0,<1.0

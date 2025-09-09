@@ -1,0 +1,19 @@
+{
+  "feature_engineering": {
+    "topk_supervised": 128,
+    "use_pca": true,
+    "winsor_p": 0.01
+  },
+  "preprocessing": {
+    "normalization": "StandardScaler",
+    "winsorization": true,
+    "pca_components": 128,
+    "drop_near_constant": true
+  },
+  "model_architecture": {
+    "d_in": 128,
+    "arch": "mlp_128_256_128_3",
+    "params_cap": 50000,
+    "per_symbol_heads": false
+  }
+}

@@ -8,11 +8,9 @@ by files in the current organized structure (core/, training/, walkforward/, etc
 
 import os
 import re
-import subprocess
 from pathlib import Path
-from typing import Set, Dict, List
 
-def get_archive_files() -> Set[str]:
+def get_archive_files() -> set[str]:
     """Get all Python files in scripts/archive/"""
     archive_dir = Path("scripts/archive")
     if not archive_dir.exists():
@@ -25,7 +23,7 @@ def get_archive_files() -> Set[str]:
             files.add(file.stem)
     return files
 
-def get_core_files() -> Set[str]:
+def get_core_files() -> set[str]:
     """Get all Python files in organized directories"""
     core_dirs = [
         "scripts/core",
@@ -46,12 +44,12 @@ def get_core_files() -> Set[str]:
                 files.add(str(file))
     return files
 
-def check_imports_in_file(file_path: str, archive_modules: Set[str]) -> Set[str]:
+def check_imports_in_file(file_path: str, archive_modules: set[str]) -> set[str]:
     """Check if a file imports any archive modules"""
     imports = set()
     
     try:
-        with open(file_path, 'r') as f:
+        with open(file_path) as f:
             content = f.read()
         
         # Check for various import patterns
@@ -72,12 +70,12 @@ def check_imports_in_file(file_path: str, archive_modules: Set[str]) -> Set[str]
     
     return imports
 
-def check_dynamic_imports(file_path: str, archive_modules: Set[str]) -> Set[str]:
+def check_dynamic_imports(file_path: str, archive_modules: set[str]) -> set[str]:
     """Check for dynamic imports (importlib, __import__, etc.)"""
     imports = set()
     
     try:
-        with open(file_path, 'r') as f:
+        with open(file_path) as f:
             content = f.read()
         
         # Check for dynamic import patterns
@@ -101,7 +99,7 @@ def check_dynamic_imports(file_path: str, archive_modules: Set[str]) -> Set[str]
     
     return imports
 
-def categorize_archive_files(archive_modules: Set[str]) -> Dict[str, List[str]]:
+def categorize_archive_files(archive_modules: set[str]) -> dict[str, list[str]]:
     """Categorize archive files by usage type"""
     categories = {
         "makefile_used": [],
@@ -112,7 +110,7 @@ def categorize_archive_files(archive_modules: Set[str]) -> Dict[str, List[str]]:
     
     # Check Makefile usage
     try:
-        with open("Makefile", "r") as f:
+        with open("Makefile") as f:
             makefile_content = f.read()
         
         for module in archive_modules:
@@ -132,7 +130,7 @@ def categorize_archive_files(archive_modules: Set[str]) -> Dict[str, List[str]]:
     if ci_dir.exists():
         for yml_file in ci_dir.glob("*.yml"):
             try:
-                with open(yml_file, "r") as f:
+                with open(yml_file) as f:
                     content = f.read()
                 
                 for module in archive_modules:
@@ -152,7 +150,7 @@ def main():
     archive_modules = get_archive_files()
     core_files = get_core_files()
     
-    print(f"📊 SUMMARY:")
+    print("📊 SUMMARY:")
     print(f"   Archive modules: {len(archive_modules)}")
     print(f"   Core files to check: {len(core_files)}")
     print()

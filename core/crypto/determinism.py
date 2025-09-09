@@ -9,7 +9,6 @@ all sources of randomness and ordering.
 import os
 import logging
 import random
-from typing import Optional
 import numpy as np
 import pandas as pd
 

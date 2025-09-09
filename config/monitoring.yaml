@@ -1,0 +1,99 @@
+# Nightly Monitoring Configuration
+# Defines monitoring parameters, thresholds, and alerting rules
+
+monitoring:
+  # Data freshness checks
+  data_freshness:
+    max_age_hours: 24
+    min_completeness: 0.8
+    expected_trading_days: 5
+  
+  # Performance thresholds
+  performance_thresholds:
+    min_sharpe: 0.05
+    min_gate_passes: 5
+    max_drawdown: 0.15
+    max_turnover: 0.5
+  
+  # Drift detection
+  drift_detection:
+    sharpe_drift_threshold: 0.3  # 30% change
+    return_drift_threshold: 0.2  # 20% change
+    volatility_drift_threshold: 0.25  # 25% change
+    lookback_days: 30
+  
+  # Alerting
+  alerts:
+    enabled: true
+    channels:
+      - file  # Write to file
+      # - slack  # Send to Slack (requires webhook)
+      # - email  # Send email (requires SMTP config)
+    
+    # Alert thresholds
+    critical_alerts:
+      - "Data is stale (>48 hours)"
+      - "Grid run failed"
+      - "Performance degradation >50%"
+      - "No gate passes"
+    
+    warning_alerts:
+      - "Data completeness <80%"
+      - "Low gate passes (<5)"
+      - "Significant drift detected"
+      - "High turnover (>50%)"
+
+# Data sources
+data:
+  path: "data/latest_prices.csv"
+  symbols: ["AAPL", "NVDA", "COIN", "QQQ", "SPY"]
+  update_frequency: "daily"
+
+# Grid configuration for monitoring
+grid:
+  universe_config: "config/universe_smoke.yaml"
+  grid_config: "config/robustness/cost_03bps.yaml"
+  reduced_parameters:
+    horizons: [5]  # Single horizon for speed
+    eps_quantiles: [0.35]  # Single quantile
+    temperature: [1.0]  # Single temperature
+    models:
+      - type: ridge
+        alphas: [10.0]  # Single alpha value
+
+# Historical comparison
+historical:
+  results_path: "results/historical_baseline.json"
+  comparison_periods:
+    - "last_week"
+    - "last_month"
+    - "last_quarter"
+
+# Output configuration
+output:
+  directory: "monitoring"
+  formats: ["json", "markdown", "csv"]
+  retention_days: 30
+
+# System health checks
+system_health:
+  disk_space_threshold: 0.9  # Alert if >90% full
+  memory_threshold: 0.8      # Alert if >80% memory usage
+  cpu_threshold: 0.9         # Alert if >90% CPU usage
+  
+# Notification settings
+notifications:
+  slack:
+    webhook_url: "${SLACK_WEBHOOK_URL}"
+    channel: "#trading-alerts"
+  
+  email:
+    smtp_server: "smtp.gmail.com"
+    smtp_port: 587
+    username: "${EMAIL_USERNAME}"
+    password: "${EMAIL_PASSWORD}"
+    recipients: ["trader@example.com"]
+  
+  file:
+    path: "monitoring/alerts.txt"
+    max_size_mb: 10

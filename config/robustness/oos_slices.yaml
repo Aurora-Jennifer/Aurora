@@ -1,0 +1,45 @@
+# OOS Slices Configuration for Robustness Testing
+# Tests model performance across different time periods and market conditions
+
+data:
+  start_date: "2020-01-01"
+  end_date: "2024-12-31"
+  frequency: "daily"
+
+# Define OOS slices for validation
+oos_slices:
+  - name: "2023-Q1"
+    train_start: "2020-01-01"
+    train_end: "2022-12-31"
+    test_start: "2023-01-01"
+    test_end: "2023-03-31"
+  - name: "2023-Q2"
+    train_start: "2020-01-01"
+    train_end: "2023-03-31"
+    test_start: "2023-04-01"
+    test_end: "2023-06-30"
+  - name: "2023-Q3"
+    train_start: "2020-01-01"
+    train_end: "2023-06-30"
+    test_start: "2023-07-01"
+    test_end: "2023-09-30"
+  - name: "2023-Q4"
+    train_start: "2020-01-01"
+    train_end: "2023-09-30"
+    test_start: "2023-10-01"
+    test_end: "2023-12-31"
+
+# Cost stress testing
+cost_stress:
+  base_costs_bps: 3.0
+  stress_levels:
+    - 5.0   # +2 bps stress
+    - 8.0   # +5 bps stress
+    - 12.0  # +9 bps stress
+
+# Validation criteria
+validation:
+  min_slices_passing: 2  # At least 2/4 slices must pass
+  min_symbols_per_slice: 5  # At least 5 symbols must pass per slice
+  max_sharpe_drop: 0.5  # Sharpe can drop at most 0.5 under stress
+  min_activity_ratio: 0.7  # At least 70% of symbols must maintain activity

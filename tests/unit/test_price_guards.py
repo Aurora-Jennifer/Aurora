@@ -10,7 +10,6 @@ Covers:
 """
 import pytest
 import pandas as pd
-from math import log
 from core.guards.price import (
     price_sane, 
     split_aware_jump_ok, 

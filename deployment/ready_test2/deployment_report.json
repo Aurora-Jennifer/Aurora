@@ -1,0 +1,26 @@
+{
+  "summary": "PARTIAL",
+  "component_status": {
+    "env_ok": true,
+    "robustness_ok": true,
+    "oos_ok": false,
+    "lag_ok": false,
+    "portfolio_ok": true,
+    "ablation_ok": false,
+    "monitoring_ok": true
+  },
+  "capabilities": {
+    "python": true,
+    "lightgbm": false,
+    "xgboost": true
+  },
+  "verification_messages": {
+    "robustness": "Found 54 successful cost stress runs",
+    "oos": "No OOS validation results found",
+    "lag": "No signal lag test results found or tests failed",
+    "portfolio": "Portfolio has 30 strategies with total weight 0.500",
+    "ablation": "No ablation analysis results found",
+    "monitoring": "Monitoring heartbeat is recent: deployment/ready_test2/monitoring/heartbeat.json",
+    "invariants": "Found gate passes in leaderboard"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "symbol": "QQQ",
+  "model_type": "deep_learning",
+  "training_date": "20250904_215022",
+  "lookback_days": 40,
+  "min_trades": 15,
+  "features_count": 114,
+  "training_time": 0.860131,
+  "validation_reward": 0,
+  "validation_accuracy": 0.25,
+  "sharpe_ratio": -0.24102620624974058,
+  "success_rate": 0
+}

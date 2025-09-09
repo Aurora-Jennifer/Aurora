@@ -13,7 +13,6 @@ import sys
 import logging
 from pathlib import Path
 import numpy as np
-import pandas as pd
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -212,9 +211,8 @@ def run_all_tests():
     if failed == 0:
         logger.info("🎉 ALL TESTS PASSED - Router ready for integration!")
         return True
-    else:
-        logger.error("💥 SOME TESTS FAILED - Do not integrate yet!")
-        return False
+    logger.error("💥 SOME TESTS FAILED - Do not integrate yet!")
+    return False
 
 
 if __name__ == "__main__":

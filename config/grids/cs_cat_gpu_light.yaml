@@ -1,0 +1,83 @@
+# Cross-Sectional CatBoost GPU - Light Diversity
+seed: 42
+
+walkforward:
+  slices:
+    - train: [2018-01-01, 2022-12-31]
+      test: [2023-01-01, 2023-12-31]
+    - train: [2019-01-01, 2023-12-31]
+      test: [2024-01-01, 2024-12-31]
+
+models:
+  - model:
+      type: cat_global
+      params:
+        # GPU optimization
+        task_type: GPU
+        devices: "0"
+        
+        # Model parameters (light for diversity)
+        iterations: 2200
+        learning_rate: 0.03
+        depth: 7
+        border_count: 255
+        l2_leaf_reg: 3.0
+        
+        # Early stopping
+        od_type: Iter
+        od_wait: 200
+        
+        # Bootstrap
+        bootstrap_type: Bayesian
+        
+        # Random state
+        random_seed: 42
+        
+        # Verbosity
+        verbose: 100
+        
+      training:
+        use_best_model: true
+        eval_metric: RMSE
+        cache_data: true
+
+feature_engineering:
+  float_dtype: float32
+  id_dtype: int32
+  cache_features: true
+  drop_high_corr: 0.98
+  train_only_stats: true
+  
+  # Feature selection
+  max_features: 100
+  feature_selection: true
+  selection_method: "mutual_info"
+
+gating:
+  sharpe_gate:
+    min_delta_vs_bh: 0.10
+    max_drawdown_rel: 0.05
+  activity_gate:
+    min_trades: 20
+    min_active_days_pct: 0.15
+
+turnover:
+  band: [0.08, 0.22]
+  hysteresis: 0.05
+
+costs_bps_per_side: 3.0
+
+# Data configuration (required by runner_grid.py)
+data:
+  symbols: ["SPY"]  # Will be overridden by universe runner
+  start_date: "2020-01-01"
+  end_date: "2024-12-31"
+  market_benchmark: "SPY"
+
+output:
+  csv_path: "grid_results.csv"
+  json_path: "grid_results.json"
+  save_predictions: true
+  save_models: true
+  save_metrics: true
+  log_level: INFO

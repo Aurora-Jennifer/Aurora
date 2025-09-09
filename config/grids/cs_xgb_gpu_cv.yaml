@@ -1,0 +1,85 @@
+# Cross-Sectional XGBoost GPU with Purged Cross-Validation
+mode: cross_sectional
+seed: 42
+
+# Prediction horizons (days)
+horizons: [5]
+
+# Epsilon quantiles for neutral band
+eps_quantiles: [0.5]
+
+# Temperature scaling parameters
+temperature: [1.0]
+
+# Target turnover band (min, max)
+turnover_band: [0.08, 0.22]
+
+# Model specifications
+models:
+  - type: xgboost
+    params:
+        # GPU optimization (updated API)
+        tree_method: [hist]
+        device: [cuda]
+        max_bin: [512]
+        
+        # Model parameters (tuned for 1-hour budget)
+        n_estimators: [2400]
+        learning_rate: [0.03]
+        max_depth: [7]
+        subsample: [0.85]
+        colsample_bytree: [0.85]
+        min_child_weight: [4]
+        
+        # Regularization
+        reg_alpha: [0.0]
+        reg_lambda: [1.0]
+        
+        # Threading
+        nthread: [8]
+        
+        # Random state
+        random_state: [42]
+
+# Purged Cross-Validation Configuration
+cross_validation:
+  enabled: true
+  n_splits: 5
+  embargo_days: 10
+  min_train_days: 252
+
+# Transaction costs
+costs:
+  commission_bps: 1.5
+  slippage_bps: 1.5
+
+# Walkforward parameters
+walkforward:
+  fold_length_days: 252
+  step_size_days: 63
+  min_train_days: 500
+  min_test_days: 21
+
+# Gating criteria
+gate:
+  threshold_delta_vs_baseline: 0.10
+  min_folds: 3
+  max_fail_rate: 0.5
+
+# Data configuration (required by runner_grid.py)
+data:
+  panel: true
+  join_on: [date, ticker]
+  symbols: ["SPY"]  # Will be overridden by universe runner
+  start_date: "2020-01-01"
+  end_date: "2024-12-31"
+  market_benchmark: "SPY"
+
+# Output configuration
+output:
+  csv_path: "grid_results.csv"
+  json_path: "grid_results.json"
+  save_predictions: true
+  save_models: true
+  save_metrics: true
+  log_level: INFO

@@ -1,0 +1,82 @@
+# Production Trading System Configuration
+# Generated from comprehensive validation pipeline
+
+strategy:
+  name: "CS_XGB_Residuals_VolFix"
+  version: "1.0.0"
+  validated_date: "2024-09-08"
+  
+limits:
+  max_gross_exposure: 0.30      # 30% of equity
+  per_symbol_cap: 0.02          # 2% per symbol
+  max_positions: 50             # Maximum concurrent positions
+  max_trades_per_day: 60        # Daily trade limit
+  daily_loss_kill_pct: 0.02     # 2% daily loss triggers kill switch
+  
+costs:
+  slippage_bps: 5.0            # Base slippage assumption
+  fee_per_share: 0.001         # Commission per share
+  total_cost_bps: 6.5          # Total round-trip cost
+  
+performance:
+  validated_ic: 0.0174         # Post-neutralization IC
+  validated_sharpe: 0.323      # Net Sharpe ratio
+  turnover_monthly: 1.8        # Monthly turnover
+  cost_resilience: true        # Passes 3x cost stress test
+  
+features:
+  total_count: 45              # Safe features from allowlist
+  residualization: true        # Sector residualization enabled
+  neutralization:
+    size: true                 # Size neutralization enabled
+    sector: true               # Sector neutralization enabled
+    momentum: false            # Momentum neutralization disabled
+    
+validation:
+  leakage_eliminated: true     # Structural leakage audit passed
+  negative_controls_passed: true  # Label/feature shuffle tests passed
+  regime_robust: true          # Performance stable across regimes
+  capacity_adequate: true      # ADV constraints satisfied
+  
+observability:
+  alerts:
+    - name: entropy_floor
+      condition: "action_entropy < 0.75 for 10 consecutive bars"
+      action: "alert"
+    - name: pnl_divergence
+      condition: "|realized_pnl - expected_pnl| > 3 * weekly_sigma"
+      action: "alert"
+    - name: daily_loss_limit
+      condition: "daily_pnl < -0.02 * equity"
+      action: "kill_switch"
+    - name: position_concentration
+      condition: "any_position > 0.02 * equity"
+      action: "position_trim"
+      
+rollback:
+  previous_model_ref: "baseline_v0.9.0"
+  rollback_command: "python ops/rollback.py --target baseline_v0.9.0"
+  rollback_tested: false  # TODO: Test rollback procedure
+  
+artifacts:
+  model_path: "results/leakage_final_clean/"
+  feature_whitelist: "results/leakage_final_clean/features_whitelist.json"
+  config_hash: "TBD"  # TODO: Generate config hash
+  validation_manifest: "results/validation_manifest.json"
+  
+governance:
+  validated_by: "automated_pipeline"
+  validation_timestamp: "2024-09-08T17:00:00Z"
+  promotion_approved: false  # Requires manual approval
+  production_ready: true     # Technical validation complete
+  
+notes: |
+  Strategy has passed comprehensive validation pipeline:
+  - Structural leakage eliminated (IC honest ~0.017)
+  - Negative controls confirm non-spurious results
+  - Robust across market regimes (COVID, rate hikes, recent)
+  - Cost resilient (passes 3x stress test)
+  - Capacity adequate for $10M deployment
+  - All technical gates passed
+  
+  Manual review and approval required before paper trading.

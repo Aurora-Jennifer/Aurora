@@ -1,0 +1,61 @@
+{
+  "timestamp": "2025-09-06T00:52:01.544103",
+  "slices": [
+    {
+      "slice_name": "train_2019_2022__test_2023",
+      "train_period": {
+        "start": "2019-01-01",
+        "end": "2022-12-31"
+      },
+      "test_period": {
+        "start": "2023-01-01",
+        "end": "2024-12-31"
+      },
+      "status": "failed",
+      "output": "",
+      "error": "usage: runner_universe.py [-h] --universe-cfg UNIVERSE_CFG --grid-cfg GRID_CFG\n                          [--out-dir OUT_DIR]\nrunner_universe.py: error: unrecognized arguments: --config-override deployment/refactored/oos_validation/train_2019_2022__test_2023/temp_config.yaml\n",
+      "tickers_total": 0,
+      "tickers_pass": 0,
+      "gate_passes": []
+    },
+    {
+      "slice_name": "train_2018_2021__test_2022",
+      "train_period": {
+        "start": "2018-01-01",
+        "end": "2021-12-31"
+      },
+      "test_period": {
+        "start": "2022-01-01",
+        "end": "2022-12-31"
+      },
+      "status": "failed",
+      "output": "",
+      "error": "usage: runner_universe.py [-h] --universe-cfg UNIVERSE_CFG --grid-cfg GRID_CFG\n                          [--out-dir OUT_DIR]\nrunner_universe.py: error: unrecognized arguments: --config-override deployment/refactored/oos_validation/train_2018_2021__test_2022/temp_config.yaml\n",
+      "tickers_total": 0,
+      "tickers_pass": 0,
+      "gate_passes": []
+    },
+    {
+      "slice_name": "train_2020_2022__test_2024H1",
+      "train_period": {
+        "start": "2020-01-01",
+        "end": "2022-12-31"
+      },
+      "test_period": {
+        "start": "2024-01-01",
+        "end": "2024-06-30"
+      },
+      "status": "failed",
+      "output": "",
+      "error": "usage: runner_universe.py [-h] --universe-cfg UNIVERSE_CFG --grid-cfg GRID_CFG\n                          [--out-dir OUT_DIR]\nrunner_universe.py: error: unrecognized arguments: --config-override deployment/refactored/oos_validation/train_2020_2022__test_2024H1/temp_config.yaml\n",
+      "tickers_total": 0,
+      "tickers_pass": 0,
+      "gate_passes": []
+    }
+  ],
+  "all_slices_pass": false,
+  "total_slices": 3,
+  "passed_slices": 0,
+  "total_tickers": 0,
+  "total_tickers_pass": 0
+}

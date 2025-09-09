@@ -15,7 +15,6 @@ from pathlib import Path
 from typing import Any
 
 import pandas as pd
-import numpy as np
 import yaml
 
 # Add parent directory to path for imports
@@ -112,7 +111,7 @@ class PaperRunner:
         if is_live_flag:
             # LIVE MODE: Fetch current data from yfinance
             import yfinance as yf
-            print(f"[FETCH] 🔴 LIVE MODE: Fetching current data from yfinance")
+            print("[FETCH] 🔴 LIVE MODE: Fetching current data from yfinance")
             
             for symbol in symbols:
                 try:
@@ -285,8 +284,7 @@ class PaperRunner:
                                 print(f"[SANITY] BREACH: {symbol} stale_demo_data, age={age_sec/3600:.1f}h vs max={demo_max_hours}h")
                                 self._log_telemetry("sanity_breach", {"symbol": symbol, "issue": "stale_demo_data", "age_hours": age_sec/3600, "max_hours": demo_max_hours})
                                 return False
-                            else:
-                                print(f"[SANITY] DEMO OK: {symbol} age={age_sec/3600:.1f}h vs max={demo_max_hours}h")
+                            print(f"[SANITY] DEMO OK: {symbol} age={age_sec/3600:.1f}h vs max={demo_max_hours}h")
                         else:
                             # Production mode: strict bar-based tolerance
                             tolerance_sec = max(180, 3 * max(bar_sec, 1))
@@ -458,8 +456,7 @@ class PaperRunner:
                     self._log_telemetry("trade_rejected", {"symbol": symbol, "reason": reason, "price": price})
                     print(f"[PRICE] 🛑 {symbol} rejected: {reason} (price={price:.4f})")
                     return {"status": "rejected", "reason": f"price_guard_failed: {reason}"}
-                else:
-                    print(f"[PRICE] ✅ {symbol} passed price guards (price={price:.4f})")
+                print(f"[PRICE] ✅ {symbol} passed price guards (price={price:.4f})")
             
             # CLEARFRAME SIZING CAPS WITH DETAILED LOGGING
             
@@ -714,7 +711,7 @@ class PaperRunner:
             try:
                 # Check trading halt
                 if check_trading_halted():
-                    print(f"[RUNNER] 🛑 Trading halted, skipping bar")
+                    print("[RUNNER] 🛑 Trading halted, skipping bar")
                     return
                 
                 bar_ts = bar_data["timestamp"]
@@ -803,13 +800,13 @@ class PaperRunner:
         feed.on_halt = on_halt
         
         # Start feed (async)
-        print(f"[RUNNER] 📡 Connecting to realtime feed...")
+        print("[RUNNER] 📡 Connecting to realtime feed...")
         
         try:
             # Run with timeout
             await asyncio.wait_for(feed.start(), timeout=minutes * 60)
             
-        except asyncio.TimeoutError:
+        except TimeoutError:
             print(f"[RUNNER] ⏰ Realtime run completed ({minutes} minutes)")
             
         except Exception as e:

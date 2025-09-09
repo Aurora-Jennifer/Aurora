@@ -1,0 +1,64 @@
+{
+  "symbol": "SPY",
+  "model_type": "enhanced_random_forest",
+  "trained_at": "2025-09-05T19:56:27.696073",
+  "lookback_days": 500,
+  "horizon": 5,
+  "epsilon": 6.212478448341934e-18,
+  "epsilon_percentiles": [
+    40,
+    60
+  ],
+  "features": [
+    "returns_1d",
+    "returns_5d",
+    "returns_20d",
+    "vol_5d",
+    "vol_20d",
+    "vol_60d",
+    "vol_ratio",
+    "skew_20d",
+    "kurt_20d",
+    "drawdown",
+    "high_20d",
+    "low_20d",
+    "price_position",
+    "momentum_3d",
+    "momentum_5d",
+    "momentum_10d",
+    "momentum_20d",
+    "rsi",
+    "macd",
+    "volume_ma",
+    "volume_ratio",
+    "gap",
+    "gap_abs",
+    "market_returns_1d",
+    "market_returns_5d",
+    "relative_strength",
+    "market_vol",
+    "vol_spread"
+  ],
+  "class_weights": {
+    "0": 3.72,
+    "1": 2.1627906976744184,
+    "2": 3.72
+  },
+  "class_distribution": {
+    "1.0": 129,
+    "0.0": 75,
+    "2.0": 75
+  },
+  "edge_statistics": {
+    "mean_edge": -0.006059477667155672,
+    "std_edge": 0.12501667848095782,
+    "edge_abs_mean": 0.09125966078804927,
+    "edge_above_0.1": 0.3392857142857143
+  },
+  "validation_metrics": {
+    "unique_predictions": 3,
+    "total_samples": 279,
+    "train_samples": 223,
+    "val_samples": 56
+  }
+}

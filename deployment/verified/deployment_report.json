@@ -1,0 +1,26 @@
+{
+  "summary": "PARTIAL",
+  "component_status": {
+    "env_ok": true,
+    "robustness_ok": false,
+    "oos_ok": false,
+    "lag_ok": false,
+    "portfolio_ok": false,
+    "ablation_ok": false,
+    "monitoring_ok": false
+  },
+  "capabilities": {
+    "python": true,
+    "lightgbm": false,
+    "xgboost": true
+  },
+  "verification_messages": {
+    "robustness": "No cost stress results found",
+    "oos": "No OOS validation results found",
+    "lag": "No signal lag test results found or tests failed",
+    "portfolio": "No portfolio weights found or all weights are zero",
+    "ablation": "No ablation analysis results found",
+    "monitoring": "No monitoring configuration found",
+    "invariants": "No strategies passed gate in any results"
+  }
+}

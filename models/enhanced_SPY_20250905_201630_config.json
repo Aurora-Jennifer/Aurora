@@ -1,0 +1,77 @@
+{
+  "symbol": "SPY",
+  "model_type": "enhanced_random_forest",
+  "trained_at": "2025-09-05T20:16:30.067818",
+  "lookback_days": 500,
+  "horizon": 5,
+  "epsilon": 1.3010426069826053e-18,
+  "epsilon_percentiles": [
+    40,
+    60
+  ],
+  "features": [
+    "returns_1d",
+    "returns_5d",
+    "returns_20d",
+    "vol_5d",
+    "vol_20d",
+    "vol_60d",
+    "vol_ratio",
+    "skew_20d",
+    "kurt_20d",
+    "drawdown",
+    "high_20d",
+    "low_20d",
+    "price_position",
+    "momentum_3d",
+    "momentum_5d",
+    "momentum_10d",
+    "momentum_20d",
+    "rsi",
+    "macd",
+    "volume_ma",
+    "volume_ratio",
+    "gap",
+    "gap_abs",
+    "market_returns_1d",
+    "market_returns_5d",
+    "relative_strength",
+    "market_vol",
+    "vol_spread"
+  ],
+  "class_weights": {
+    "0": 3.3095238095238093,
+    "1": 2.1384615384615384,
+    "2": 4.34375
+  },
+  "class_distribution": {
+    "1.0": 130,
+    "0.0": 84,
+    "2.0": 64
+  },
+  "class_mapping": {
+    "model_classes": [
+      0.0,
+      1.0,
+      2.0
+    ],
+    "canonical_order": [
+      "SELL",
+      "HOLD",
+      "BUY"
+    ],
+    "mapping_type": "sklearn_standard"
+  },
+  "edge_statistics": {
+    "mean_edge": 0.06292084518261847,
+    "std_edge": 0.10494952395508346,
+    "edge_abs_mean": 0.1026932016416414,
+    "edge_above_0.1": 0.4642857142857143
+  },
+  "validation_metrics": {
+    "unique_predictions": 3,
+    "total_samples": 278,
+    "train_samples": 222,
+    "val_samples": 56
+  }
+}

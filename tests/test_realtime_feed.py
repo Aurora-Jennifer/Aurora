@@ -8,12 +8,9 @@ Validates:
 - Feature flag behavior
 """
 
-import asyncio
-import json
 import os
 import pytest
 import time
-from unittest.mock import AsyncMock, patch, MagicMock
 import pandas as pd
 
 from brokers.realtime_feed import RealtimeFeed, is_realtime_enabled, check_trading_halted

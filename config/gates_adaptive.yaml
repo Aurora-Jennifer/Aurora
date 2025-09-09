@@ -1,0 +1,33 @@
+# Adaptive gates that scale with test window length
+# These gates use t-statistics and annualized metrics for better scaling
+
+# Gate scaling parameters
+min_test_bars_for_strict_gates: 200  # Use strict gates only for longer tests
+min_test_bars_for_capm: 40          # Minimum bars for reliable CAPM
+
+# Performance gates (scale with test length)
+min_trades_ratio: 0.5               # Require trades >= 50% of test bars
+turnover_annual_max: 400            # Max 400% annualized turnover
+breadth_min: 0.30
+
+# Market-neutral gates (use t-statistics for better scaling)
+IR_mkt_min: 0.25                    # Information ratio threshold
+alpha_t_min: 1.8                    # Alpha t-statistic threshold (HAC/NW adjusted)
+beta_cap_abs: 0.35                  # Max absolute beta exposure
+
+# Sharpe gates (scale with test length)
+nw_sharpe_min: 1.0                  # Minimum Newey-West Sharpe ratio
+nw_sharpe_min_benchmark: 0.1        # Stricter threshold for benchmark tickers (e.g., SPY)
+benchmark_tickers: [SPY]            # Tickers that use benchmark threshold
+
+# Portfolio-level gates (applied after individual ticker evaluation)
+portfolio_ir_mkt_min: 0.30          # Portfolio IR vs market
+portfolio_alpha_t_min: 2.0          # Portfolio alpha t-stat
+portfolio_beta_cap_abs: 0.15        # Portfolio beta cap
+portfolio_max_drawdown: -0.10       # Max 10% portfolio drawdown
+portfolio_avg_turnover_max: 300     # Max 300% average annualized turnover
+portfolio_sharpe_min: 1.5           # Minimum portfolio Sharpe
+
+# Cost-aware gates
+cost_bps: 5                         # Transaction cost in basis points
+slippage_bps: 3                     # Market impact in basis points

@@ -10,9 +10,7 @@ import json
 import logging
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Tuple, Optional
 import pandas as pd
-import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -43,13 +41,13 @@ class CorporateActionsRule:
         for actions_file in self.actions_dir.glob("*_actions.json"):
             symbol = actions_file.stem.replace("_actions", "")
             try:
-                with open(actions_file, 'r') as f:
+                with open(actions_file) as f:
                     self.actions_cache[symbol] = json.load(f)
                 logger.debug(f"Loaded corporate actions for {symbol}")
             except Exception as e:
                 logger.warning(f"Failed to load corporate actions for {symbol}: {e}")
     
-    def _get_symbol_actions(self, symbol: str) -> Dict:
+    def _get_symbol_actions(self, symbol: str) -> dict:
         """Get corporate actions for a symbol."""
         return self.actions_cache.get(symbol, {
             "splits": {},
@@ -58,7 +56,7 @@ class CorporateActionsRule:
             "dividends_count": 0
         })
     
-    def _check_split_adjustments(self, df: pd.DataFrame, symbol: str) -> List[str]:
+    def _check_split_adjustments(self, df: pd.DataFrame, symbol: str) -> list[str]:
         """Check if price data is properly adjusted for splits."""
         violations = []
         actions = self._get_symbol_actions(symbol)
@@ -99,7 +97,7 @@ class CorporateActionsRule:
                 
         return violations
     
-    def _check_dividend_gaps(self, df: pd.DataFrame, symbol: str) -> List[str]:
+    def _check_dividend_gaps(self, df: pd.DataFrame, symbol: str) -> list[str]:
         """Check for unusual price gaps on dividend ex-dates."""
         violations = []
         actions = self._get_symbol_actions(symbol)
@@ -141,7 +139,7 @@ class CorporateActionsRule:
                 
         return violations
     
-    def _check_volume_spikes(self, df: pd.DataFrame, symbol: str) -> List[str]:
+    def _check_volume_spikes(self, df: pd.DataFrame, symbol: str) -> list[str]:
         """Check for volume spikes around corporate action dates."""
         violations = []
         

@@ -115,6 +115,20 @@ risk:
     per_trade_risk_bps: 10
     portfolio_max_gross_pct: 100
   vol_target: 0.15
+
+# Reinforcement Learning
+rl:
+  enabled: true  # feature flag
+  algorithm: "q_learning"
+  reward_function: "positive_returns"
+  exploration_rate: 0.1
+  learning_rate: 0.1
+  discount_factor: 0.95
+  episodes: 1000
+  max_steps_per_episode: 252
+  min_pattern_frequency: 5
+  min_success_rate: 0.6
+  min_confidence: 0.7
 tickers:
 - SPY
 training:

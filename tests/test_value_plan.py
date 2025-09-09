@@ -7,7 +7,6 @@ These tests ensure the reality check is properly documented and the
 improvement roadmap is tracked through feature flags.
 """
 
-import json
 import yaml
 from pathlib import Path
 
@@ -30,7 +29,7 @@ def test_flags_declared_and_default_off():
     config_path = Path("config/base.yaml")
     assert config_path.exists(), "config/base.yaml must exist"
     
-    with open(config_path, 'r') as f:
+    with open(config_path) as f:
         cfg = yaml.safe_load(f)
     
     # Check flags section exists
@@ -79,7 +78,7 @@ def test_reality_check_content_structure():
 def test_roadmap_flags_match_documentation():
     """Test that flags in config match the roadmap in documentation."""
     # Load config flags
-    with open("config/base.yaml", 'r') as f:
+    with open("config/base.yaml") as f:
         cfg = yaml.safe_load(f)
     config_flags = set(cfg.get("flags", {}).keys())
     

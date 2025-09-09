@@ -1,0 +1,84 @@
+# Phase 3 Deployment Configuration
+# Defines deployment parameters and validation criteria
+
+deployment:
+  # Deployment phases
+  phases:
+    - name: "environment_check"
+      required: true
+      timeout_minutes: 5
+    
+    - name: "robustness_tests"
+      required: true
+      timeout_minutes: 30
+    
+    - name: "portfolio_construction"
+      required: true
+      timeout_minutes: 10
+    
+    - name: "baseline_comparison"
+      required: true
+      timeout_minutes: 15
+    
+    - name: "ablation_analysis"
+      required: false
+      timeout_minutes: 10
+    
+    - name: "monitoring_setup"
+      required: true
+      timeout_minutes: 5
+  
+  # Validation criteria
+  validation:
+    environment:
+      python_version: ">=3.11"
+      required_packages: ["pandas", "numpy", "scipy", "scikit-learn", "yfinance"]
+      optional_packages: ["lightgbm"]
+    
+    robustness:
+      min_successful_tests: 2
+      max_failure_rate: 0.2
+      required_tests:
+        - "cost_stress"
+        - "oos_validation"
+        - "signal_lag"
+    
+    portfolio:
+      min_strategies: 5
+      max_turnover: 0.5
+      max_position_weight: 0.2
+    
+    baseline:
+      min_alpha_vs_buyhold: -0.5  # Allow some underperformance with costs
+      max_underperformance: 1.0   # Don't allow >1 Sharpe underperformance
+
+# System requirements
+system:
+  min_memory_gb: 4
+  min_disk_space_gb: 10
+  max_cpu_usage: 0.8
+  
+# Output configuration
+output:
+  reports_dir: "deployment"
+  retention_days: 30
+  formats: ["json", "markdown", "csv"]
+
+# Rollback configuration
+rollback:
+  enabled: true
+  backup_dirs:
+    - "config/"
+    - "scripts/"
+    - "ml/"
+  restore_commands:
+    - "git checkout HEAD~1 -- config/"
+    - "git checkout HEAD~1 -- scripts/"
+    - "git checkout HEAD~1 -- ml/"
+
+# Notification settings
+notifications:
+  deployment_start: true
+  deployment_complete: true
+  deployment_failure: true
+  critical_errors: true

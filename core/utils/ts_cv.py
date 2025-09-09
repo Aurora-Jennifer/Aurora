@@ -7,7 +7,7 @@ Prevents forward-looking bias by purging overlapping periods between train/test.
 """
 
 import logging
-from typing import Iterator, Tuple
+from collections.abc import Iterator
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import BaseCrossValidator
@@ -42,7 +42,7 @@ class PurgedTimeSeriesSplit(BaseCrossValidator):
         """Return the number of splits."""
         return self.n_splits
     
-    def split(self, X, y=None, groups=None) -> Iterator[Tuple[np.ndarray, np.ndarray]]:
+    def split(self, X, y=None, groups=None) -> Iterator[tuple[np.ndarray, np.ndarray]]:
         """
         Generate indices to split data into training and test sets.
         
@@ -125,7 +125,7 @@ class WalkForwardSplit(BaseCrossValidator):
         """Return the number of splits."""
         return self.n_splits
     
-    def split(self, X, y=None, groups=None) -> Iterator[Tuple[np.ndarray, np.ndarray]]:
+    def split(self, X, y=None, groups=None) -> Iterator[tuple[np.ndarray, np.ndarray]]:
         """Generate walk-forward splits."""
         n_samples = len(X)
         

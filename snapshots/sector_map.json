@@ -1,0 +1,23 @@
+{
+  "created_at": "2025-09-08T18:54:29.854877",
+  "content_hash": "0c653afcab5e274c",
+  "num_symbols": 300,
+  "num_sectors": 11,
+  "date_range": {
+    "start": "2020-01-01T00:00:00",
+    "end": "2025-09-06T00:00:00"
+  },
+  "sectors": [
+    "Communication_Services",
+    "Consumer_Discretionary",
+    "Consumer_Staples",
+    "Energy",
+    "Financials",
+    "Healthcare",
+    "Industrials",
+    "Materials",
+    "Real_Estate",
+    "Technology",
+    "Utilities"
+  ]
+}

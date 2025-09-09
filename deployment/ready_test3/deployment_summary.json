@@ -1,0 +1,102 @@
+{
+  "deployment_timestamp": "2025-09-06T12:49:32.101941",
+  "overall_status": "partial",
+  "total_steps": 8,
+  "successful_steps": 8,
+  "failed_steps": [],
+  "error_steps": [],
+  "deployment_log": [
+    {
+      "step": "environment_check",
+      "timestamp": "2025-09-06T12:47:41.378958",
+      "status": "passed",
+      "details": {
+        "status": "passed",
+        "output": "\ud83d\udd0d Validating environment...\n\n\ud83d\udcca Environment Summary:\n  Python: 3.13.2\n  Git commit: 6fd75c9f\n  Feature schema: cd4a1b027503adc7\n\n\ud83d\udce6 Dependencies:\n  \u2705 numpy (v2.2.6)\n  \u2705 pandas (v2.3.1)\n  \u2705 scipy (v1.16.1)\n  \u2705 sklearn (v1.7.1)\n  \u2705 yfinance (v0.2.65)\n  \u274c lightgbm\n  \u2705 xgboost (v3.0.4)\n  \u2705 torch (v2.8.0+cu128)\n\n\u26a0\ufe0f  Warnings:\n  \u2022 LightGBM not available. This is expected on Python 3.13. LGBM grid items will be skipped. Use conda environment with Python 3.11/3.12 for full LightGBM support.\n  \u2022 Python 3.13+ detected. LightGBM may not be available. Consider using Python 3.11/3.12 for full compatibility.\n\n\u2705 Environment validation passed!\n\ud83d\udcc4 Environment info saved to: results/environment_info.json\n\u26a0\ufe0f  Missing models will be skipped: ['lightgbm']\n"
+      }
+    },
+    {
+      "step": "robustness_tests",
+      "timestamp": "2025-09-06T12:47:54.003665",
+      "status": "completed",
+      "details": {
+        "cost_stress": {
+          "status": "passed",
+          "output": "\n=== Running grid for AAPL (1/3) ===\n\u2705 AAPL completed in 3.62s | best Sharpe=0.398 | gate=PASS\n\n=== Running grid for NVDA (2/3) ===\n\u2705 NVDA completed in 3.22s | best Sharpe=0.005 | gate=FAIL\n\n=== Running grid for COIN (3/3) ===\n\u2705 COIN completed in 2.23s | best Sharpe=0.000 | gate=FAIL\n\n=== Universe Run Complete ===\nTotal tickers: 3\nSuccessful: 3\nGate passes: 1\nResults saved to: results/deployment_test_cost\n\n=== Leaderboard (top 10) ===\nticker  best_median_sharpe  best_vs_BH  best_vs_rule  median_turnover  median_trades  gate_pass  runtime_sec  costs_bps  num_configs\n  AAPL            0.397520    0.397520      0.397520              NaN            NaN       True         3.62        3.0           54\n  NVDA            0.005356    0.005356      0.005356              NaN            NaN      False         3.22        3.0           54\n  COIN            0.000000    0.000000      0.000000              NaN            NaN      False         2.23        6.0           54\n\n\ud83c\udf89 Universe run completed successfully!\nLeaderboard saved to: results/deployment_test_cost/leaderboard.csv\n",
+          "error": null
+        },
+        "oos_validation": {
+          "status": "passed",
+          "output": "\n=== Running grid for AAPL (1/3) ===\n\u274c AAPL failed with error: 'horizons'\n\n=== Running grid for NVDA (2/3) ===\n\u274c NVDA failed with error: 'horizons'\n\n=== Running grid for COIN (3/3) ===\n\u274c COIN failed with error: 'horizons'\n\n=== Universe Run Complete ===\nTotal tickers: 3\nSuccessful: 0\nGate passes: 0\nResults saved to: results/deployment_test_oos\n\n=== Leaderboard (top 10) ===\nticker  best_median_sharpe  best_vs_BH  best_vs_rule  median_turnover  median_trades  gate_pass  runtime_sec  costs_bps  num_configs\n  AAPL                 NaN         NaN           NaN              NaN            NaN      False          0.0        3.0            0\n  NVDA                 NaN         NaN           NaN              NaN            NaN      False          0.0        3.0            0\n  COIN                 NaN         NaN           NaN              NaN            NaN      False          0.0        6.0            0\n\n\ud83c\udf89 Universe run completed successfully!\nLeaderboard saved to: results/deployment_test_oos/leaderboard.csv\n",
+          "error": null
+        },
+        "signal_lag": {
+          "status": "passed",
+          "output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.2, pytest-8.4.2, pluggy-1.5.0 -- /home/Jennifer/miniconda3/bin/python\ncachedir: .pytest_cache\nUsing --randomly-seed=2077490976\nhypothesis profile 'default'\nbenchmark: 5.1.0 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)\nrootdir: /home/Jennifer/secure/trader\nconfigfile: pytest.ini\nplugins: dash-3.2.0, asyncio-1.1.0, randomly-3.16.0, cov-6.2.1, anyio-4.10.0, hypothesis-6.138.14, benchmark-5.1.0\nasyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 6 items\n\ntests/test_signal_lag.py::TestSignalLag::test_label_shift_robustness PASSED [ 16%]\ntests/test_signal_lag.py::TestSignalLag::test_position_timing PASSED     [ 33%]\ntests/test_signal_lag.py::TestTemporalIntegrity::test_no_future_information_usage PASSED [ 50%]\ntests/test_signal_lag.py::TestActivityGates::test_active_days_requirement PASSED [ 66%]\ntests/test_signal_lag.py::TestActivityGates::test_minimum_trades_requirement PASSED [ 83%]\ntests/test_signal_lag.py::TestActivityGates::test_activity_gate_validation PASSED [100%]\n\n============================== 6 passed in 0.47s ===============================\n",
+          "error": null
+        }
+      }
+    },
+    {
+      "step": "oos_validation",
+      "timestamp": "2025-09-06T12:48:30.603906",
+      "status": "passed",
+      "details": {
+        "status": "passed",
+        "output": "",
+        "error": null
+      }
+    },
+    {
+      "step": "signal_lag_tests",
+      "timestamp": "2025-09-06T12:48:32.070537",
+      "status": "passed",
+      "details": {
+        "status": "passed",
+        "output": "",
+        "error": null
+      }
+    },
+    {
+      "step": "ablation_analysis",
+      "timestamp": "2025-09-06T12:49:30.903292",
+      "status": "passed",
+      "details": {
+        "status": "passed",
+        "output": "",
+        "error": null
+      }
+    },
+    {
+      "step": "portfolio_construction",
+      "timestamp": "2025-09-06T12:49:31.257003",
+      "status": "passed",
+      "details": {
+        "status": "passed",
+        "output": "\n\ud83c\udfaf Portfolio Construction Summary:\n  Strategies selected: 30\n  Total evaluated: 30\n  Valid: \u274c\n  Turnover: 1.000\n  Net exposure: 1.000\n\n\u26a0\ufe0f  Violations:\n    \u2022 Turnover limit violated: 1.000\n",
+        "error": null
+      }
+    },
+    {
+      "step": "baseline_comparison",
+      "timestamp": "2025-09-06T12:49:32.092829",
+      "status": "passed",
+      "details": {
+        "status": "passed",
+        "output": "",
+        "error": null
+      }
+    },
+    {
+      "step": "monitoring_setup",
+      "timestamp": "2025-09-06T12:49:32.093287",
+      "status": "passed",
+      "details": {
+        "status": "passed",
+        "output": "Monitoring system configured with heartbeat",
+        "config_path": "deployment/ready_test3/monitoring/monitoring_config.json",
+        "heartbeat_path": "deployment/ready_test3/monitoring/heartbeat.json"
+      }
+    }
+  ]
+}

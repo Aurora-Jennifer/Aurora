@@ -1,0 +1,36 @@
+{
+  "symbol": "SPY",
+  "model_type": "fixed_random_forest",
+  "trained_at": "2025-09-05T19:42:01.782162",
+  "lookback_days": 300,
+  "features": [
+    "returns_1d",
+    "returns_5d",
+    "returns_20d",
+    "vol_5d",
+    "vol_20d",
+    "high_20d",
+    "low_20d",
+    "price_position",
+    "volume_ma",
+    "volume_ratio",
+    "rsi",
+    "macd"
+  ],
+  "class_weights": {
+    "0": 3.6530612244897958,
+    "1": 1.9456521739130435,
+    "2": 4.7105263157894735
+  },
+  "class_distribution": {
+    "1.0": 92,
+    "2.0": 38,
+    "0.0": 49
+  },
+  "validation_metrics": {
+    "unique_predictions": 3,
+    "total_samples": 179,
+    "train_samples": 143,
+    "val_samples": 36
+  }
+}

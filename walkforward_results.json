@@ -1,0 +1,76 @@
+{
+  "symbols": [
+    "SPY",
+    "QQQ"
+  ],
+  "lookback_days": 400,
+  "test_window_days": 120,
+  "folds": 3,
+  "costs_bps": 4.0,
+  "seed": 42,
+  "fold_results": [
+    {
+      "fold": 1,
+      "train_days": 400,
+      "test_days": 120,
+      "metrics": {
+        "sharpe_net": 3.0638186974210875,
+        "sortino_net": 4.500562605778857,
+        "mdd": -0.053538866948281055,
+        "trades": 11,
+        "turnover": 0.09243697478991597,
+        "total_return": 0.1589701222471105
+      },
+      "sharpe_ci": [
+        0.2214684820521168,
+        5.738567469111959
+      ],
+      "num_trades": 119
+    },
+    {
+      "fold": 2,
+      "train_days": 520,
+      "test_days": 120,
+      "metrics": {
+        "sharpe_net": 1.0535863142807163,
+        "sortino_net": 1.2837520676426348,
+        "mdd": -0.08405612628633226,
+        "trades": 11,
+        "turnover": 0.09243697478991597,
+        "total_return": 0.0689553315507252
+      },
+      "sharpe_ci": [
+        -1.8171460562534698,
+        4.236029280736988
+      ],
+      "num_trades": 119
+    },
+    {
+      "fold": 3,
+      "train_days": 640,
+      "test_days": 120,
+      "metrics": {
+        "sharpe_net": 0.4756160014725838,
+        "sortino_net": 0.6404938213470232,
+        "mdd": -0.18755235977747348,
+        "trades": 11,
+        "turnover": 0.09243697478991597,
+        "total_return": 0.043651365189487645
+      },
+      "sharpe_ci": [
+        -2.180607071041709,
+        2.914363712107846
+      ],
+      "num_trades": 119
+    }
+  ],
+  "aggregate_metrics": {
+    "median_sharpe": 1.0535863142807163,
+    "mean_sharpe": 1.5310070043914623,
+    "std_sharpe": 1.1092478488712194,
+    "min_sharpe": 0.4756160014725838,
+    "max_sharpe": 3.0638186974210875,
+    "num_successful_folds": 3,
+    "sharpe_ci_includes_zero": true
+  }
+}

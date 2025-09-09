@@ -1,0 +1,88 @@
+{
+  "metadata": {
+    "timestamp": "2025-09-05T14:35:51.656978",
+    "git_sha": "6fd75c9fb85641addb8964f52cf5b60d0f50fb4d",
+    "git_short": "6fd75c9",
+    "version": "1.0.0",
+    "environment": {
+      "python": "3.13.2 | packaged by Anaconda, Inc. | (main, Feb  6 2025, 18:56:02) [GCC 11.2.0]",
+      "platform": "linux"
+    }
+  },
+  "config_snapshot": {
+    "data": {
+      "symbols": [
+        "SPY",
+        "QQQ"
+      ],
+      "min_days": 800,
+      "align_method": "inner"
+    },
+    "folds": {
+      "lookback_days": 400,
+      "test_days": 120,
+      "n_folds": 3,
+      "purge_days": 5
+    },
+    "model": {
+      "d_in": 128,
+      "arch": "mlp_128_256_128_3",
+      "params_cap": 50000,
+      "per_symbol_heads": false
+    },
+    "features": {
+      "topk_supervised": 128,
+      "use_pca": true,
+      "winsor_p": 0.01
+    },
+    "train": {
+      "epochs_max": 20,
+      "early_stop_patience": 3,
+      "batch_size": 1024,
+      "lr": "3e-4",
+      "warm_start_lr": "3e-4",
+      "weight_decay": "1e-4",
+      "amp_dtype": "fp16",
+      "class_weights": [
+        1.2,
+        1.2,
+        0.8
+      ],
+      "entropy_bonus": 0.005
+    },
+    "decision": {
+      "hold_id": 2,
+      "costs_bps": 4.0,
+      "calibrate_temperature": true,
+      "tau_search": [
+        0.33,
+        0.6,
+        28
+      ],
+      "selective_quantile": 0.8,
+      "margin_bps_mult": 1.0,
+      "use_advantage_gating": true,
+      "trade_topk": null,
+      "min_trade_frac": 0.0
+    },
+    "seed": 42
+  },
+  "performance_metrics": {
+    "mean_sharpe": 0.0,
+    "median_sharpe": 0.0,
+    "sharpe_std": 0.0,
+    "sharpe_range": [
+      0.0,
+      0.0
+    ],
+    "successful_folds": 0,
+    "total_folds": 0,
+    "ci_includes_zero": true
+  },
+  "validation_summary": {
+    "passed_production_gate": false,
+    "model_size_ok": true,
+    "action_diversity_ok": true,
+    "cost_model": "4.0 bps"
+  }
+}

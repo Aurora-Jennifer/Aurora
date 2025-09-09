@@ -8,7 +8,6 @@ Ensures deterministic, leak-proof, and consistent data processing.
 
 import logging
 import hashlib
-from typing import Dict, List, Tuple, Any
 from pathlib import Path
 
 import numpy as np
@@ -26,13 +25,13 @@ class CryptoDataContract:
         self.contract_path = Path(contract_path)
         self.contract = self._load_contract()
         
-    def _load_contract(self) -> Dict:
+    def _load_contract(self) -> dict:
         """Load contract specification."""
         try:
             if not self.contract_path.exists():
                 raise FileNotFoundError(f"Contract not found: {self.contract_path}")
             
-            with open(self.contract_path, 'r') as f:
+            with open(self.contract_path) as f:
                 contract = yaml.safe_load(f)
             
             logger.info(f"Loaded crypto data contract: {contract.get('schema_name', 'unknown')}")
@@ -42,7 +41,7 @@ class CryptoDataContract:
             logger.error(f"Failed to load contract: {e}")
             raise
     
-    def validate_input_data(self, df: pd.DataFrame) -> Tuple[bool, List[str]]:
+    def validate_input_data(self, df: pd.DataFrame) -> tuple[bool, list[str]]:
         """
         Validate input data against contract schema.
         
@@ -96,7 +95,7 @@ class CryptoDataContract:
             logger.error(f"Input validation error: {e}")
             return False, [f"Validation error: {e}"]
     
-    def _validate_column_dtype(self, series: pd.Series, col_name: str, expected_dtype: str) -> List[str]:
+    def _validate_column_dtype(self, series: pd.Series, col_name: str, expected_dtype: str) -> list[str]:
         """Validate column data type."""
         violations = []
         
@@ -124,7 +123,7 @@ class CryptoDataContract:
         
         return violations
     
-    def _validate_column_constraints(self, series: pd.Series, col_name: str, constraint_spec: Dict) -> List[str]:
+    def _validate_column_constraints(self, series: pd.Series, col_name: str, constraint_spec: dict) -> list[str]:
         """Validate column value constraints."""
         violations = []
         
@@ -150,7 +149,7 @@ class CryptoDataContract:
         
         return violations
     
-    def _validate_quality_requirements(self, df: pd.DataFrame, quality_spec: Dict) -> List[str]:
+    def _validate_quality_requirements(self, df: pd.DataFrame, quality_spec: dict) -> list[str]:
         """Validate data quality requirements."""
         violations = []
         
@@ -207,7 +206,7 @@ class CryptoDataContract:
         
         return violations
     
-    def _validate_rules(self, df: pd.DataFrame, validation_spec: Dict) -> List[str]:
+    def _validate_rules(self, df: pd.DataFrame, validation_spec: dict) -> list[str]:
         """Validate general validation rules."""
         violations = []
         
@@ -240,7 +239,7 @@ class CryptoDataContract:
         
         return violations
     
-    def _validate_data_quality(self, df: pd.DataFrame) -> List[str]:
+    def _validate_data_quality(self, df: pd.DataFrame) -> list[str]:
         """Validate overall data quality."""
         violations = []
         
@@ -278,7 +277,7 @@ class CryptoDataContract:
         
         return violations
     
-    def validate_features(self, X: pd.DataFrame, y: pd.Series) -> Tuple[bool, List[str]]:
+    def validate_features(self, X: pd.DataFrame, y: pd.Series) -> tuple[bool, list[str]]:
         """Validate feature matrix and labels against contract."""
         violations = []
         
@@ -323,7 +322,7 @@ class CryptoDataContract:
         
         return is_valid, violations
     
-    def create_feature_manifest(self, X: pd.DataFrame, y: pd.Series) -> Dict:
+    def create_feature_manifest(self, X: pd.DataFrame, y: pd.Series) -> dict:
         """Create feature manifest for artifact tracking."""
         
         # Calculate feature hash for reproducibility
@@ -370,7 +369,7 @@ def enforce_determinism(seed: int = 42) -> None:
     logger.info(f"✅ Determinism enforced: seed={seed}")
 
 
-def create_data_lineage(df: pd.DataFrame, processing_steps: List[str]) -> Dict:
+def create_data_lineage(df: pd.DataFrame, processing_steps: list[str]) -> dict:
     """Create data lineage tracking."""
     
     # Calculate data hash for tracking

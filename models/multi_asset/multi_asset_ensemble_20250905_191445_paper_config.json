@@ -1,0 +1,91 @@
+{
+  "model_path": "models/multi_asset/multi_asset_ensemble_20250905_191445.pkl",
+  "symbols": [
+    "SPY",
+    "QQQ",
+    "IWM",
+    "GLD"
+  ],
+  "primary_symbol": "SPY",
+  "model_type": "ensemble",
+  "trained_at": "2025-09-05T19:14:45.175505",
+  "validation_metrics": {
+    "total_reward": 0.0,
+    "accuracy": 0.8947368421052632,
+    "avg_confidence": 0.8961954104924754,
+    "reward_weighted_performance": 0.0,
+    "sharpe_ratio": 0.0,
+    "num_trades": 19
+  },
+  "strategy_analysis": {
+    "action_analysis": {
+      "action_0": {
+        "count": "11",
+        "avg_reward": 0.045454545454545456,
+        "avg_confidence": 0.9740217272317885,
+        "success_rate": 0.09090909090909091
+      },
+      "action_1": {
+        "count": "8",
+        "avg_reward": -0.0625,
+        "avg_confidence": 0.78918422497592,
+        "success_rate": 0.0
+      }
+    },
+    "confidence_analysis": {
+      "quartile_1": {
+        "count": "5",
+        "avg_reward": -0.1,
+        "success_rate": 0.0
+      },
+      "quartile_2": {
+        "count": "4",
+        "avg_reward": 0.0,
+        "success_rate": 0.0
+      },
+      "quartile_3": {
+        "count": "5",
+        "avg_reward": 0.1,
+        "success_rate": 0.2
+      },
+      "quartile_4": {
+        "count": "5",
+        "avg_reward": 0.0,
+        "success_rate": 0.0
+      }
+    },
+    "overall_success_rate": 0.05263157894736842,
+    "avg_reward": 0.0,
+    "reward_std": 0.16222142113076254,
+    "safety_validation": {
+      "is_safe_to_deploy": false,
+      "stability_results": {
+        "is_stable": false,
+        "reason": "Insufficient data: 19 < 50",
+        "stability_score": 0.0
+      },
+      "recommendations": [
+        "Model is not stable - do not deploy",
+        "Low stability score - consider more training data",
+        "Low accuracy - consider feature engineering",
+        "Insufficient validation windows - need more data"
+      ],
+      "config": {
+        "max_position_size": 0.3,
+        "max_daily_trades": 5,
+        "min_confidence_threshold": 0.6,
+        "max_drawdown_limit": 0.15,
+        "volatility_threshold": 0.05,
+        "min_trades_for_validation": 50
+      }
+    }
+  },
+  "paper_trading": {
+    "enabled": true,
+    "initial_capital": 10000,
+    "max_position_size": 0.15,
+    "stop_loss": 0.03,
+    "take_profit": 0.06,
+    "rebalance_frequency": "daily"
+  }
+}

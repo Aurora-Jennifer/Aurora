@@ -1,0 +1,45 @@
+# XGBoost Global Model - GPU Optimized
+xgb_global:
+  use_gpu: true
+  params:
+    # GPU-specific parameters
+    tree_method: "gpu_hist"
+    predictor: "gpu_predictor"
+    gpu_id: 0
+    
+    # Model parameters
+    n_estimators: 1200
+    max_depth: 7
+    learning_rate: 0.05
+    subsample: 0.8
+    colsample_bytree: 0.8
+    
+    # GPU optimization
+    max_bin: 512
+    single_precision_histogram: true
+    
+    # Threading
+    nthread: 8
+    
+    # Regularization
+    reg_alpha: 0.1
+    reg_lambda: 1.0
+    
+    # Early stopping
+    early_stopping_rounds: 50
+    
+    # Random state
+    random_state: 42
+
+# Data optimization
+data:
+  dtype: "float32"
+  use_quantile_dmatrix: true
+  cache_data: true
+
+# Training optimization
+training:
+  batch_size: 8192
+  num_workers: 4
+  pin_memory: true
+  prefetch_factor: 2

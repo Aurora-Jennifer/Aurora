@@ -1,0 +1,81 @@
+{
+  "multi_symbol_results": {
+    "total_return": 0.006790479979703217,
+    "sharpe_ratio": 2.330356069599517,
+    "max_drawdown": -0.004544099053563552,
+    "success_rate": 0.5263157894736842,
+    "total_trades": 0,
+    "avg_diversification": 0.9909026401903537,
+    "final_value": 100666.96651221057,
+    "num_positions": 3,
+    "num_return_samples": 38,
+    "daily_return_mean": 0.00017883079692087257,
+    "daily_return_std": 0.0012182047754447309
+  },
+  "feature_analysis": {
+    "total_features": 390,
+    "feature_categories": {
+      "individual": 351,
+      "correlation": 19,
+      "cross_asset": 9,
+      "portfolio": 11
+    },
+    "missing_data_pct": 0.5071858974358975,
+    "feature_types": {
+      "float64": 390
+    }
+  },
+  "data_summary": {
+    "total_symbols": 3,
+    "available_symbols": [
+      "SPY",
+      "QQQ",
+      "IWM"
+    ],
+    "data_ranges": {
+      "SPY": {
+        "start_date": "2024-11-14",
+        "end_date": "2025-09-04",
+        "total_days": 200,
+        "has_features": false
+      },
+      "QQQ": {
+        "start_date": "2024-11-14",
+        "end_date": "2025-09-04",
+        "total_days": 200,
+        "has_features": false
+      },
+      "IWM": {
+        "start_date": "2024-11-14",
+        "end_date": "2025-09-04",
+        "total_days": 200,
+        "has_features": false
+      }
+    },
+    "last_update": null
+  },
+  "correlation_matrix": {
+    "SPY": {
+      "SPY": 1.0,
+      "QQQ": 0.9726747599421347,
+      "IWM": 0.8935986208580593
+    },
+    "QQQ": {
+      "SPY": 0.9726747599421347,
+      "QQQ": 1.0,
+      "IWM": 0.8464361982681132
+    },
+    "IWM": {
+      "SPY": 0.8935986208580593,
+      "QQQ": 0.8464361982681132,
+      "IWM": 1.0
+    }
+  },
+  "volatility_ranking": {
+    "QQQ": 0.25391089860795746,
+    "IWM": 0.23799867453891188,
+    "SPY": 0.21186769921917656
+  },
+  "overall_success_rate": true,
+  "avg_reward": 0.006790479979703217
+}

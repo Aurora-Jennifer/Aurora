@@ -1,0 +1,98 @@
+# Production Universe - 60 Liquid, Diversified Symbols
+market_proxy: QQQ
+
+universe:
+  # Tech / Communications (16)
+  - AAPL
+  - MSFT
+  - NVDA
+  - AMZN
+  - GOOGL
+  - META
+  - AVGO
+  - AMD
+  - INTC
+  - CRM
+  - NFLX
+  - ORCL
+  - IBM
+  - QCOM
+  - CSCO
+  - TSLA
+  
+  # Financials (6)
+  - JPM
+  - BAC
+  - WFC
+  - GS
+  - MS
+  - C
+  
+  # Healthcare (6)
+  - UNH
+  - JNJ
+  - PFE
+  - MRK
+  - ABBV
+  - LLY
+  
+  # Consumer (9)
+  - WMT
+  - COST
+  - HD
+  - MCD
+  - NKE
+  - PG
+  - KO
+  - PEP
+  - SBUX
+  
+  # Industrials / Materials (6)
+  - CAT
+  - BA
+  - HON
+  - GE
+  - DE
+  - MMM
+  
+  # Energy (4)
+  - XOM
+  - CVX
+  - COP
+  - SLB
+  
+  # Utilities / Staples (4)
+  - SO
+  - DUK
+  - AEP
+  - CL
+  - KMB
+  
+  # Alternatives (6)
+  - COIN
+  - GLD
+  - GDX
+  - XLF
+  - XLV
+  - XLE
+
+# Data configuration
+data:
+  start_date: "2018-01-01"
+  end_date: "2024-12-31"
+  frequency: "daily"
+  
+# Feature engineering
+features:
+  lookback_days: 252
+  include_technical: true
+  include_fundamental: false
+  include_sector: true
+  include_market: true
+  
+# Risk management
+risk:
+  max_position_weight: 0.05
+  max_sector_weight: 0.20
+  max_turnover: 0.25
+  min_liquidity: 1000000

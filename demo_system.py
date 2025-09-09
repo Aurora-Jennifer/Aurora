@@ -122,15 +122,15 @@ def demo_simple_model_training(features: pd.DataFrame):
         train_score = r2_score(y_train, model.predict(X_train))
         test_score = r2_score(y_test, model.predict(X_test))
         
-        print(f"  ✅ Model trained: Ridge Regression")
+        print("  ✅ Model trained: Ridge Regression")
         print(f"  📊 Training R²: {train_score:.4f}")
         print(f"  📊 Test R²: {test_score:.4f}")
         
         # Feature importance
-        feature_importance = list(zip(X.columns, np.abs(model.coef_)))
+        feature_importance = list(zip(X.columns, np.abs(model.coef_), strict=False))
         feature_importance.sort(key=lambda x: x[1], reverse=True)
         
-        print(f"  📊 Top 3 features:")
+        print("  📊 Top 3 features:")
         for i, (feature, importance) in enumerate(feature_importance[:3]):
             print(f"     {i+1}. {feature}: {importance:.4f}")
         
@@ -194,7 +194,7 @@ def demo_testing():
             test_lines = [l for l in lines if '::' in l and ('PASSED' in l or 'FAILED' in l)]
             print(f"  📊 Ran {len(test_lines)} tests")
         else:
-            print(f"  ⚠️  Some tests failed")
+            print("  ⚠️  Some tests failed")
             print(f"  📋 Output: {result.stdout[-200:]}")  # Last 200 chars
             
     except (subprocess.TimeoutExpired, FileNotFoundError) as e:

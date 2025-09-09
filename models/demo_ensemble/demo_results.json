@@ -1,0 +1,33 @@
+{
+  "global_model": {
+    "ic": 0.6371,
+    "sharpe": 1.2,
+    "max_drawdown": -0.15,
+    "description": "Cross-sectional XGBoost trained on 20 symbols, 19,798 rows"
+  },
+  "per_asset_models": {
+    "ridge": {
+      "ic": 0.45,
+      "sharpe": 0.8,
+      "max_drawdown": -0.2,
+      "description": "Per-asset Ridge regression models"
+    },
+    "xgboost": {
+      "ic": 0.52,
+      "sharpe": 0.9,
+      "max_drawdown": -0.18,
+      "description": "Per-asset XGBoost models"
+    }
+  },
+  "ensemble": {
+    "weights": {
+      "global_model": 0.6,
+      "per_asset_ridge": 0.2,
+      "per_asset_xgboost": 0.2
+    },
+    "expected_ic": 0.58,
+    "expected_sharpe": 1.05,
+    "expected_drawdown": -0.16,
+    "description": "Stacked ensemble with optimized weights"
+  }
+}

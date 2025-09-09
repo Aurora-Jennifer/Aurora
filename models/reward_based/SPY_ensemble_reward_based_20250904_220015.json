@@ -1,0 +1,13 @@
+{
+  "symbol": "SPY",
+  "model_type": "ensemble",
+  "training_date": "20250904_220015",
+  "lookback_days": 200,
+  "min_trades": 50,
+  "features_count": 114,
+  "training_time": 0.820727,
+  "validation_reward": 0,
+  "validation_accuracy": 0.0,
+  "sharpe_ratio": -0.1856953381770519,
+  "success_rate": 0
+}

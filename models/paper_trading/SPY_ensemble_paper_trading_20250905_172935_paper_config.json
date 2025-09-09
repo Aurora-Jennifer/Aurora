@@ -1,0 +1,90 @@
+{
+  "model_path": "models/paper_trading/SPY_ensemble_paper_trading_20250905_172935.pkl",
+  "symbol": "SPY",
+  "model_type": "ensemble",
+  "trained_at": "2025-09-05T17:29:35.367443",
+  "validation_metrics": {
+    "total_reward": -0.5,
+    "accuracy": 0.7111111111111111,
+    "avg_confidence": 0.8316597686562435,
+    "reward_weighted_performance": -0.5,
+    "sharpe_ratio": -0.049751859510499465,
+    "num_trades": 45
+  },
+  "strategy_analysis": {
+    "action_analysis": {
+      "action_0": {
+        "count": "22",
+        "avg_reward": 0.022727272727272728,
+        "avg_confidence": 0.773652221130689,
+        "success_rate": 0.13636363636363635
+      },
+      "action_1": {
+        "count": "18",
+        "avg_reward": -0.05555555555555555,
+        "avg_confidence": 0.8667115954778198,
+        "success_rate": 0.05555555555555555
+      },
+      "action_2": {
+        "count": "5",
+        "avg_reward": -0.1,
+        "avg_confidence": 0.9607064012110088,
+        "success_rate": 0.0
+      }
+    },
+    "confidence_analysis": {
+      "quartile_1": {
+        "count": "11",
+        "avg_reward": 0.0,
+        "success_rate": 0.09090909090909091
+      },
+      "quartile_2": {
+        "count": "11",
+        "avg_reward": 0.0,
+        "success_rate": 0.09090909090909091
+      },
+      "quartile_3": {
+        "count": "11",
+        "avg_reward": -0.045454545454545456,
+        "success_rate": 0.09090909090909091
+      },
+      "quartile_4": {
+        "count": "12",
+        "avg_reward": -0.041666666666666664,
+        "success_rate": 0.08333333333333333
+      }
+    },
+    "overall_success_rate": 0.08888888888888889,
+    "avg_reward": -0.022222222222222223,
+    "reward_std": 0.23465235646603197,
+    "safety_validation": {
+      "is_safe_to_deploy": false,
+      "stability_results": {
+        "is_stable": false,
+        "reason": "Insufficient data: 45 < 50",
+        "stability_score": 0.0
+      },
+      "recommendations": [
+        "Model is not stable - do not deploy",
+        "Low stability score - consider more training data",
+        "Low accuracy - consider feature engineering",
+        "Insufficient validation windows - need more data"
+      ],
+      "config": {
+        "max_position_size": 0.3,
+        "max_daily_trades": 5,
+        "min_confidence_threshold": 0.6,
+        "max_drawdown_limit": 0.15,
+        "volatility_threshold": 0.05,
+        "min_trades_for_validation": 50
+      }
+    }
+  },
+  "paper_trading": {
+    "enabled": true,
+    "initial_capital": 10000,
+    "max_position_size": 0.1,
+    "stop_loss": 0.05,
+    "take_profit": 0.1
+  }
+}

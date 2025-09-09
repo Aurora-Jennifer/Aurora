@@ -9,7 +9,7 @@ import pytest
 from core.config import load_config
 from core.engine.composer_integration import ComposerIntegration
 from core.walk.folds import gen_walkforward
-from scripts.walkforward_with_composer import run_walkforward_with_composer
+from scripts.walkforward.walkforward_with_composer import run_walkforward_with_composer
 
 
 def test_composer_end_to_end():
@@ -124,7 +124,7 @@ def test_config_overlay():
 
 def test_metrics_empty_handling():
     """Test that empty metrics are handled correctly."""
-    from scripts.walkforward_with_composer import compute_metrics_from_pnl
+    from scripts.walkforward.walkforward_with_composer import compute_metrics_from_pnl
 
     # Test with empty data
     pnl_series = np.array([])

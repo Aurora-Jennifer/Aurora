@@ -14,11 +14,10 @@ import argparse
 import json
 import sys
 import time
-import warnings
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import dataclass, asdict
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Any
+from typing import Any
 import numpy as np
 import pandas as pd
 import yaml
@@ -35,8 +34,8 @@ class ExperimentProfile:
     """Experiment configuration with search budget and guardrails."""
     name: str
     hypothesis: str
-    feature_families: List[str]
-    tickers: List[str]
+    feature_families: list[str]
+    tickers: list[str]
     discovery_start: str  # ISO date
     discovery_end: str    # ISO date
     confirmation_start: str  # ISO date (must be > discovery_end)
@@ -61,7 +60,7 @@ class ConfigResult:
     max_drawdown: float
     annual_return: float
     total_trades: int
-    metadata: Dict[str, Any]
+    metadata: dict[str, Any]
     timestamp: str
 
 
@@ -72,7 +71,7 @@ class ConfigSweepRunner:
         """Initialize with experiment profile."""
         self.profile = self._load_profile(profile_path)
         self.ic_validator = ICValidator()
-        self.results: List[ConfigResult] = []
+        self.results: list[ConfigResult] = []
         self.confirmation_locked = False
         
         # Create experiment directory
@@ -86,7 +85,7 @@ class ConfigSweepRunner:
     
     def _load_profile(self, profile_path: str) -> ExperimentProfile:
         """Load and validate experiment profile."""
-        with open(profile_path, 'r') as f:
+        with open(profile_path) as f:
             data = yaml.safe_load(f)
         
         profile = ExperimentProfile(**data)
@@ -109,7 +108,7 @@ class ConfigSweepRunner:
         
         return profile
     
-    def generate_configs(self) -> List[Dict[str, Any]]:
+    def generate_configs(self) -> list[dict[str, Any]]:
         """Generate configuration grid for systematic testing."""
         configs = []
         config_id = 0
@@ -156,9 +155,9 @@ class ConfigSweepRunner:
         print(f"🔧 Generated {len(configs)} configurations")
         return configs
     
-    def run_discovery_phase(self) -> List[ConfigResult]:
+    def run_discovery_phase(self) -> list[ConfigResult]:
         """Run discovery phase with timeline isolation."""
-        print(f"\n🔍 DISCOVERY PHASE")
+        print("\n🔍 DISCOVERY PHASE")
         print(f"Timeline: {self.profile.discovery_start} to {self.profile.discovery_end}")
         
         configs = self.generate_configs()
@@ -190,14 +189,14 @@ class ConfigSweepRunner:
         if discovery_results:
             ics = [r.ic_stats.mean_ic for r in discovery_results]
             sharpes = [r.sharpe for r in discovery_results]
-            print(f"\n📊 DISCOVERY SUMMARY")
+            print("\n📊 DISCOVERY SUMMARY")
             print(f"Configs tested: {len(discovery_results)}")
             print(f"IC stats: μ={np.mean(ics):.4f}, σ={np.std(ics):.4f}, range=[{np.min(ics):.4f}, {np.max(ics):.4f}]")
             print(f"Sharpe stats: μ={np.mean(sharpes):.3f}, σ={np.std(sharpes):.3f}, range=[{np.min(sharpes):.3f}, {np.max(sharpes):.3f}]")
         
         return discovery_results
     
-    def select_candidates(self, discovery_results: List[ConfigResult]) -> List[ConfigResult]:
+    def select_candidates(self, discovery_results: list[ConfigResult]) -> list[ConfigResult]:
         """Select candidate configurations for confirmation testing."""
         if not discovery_results:
             print("❌ No discovery results to select from")
@@ -234,7 +233,7 @@ class ConfigSweepRunner:
         max_candidates = min(5, max(1, int(0.1 * self.profile.trial_budget)))
         top_candidates = candidates[:max_candidates]
         
-        print(f"\n🎯 CANDIDATE SELECTION")
+        print("\n🎯 CANDIDATE SELECTION")
         print(f"Discovery configs: {len(discovery_results)}")
         print(f"Passed filters: {len(candidates)}")
         print(f"Selected for confirmation: {len(top_candidates)}")
@@ -244,15 +243,15 @@ class ConfigSweepRunner:
         
         return top_candidates
     
-    def run_confirmation_phase(self, candidates: List[ConfigResult]) -> List[ConfigResult]:
+    def run_confirmation_phase(self, candidates: list[ConfigResult]) -> list[ConfigResult]:
         """Run confirmation phase on quarantined holdout data."""
         if not candidates:
             print("❌ No candidates for confirmation")
             return []
         
-        print(f"\n🔒 CONFIRMATION PHASE")
+        print("\n🔒 CONFIRMATION PHASE")
         print(f"Timeline: {self.profile.confirmation_start} to {self.profile.confirmation_end}")
-        print(f"⚠️  HOLDOUT DATA - ONE SHOT ONLY")
+        print("⚠️  HOLDOUT DATA - ONE SHOT ONLY")
         
         # Lock confirmation to prevent multiple runs
         if self.confirmation_locked:
@@ -275,7 +274,7 @@ class ConfigSweepRunner:
                     confirmation_results.append(result)
                     print(f"✅ Confirmation IC: {result.ic_stats.mean_ic:.4f} (t={result.ic_stats.t_stat:.2f}) | Sharpe: {result.sharpe:.2f}")
                 else:
-                    print(f"❌ Confirmation failed")
+                    print("❌ Confirmation failed")
             except Exception as e:
                 print(f"❌ Confirmation error: {e}")
         
@@ -284,7 +283,7 @@ class ConfigSweepRunner:
         
         return confirmation_results
     
-    def _run_single_config(self, config: Dict[str, Any], phase: str) -> Optional[ConfigResult]:
+    def _run_single_config(self, config: dict[str, Any], phase: str) -> ConfigResult | None:
         """Run a single configuration trial."""
         try:
             # Set timeline based on phase
@@ -358,7 +357,7 @@ class ConfigSweepRunner:
             print(f"Config {config['config_id']} failed: {e}")
             return None
     
-    def _save_results(self, results: List[ConfigResult], filename: str):
+    def _save_results(self, results: list[ConfigResult], filename: str):
         """Save results with full provenance."""
         results_data = {
             "experiment_profile": asdict(self.profile),
@@ -373,7 +372,7 @@ class ConfigSweepRunner:
         
         print(f"💾 Saved {len(results)} results to {output_path}")
     
-    def run_full_experiment(self) -> Dict[str, Any]:
+    def run_full_experiment(self) -> dict[str, Any]:
         """Run complete discovery -> confirmation experiment."""
         start_time = time.time()
         
@@ -397,7 +396,7 @@ class ConfigSweepRunner:
             print(f"❌ Experiment failed: {e}")
             raise
     
-    def _generate_final_report(self, discovery: List[ConfigResult], confirmation: List[ConfigResult], runtime: float) -> Dict[str, Any]:
+    def _generate_final_report(self, discovery: list[ConfigResult], confirmation: list[ConfigResult], runtime: float) -> dict[str, Any]:
         """Generate final experiment report."""
         report = {
             "experiment_name": self.profile.name,
@@ -426,7 +425,7 @@ class ConfigSweepRunner:
             json.dump(report, f, indent=2, default=str)
         
         # Print summary
-        print(f"\n🎉 EXPERIMENT COMPLETE")
+        print("\n🎉 EXPERIMENT COMPLETE")
         print(f"⏱️  Runtime: {runtime/60:.1f} minutes")
         print(f"🔍 Discovery: {len(discovery)} configs tested")
         print(f"🔒 Confirmation: {len(confirmation)} candidates validated")
@@ -436,7 +435,7 @@ class ConfigSweepRunner:
         if report['confirmation_phase']['promoted_configs']:
             print(f"🚀 Ready for paper trading: {report['confirmation_phase']['promoted_configs']}")
         else:
-            print(f"💡 No configs promoted. Consider: different features, longer discovery, or hypothesis revision.")
+            print("💡 No configs promoted. Consider: different features, longer discovery, or hypothesis revision.")
         
         return report
 

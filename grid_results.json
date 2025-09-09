@@ -1,0 +1,47 @@
+[
+  {
+    "param_combo": {
+      "horizon": 5,
+      "eps_quantile": 0.5,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.22
+      ],
+      "model": {
+        "type": "xgboost",
+        "params": {
+          "colsample_bytree": 0.85,
+          "learning_rate": 0.03,
+          "max_bin": 512,
+          "max_depth": 7,
+          "min_child_weight": 4,
+          "n_estimators": 2400,
+          "nthread": 8,
+          "predictor": "gpu_predictor",
+          "random_state": 42,
+          "reg_alpha": 0.0,
+          "reg_lambda": 1.0,
+          "single_precision_histogram": true,
+          "subsample": 0.85,
+          "tree_method": "gpu_hist"
+        }
+      }
+    },
+    "num_folds": 2,
+    "median_model_sharpe": 0.0,
+    "median_bh_sharpe": 0.6264696831738249,
+    "median_rule_sharpe": -1.6850424091986436,
+    "mean_model_sharpe": 0.0,
+    "std_model_sharpe": 0.0,
+    "mean_trades": 0.0,
+    "mean_turnover": 0.0,
+    "mean_mdd": -0.1312747039913481,
+    "mean_pf": 0.0,
+    "eps": 0.030986907774445675,
+    "tau_in": 0.07029038593173026,
+    "tau_out": 0.03514519296586513,
+    "success": true,
+    "error": null
+  }
+]

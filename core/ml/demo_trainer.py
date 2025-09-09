@@ -11,9 +11,9 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import Ridge
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import accuracy_score
 import pickle
-from typing import Dict, Any, Tuple
+from typing import Any
 import logging
 
 logger = logging.getLogger(__name__)
@@ -46,7 +46,7 @@ class DemoModelTrainer:
         else:
             raise ValueError(f"Unknown model type: {model_type}")
     
-    def prepare_data(self, features: pd.DataFrame, returns: pd.Series) -> Tuple[np.ndarray, np.ndarray]:
+    def prepare_data(self, features: pd.DataFrame, returns: pd.Series) -> tuple[np.ndarray, np.ndarray]:
         """Prepare data for training."""
         
         # Align features and returns
@@ -65,7 +65,7 @@ class DemoModelTrainer:
             
         return X_scaled, y
     
-    def train(self, features: pd.DataFrame, returns: pd.Series) -> Dict[str, Any]:
+    def train(self, features: pd.DataFrame, returns: pd.Series) -> dict[str, Any]:
         """
         Train the demo model.
         

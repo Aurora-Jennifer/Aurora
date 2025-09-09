@@ -19,18 +19,14 @@ Examples:
 
 import argparse
 import json
-import os
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
-import warnings
 
 import numpy as np
 import pandas as pd
 from scipy.stats import spearmanr, ttest_1samp
 import matplotlib
 matplotlib.use('Agg')  # Non-interactive backend
-import matplotlib.pyplot as plt
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -49,7 +45,7 @@ class ICAnalyzer:
         self.results_dir.mkdir(parents=True, exist_ok=True)
     
     def measure_ic_properly(self, y_true: np.ndarray, y_pred: np.ndarray, 
-                           method: str = "spearman") -> Dict:
+                           method: str = "spearman") -> dict:
         """
         Measure IC properly with significance testing.
         
@@ -105,7 +101,7 @@ class ICAnalyzer:
         }
     
     def analyze_ic_across_horizons(self, data: pd.DataFrame, predictions: np.ndarray,
-                                  horizons: List[int] = [1, 5, 10, 20]) -> Dict:
+                                  horizons: list[int] = [1, 5, 10, 20]) -> dict:
         """
         Analyze IC across different forward return horizons.
         
@@ -142,8 +138,8 @@ class ICAnalyzer:
         
         return results
     
-    def compute_ic_stability(self, y_true_series: List[np.ndarray], 
-                           y_pred_series: List[np.ndarray]) -> Dict:
+    def compute_ic_stability(self, y_true_series: list[np.ndarray], 
+                           y_pred_series: list[np.ndarray]) -> dict:
         """
         Compute IC stability across multiple folds/periods.
         
@@ -156,7 +152,7 @@ class ICAnalyzer:
         """
         ics = []
         
-        for y_true, y_pred in zip(y_true_series, y_pred_series):
+        for y_true, y_pred in zip(y_true_series, y_pred_series, strict=False):
             ic_result = self.measure_ic_properly(y_true, y_pred)
             ics.append(ic_result["ic"])
         
@@ -190,7 +186,7 @@ class ICAnalyzer:
         }
     
     def backtest_from_predictions(self, data: pd.DataFrame, predictions: np.ndarray,
-                                 cost_bps: float = 5.0, rebalance_freq: int = 1) -> Dict:
+                                 cost_bps: float = 5.0, rebalance_freq: int = 1) -> dict:
         """
         Convert IC predictions to actual returns via long-short backtesting.
         
@@ -284,7 +280,7 @@ class ICAnalyzer:
         drawdown = (cumulative_returns - running_max) / running_max
         return float(drawdown.min())
     
-    def create_ic_report(self, experiment_id: str, save_plots: bool = True) -> Dict:
+    def create_ic_report(self, experiment_id: str, save_plots: bool = True) -> dict:
         """Create comprehensive IC analysis report for an experiment."""
         
         # Load experiment data
@@ -322,7 +318,7 @@ class ICAnalyzer:
         logger.info(f"IC report saved to {report_path}")
         return report
     
-    def _generate_recommendations(self, exp_data: Dict) -> List[str]:
+    def _generate_recommendations(self, exp_data: dict) -> list[str]:
         """Generate recommendations based on IC analysis."""
         recommendations = []
         
@@ -395,13 +391,13 @@ def main():
             print(f"Primary IC: {ic_analysis['primary_ic']:.6f}")
             print(f"Quality: {ic_analysis['quality']}")
             
-            print(f"\nRecommendations:")
+            print("\nRecommendations:")
             for rec in report["recommendations"]:
                 print(f"  {rec}")
                 
             if args.backtest:
                 print(f"\n📊 Return backtest would run here with {args.cost_bps} bps costs")
-                print(f"   (Requires model predictions and price data)")
+                print("   (Requires model predictions and price data)")
     
     except Exception as e:
         logger.error(f"Analysis failed: {e}")

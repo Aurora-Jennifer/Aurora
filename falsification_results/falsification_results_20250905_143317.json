@@ -1,0 +1,144 @@
+{
+  "determinism": {
+    "run_1": {
+      "seed": 42,
+      "mean_sharpe": 0.0,
+      "median_sharpe": 0.0,
+      "successful_folds": 0,
+      "total_folds": 0
+    },
+    "run_2": {
+      "seed": 142,
+      "mean_sharpe": 0.0,
+      "median_sharpe": 0.0,
+      "successful_folds": 0,
+      "total_folds": 0
+    },
+    "run_3": {
+      "seed": 242,
+      "mean_sharpe": 0.0,
+      "median_sharpe": 0.0,
+      "successful_folds": 0,
+      "total_folds": 0
+    },
+    "variance_analysis": {
+      "mean_sharpe": 0.0,
+      "std_sharpe": 0.0,
+      "cv": Infinity,
+      "is_stable": "True"
+    }
+  },
+  "cost_stress": {
+    "base": {
+      "costs_bps": 4.0,
+      "mean_sharpe": 0.0,
+      "median_sharpe": 0.0,
+      "successful_folds": 0,
+      "total_folds": 0
+    },
+    "stress_50pct": {
+      "costs_bps": 6.0,
+      "mean_sharpe": 0.0,
+      "median_sharpe": 0.0,
+      "successful_folds": 0,
+      "total_folds": 0
+    },
+    "stress_100pct": {
+      "costs_bps": 8.0,
+      "mean_sharpe": 0.0,
+      "median_sharpe": 0.0,
+      "successful_folds": 0,
+      "total_folds": 0
+    }
+  },
+  "out_of_time": {
+    "current": {
+      "lookback_days": 400,
+      "mean_sharpe": 0.0,
+      "median_sharpe": 0.0,
+      "successful_folds": 0,
+      "total_folds": 0
+    },
+    "backward_2yr": {
+      "lookback_days": 200,
+      "mean_sharpe": 0.0,
+      "median_sharpe": 0.0,
+      "successful_folds": 0,
+      "total_folds": 0
+    },
+    "forward_recent": {
+      "lookback_days": 400,
+      "mean_sharpe": 0.0,
+      "median_sharpe": 0.0,
+      "successful_folds": 0,
+      "total_folds": 0
+    }
+  },
+  "symbol_holdout": {
+    "base_symbols": {
+      "symbols": [
+        "SPY",
+        "QQQ"
+      ],
+      "mean_sharpe": 0.0,
+      "median_sharpe": 0.0,
+      "successful_folds": 0,
+      "total_folds": 0
+    },
+    "holdout_test": {
+      "error": "Insufficient symbols with data: 1 < 2"
+    },
+    "mixed_test": {
+      "symbols": [
+        "SPY",
+        "IWM"
+      ],
+      "mean_sharpe": 0.0,
+      "median_sharpe": 0.0,
+      "successful_folds": 0,
+      "total_folds": 0
+    }
+  },
+  "feature_ablation": {
+    "base_pca": {
+      "features": {
+        "use_pca": true,
+        "topk_supervised": 128
+      },
+      "mean_sharpe": 0.0,
+      "median_sharpe": 0.0,
+      "successful_folds": 0,
+      "total_folds": 0
+    },
+    "no_pca": {
+      "features": {
+        "use_pca": false,
+        "topk_supervised": 128
+      },
+      "mean_sharpe": 0.0,
+      "median_sharpe": 0.0,
+      "successful_folds": 0,
+      "total_folds": 0
+    },
+    "pca_64": {
+      "features": {
+        "use_pca": true,
+        "topk_supervised": 64
+      },
+      "mean_sharpe": 0.0,
+      "median_sharpe": 0.0,
+      "successful_folds": 0,
+      "total_folds": 0
+    },
+    "pca_256": {
+      "features": {
+        "use_pca": true,
+        "topk_supervised": 256
+      },
+      "mean_sharpe": 0.0,
+      "median_sharpe": 0.0,
+      "successful_folds": 0,
+      "total_folds": 0
+    }
+  }
+}

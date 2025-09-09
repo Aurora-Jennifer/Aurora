@@ -1,0 +1,32 @@
+{
+  "timestamp": "2025-09-06 14:10:37",
+  "hardware": {
+    "cpu_cores": 16,
+    "memory_gb": 31.228614807128906,
+    "gpu_available": true
+  },
+  "data_info": {
+    "n_symbols": 50,
+    "n_days": 500,
+    "n_samples": 25000,
+    "n_features": 11
+  },
+  "gpu_models": {
+    "xgboost_gpu": {
+      "error": "[14:10:31] /workspace/dmlc-core/src/io/local_filesys.cc:210: Check failed: allow_null:  LocalFileSystem::Open \"models/gpu_demo/global_xgb_gpu/model.json\": No such file or directory\nStack trace:\n  [bt] (0) /home/Jennifer/miniconda3/lib/python3.13/site-packages/xgboost/lib/libxgboost.so(+0x2a6e7c) [0x7f534a8a6e7c]\n  [bt] (1) /home/Jennifer/miniconda3/lib/python3.13/site-packages/xgboost/lib/libxgboost.so(+0x10d986d) [0x7f534b6d986d]\n  [bt] (2) /home/Jennifer/miniconda3/lib/python3.13/site-packages/xgboost/lib/libxgboost.so(+0x10c5c85) [0x7f534b6c5c85]\n  [bt] (3) /home/Jennifer/miniconda3/lib/python3.13/site-packages/xgboost/lib/libxgboost.so(XGBoosterSaveModel+0x4f) [0x7f534a7b758f]\n  [bt] (4) /home/Jennifer/miniconda3/lib/python3.13/lib-dynload/../../libffi.so.8(+0xa052) [0x7f53b86d7052]\n  [bt] (5) /home/Jennifer/miniconda3/lib/python3.13/lib-dynload/../../libffi.so.8(+0x8925) [0x7f53b86d5925]\n  [bt] (6) /home/Jennifer/miniconda3/lib/python3.13/lib-dynload/../../libffi.so.8(ffi_call+0xde) [0x7f53b86d606e]\n  [bt] (7) /home/Jennifer/miniconda3/lib/python3.13/lib-dynload/_ctypes.cpython-313-x86_64-linux-gnu.so(+0x14c68) [0x7f53b86f2c68]\n  [bt] (8) /home/Jennifer/miniconda3/lib/python3.13/lib-dynload/_ctypes.cpython-313-x86_64-linux-gnu.so(+0x8835) [0x7f53b86e6835]\n\n"
+    },
+    "catboost_gpu": {
+      "error": "(Error 2: No such file or directory) util/system/file.cpp:936: can't open \"models/gpu_demo/global_catboost_gpu/model.cbm\" with mode WrOnly|CreateAlways|Seq (0x00000034)"
+    }
+  },
+  "cpu_models": {
+    "ridge_cpu": {
+      "ic": 0.99999999999959,
+      "mse": 1.605115905736523e-13,
+      "n_samples": 25000,
+      "n_features": 11,
+      "training_time": 0.007370948791503906,
+      "samples_per_second": 3391693.621425799
+    }
+  }
+}

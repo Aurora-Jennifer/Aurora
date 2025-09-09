@@ -1,0 +1,94 @@
+{
+  "timestamp": "2025-09-06T12:58:48.803920",
+  "families_tested": 6,
+  "families_completed": 6,
+  "significant_drops": [
+    {
+      "family": "trend",
+      "delta_pct": 1.0,
+      "delta_sharpe": -0.4479189430577938
+    },
+    {
+      "family": "volatility",
+      "delta_pct": 1.0,
+      "delta_sharpe": -0.4479189430577938
+    },
+    {
+      "family": "momentum",
+      "delta_pct": 1.0,
+      "delta_sharpe": -0.4479189430577938
+    },
+    {
+      "family": "proxy",
+      "delta_pct": 1.0,
+      "delta_sharpe": -0.4479189430577938
+    },
+    {
+      "family": "volume",
+      "delta_pct": 1.0,
+      "delta_sharpe": -0.4479189430577938
+    },
+    {
+      "family": "price",
+      "delta_pct": 1.0,
+      "delta_sharpe": -0.4479189430577938
+    }
+  ],
+  "max_delta_threshold": 0.75,
+  "results": [
+    {
+      "family": "trend",
+      "status": "completed",
+      "baseline_sharpe": 0.4479189430577938,
+      "ablated_sharpe": 0.0,
+      "delta_sharpe": -0.4479189430577938,
+      "baseline_count": 1,
+      "ablated_count": 3
+    },
+    {
+      "family": "volatility",
+      "status": "completed",
+      "baseline_sharpe": 0.4479189430577938,
+      "ablated_sharpe": 0.0,
+      "delta_sharpe": -0.4479189430577938,
+      "baseline_count": 1,
+      "ablated_count": 3
+    },
+    {
+      "family": "momentum",
+      "status": "completed",
+      "baseline_sharpe": 0.4479189430577938,
+      "ablated_sharpe": 0.0,
+      "delta_sharpe": -0.4479189430577938,
+      "baseline_count": 1,
+      "ablated_count": 3
+    },
+    {
+      "family": "proxy",
+      "status": "completed",
+      "baseline_sharpe": 0.4479189430577938,
+      "ablated_sharpe": 0.0,
+      "delta_sharpe": -0.4479189430577938,
+      "baseline_count": 1,
+      "ablated_count": 3
+    },
+    {
+      "family": "volume",
+      "status": "completed",
+      "baseline_sharpe": 0.4479189430577938,
+      "ablated_sharpe": 0.0,
+      "delta_sharpe": -0.4479189430577938,
+      "baseline_count": 1,
+      "ablated_count": 3
+    },
+    {
+      "family": "price",
+      "status": "completed",
+      "baseline_sharpe": 0.4479189430577938,
+      "ablated_sharpe": 0.0,
+      "delta_sharpe": -0.4479189430577938,
+      "baseline_count": 1,
+      "ablated_count": 3
+    }
+  ]
+}

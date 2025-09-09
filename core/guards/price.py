@@ -7,7 +7,6 @@ Replaces brittle hard-coded price bands with adaptive checks:
 3. Regime band: Rolling median-based bands that adapt to data
 """
 from math import log, isfinite
-from typing import List, Tuple, Optional
 import pandas as pd
 
 
@@ -24,7 +23,7 @@ def split_aware_jump_ok(p_t: float, p_tm1: float, had_corporate_action_today: bo
     return r <= log(1.0 + jump_limit)
 
 
-def regime_band_ok(p_t: float, rolling_prices: List[float], band_frac: float = 0.80, min_bars: int = 30) -> bool:
+def regime_band_ok(p_t: float, rolling_prices: list[float], band_frac: float = 0.80, min_bars: int = 30) -> bool:
     """Check if price is within rolling regime band."""
     if len(rolling_prices) < min_bars:
         return True  # not enough history to form a band
@@ -41,11 +40,11 @@ def regime_band_ok(p_t: float, rolling_prices: List[float], band_frac: float = 0
 def price_sane(
     symbol: str, 
     p_t: float, 
-    p_tm1: Optional[float], 
-    rolling_prices: List[float], 
+    p_tm1: float | None, 
+    rolling_prices: list[float], 
     had_corp_action_today: bool,
     config: dict = None
-) -> Tuple[bool, str]:
+) -> tuple[bool, str]:
     """
     Comprehensive price sanity check with split-awareness and regime adaptation.
     
@@ -102,7 +101,7 @@ def price_sane(
     return True, "ok"
 
 
-def extract_rolling_prices(bars: pd.DataFrame, lookback: int = 90) -> List[float]:
+def extract_rolling_prices(bars: pd.DataFrame, lookback: int = 90) -> list[float]:
     """Extract rolling prices from bars DataFrame."""
     if len(bars) == 0:
         return []

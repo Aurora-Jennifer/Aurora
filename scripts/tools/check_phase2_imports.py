@@ -8,11 +8,9 @@ by files in the current organized structure (core/, training/, walkforward/, etc
 
 import os
 import re
-import subprocess
 from pathlib import Path
-from typing import Set, Dict, List
 
-def get_phase2_files() -> Set[str]:
+def get_phase2_files() -> set[str]:
     """Get all files in phase2_conservative"""
     phase2_dir = Path("scripts/cleanup+remove/phase2_conservative")
     if not phase2_dir.exists():
@@ -25,7 +23,7 @@ def get_phase2_files() -> Set[str]:
             files.add(file.stem)
     return files
 
-def get_core_files() -> Set[str]:
+def get_core_files() -> set[str]:
     """Get all Python files in organized directories"""
     core_dirs = [
         "scripts/core",
@@ -46,12 +44,12 @@ def get_core_files() -> Set[str]:
                 files.add(str(file))
     return files
 
-def check_imports_in_file(file_path: str, phase2_modules: Set[str]) -> Set[str]:
+def check_imports_in_file(file_path: str, phase2_modules: set[str]) -> set[str]:
     """Check if a file imports any Phase 2 modules"""
     imports = set()
     
     try:
-        with open(file_path, 'r') as f:
+        with open(file_path) as f:
             content = f.read()
         
         # Check for various import patterns
@@ -72,12 +70,12 @@ def check_imports_in_file(file_path: str, phase2_modules: Set[str]) -> Set[str]:
     
     return imports
 
-def check_dynamic_imports(file_path: str, phase2_modules: Set[str]) -> Set[str]:
+def check_dynamic_imports(file_path: str, phase2_modules: set[str]) -> set[str]:
     """Check for dynamic imports (importlib, __import__, etc.)"""
     imports = set()
     
     try:
-        with open(file_path, 'r') as f:
+        with open(file_path) as f:
             content = f.read()
         
         # Check for dynamic import patterns
@@ -109,7 +107,7 @@ def main():
     phase2_modules = get_phase2_files()
     core_files = get_core_files()
     
-    print(f"📊 SUMMARY:")
+    print("📊 SUMMARY:")
     print(f"   Phase 2 modules: {len(phase2_modules)}")
     print(f"   Core files to check: {len(core_files)}")
     print()

@@ -10,7 +10,6 @@ import os
 import sys
 import json
 import importlib
-import traceback
 from pathlib import Path
 from datetime import datetime
 import pandas as pd
@@ -93,7 +92,7 @@ class AuroraAuditor:
             
             result = validator.validate_and_repair(test_data, "TEST")
             self.log_check("Data Sanity", "Validation runs", True, 
-                          f"Validation completed", 8)
+                          "Validation completed", 8)
             
         except Exception as e:
             self.log_check("Data Sanity", "Validator loads", False, str(e), 0)
@@ -303,7 +302,7 @@ class AuroraAuditor:
         print(f"\n🎯 VERDICT: {verdict}")
         
         # Top 3 blockers
-        print(f"\n⚠️  TOP BLOCKERS:")
+        print("\n⚠️  TOP BLOCKERS:")
         failures = []
         for category, data in self.results.items():
             for test in data["tests"]:

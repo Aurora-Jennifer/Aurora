@@ -21,7 +21,6 @@ import logging
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -63,7 +62,7 @@ class ModelComparator:
             logger.error(f"Failed to load model {model_name}: {e}")
             raise
     
-    def load_data(self, symbols: List[str], start_date: str, end_date: str) -> pd.DataFrame:
+    def load_data(self, symbols: list[str], start_date: str, end_date: str) -> pd.DataFrame:
         """Load evaluation data."""
         logger.info(f"Loading data for {symbols} from {start_date} to {end_date}")
         
@@ -123,7 +122,7 @@ class ModelComparator:
         
         # Generate OHLCV data
         data = []
-        for i, (date, close) in enumerate(zip(date_range, prices)):
+        for i, (date, close) in enumerate(zip(date_range, prices, strict=False)):
             high = close * (1 + abs(np.random.normal(0, 0.01)))
             low = close * (1 - abs(np.random.normal(0, 0.01)))
             open_price = prices[i-1] if i > 0 else close
@@ -142,7 +141,7 @@ class ModelComparator:
         
         return df
     
-    def generate_predictions(self, data: pd.DataFrame) -> Dict[str, pd.DataFrame]:
+    def generate_predictions(self, data: pd.DataFrame) -> dict[str, pd.DataFrame]:
         """Generate predictions from all loaded models."""
         logger.info("Generating predictions from models")
         
@@ -229,7 +228,7 @@ class ModelComparator:
         
         return all_features
     
-    def calculate_metrics(self, predictions: Dict[str, pd.DataFrame], data: pd.DataFrame) -> Dict[str, Dict]:
+    def calculate_metrics(self, predictions: dict[str, pd.DataFrame], data: pd.DataFrame) -> dict[str, dict]:
         """Calculate comparison metrics for all models."""
         logger.info("Calculating performance metrics")
         
@@ -276,7 +275,7 @@ class ModelComparator:
         
         return metrics
     
-    def _calculate_model_metrics(self, aligned_df: pd.DataFrame) -> Dict:
+    def _calculate_model_metrics(self, aligned_df: pd.DataFrame) -> dict:
         """Calculate specific metrics for a model."""
         
         # Generate trading signals from predictions
@@ -325,7 +324,7 @@ class ModelComparator:
             'n_samples': len(strategy_returns)
         }
     
-    def apply_gates(self, metrics: Dict[str, Dict], model_a: str, model_b: str) -> Dict:
+    def apply_gates(self, metrics: dict[str, dict], model_a: str, model_b: str) -> dict:
         """Apply Clearframe pass/fail gates."""
         logger.info(f"Applying quality gates: {model_a} vs {model_b}")
         
@@ -441,9 +440,9 @@ def main():
         
         # Log summary
         if gates['overall_pass']:
-            logger.info(f"✅ Model A PASSES quality gates - recommend deployment")
+            logger.info("✅ Model A PASSES quality gates - recommend deployment")
         else:
-            logger.info(f"❌ Model A FAILS quality gates - reject deployment")
+            logger.info("❌ Model A FAILS quality gates - reject deployment")
         
         logger.info(f"Comparison report saved: {args.out}")
         

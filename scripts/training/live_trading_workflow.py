@@ -14,23 +14,19 @@ Usage:
 
 import argparse
 import json
-import os
 import sys
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Any
 
 import pandas as pd
-import yaml
 import yfinance as yf
 
 # Add project root to path
 sys.path.append(str(Path(__file__).parent.parent))
 
 from core.ml.build_features import build_matrix
-from ml.runtime import build_features, infer_weights
-from scripts.core.paper_runner import main as paper_main
+from ml.runtime import build_features
 
 
 def setup_logging():
@@ -39,7 +35,7 @@ def setup_logging():
     return core_setup_logging("logs/live_trading_workflow.log", logging.INFO)
 
 
-def download_live_data(symbols: List[str], days: int = 252) -> Dict[str, pd.DataFrame]:
+def download_live_data(symbols: list[str], days: int = 252) -> dict[str, pd.DataFrame]:
     """Download live data for symbols."""
     logger = setup_logging()
     data = {}
@@ -69,7 +65,7 @@ def download_live_data(symbols: List[str], days: int = 252) -> Dict[str, pd.Data
     return data
 
 
-def research_features(symbols: List[str], output_dir: str = "reports/research"):
+def research_features(symbols: list[str], output_dir: str = "reports/research"):
     """Research feature performance on live data."""
     logger = setup_logging()
     Path(output_dir).mkdir(parents=True, exist_ok=True)
@@ -79,7 +75,7 @@ def research_features(symbols: List[str], output_dir: str = "reports/research"):
     
     if not data:
         logger.error("❌ No data downloaded for research")
-        return
+        return None
     
     results = {}
     
@@ -121,7 +117,7 @@ def research_features(symbols: List[str], output_dir: str = "reports/research"):
     return results
 
 
-def train_live_model(symbols: List[str], model_type: str = "ridge", output_dir: str = "models"):
+def train_live_model(symbols: list[str], model_type: str = "ridge", output_dir: str = "models"):
     """Train model on live data."""
     logger = setup_logging()
     Path(output_dir).mkdir(parents=True, exist_ok=True)
@@ -131,7 +127,7 @@ def train_live_model(symbols: List[str], model_type: str = "ridge", output_dir: 
     
     if not data:
         logger.error("❌ No data for training")
-        return
+        return None
     
     # Combine data from all symbols
     all_features = []
@@ -149,7 +145,7 @@ def train_live_model(symbols: List[str], model_type: str = "ridge", output_dir: 
     
     if not all_features:
         logger.error("❌ No valid features for training")
-        return
+        return None
     
     # Combine all data
     X_combined = pd.concat(all_features, ignore_index=True)
@@ -171,7 +167,7 @@ def train_live_model(symbols: List[str], model_type: str = "ridge", output_dir: 
         model = XGBRegressor(n_estimators=100, max_depth=3, random_state=42)
     else:
         logger.error(f"❌ Unknown model type: {model_type}")
-        return
+        return None
     
     model.fit(X_combined, y_combined)
     
@@ -202,7 +198,7 @@ def train_live_model(symbols: List[str], model_type: str = "ridge", output_dir: 
     return str(model_file), metadata
 
 
-def paper_trade_live(symbols: List[str], duration_minutes: int = 30, model_path: str = None):
+def paper_trade_live(symbols: list[str], duration_minutes: int = 30, model_path: str = None):
     """Run paper trading with live data."""
     logger = setup_logging()
     
@@ -218,7 +214,7 @@ def paper_trade_live(symbols: List[str], duration_minutes: int = 30, model_path:
         # Load metadata
         meta_file = Path(model_path).with_suffix('.json')
         if meta_file.exists():
-            with open(meta_file, 'r') as f:
+            with open(meta_file) as f:
                 metadata = json.load(f)
             feature_order = metadata['feature_order']
         else:
@@ -234,7 +230,7 @@ def paper_trade_live(symbols: List[str], duration_minutes: int = 30, model_path:
     start_time = datetime.now()
     end_time = start_time + timedelta(minutes=duration_minutes)
     trades = []
-    positions = {symbol: 0.0 for symbol in symbols}
+    positions = dict.fromkeys(symbols, 0.0)
     
     logger.info("⏰ Starting trading loop...")
     
@@ -315,14 +311,14 @@ def paper_trade_live(symbols: List[str], duration_minutes: int = 30, model_path:
     with open(results_file, 'w') as f:
         json.dump(results, f, indent=2, default=str)
     
-    logger.info(f"✅ Paper trading completed")
+    logger.info("✅ Paper trading completed")
     logger.info(f"📊 Total trades: {len(trades)}")
     logger.info(f"💾 Results saved to {results_file}")
     
     return results
 
 
-def full_workflow(symbols: List[str], duration_minutes: int = 60):
+def full_workflow(symbols: list[str], duration_minutes: int = 60):
     """Complete workflow: research → train → paper trade."""
     logger = setup_logging()
     

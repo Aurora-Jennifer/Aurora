@@ -1,0 +1,71 @@
+data:
+  align_method: inner
+  min_days: 800
+  symbols:
+  - SPY
+  - QQQ
+decision:
+  calibrate_temperature: true
+  costs_bps: 4.0
+  hold_id: 2
+  margin_bps_mult: 1.0
+  min_trade_frac: 0.0
+  selective_quantile: 0.8
+  tau_search:
+  - 0.33
+  - 0.6
+  - 28
+  trade_topk: null
+  use_advantage_gating: true
+features:
+  topk_supervised: 128
+  use_pca: true
+  winsor_p: 0.01
+folds:
+  lookback_days: 400
+  n_folds: 3
+  purge_days: 5
+  test_days: 120
+loader:
+  num_workers: 8
+  persistent_workers: true
+  pin_memory: true
+  prefetch_factor: 4
+model:
+  arch: mlp_128_256_128_3
+  d_in: 128
+  params_cap: 50000
+  per_symbol_heads: false
+ops:
+  fail_fast_on_insufficient_data: true
+  resume: true
+  save_dir: artifacts
+report:
+  benchmarks:
+  - BH
+  - MOM20
+  - HOLD
+  cost_grid_bps:
+  - 0
+  - 2
+  - 4
+  - 8
+  gates:
+    max_dd: 0.1
+    pval_max: 0.1
+    sr_min: 0.3
+    turnover_yr_max: 2.5
+seed: 42
+train:
+  amp_dtype: fp16
+  batch_size: 1024
+  class_weights:
+  - 1.2
+  - 1.2
+  - 0.8
+  early_stop_patience: 3
+  entropy_bonus: 0.005
+  epochs_max: 20
+  lr: 3e-4
+  warm_start_lr: 3e-4
+  weight_decay: 1e-4

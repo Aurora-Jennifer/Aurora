@@ -1,0 +1,17 @@
+{
+  "summary": "PARTIAL",
+  "component_status": {
+    "env_ok": true,
+    "robustness_ok": true,
+    "oos_ok": true,
+    "lag_ok": true,
+    "portfolio_ok": true,
+    "ablation_ok": true,
+    "monitoring_ok": false
+  },
+  "capabilities": {
+    "python": true,
+    "lightgbm": false,
+    "xgboost": true
+  }
+}

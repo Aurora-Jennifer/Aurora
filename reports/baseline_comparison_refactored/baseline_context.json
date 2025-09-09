@@ -1,0 +1,9 @@
+{
+  "symbol": "AAPL",
+  "start": "2020-01-03 00:00:00-05:00",
+  "end": "2023-12-29 00:00:00-05:00",
+  "costs_bps": 3.0,
+  "annualization": "252d",
+  "data_source": "yfinance",
+  "auto_adjust": true
+}

@@ -1,0 +1,35 @@
+extends: "configs/defaults.yaml"
+
+# Paper trading configuration
+runtime:
+  allow_legacy_paths: false
+  fail_fast_on_nan: true
+  single_decision_core: true
+
+order_routing:
+  enable_orders: false
+  paper_broker: "mock"  # Use mock broker for paper trading
+  venue: "paper"
+
+decision:
+  tau_threshold: 0.0001  # Use validated τ from research
+  use_advantage_gating: true
+
+model:
+  params_cap: 50000  # Production cap
+
+risk:
+  max_position_notional: 50000  # Lower limits for paper
+  daily_loss_limit_pct: 1.0
+  max_symbol_weight: 0.2
+
+monitoring:
+  dashboard: "paper-trade"
+  alerts: false
+  log_level: "INFO"
+
+logging:
+  level: "INFO"
+  include_code_hash: true
+  include_config_hash: true
+  structured: true

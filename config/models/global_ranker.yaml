@@ -1,0 +1,62 @@
+# Global Cross-Sectional Model Configuration
+
+# Model parameters
+model_params:
+  n_estimators: 600
+  max_depth: 6
+  learning_rate: 0.05
+  subsample: 0.8
+  colsample_bytree: 0.8
+  reg_lambda: 1.0
+  random_state: 42
+
+# Time splits
+train_start: "2020-01-01"
+train_end: "2022-12-31"
+valid_start: "2023-01-01"
+valid_end: "2023-12-31"
+
+# Features to use (will be combined with symbol/sector features)
+features:
+  - "ret1"
+  - "ret5"
+  - "ret10"
+  - "ret20"
+  - "vol_5"
+  - "vol_20"
+  - "bb_upper"
+  - "bb_lower"
+  - "bb_width"
+  - "bb_position"
+  - "rsi_14"
+  - "ma_fast"
+  - "ma_slow"
+  - "ma_ratio"
+  - "volume_ratio"
+  - "price_ma_ratio"
+  - "vol_ratio"
+  - "ret_vol_ratio"
+  - "momentum_5"
+  - "momentum_10"
+  - "momentum_20"
+  - "regime_trend"
+  - "regime_chop"
+  - "regime_vol"
+  - "cross_asset_delta"
+  - "market_beta"
+  - "sector_momentum"
+  - "size_factor"
+  - "value_factor"
+
+# Evaluation settings
+evaluation:
+  ic_threshold: 0.05
+  min_ic_consistency: 0.6
+  cost_bps: 3.0
+  turnover_penalty: 0.001
+
+# Output settings
+output:
+  save_predictions: true
+  save_feature_importance: true
+  save_ic_by_date: true

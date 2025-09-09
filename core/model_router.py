@@ -15,7 +15,6 @@ import logging
 import os
 import re
 from pathlib import Path
-from typing import Dict, Optional, Union, List
 import numpy as np
 import pandas as pd
 import yaml
@@ -39,7 +38,7 @@ class AssetClassifier:
                 logger.warning(f"Assets config not found: {self.config_path}, using fallback")
                 return self._get_fallback_config()
             
-            with open(self.config_path, 'r') as f:
+            with open(self.config_path) as f:
                 config = yaml.safe_load(f)
             
             logger.info(f"Loaded asset classification config from {self.config_path}")
@@ -115,7 +114,7 @@ class ModelRegistry:
         self.config_path = Path(assets_config_path)
         self.config = self._load_config()
         self.model_paths = self._load_model_paths()
-        self._loaded_models: Dict[str, any] = {}
+        self._loaded_models: dict[str, any] = {}
         
     def _load_config(self) -> dict:
         """Load asset configuration."""
@@ -124,7 +123,7 @@ class ModelRegistry:
                 logger.warning(f"Assets config not found: {self.config_path}, using fallback")
                 return self._get_fallback_config()
             
-            with open(self.config_path, 'r') as f:
+            with open(self.config_path) as f:
                 return yaml.safe_load(f)
         except Exception as e:
             logger.error(f"Failed to load assets config: {e}, using fallback")
@@ -141,7 +140,7 @@ class ModelRegistry:
             }
         }
     
-    def _load_model_paths(self) -> Dict[str, Path]:
+    def _load_model_paths(self) -> dict[str, Path]:
         """Load model paths from configuration."""
         model_config = self.config.get('models', {})
         paths = {}
@@ -161,8 +160,7 @@ class ModelRegistry:
             model_path = self.model_paths[asset_class]
             if model_path.exists():
                 return model_path
-            else:
-                logger.warning(f"Model not found for {asset_class} at {model_path}, using universal fallback")
+            logger.warning(f"Model not found for {asset_class} at {model_path}, using universal fallback")
         else:
             logger.warning(f"Unknown asset class {asset_class}, using universal fallback")
             
@@ -170,9 +168,8 @@ class ModelRegistry:
         universal_path = self.model_paths['universal']
         if universal_path.exists():
             return universal_path
-        else:
-            logger.error(f"Universal model not found at {universal_path}")
-            raise FileNotFoundError(f"No model found for {asset_class} and universal fallback missing")
+        logger.error(f"Universal model not found at {universal_path}")
+        raise FileNotFoundError(f"No model found for {asset_class} and universal fallback missing")
     
     def model_exists(self, asset_class: str) -> bool:
         """Check if model exists for asset class."""
@@ -180,7 +177,7 @@ class ModelRegistry:
             return self.model_paths[asset_class].exists()
         return False
     
-    def list_available_models(self) -> List[str]:
+    def list_available_models(self) -> list[str]:
         """List asset classes with available models."""
         available = []
         for asset_class, path in self.model_paths.items():
@@ -205,7 +202,7 @@ class AssetSpecificModelRouter:
         self.feature_enabled = os.getenv("FLAG_ASSET_SPECIFIC_MODELS", "0") == "1"
         self.classifier = AssetClassifier(assets_config_path)
         self.registry = ModelRegistry(assets_config_path)
-        self._models_cache: Dict[str, any] = {}
+        self._models_cache: dict[str, any] = {}
         
         if self.feature_enabled:
             available_models = self.registry.list_available_models()
@@ -213,7 +210,7 @@ class AssetSpecificModelRouter:
         else:
             logger.info("Asset-specific model routing DISABLED (using universal model)")
     
-    def get_prediction(self, symbol: str, features: Union[np.ndarray, pd.DataFrame]) -> float:
+    def get_prediction(self, symbol: str, features: np.ndarray | pd.DataFrame) -> float:
         """
         Get prediction for symbol using appropriate model.
         
@@ -230,16 +227,15 @@ class AssetSpecificModelRouter:
             if not self.feature_enabled:
                 # EXACT SAME PATH AS CURRENT SYSTEM
                 return self._universal_prediction(features)
-            else:
-                # NEW ASSET-SPECIFIC PATH
-                return self._asset_specific_prediction(symbol, features)
+            # NEW ASSET-SPECIFIC PATH
+            return self._asset_specific_prediction(symbol, features)
                 
         except Exception as e:
             logger.warning(f"Asset-specific prediction failed for {symbol}: {e}")
             logger.info("Falling back to universal model")
             return self._universal_prediction(features)
     
-    def _universal_prediction(self, features: Union[np.ndarray, pd.DataFrame]) -> float:
+    def _universal_prediction(self, features: np.ndarray | pd.DataFrame) -> float:
         """
         Universal model prediction - PRESERVES EXISTING BEHAVIOR EXACTLY.
         
@@ -278,15 +274,14 @@ class AssetSpecificModelRouter:
             # Return single value (current system behavior)
             if isinstance(prediction, np.ndarray):
                 return float(prediction[0]) if len(prediction) > 0 else 0.0
-            else:
-                return float(prediction)
+            return float(prediction)
                 
         except Exception as e:
             logger.warning(f"Universal model prediction failed: {e}")
             # Last resort fallback (safe for testing)
             return 0.0
     
-    def _asset_specific_prediction(self, symbol: str, features: Union[np.ndarray, pd.DataFrame]) -> float:
+    def _asset_specific_prediction(self, symbol: str, features: np.ndarray | pd.DataFrame) -> float:
         """
         Asset-specific prediction routing.
         
@@ -351,7 +346,7 @@ def create_model_router(assets_config_path: str = "config/assets.yaml") -> Asset
 
 
 # Global router instance (lazy initialization)
-_global_router: Optional[AssetSpecificModelRouter] = None
+_global_router: AssetSpecificModelRouter | None = None
 
 def get_model_router(assets_config_path: str = "config/assets.yaml") -> AssetSpecificModelRouter:
     """Get global model router instance."""
@@ -361,7 +356,7 @@ def get_model_router(assets_config_path: str = "config/assets.yaml") -> AssetSpe
     return _global_router
 
 
-def predict_with_router(symbol: str, features: Union[np.ndarray, pd.DataFrame]) -> float:
+def predict_with_router(symbol: str, features: np.ndarray | pd.DataFrame) -> float:
     """
     Convenience function for getting predictions with asset-specific routing.
     

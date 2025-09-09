@@ -1,0 +1,106 @@
+name: Placebo Checks
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'ml/**'
+      - 'scripts/**'
+      - 'config/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'ml/**'
+      - 'scripts/**'
+      - 'config/**'
+
+jobs:
+  placebo-checks:
+    name: Data Leakage Placebo Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest
+      
+      - name: Run 100% Feature Shuffle Placebo Check
+        run: |
+          python scripts/ci_placebo_checks.py \
+            --threshold 0.01 \
+            --output results/ci/placebo_results.json
+        env:
+          PYTHONPATH: .
+      
+      - name: Upload placebo results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: placebo-results
+          path: results/ci/placebo_results.json
+          retention-days: 30
+      
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            try {
+              const results = JSON.parse(fs.readFileSync('results/ci/placebo_results.json', 'utf8'));
+              
+              let comment = `## 🧪 Placebo Check Results\n\n`;
+              
+              if (results.all_passed) {
+                comment += `✅ **All placebo checks PASSED** - No data leakage detected\n\n`;
+              } else {
+                comment += `❌ **Placebo checks FAILED** - Potential data leakage detected\n\n`;
+              }
+              
+              comment += `### Test Results:\n`;
+              
+              for (const result of results.results) {
+                const icon = result.passes ? '✅' : '❌';
+                const testName = result.test.replace('_', ' ').toUpperCase();
+                comment += `- ${icon} **${testName}**: |IC| = ${result.abs_median_ic.toFixed(6)} (threshold: ${results.threshold})\n`;
+              }
+              
+              comment += `\n*Threshold: |IC| < ${results.threshold}*`;
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            } catch (error) {
+              console.log('Could not read placebo results:', error);
+            }
+      
+      - name: Fail if placebo checks failed
+        run: |
+          if [ -f results/ci/placebo_results.json ]; then
+            python -c "
+            import json
+            with open('results/ci/placebo_results.json') as f:
+              results = json.load(f)
+            if not results['all_passed']:
+              print('❌ Placebo checks failed - blocking merge')
+              exit(1)
+            else:
+              print('✅ All placebo checks passed')
+            "
+          else
+            echo '❌ Placebo results file not found'
+            exit 1
+          fi

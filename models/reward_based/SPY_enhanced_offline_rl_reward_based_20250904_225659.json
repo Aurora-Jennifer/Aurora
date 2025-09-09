@@ -1,0 +1,13 @@
+{
+  "symbol": "SPY",
+  "model_type": "enhanced_offline_rl",
+  "training_date": "20250904_225659",
+  "lookback_days": 200,
+  "min_trades": 50,
+  "features_count": 114,
+  "training_time": 1.6604,
+  "validation_reward": 0,
+  "validation_accuracy": 0.10526315789473684,
+  "sharpe_ratio": 0.0,
+  "success_rate": 0
+}

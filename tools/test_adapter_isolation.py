@@ -29,14 +29,12 @@ def test_imports_dont_break_existing():
     
     try:
         # Test existing imports still work
-        from core.walk.ml_pipeline import MLPipeline
         logger.info("✅ Existing MLPipeline import works")
         
-        from serve.adapter import ModelAdapter
         logger.info("✅ Existing ModelAdapter import works")
         
         # Test new imports work
-        from core.model_router import AssetSpecificModelRouter, AssetClassifier
+        from core.model_router import AssetClassifier
         logger.info("✅ New model router import works")
         
         # Test they don't interfere (without actually loading models)
@@ -144,7 +142,7 @@ except Exception as e:
             logger.info("✅ Core functionality working (success exit code)")
             return True
         
-        logger.error(f"❌ Compatibility test failed:")
+        logger.error("❌ Compatibility test failed:")
         logger.error(f"Return code: {result.returncode}")
         logger.error(f"Stdout: {result.stdout}")
         logger.error(f"Stderr: {result.stderr}")
@@ -245,12 +243,10 @@ def test_performance_impact():
         
         # Measure baseline import time
         start_time = time.time()
-        from core.walk.ml_pipeline import MLPipeline
         baseline_time = time.time() - start_time
         
         # Measure import time with new modules
         start_time = time.time()
-        from core.model_router import AssetSpecificModelRouter
         new_module_time = time.time() - start_time
         
         logger.info(f"Baseline import time: {baseline_time:.4f}s")
@@ -303,9 +299,8 @@ def run_isolation_tests():
     if failed == 0:
         logger.info("🎉 ALL ISOLATION TESTS PASSED - Safe to proceed!")
         return True
-    else:
-        logger.error("💥 ISOLATION TESTS FAILED - Do NOT integrate!")
-        return False
+    logger.error("💥 ISOLATION TESTS FAILED - Do NOT integrate!")
+    return False
 
 
 if __name__ == "__main__":

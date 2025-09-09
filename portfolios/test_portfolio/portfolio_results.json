@@ -1,0 +1,127 @@
+{
+  "timestamp": "2025-09-06T00:08:02.095345",
+  "weights": {
+    "AAPL_0": 0.10219710823029543,
+    "AAPL_1": 0.10219710823029543,
+    "AAPL_2": 0.10219710823029543,
+    "AAPL_3": 0.0,
+    "AAPL_4": 0.0,
+    "AAPL_5": 0.0,
+    "AAPL_6": 0.0,
+    "AAPL_7": 0.0,
+    "AAPL_8": 0.0,
+    "AAPL_9": 0.0,
+    "COIN_10": 0.008422838590408965,
+    "COIN_11": 0.0,
+    "COIN_12": 0.0,
+    "COIN_13": 0.0,
+    "COIN_14": 0.0,
+    "COIN_15": 0.0,
+    "COIN_16": 0.008422838590408965,
+    "COIN_17": 0.0,
+    "COIN_18": 0.0,
+    "COIN_19": 0.0,
+    "NVDA_20": 0.0395285974992158,
+    "NVDA_21": 0.0395285974992158,
+    "NVDA_22": 0.0395285974992158,
+    "NVDA_23": 0.0,
+    "NVDA_24": 0.004913322511071896,
+    "NVDA_25": 0.018670625542073202,
+    "NVDA_26": 0.01080930952435817,
+    "NVDA_27": 0.018670625542073202,
+    "NVDA_28": 0.004913322511071896,
+    "NVDA_29": 0.0
+  },
+  "validation": {
+    "valid": false,
+    "violations": [
+      "Turnover limit violated: 1.000",
+      "Weight sum not equal to 1: 0.500"
+    ],
+    "metrics": {
+      "net_exposure": 0.5,
+      "turnover": 1.0,
+      "weight_sum": 0.5
+    }
+  },
+  "strategy_count": 30,
+  "total_strategies_evaluated": 30,
+  "config": {
+    "portfolio": {
+      "top_k": 10,
+      "min_sharpe": 0.0,
+      "min_trades": 0,
+      "min_active_days_pct": 0.0,
+      "target_volatility": 0.1,
+      "max_position_weight": 0.2,
+      "max_net_exposure": 0.8,
+      "max_turnover": 0.3,
+      "hysteresis_factor": 0.1,
+      "rebalance_frequency": 21,
+      "scoring": {
+        "sharpe_weight": 0.7,
+        "trades_weight": 0.2,
+        "stability_weight": 0.1
+      }
+    },
+    "risk": {
+      "max_position_weight": 1.0,
+      "max_net_exposure": 1.0,
+      "max_turnover": 0.5,
+      "target_volatility": 0.1,
+      "max_volatility": 0.2,
+      "vol_lookback": 252,
+      "max_drawdown": 0.15,
+      "drawdown_lookback": 252
+    },
+    "baselines": [
+      {
+        "name": "1/N",
+        "description": "Equal weight portfolio",
+        "weight": 0.2
+      },
+      {
+        "name": "12-1_momentum",
+        "description": "12-month momentum strategy",
+        "weight": 0.2
+      },
+      {
+        "name": "mean_reversion",
+        "description": "Simple mean reversion",
+        "weight": 0.2
+      },
+      {
+        "name": "buy_hold",
+        "description": "Buy and hold benchmark",
+        "weight": 0.4
+      }
+    ],
+    "output": {
+      "save_weights": true,
+      "save_performance": true,
+      "save_attribution": true,
+      "save_risk_metrics": true,
+      "save_rebalancing_log": true,
+      "weights_format": "csv",
+      "performance_format": "json",
+      "plots_format": "png",
+      "daily_update": true,
+      "weekly_summary": true,
+      "monthly_report": true
+    },
+    "monitoring": {
+      "min_sharpe": 0.5,
+      "max_drawdown": 0.15,
+      "min_trades_per_month": 5,
+      "max_position_concentration": 0.3,
+      "max_sector_concentration": 0.4,
+      "max_turnover_spike": 0.5,
+      "alert_on_violations": true,
+      "alert_on_performance_degradation": true,
+      "alert_frequency": "daily",
+      "email_alerts": false,
+      "slack_alerts": false,
+      "log_alerts": true
+    }
+  }
+}

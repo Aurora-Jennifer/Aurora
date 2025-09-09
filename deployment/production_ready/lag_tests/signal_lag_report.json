@@ -1,0 +1,35 @@
+{
+  "timestamp": "2025-09-06T12:57:40.488650",
+  "status": "neutral",
+  "passed": false,
+  "reason": "dummy_predictions",
+  "lead_vs_lag_auc": 0.5,
+  "p_value": 1.0,
+  "perm_mean_sharpe": 0.0,
+  "proxy_swap_delta": 0.0,
+  "tests": {
+    "lead_vs_lag": {
+      "lead_vs_lag_auc": 0.5,
+      "lead_correlations": [],
+      "lag_correlations": [],
+      "lead_mean": 0,
+      "lag_mean": 0
+    },
+    "permutation": {
+      "perm_mean_sharpe": 0.0,
+      "original_mean_sharpe": 0.0,
+      "p_value": 1.0,
+      "significant": false
+    },
+    "proxy_swap": {
+      "proxy_swap_delta": 0.0,
+      "within_tolerance": true
+    }
+  },
+  "tickers_tested": [
+    "AAPL",
+    "NVDA",
+    "COIN"
+  ],
+  "data_points": 4386
+}

@@ -1,0 +1,76 @@
+# Ensemble v2 Configuration
+
+# Models to include in ensemble
+models:
+  - "global_ranker"
+  - "ridge"
+  - "xgboost"
+
+# Target column
+target_col: "ret_fwd_5"
+
+# Panel dataset file
+panel_file: "panel_dataset.csv"
+
+# Meta-learning settings
+meta_learning:
+  method: "nnls"  # nnls or ridge
+  min_weight: 0.01
+  max_weight: 0.8
+
+# Residual MLP settings
+residual_mlp:
+  hidden_layers: [64, 32]
+  activation: "relu"
+  learning_rate: 0.001
+  max_iter: 1000
+  early_stopping: true
+  alpha: 0.0001
+
+# Regime gating settings
+regime_gate:
+  regime_threshold: 0.7
+  features:
+    - "vol_regime"
+    - "trend_regime"
+    - "volume_regime"
+    - "momentum_regime"
+    - "chop_regime"
+
+# Uncertainty quantification
+uncertainty:
+  alpha: 0.1  # 90% confidence
+  method: "residual"  # residual or quantile
+  max_weight: 0.02
+  min_weight: 0.001
+
+# Factor neutralization
+neutralization:
+  neutralize_market: true
+  neutralize_sectors: true
+  neutralize_size: false
+  neutralize_momentum: false
+  beta_lookback: 20
+
+# Portfolio optimization
+portfolio:
+  lambda_risk: 5.0
+  lambda_turnover: 10.0
+  weight_cap: 0.03
+  long_only: false
+  cov_method: "ledoit_wolf"
+  cov_lookback: 60
+
+# Validation settings
+validation:
+  cv_folds: 5
+  purged_gap: 5
+  embargo_period: 10
+  min_samples_per_fold: 100
+
+# Output settings
+output:
+  save_predictions: true
+  save_weights: true
+  save_metrics: true
+  save_artifacts: true

@@ -1,0 +1,69 @@
+{
+  "action_analysis": {
+    "action_0": {
+      "count": 4,
+      "avg_reward": 0.0,
+      "avg_confidence": 0.93042373231484,
+      "success_rate": 0.0
+    },
+    "action_1": {
+      "count": 1,
+      "avg_reward": 0.0,
+      "avg_confidence": 0.9528342975584739,
+      "success_rate": 0.0
+    },
+    "action_2": {
+      "count": 25,
+      "avg_reward": -0.04,
+      "avg_confidence": 0.9682159723746452,
+      "success_rate": 0.04
+    }
+  },
+  "confidence_analysis": {
+    "quartile_1": {
+      "count": 8,
+      "avg_reward": -0.125,
+      "success_rate": 0.0
+    },
+    "quartile_2": {
+      "count": 7,
+      "avg_reward": 0.0,
+      "success_rate": 0.0
+    },
+    "quartile_3": {
+      "count": 7,
+      "avg_reward": 0.0,
+      "success_rate": 0.14285714285714285
+    },
+    "quartile_4": {
+      "count": 8,
+      "avg_reward": 0.0,
+      "success_rate": 0.0
+    }
+  },
+  "overall_success_rate": 0.03333333333333333,
+  "avg_reward": -0.03333333333333333,
+  "reward_std": 0.17950549357115012,
+  "safety_validation": {
+    "is_safe_to_deploy": false,
+    "stability_results": {
+      "is_stable": false,
+      "reason": "Insufficient data: 30 < 50",
+      "stability_score": 0.0
+    },
+    "recommendations": [
+      "Model is not stable - do not deploy",
+      "Low stability score - consider more training data",
+      "Low accuracy - consider feature engineering",
+      "Insufficient validation windows - need more data"
+    ],
+    "config": {
+      "max_position_size": 0.3,
+      "max_daily_trades": 5,
+      "min_confidence_threshold": 0.6,
+      "max_drawdown_limit": 0.15,
+      "volatility_threshold": 0.05,
+      "min_trades_for_validation": 50
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-09-06T00:08:02.095345",
+  "valid": false,
+  "violations": [
+    "Turnover limit violated: 1.000",
+    "Weight sum not equal to 1: 0.500"
+  ],
+  "metrics": {
+    "net_exposure": 0.5,
+    "turnover": 1.0,
+    "weight_sum": 0.5
+  }
+}

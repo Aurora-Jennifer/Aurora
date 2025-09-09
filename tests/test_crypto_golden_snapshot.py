@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
 """Test Crypto Golden Snapshot"""
 
-import pytest
 import pandas as pd
-import numpy as np
 
 from tests.golden.crypto_snapshot import (
     create_golden_crypto_data,
-    create_golden_crypto_features,
-    GOLDEN_SEED
+    create_golden_crypto_features
 )
 
 

@@ -1,0 +1,21 @@
+extends: "configs/defaults.yaml"
+
+# Research overrides for experimentation
+runtime:
+  allow_legacy_paths: true  # Allow legacy paths for research
+  fail_fast_on_nan: false   # More lenient for research
+
+decision:
+  tau_threshold: 0.0001
+  use_advantage_gating: true
+
+model:
+  params_cap: 100000  # Higher cap for research
+
+eval:
+  test_window_days: 120  # Longer test windows for research
+
+logging:
+  level: "DEBUG"
+  include_code_hash: true
+  include_config_hash: true

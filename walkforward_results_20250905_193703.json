@@ -1,0 +1,276 @@
+{
+  "aggregate_metrics": {
+    "num_folds": 2,
+    "mean_return": 0.017387578522817148,
+    "std_return": 0.005160275123966403,
+    "min_return": 0.012227303398850744,
+    "max_return": 0.02254785364678355,
+    "mean_sharpe": 3.0511828794989753,
+    "std_sharpe": 0.7838485264743009,
+    "total_trades": 32,
+    "mean_trades_per_fold": 16.0,
+    "positive_return_folds": 2,
+    "win_rate": 1.0
+  },
+  "fold_results": [
+    {
+      "initial_capital": 10000,
+      "final_value": 10225.478536467836,
+      "total_return": 0.02254785364678355,
+      "sharpe_ratio": 3.835031405973276,
+      "num_trades": 16,
+      "trades": [
+        {
+          "timestamp": "2023-01-09 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 2.666846366275332,
+          "price": 374.9747314453125,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-01-10 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 2.3834467990496666,
+          "price": 377.6044006347656,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-01-11 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 2.118310078574845,
+          "price": 382.3802795410156,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-01-12 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 1.899562934372882,
+          "price": 383.7724914550781,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-01-13 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 1.7030000533893441,
+          "price": 385.26129150390625,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-01-17 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 1.535513033568855,
+          "price": 384.5555114746094,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-01-18 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 1.404130204332017,
+          "price": 378.484130859375,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-01-19 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 1.2729840165985957,
+          "price": 375.7289123535156,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-01-20 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 1.1247330637013464,
+          "price": 382.72833251953125,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-01-23 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 1.000258088250457,
+          "price": 387.3205261230469,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-01-24 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 0.9011994642411504,
+          "price": 386.90484619140625,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-01-25 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 0.8107754953441955,
+          "price": 387.0499267578125,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-01-26 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 0.7217655457556097,
+          "price": 391.3037109375,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-01-27 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 0.6480998350466318,
+          "price": 392.20281982421875,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-01-30 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 0.590701367582622,
+          "price": 387.2818603515625,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-01-31 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 0.5239277036367783,
+          "price": 392.9762268066406,
+          "confidence": 0.7
+        }
+      ],
+      "action_probs": {
+        "SELL": 0.0,
+        "HOLD": 1.0,
+        "BUY": 0.0
+      },
+      "fold_id": 1,
+      "start_date": "2023-01-03 00:00:00-05:00",
+      "end_date": "2023-01-31 00:00:00-05:00"
+    },
+    {
+      "initial_capital": 10000,
+      "final_value": 10122.273033988507,
+      "total_return": 0.012227303398850744,
+      "sharpe_ratio": 2.2673343530246743,
+      "num_trades": 16,
+      "trades": [
+        {
+          "timestamp": "2023-01-24 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 2.5846148215607734,
+          "price": 386.90484619140625,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-01-25 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 2.32528141146802,
+          "price": 387.0499267578125,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-01-26 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 2.0700033691461086,
+          "price": 391.3037109375,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-01-27 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 1.8587321741509413,
+          "price": 392.20281982421875,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-01-30 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 1.6941149771497501,
+          "price": 387.2818603515625,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-01-31 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 1.5026099792304835,
+          "price": 392.9762268066406,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-02-01 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 1.338127593419344,
+          "price": 397.1527099609375,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-02-02 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 1.1870352838849438,
+          "price": 402.93402099609375,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-02-03 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 1.0798092672028428,
+          "price": 398.6511535644531,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-02-06 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 0.977803924892919,
+          "price": 396.21490478515625,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-02-07 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 0.8686627526100037,
+          "price": 401.39678955078125,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-02-08 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 0.7904396508608228,
+          "price": 397.0076599121094,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-02-09 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 0.717616799845709,
+          "price": 393.5659484863281,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-02-10 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 0.6443514097836079,
+          "price": 394.4844055175781,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-02-13 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 0.5731876532045994,
+          "price": 399.115234375,
+          "confidence": 0.7
+        },
+        {
+          "timestamp": "2023-02-14 00:00:00-05:00",
+          "action": "BUY",
+          "shares": 0.5161063372220813,
+          "price": 398.9316101074219,
+          "confidence": 0.7
+        }
+      ],
+      "action_probs": {
+        "SELL": 0.0,
+        "HOLD": 1.0,
+        "BUY": 0.0
+      },
+      "fold_id": 2,
+      "start_date": "2023-01-18 00:00:00-05:00",
+      "end_date": "2023-02-14 00:00:00-05:00"
+    }
+  ],
+  "ready_for_paper": true
+}

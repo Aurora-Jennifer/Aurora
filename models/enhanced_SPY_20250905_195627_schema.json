@@ -1,0 +1,33 @@
+{
+  "feature_columns": [
+    "returns_1d",
+    "returns_5d",
+    "returns_20d",
+    "vol_5d",
+    "vol_20d",
+    "vol_60d",
+    "vol_ratio",
+    "skew_20d",
+    "kurt_20d",
+    "drawdown",
+    "high_20d",
+    "low_20d",
+    "price_position",
+    "momentum_3d",
+    "momentum_5d",
+    "momentum_10d",
+    "momentum_20d",
+    "rsi",
+    "macd",
+    "volume_ma",
+    "volume_ratio",
+    "gap",
+    "gap_abs",
+    "market_returns_1d",
+    "market_returns_5d",
+    "relative_strength",
+    "market_vol",
+    "vol_spread"
+  ],
+  "num_features": 28
+}

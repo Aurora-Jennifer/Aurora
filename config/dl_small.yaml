@@ -1,0 +1,58 @@
+# Small DL Grid Configuration for Smoke Testing
+# Fast, minimal grid to validate the multi-asset pipeline
+
+horizons: [3, 5, 10]
+eps_quantiles: [0.25, 0.35, 0.45]
+temperature: [1.0, 1.5]
+sequence_lengths: [64]
+models:
+  - type: ridge
+    alphas: [1.0, 10.0, 100.0]
+  - type: lgbm
+    params:
+      num_leaves: [15, 31]
+      max_depth: [-1]
+      learning_rate: [0.05]
+      n_estimators: [200]
+      min_child_samples: [20]
+
+loss:
+  label_smoothing: 0.05
+  multitask_vol: true
+  vol_loss_weight: 0.2
+
+optim:
+  lr: 0.001
+  batch_size: 256
+  epochs_max: 40
+  early_stop_patience: 6
+
+calibration:
+  temperature: true
+  clamp: [0.7, 1.5]
+
+turnover_band: [0.08, 0.18]
+
+walkforward:
+  fold_length_days: 63
+  step_size_days: 21
+  min_train_days: 252
+  min_test_days: 21
+
+costs:
+  commission_bps: 1
+  slippage_bps: 2
+
+gate:
+  threshold_delta_vs_baseline: 0.1
+
+output:
+  csv_path: "grid_results.csv"
+  json_path: "grid_results.json"
+  log_level: "INFO"
+
+data:
+  symbols: []           # (unused by universe runner)
+  start_date: "2023-01-01"
+  end_date: "2024-01-01"
+  market_benchmark: "QQQ"

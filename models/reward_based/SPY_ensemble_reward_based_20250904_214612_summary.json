@@ -1,0 +1,35 @@
+{
+  "action_analysis": {
+    "action_0": {
+      "count": 6,
+      "avg_reward": -0.000807431417609451,
+      "avg_confidence": 0.75282407194516,
+      "success_rate": 0.0
+    }
+  },
+  "confidence_analysis": {
+    "quartile_1": {
+      "count": 2,
+      "avg_reward": 0.0007373977005373481,
+      "success_rate": 0.0
+    },
+    "quartile_2": {
+      "count": 1,
+      "avg_reward": -0.0013082807819160072,
+      "success_rate": 0.0
+    },
+    "quartile_3": {
+      "count": 1,
+      "avg_reward": -0.0016839085377339427,
+      "success_rate": 0.0
+    },
+    "quartile_4": {
+      "count": 2,
+      "avg_reward": -0.0016635972935407262,
+      "success_rate": 0.0
+    }
+  },
+  "overall_success_rate": 0.0,
+  "avg_reward": -0.000807431417609451,
+  "reward_std": 0.0011575113011045354
+}

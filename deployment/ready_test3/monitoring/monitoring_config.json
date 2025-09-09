@@ -1,0 +1,9 @@
+{
+  "enabled": true,
+  "frequency": "daily",
+  "data_freshness_threshold_hours": 24,
+  "performance_thresholds": {
+    "min_sharpe": 0.05,
+    "max_drawdown": 0.15
+  }
+}

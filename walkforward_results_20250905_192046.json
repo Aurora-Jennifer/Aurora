@@ -1,0 +1,354 @@
+{
+  "aggregate_metrics": {
+    "num_folds": 21,
+    "mean_return": 0.0,
+    "std_return": 0.0,
+    "min_return": 0.0,
+    "max_return": 0.0,
+    "mean_sharpe": 0.0,
+    "std_sharpe": 0.0,
+    "total_trades": 0,
+    "mean_trades_per_fold": 0.0,
+    "positive_return_folds": 0,
+    "win_rate": 0.0
+  },
+  "fold_results": [
+    {
+      "initial_capital": 10000,
+      "final_value": 10000.0,
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "trades": [],
+      "action_probs": {
+        "SELL": 0.0,
+        "HOLD": 1.0,
+        "BUY": 0.0
+      },
+      "fold_id": 1,
+      "start_date": "2023-01-03 00:00:00-05:00",
+      "end_date": "2023-04-03 00:00:00-04:00"
+    },
+    {
+      "initial_capital": 10000,
+      "final_value": 10000.0,
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "trades": [],
+      "action_probs": {
+        "SELL": 0.6,
+        "HOLD": 0.4,
+        "BUY": 0.0
+      },
+      "fold_id": 2,
+      "start_date": "2023-02-02 00:00:00-05:00",
+      "end_date": "2023-05-03 00:00:00-04:00"
+    },
+    {
+      "initial_capital": 10000,
+      "final_value": 10000.0,
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "trades": [],
+      "action_probs": {
+        "SELL": 0.0,
+        "HOLD": 0.4,
+        "BUY": 0.6
+      },
+      "fold_id": 3,
+      "start_date": "2023-03-06 00:00:00-05:00",
+      "end_date": "2023-06-02 00:00:00-04:00"
+    },
+    {
+      "initial_capital": 10000,
+      "final_value": 10000.0,
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "trades": [],
+      "action_probs": {
+        "SELL": 0.0,
+        "HOLD": 1.0,
+        "BUY": 0.0
+      },
+      "fold_id": 4,
+      "start_date": "2023-04-04 00:00:00-04:00",
+      "end_date": "2023-07-05 00:00:00-04:00"
+    },
+    {
+      "initial_capital": 10000,
+      "final_value": 10000.0,
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "trades": [],
+      "action_probs": {
+        "SELL": 0.0,
+        "HOLD": 1.0,
+        "BUY": 0.0
+      },
+      "fold_id": 5,
+      "start_date": "2023-05-04 00:00:00-04:00",
+      "end_date": "2023-08-03 00:00:00-04:00"
+    },
+    {
+      "initial_capital": 10000,
+      "final_value": 10000.0,
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "trades": [],
+      "action_probs": {
+        "SELL": 0.0,
+        "HOLD": 1.0,
+        "BUY": 0.0
+      },
+      "fold_id": 6,
+      "start_date": "2023-06-05 00:00:00-04:00",
+      "end_date": "2023-09-01 00:00:00-04:00"
+    },
+    {
+      "initial_capital": 10000,
+      "final_value": 10000.0,
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "trades": [],
+      "action_probs": {
+        "SELL": 0.6,
+        "HOLD": 0.4,
+        "BUY": 0.0
+      },
+      "fold_id": 7,
+      "start_date": "2023-07-06 00:00:00-04:00",
+      "end_date": "2023-10-03 00:00:00-04:00"
+    },
+    {
+      "initial_capital": 10000,
+      "final_value": 10000.0,
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "trades": [],
+      "action_probs": {
+        "SELL": 0.0,
+        "HOLD": 0.4,
+        "BUY": 0.6
+      },
+      "fold_id": 8,
+      "start_date": "2023-08-04 00:00:00-04:00",
+      "end_date": "2023-11-01 00:00:00-04:00"
+    },
+    {
+      "initial_capital": 10000,
+      "final_value": 10000.0,
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "trades": [],
+      "action_probs": {
+        "SELL": 0.0,
+        "HOLD": 0.4,
+        "BUY": 0.6
+      },
+      "fold_id": 9,
+      "start_date": "2023-09-05 00:00:00-04:00",
+      "end_date": "2023-12-01 00:00:00-05:00"
+    },
+    {
+      "initial_capital": 10000,
+      "final_value": 10000.0,
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "trades": [],
+      "action_probs": {
+        "SELL": 0.6,
+        "HOLD": 0.4,
+        "BUY": 0.0
+      },
+      "fold_id": 10,
+      "start_date": "2023-10-04 00:00:00-04:00",
+      "end_date": "2024-01-03 00:00:00-05:00"
+    },
+    {
+      "initial_capital": 10000,
+      "final_value": 10000.0,
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "trades": [],
+      "action_probs": {
+        "SELL": 0.0,
+        "HOLD": 0.4,
+        "BUY": 0.6
+      },
+      "fold_id": 11,
+      "start_date": "2023-11-02 00:00:00-04:00",
+      "end_date": "2024-02-02 00:00:00-05:00"
+    },
+    {
+      "initial_capital": 10000,
+      "final_value": 10000.0,
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "trades": [],
+      "action_probs": {
+        "SELL": 0.6,
+        "HOLD": 0.4,
+        "BUY": 0.0
+      },
+      "fold_id": 12,
+      "start_date": "2023-12-04 00:00:00-05:00",
+      "end_date": "2024-03-05 00:00:00-05:00"
+    },
+    {
+      "initial_capital": 10000,
+      "final_value": 10000.0,
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "trades": [],
+      "action_probs": {
+        "SELL": 0.6,
+        "HOLD": 0.4,
+        "BUY": 0.0
+      },
+      "fold_id": 13,
+      "start_date": "2024-01-04 00:00:00-05:00",
+      "end_date": "2024-04-04 00:00:00-04:00"
+    },
+    {
+      "initial_capital": 10000,
+      "final_value": 10000.0,
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "trades": [],
+      "action_probs": {
+        "SELL": 0.0,
+        "HOLD": 0.4,
+        "BUY": 0.6
+      },
+      "fold_id": 14,
+      "start_date": "2024-02-05 00:00:00-05:00",
+      "end_date": "2024-05-03 00:00:00-04:00"
+    },
+    {
+      "initial_capital": 10000,
+      "final_value": 10000.0,
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "trades": [],
+      "action_probs": {
+        "SELL": 0.0,
+        "HOLD": 1.0,
+        "BUY": 0.0
+      },
+      "fold_id": 15,
+      "start_date": "2024-03-06 00:00:00-05:00",
+      "end_date": "2024-06-04 00:00:00-04:00"
+    },
+    {
+      "initial_capital": 10000,
+      "final_value": 10000.0,
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "trades": [],
+      "action_probs": {
+        "SELL": 0.0,
+        "HOLD": 0.4,
+        "BUY": 0.6
+      },
+      "fold_id": 16,
+      "start_date": "2024-04-05 00:00:00-04:00",
+      "end_date": "2024-07-05 00:00:00-04:00"
+    },
+    {
+      "initial_capital": 10000,
+      "final_value": 10000.0,
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "trades": [],
+      "action_probs": {
+        "SELL": 0.6,
+        "HOLD": 0.4,
+        "BUY": 0.0
+      },
+      "fold_id": 17,
+      "start_date": "2024-05-06 00:00:00-04:00",
+      "end_date": "2024-08-05 00:00:00-04:00"
+    },
+    {
+      "initial_capital": 10000,
+      "final_value": 10000.0,
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "trades": [],
+      "action_probs": {
+        "SELL": 0.0,
+        "HOLD": 1.0,
+        "BUY": 0.0
+      },
+      "fold_id": 18,
+      "start_date": "2024-06-05 00:00:00-04:00",
+      "end_date": "2024-09-04 00:00:00-04:00"
+    },
+    {
+      "initial_capital": 10000,
+      "final_value": 10000.0,
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "trades": [],
+      "action_probs": {
+        "SELL": 0.0,
+        "HOLD": 1.0,
+        "BUY": 0.0
+      },
+      "fold_id": 19,
+      "start_date": "2024-07-08 00:00:00-04:00",
+      "end_date": "2024-10-03 00:00:00-04:00"
+    },
+    {
+      "initial_capital": 10000,
+      "final_value": 10000.0,
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "trades": [],
+      "action_probs": {
+        "SELL": 0.0,
+        "HOLD": 1.0,
+        "BUY": 0.0
+      },
+      "fold_id": 20,
+      "start_date": "2024-08-06 00:00:00-04:00",
+      "end_date": "2024-11-01 00:00:00-04:00"
+    },
+    {
+      "initial_capital": 10000,
+      "final_value": 10000.0,
+      "total_return": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "trades": [],
+      "action_probs": {
+        "SELL": 0.0,
+        "HOLD": 1.0,
+        "BUY": 0.0
+      },
+      "fold_id": 21,
+      "start_date": "2024-09-05 00:00:00-04:00",
+      "end_date": "2024-12-03 00:00:00-05:00"
+    }
+  ],
+  "ready_for_paper": "False"
+}

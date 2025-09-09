@@ -1,0 +1,48 @@
+# Smoke Test Universe Configuration
+# Small subset for quick validation
+
+universe:
+  - AAPL
+  - NVDA
+  - COIN
+
+# Market proxy for excess return calculations
+market_proxy: QQQ
+
+# Cross-asset proxies for additional features (robust, liquid ETFs)
+cross_proxies:
+  - TLT    # Treasury bonds
+  - UUP    # Dollar proxy (more reliable than DXY)
+  - VIXY   # Volatility proxy
+  - HYG    # Credit/high yield proxy
+
+# Per-asset roundtrip costs (commission + slippage in basis points)
+costs_bps:
+  default: 3
+  COIN: 6     # Crypto exposure, higher volatility
+
+# Data configuration
+data:
+  start_date: "2023-01-01"
+  end_date: "2024-01-01"
+  min_data_days: 200
+
+# Walkforward configuration
+walkforward:
+  fold_length: 63
+  step_size: 63  # Non-overlapping folds
+  min_train_days: 200
+  min_test_days: 21
+
+# Gating criteria
+gate:
+  threshold_delta_vs_baseline: 0.1
+  min_folds: 5
+  max_fail_rate: 0.3
+
+# Output configuration
+output:
+  out_dir: "smoke_results"
+  save_per_asset_csvs: true
+  save_leaderboard: true
+  log_level: "INFO"

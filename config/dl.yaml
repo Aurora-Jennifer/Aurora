@@ -1,0 +1,88 @@
+# Deep Learning Grid Configuration
+# Keep it small; DL will overfit if you explode the space
+
+# Prediction horizons (days)
+horizons: [3, 5, 10]
+
+# Sequence lengths for TCN models
+sequence_lengths: [64, 128]
+
+# Model configurations
+models:
+  - type: mlp
+    hidden_dims: [128, 64]
+    dropout: 0.2
+    weight_decay: 0.0001
+    lr: 0.001
+    batch_size: 256
+    max_epochs: 100
+    early_stop_patience: 10
+  
+  - type: tcn
+    channels: 16
+    blocks: 3
+    kernel_size: 3
+    dilations: [1, 2, 4, 8]
+    dropout: 0.2
+    weight_decay: 0.0001
+    lr: 0.001
+    batch_size: 256
+    max_epochs: 100
+    early_stop_patience: 10
+
+# Loss configuration
+loss:
+  label_smoothing: 0.05
+  multitask_vol: true
+  vol_loss_weight: 0.2
+
+# Optimization
+optim:
+  lr: 0.001
+  batch_size: 256
+  epochs_max: 100
+  early_stop_patience: 10
+  grad_clip: 1.0
+
+# Calibration
+calibration:
+  temperature: true
+
+# Turnover targeting
+turnover_band: [0.08, 0.18]
+
+# Transaction costs
+costs:
+  commission_bps: 1
+  slippage_bps: 2
+
+# Walkforward parameters
+walkforward:
+  fold_length: 63
+  step_size: 63  # Non-overlapping folds
+  min_train_days: 200  # Need more data for DL
+
+# Gating criteria
+gate:
+  threshold_delta_vs_baseline: 0.1
+  min_folds: 5
+  max_fail_rate: 0.3
+
+# Output configuration
+output:
+  csv_path: "dl_grid_results.csv"
+  json_path: "dl_grid_results.json"
+  log_level: "INFO"
+
+# Data configuration
+data:
+  symbols: ["QQQ", "SPY", "IWM"]
+  start_date: "2023-01-01"
+  end_date: "2024-12-31"
+  market_benchmark: "SPY"
+
+# Training configuration
+training:
+  inner_val_split: 0.15  # Last 15% of train as inner validation
+  warmup_epochs: 5
+  cosine_schedule: true

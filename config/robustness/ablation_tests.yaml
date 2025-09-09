@@ -1,0 +1,45 @@
+# Feature Ablation Tests Configuration
+# Defines feature families for ablation analysis
+
+families:
+  - name: trend
+    drop_prefixes: ["ma_", "ema_", "bb_", "sma_", "wma_"]
+    description: "Moving averages and trend indicators"
+  
+  - name: volatility
+    drop_prefixes: ["rv_", "atr_", "vol_", "std_", "var_"]
+    description: "Volatility and risk measures"
+  
+  - name: momentum
+    drop_prefixes: ["mom_", "roc_", "rsi_", "macd_", "stoch_"]
+    description: "Momentum and oscillator indicators"
+  
+  - name: proxy
+    drop_prefixes: ["qqq_", "tlt_", "dxy_", "uso_", "spy_", "vix_"]
+    description: "Market proxy and cross-asset features"
+  
+  - name: volume
+    drop_prefixes: ["vol_", "adv_", "dec_", "obv_", "ad_"]
+    description: "Volume-based indicators"
+  
+  - name: price
+    drop_prefixes: ["price_", "ret_", "log_", "pct_"]
+    description: "Price-based features"
+
+# Ablation test parameters
+test_params:
+  min_baseline_sharpe: 0.1  # Minimum baseline Sharpe to consider
+  max_delta_threshold: 0.75  # Flag if any family causes >75% Sharpe drop
+  min_strategies_per_family: 3  # Minimum strategies to test per family
+  
+# Baseline selection criteria
+baseline_selection:
+  min_sharpe: 0.0  # Minimum Sharpe for baseline selection
+  min_trades: 5  # Minimum trades for baseline selection
+  top_k_strategies: 10  # Number of top strategies to use as baseline
+
+# Output configuration
+output:
+  save_individual_results: true
+  save_summary: true
+  log_level: "INFO"

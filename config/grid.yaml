@@ -1,0 +1,61 @@
+# Experiment Grid Configuration
+# This config defines the parameter grid for systematic model evaluation
+
+# Prediction horizons (days)
+horizons: [3, 5, 10]
+
+# Epsilon quantiles for neutral band
+eps_quantiles: [0.4, 0.5, 0.6]
+
+# Temperature scaling parameters
+temperature: [1.0, 1.5]
+
+# Target turnover band (min, max)
+turnover_band: [0.08, 0.18]
+
+# Model specifications
+models:
+  - type: ridge
+    alphas: [0.1, 1.0, 5.0]
+  - type: lgbm
+    params:
+      max_depth: [3, 5]
+      num_leaves: [7, 15]
+      min_data_in_leaf: [20, 60]
+      learning_rate: [0.05, 0.1]
+  - type: xgboost
+    params:
+      max_depth: [3, 5]
+      num_leaves: [7, 15]
+      min_child_weight: [20, 60]
+      learning_rate: [0.05, 0.1]
+
+# Transaction costs
+costs:
+  commission_bps: 1
+  slippage_bps: 2
+
+# Walkforward parameters
+walkforward:
+  fold_length: 63
+  step_size: 63  # Non-overlapping folds
+  min_train_days: 100
+
+# Gating criteria
+gate:
+  threshold_delta_vs_baseline: 0.1
+  min_folds: 5
+  max_fail_rate: 0.3
+
+# Output configuration
+output:
+  csv_path: "grid_results.csv"
+  json_path: "grid_results.json"
+  log_level: "INFO"
+
+# Data configuration
+data:
+  symbols: ["SPY", "QQQ", "IWM"]
+  start_date: "2023-01-01"
+  end_date: "2024-12-31"
+  market_benchmark: "SPY"

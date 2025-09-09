@@ -1,0 +1,9 @@
+{
+  "max_gross_exposure_pct": 30.0,
+  "max_position_pct": 2.0,
+  "max_adv_participation_pct": 2.0,
+  "daily_loss_kill_pct": 2.0,
+  "min_price_dollars": 5.0,
+  "max_trades_per_day": 60,
+  "enable_short_selling": false
+}

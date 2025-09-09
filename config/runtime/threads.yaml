@@ -1,0 +1,29 @@
+# Runtime Thread Configuration
+runtime:
+  # Thread limits (avoid oversubscription)
+  omp_num_threads: 8
+  mkl_num_threads: 8
+  openblas_num_threads: 8
+  numexpr_num_threads: 8
+  xgboost_num_threads: 8
+  
+  # Worker configuration
+  cpu_workers: 6
+  gpu_worker_queue: true
+  
+  # Memory optimization
+  memory_mapping: true
+  cache_size_gb: 8
+  
+  # GPU configuration
+  gpu_memory_fraction: 0.9
+  gpu_allow_growth: true
+  
+  # Data loading
+  prefetch_factor: 2
+  num_workers: 4
+  pin_memory: true
+  
+  # Batch sizes
+  gpu_batch_size: 8192
+  cpu_batch_size: 4096

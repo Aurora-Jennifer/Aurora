@@ -127,7 +127,7 @@ class SimpleLinearModel:
 
 def compute_metrics_from_pnl(pnl_series: np.ndarray, trades: list[dict]) -> dict[str, float]:
     if len(pnl_series) == 0 or np.all(np.isnan(pnl_series)):
-        return {k: 0.0 for k in ["sharpe_nw", "sortino", "max_dd", "hit_rate", "turnover", "median_hold", "total_return", "volatility"]}
+        return dict.fromkeys(["sharpe_nw", "sortino", "max_dd", "hit_rate", "turnover", "median_hold", "total_return", "volatility"], 0.0)
     returns = np.diff(pnl_series)
     if len(returns) == 0:
         returns = np.array([0.0])

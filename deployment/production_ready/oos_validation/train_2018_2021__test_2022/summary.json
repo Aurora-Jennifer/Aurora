@@ -1,0 +1,8 @@
+{
+  "total_tickers": 3,
+  "successful_runs": 3,
+  "gate_passes": 3,
+  "total_runtime_sec": 12.3,
+  "avg_runtime_sec": 4.1000000000000005,
+  "best_sharpe": 0.8871325091535546
+}

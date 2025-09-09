@@ -1,0 +1,16 @@
+{
+  "total_training_runs": 1,
+  "best_reward": -0.5,
+  "avg_training_time": 1.378144,
+  "avg_validation_reward": -0.5,
+  "avg_validation_accuracy": 0.7111111111111111,
+  "training_runs": [
+    {
+      "run_id": 0,
+      "training_time": 1.378144,
+      "validation_reward": -0.5,
+      "validation_accuracy": 0.7111111111111111,
+      "strategy_success_rate": 0.08888888888888889
+    }
+  ]
+}

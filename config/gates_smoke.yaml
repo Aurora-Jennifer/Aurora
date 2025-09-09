@@ -1,0 +1,16 @@
+# Smoke test gates - relaxed thresholds for wiring validation
+# These are NOT production gates, just to test CAPM plumbing
+
+# Basic performance gates (relaxed for short OOS)
+min_trades: 10
+turnover_max_pct: 120  # effectively ignore
+breadth_min: 0.30
+
+# Market-neutral gates (relaxed for smoke test - CAPM needs 40+ bars)
+# For smoke test with <40 bars, CAPM metrics will be NaN (expected)
+IR_mkt_min: -0.10
+alpha_t_min: 0.0
+beta_cap_abs: 2.0
+
+# Sharpe gates (relaxed)
+nw_sharpe_min: 0.20

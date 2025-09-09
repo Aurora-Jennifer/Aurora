@@ -1,0 +1,32 @@
+{
+  "timestamp": "2025-09-06T14:00:59.687317",
+  "ensemble_components": {
+    "meta_weights": {
+      "global_ranker": 0.30487333586808324,
+      "ridge": 0.2288194260412369,
+      "xgboost": 0.4663072380906798
+    },
+    "ensemble_ic": 0.9638726510673186,
+    "improvement": 0.03626825020664626,
+    "residual_mlp_ic": 0.6815765501596412,
+    "conformal_scale": 0.004553312967338442,
+    "regime_gate_available": true,
+    "neutralizer_available": true,
+    "optimizer_available": true
+  },
+  "pipeline_results": {
+    "base_ensemble_ic": 0.9638726510673186,
+    "enhanced_ic": 0.6815765501596412,
+    "gated_ic": NaN,
+    "neutralized_ic": 0.9637693530966752,
+    "max_position_weight": 7.665170872435051e-05,
+    "num_positions": 20,
+    "portfolio_turnover": 0.0
+  },
+  "data_info": {
+    "n_samples": 1000,
+    "n_assets": 20,
+    "n_features": 7,
+    "n_regime_features": 5
+  }
+}

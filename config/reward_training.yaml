@@ -1,0 +1,120 @@
+# Reward-Based Training Configuration
+
+# Model Configuration
+model:
+  type: "ensemble"  # Options: deep_learning, ensemble, xgboost
+  input_features: 100  # Will be set automatically based on feature engineering
+  hidden_layers: [128, 64, 32]  # For deep learning models
+  learning_rate: 0.001
+  dropout_rate: 0.2
+  regularization: 0.01
+  reward_weight: 1.0
+
+# Training Configuration
+training:
+  lookback_days: 252  # 1 year of data
+  min_trades_for_training: 100
+  reward_threshold: 0.001  # Minimum reward to consider a trade successful
+  risk_free_rate: 0.02  # 2% annual risk-free rate
+  transaction_cost_bps: 10  # 10 basis points transaction cost
+  validation_split: 0.2  # 20% for validation
+  early_stopping_patience: 10
+  max_epochs: 100
+
+# Feature Engineering
+features:
+  technical_indicators:
+    sma_periods: [5, 10, 20, 50, 100, 200]
+    ema_periods: [5, 10, 20, 50, 100, 200]
+    momentum_periods: [3, 5, 10, 20, 50]
+    rsi_periods: [3, 5, 10, 20, 50]
+    bb_periods: [20, 50]
+    macd_periods: [12, 26, 9]
+    adx_period: 14
+    atr_period: 14
+  
+  market_regime:
+    trend_periods: [20, 50]
+    volatility_periods: [20, 100]
+    regime_thresholds:
+      bull: 0.02
+      bear: -0.02
+      sideways: 0.01
+      volatile: 0.8
+  
+  sentiment_indicators:
+    momentum_periods: [1, 3, 5, 10, 20]
+    gap_analysis: true
+    intraday_patterns: true
+  
+  risk_metrics:
+    var_percentiles: [0.05, 0.01]
+    cvar_percentiles: [0.05, 0.01]
+    drawdown_period: 20
+    skewness_period: 20
+    kurtosis_period: 20
+  
+  time_features:
+    day_of_week: true
+    month: true
+    quarter: true
+    market_sessions: true
+
+# Reward Function Configuration
+reward:
+  base_reward: 1.0
+  transaction_cost_bps: 10
+  risk_penalty: 0.1
+  min_reward_threshold: 0.001
+  max_position_size: 0.5
+  risk_free_rate: 0.02
+
+# Market Analysis Configuration
+market_analysis:
+  lookback_periods:
+    short: 5
+    medium: 20
+    long: 50
+    very_long: 200
+  
+  regime_classification:
+    trend_threshold: 0.02
+    volatility_threshold: 0.8
+    confidence_threshold: 0.5
+  
+  technical_signals:
+    rsi_oversold: 30
+    rsi_overbought: 70
+    bb_oversold: 0.2
+    bb_overbought: 0.8
+    volume_threshold: 1.5
+  
+  sentiment_indicators:
+    momentum_threshold: 0.01
+    gap_threshold: 0.02
+    intraday_threshold: 0.5
+
+# Risk Management Configuration
+risk_management:
+  max_position_size: 0.5
+  max_portfolio_risk: 0.2
+  stop_loss_bps: 200
+  take_profit_bps: 400
+  atr_multiplier: 2.0
+  var_limit: 0.05
+
+# Output Configuration
+output:
+  model_directory: "models/reward_based"
+  log_directory: "logs/reward_training"
+  report_directory: "reports/reward_training"
+  save_predictions: true
+  save_feature_importance: true
+  save_strategy_analysis: true
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/reward_training.log"
+  console: true

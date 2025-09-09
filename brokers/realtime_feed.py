@@ -14,8 +14,9 @@ import logging
 import os
 import time
 import websockets
-from datetime import datetime, timezone
-from typing import Dict, Any, Optional, Callable
+from datetime import UTC
+from typing import Any
+from collections.abc import Callable
 import pandas as pd
 
 logger = logging.getLogger(__name__)
@@ -35,15 +36,15 @@ class RealtimeFeed:
         self.heartbeat_timeout = heartbeat_timeout
         
         # State tracking
-        self.last_msg_ts: Optional[float] = None
-        self.last_bar_ts: Optional[pd.Timestamp] = None
+        self.last_msg_ts: float | None = None
+        self.last_bar_ts: pd.Timestamp | None = None
         self.trading_halted: bool = False
         self.latency_stats = []
         
         # Callbacks
-        self.on_bar: Optional[Callable[[Dict[str, Any]], None]] = None
-        self.on_heartbeat: Optional[Callable[[float], None]] = None
-        self.on_halt: Optional[Callable[[str], None]] = None
+        self.on_bar: Callable[[dict[str, Any]], None] | None = None
+        self.on_heartbeat: Callable[[float], None] | None = None
+        self.on_halt: Callable[[str], None] | None = None
         
         # WebSocket URL (Binance testnet)
         if testnet:
@@ -71,14 +72,14 @@ class RealtimeFeed:
         os.environ.pop("FLAG_TRADING_HALTED", None)
         logger.info("Trading resumed")
     
-    def _parse_kline(self, msg: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    def _parse_kline(self, msg: dict[str, Any]) -> dict[str, Any] | None:
         """Parse Binance kline message into OHLCV bar."""
         try:
             kline = msg.get('k', {})
             if not kline.get('x', False):  # Only process closed bars
                 return None
                 
-            bar_ts = pd.Timestamp(kline['t'], unit='ms', tz=timezone.utc)
+            bar_ts = pd.Timestamp(kline['t'], unit='ms', tz=UTC)
             
             # Skip duplicate timestamps
             if self.last_bar_ts and bar_ts <= self.last_bar_ts:
@@ -150,7 +151,7 @@ class RealtimeFeed:
         finally:
             heartbeat_task.cancel()
     
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """Get feed statistics for telemetry."""
         return {
             'symbol': self.symbol,

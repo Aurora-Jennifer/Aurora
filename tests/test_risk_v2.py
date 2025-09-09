@@ -7,7 +7,6 @@ Test per-trade risk budgeting, ATR-based stops, and portfolio position caps.
 """
 
 import pandas as pd
-import pytest
 from risk.v2 import apply, RiskV2Config
 
 

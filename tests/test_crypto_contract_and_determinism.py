@@ -6,23 +6,19 @@ Tests that crypto model training is deterministic and follows data contracts.
 This is the foundation test for production-safe crypto models.
 """
 
-import os
-import json
 import hashlib
 import tempfile
 from pathlib import Path
 import numpy as np
 import pandas as pd
-import pytest
 
 # Add project root to path
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.crypto.contracts import CryptoDataContract, enforce_determinism, create_data_lineage
+from core.crypto.contracts import CryptoDataContract, create_data_lineage
 from core.crypto.determinism import (
-    enforce_global_determinism, assert_dataframes_equal, assert_series_equal,
-    verify_feature_determinism, validate_training_reproducibility, DeterministicContext
+    enforce_global_determinism, verify_feature_determinism, validate_training_reproducibility, DeterministicContext
 )
 from core.utils.ts_cv import PurgedTimeSeriesSplit, validate_time_series_split
 from scripts.train_crypto import CryptoModelTrainer
@@ -68,7 +64,7 @@ def _create_crypto_fixture(n_samples: int = 200, symbols: list = None) -> pd.Dat
         
         # Generate OHLCV ensuring OHLC constraints
         data = []
-        for j, (date, close) in enumerate(zip(dates, prices)):
+        for j, (date, close) in enumerate(zip(dates, prices, strict=False)):
             open_price = prices[j-1] if j > 0 else close
             
             # Ensure High >= max(Open, Close) and Low <= min(Open, Close)

@@ -1,0 +1,95 @@
+# Portfolio construction configuration
+# Defines risk controls, selection criteria, and aggregation rules
+
+portfolio:
+  # Selection criteria
+  top_k: 10                    # Top K strategies per asset
+  min_sharpe: 0.0             # Minimum Sharpe ratio (relaxed for cost stress)
+  min_trades: 0               # Minimum number of trades (relaxed for cost stress)
+  min_active_days_pct: 0.0    # Minimum active days percentage (relaxed)
+  
+  # Risk management
+  target_volatility: 0.10     # 10% annualized target volatility
+  max_position_weight: 0.2    # 20% maximum position weight
+  max_net_exposure: 0.8       # 80% maximum net exposure
+  max_turnover: 0.3           # 30% maximum monthly turnover
+  
+  # Hysteresis and smoothing
+  hysteresis_factor: 0.1      # 10% hysteresis to reduce turnover
+  rebalance_frequency: 21     # Rebalance every 21 days (monthly)
+  
+  # Scoring weights
+  scoring:
+    sharpe_weight: 0.7        # 70% weight on Sharpe ratio
+    trades_weight: 0.2        # 20% weight on trade count
+    stability_weight: 0.1     # 10% weight on stability metrics
+
+risk:
+  # Position limits
+  max_position_weight: 1.0    # 100% max per position (before portfolio scaling)
+  max_net_exposure: 1.0       # 100% net exposure limit
+  max_turnover: 0.5           # 50% max turnover limit
+  
+  # Volatility controls
+  target_volatility: 0.10     # 10% annualized target
+  max_volatility: 0.20        # 20% maximum volatility
+  vol_lookback: 252           # 1 year volatility lookback
+  
+  # Drawdown controls
+  max_drawdown: 0.15          # 15% maximum drawdown
+  drawdown_lookback: 252      # 1 year drawdown lookback
+
+# Baseline strategies for comparison
+baselines:
+  - name: "1/N"
+    description: "Equal weight portfolio"
+    weight: 0.2
+  - name: "12-1_momentum"
+    description: "12-month momentum strategy"
+    weight: 0.2
+  - name: "mean_reversion"
+    description: "Simple mean reversion"
+    weight: 0.2
+  - name: "buy_hold"
+    description: "Buy and hold benchmark"
+    weight: 0.4
+
+# Output configuration
+output:
+  save_weights: true
+  save_performance: true
+  save_attribution: true
+  save_risk_metrics: true
+  save_rebalancing_log: true
+  
+  # File formats
+  weights_format: "csv"
+  performance_format: "json"
+  plots_format: "png"
+  
+  # Update frequency
+  daily_update: true
+  weekly_summary: true
+  monthly_report: true
+
+# Monitoring and alerts
+monitoring:
+  # Performance thresholds
+  min_sharpe: 0.5
+  max_drawdown: 0.15
+  min_trades_per_month: 5
+  
+  # Risk thresholds
+  max_position_concentration: 0.3
+  max_sector_concentration: 0.4
+  max_turnover_spike: 0.5
+  
+  # Alert configuration
+  alert_on_violations: true
+  alert_on_performance_degradation: true
+  alert_frequency: "daily"
+  
+  # Notification channels
+  email_alerts: false
+  slack_alerts: false
+  log_alerts: true

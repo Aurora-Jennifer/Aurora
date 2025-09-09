@@ -1,0 +1,38 @@
+# CatBoost GPU Model - LightGBM Alternative
+catboost_gpu:
+  use_gpu: true
+  params:
+    # GPU-specific parameters
+    task_type: "GPU"
+    devices: "0"
+    
+    # Model parameters
+    depth: 6
+    learning_rate: 0.05
+    iterations: 1500
+    l2_leaf_reg: 3.0
+    
+    # GPU optimization
+    border_count: 128
+    bootstrap_type: "Bayesian"
+    
+    # Early stopping
+    od_type: "Iter"
+    od_wait: 100
+    
+    # Random state
+    random_seed: 42
+    
+    # Verbosity
+    verbose: 100
+
+# Data optimization
+data:
+  dtype: "float32"
+  cache_data: true
+
+# Training optimization
+training:
+  batch_size: 8192
+  num_workers: 4
+  pin_memory: true

@@ -1,0 +1,113 @@
+{
+  "multi_symbol_results": {
+    "total_return": 0.007947516046945987,
+    "sharpe_ratio": 2.829375275693277,
+    "max_drawdown": -0.0038247975438145954,
+    "total_trades": 0,
+    "avg_diversification": 0.9933157261334851,
+    "final_value": 100782.65623450206,
+    "num_positions": 5
+  },
+  "feature_analysis": {
+    "total_features": 659,
+    "feature_categories": {
+      "individual": 587,
+      "correlation": 46,
+      "cross_asset": 15,
+      "portfolio": 11
+    },
+    "missing_data_pct": 0.5085963581183611,
+    "feature_types": {
+      "float64": 659
+    }
+  },
+  "data_summary": {
+    "total_symbols": 5,
+    "available_symbols": [
+      "SPY",
+      "QQQ",
+      "IWM",
+      "AAPL",
+      "MSFT"
+    ],
+    "data_ranges": {
+      "SPY": {
+        "start_date": "2024-11-14",
+        "end_date": "2025-09-04",
+        "total_days": 200,
+        "has_features": false
+      },
+      "QQQ": {
+        "start_date": "2024-11-14",
+        "end_date": "2025-09-04",
+        "total_days": 200,
+        "has_features": false
+      },
+      "IWM": {
+        "start_date": "2024-11-14",
+        "end_date": "2025-09-04",
+        "total_days": 200,
+        "has_features": false
+      },
+      "AAPL": {
+        "start_date": "2024-11-14",
+        "end_date": "2025-09-04",
+        "total_days": 200,
+        "has_features": false
+      },
+      "MSFT": {
+        "start_date": "2024-11-14",
+        "end_date": "2025-09-04",
+        "total_days": 200,
+        "has_features": false
+      }
+    },
+    "last_update": null
+  },
+  "correlation_matrix": {
+    "SPY": {
+      "SPY": 1.0,
+      "QQQ": 0.9726747788047033,
+      "IWM": 0.8935985245335909,
+      "AAPL": 0.7830613228317311,
+      "MSFT": 0.743083187122732
+    },
+    "QQQ": {
+      "SPY": 0.9726747788047033,
+      "QQQ": 1.0,
+      "IWM": 0.8464362520098934,
+      "AAPL": 0.7560707299723208,
+      "MSFT": 0.7825525985430103
+    },
+    "IWM": {
+      "SPY": 0.8935985245335909,
+      "QQQ": 0.8464362520098934,
+      "IWM": 1.0,
+      "AAPL": 0.6536193298176628,
+      "MSFT": 0.5951056275211303
+    },
+    "AAPL": {
+      "SPY": 0.7830613228317311,
+      "QQQ": 0.7560707299723208,
+      "IWM": 0.6536193298176628,
+      "AAPL": 1.0,
+      "MSFT": 0.5484585181591553
+    },
+    "MSFT": {
+      "SPY": 0.743083187122732,
+      "QQQ": 0.7825525985430103,
+      "IWM": 0.5951056275211303,
+      "AAPL": 0.5484585181591553,
+      "MSFT": 1.0
+    }
+  },
+  "volatility_ranking": {
+    "AAPL": 0.34674146394436384,
+    "MSFT": 0.2569789448734836,
+    "QQQ": 0.2539109345254276,
+    "IWM": 0.23799866845836168,
+    "SPY": 0.21186771468437493
+  },
+  "overall_success_rate": true,
+  "avg_reward": 0.007947516046945987
+}

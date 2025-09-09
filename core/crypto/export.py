@@ -8,26 +8,26 @@ Ensures ONNX models produce identical predictions to native models.
 
 import logging
 import json
-from typing import List, Dict, Any, Union, Optional
+from typing import Any
 from pathlib import Path
 import numpy as np
 import pandas as pd
 import onnx
 import onnxruntime as ort
 from sklearn.base import BaseEstimator
-from sklearn.linear_model import Ridge
 import joblib
+from datetime import UTC
 
 logger = logging.getLogger(__name__)
 
 
 def to_onnx(
     model: BaseEstimator,
-    feature_names: List[str],
-    output_path: Union[str, Path],
+    feature_names: list[str],
+    output_path: str | Path,
     model_name: str = "crypto_model",
     opset_version: int = 11
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Export sklearn model to ONNX format with full metadata.
     
@@ -102,9 +102,9 @@ def to_onnx(
 
 
 def onnx_predict(
-    onnx_path: Union[str, Path],
-    X: Union[np.ndarray, pd.DataFrame],
-    session_options: Optional[ort.SessionOptions] = None
+    onnx_path: str | Path,
+    X: np.ndarray | pd.DataFrame,
+    session_options: ort.SessionOptions | None = None
 ) -> np.ndarray:
     """
     Make predictions using ONNX model.
@@ -158,12 +158,12 @@ def onnx_predict(
 
 def validate_onnx_parity(
     native_model: BaseEstimator,
-    onnx_path: Union[str, Path],
-    X_test: Union[np.ndarray, pd.DataFrame],
+    onnx_path: str | Path,
+    X_test: np.ndarray | pd.DataFrame,
     tolerance: float = 1e-5,
-    n_samples: Optional[int] = None,
+    n_samples: int | None = None,
     random_seed: int = 42
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Validate that ONNX model produces identical predictions to native model.
     
@@ -223,12 +223,12 @@ def validate_onnx_parity(
         
         # Log results
         if is_parity:
-            logger.info(f"✅ ONNX parity validation PASSED")
+            logger.info("✅ ONNX parity validation PASSED")
             logger.info(f"   Samples tested: {n_samples}")
             logger.info(f"   Max difference: {max_diff:.2e} (tolerance: {tolerance:.2e})")
             logger.info(f"   Mean difference: {mean_diff:.2e}")
         else:
-            logger.error(f"❌ ONNX parity validation FAILED")
+            logger.error("❌ ONNX parity validation FAILED")
             logger.error(f"   Max difference: {max_diff:.2e} > tolerance: {tolerance:.2e}")
             logger.error(f"   Mean difference: {mean_diff:.2e}")
             logger.error(f"   Sample differences: {abs_diff[:5]}")
@@ -242,11 +242,11 @@ def validate_onnx_parity(
 
 def create_model_artifact_manifest(
     native_model: BaseEstimator,
-    onnx_path: Union[str, Path],
-    feature_names: List[str],
-    training_metadata: Dict[str, Any],
-    parity_results: Dict[str, Any]
-) -> Dict[str, Any]:
+    onnx_path: str | Path,
+    feature_names: list[str],
+    training_metadata: dict[str, Any],
+    parity_results: dict[str, Any]
+) -> dict[str, Any]:
     """
     Create comprehensive artifact manifest for model deployment.
     
@@ -261,7 +261,7 @@ def create_model_artifact_manifest(
         Complete artifact manifest
     """
     import hashlib
-    from datetime import datetime, timezone
+    from datetime import datetime
     
     # Calculate model hash for tracking
     with open(onnx_path, 'rb') as f:
@@ -272,7 +272,7 @@ def create_model_artifact_manifest(
     
     manifest = {
         'artifact_version': '1.0',
-        'created_at': datetime.now(timezone.utc).isoformat(),
+        'created_at': datetime.now(UTC).isoformat(),
         'model': {
             'type': type(native_model).__name__,
             'parameters': model_params,
@@ -304,13 +304,13 @@ def create_model_artifact_manifest(
 
 def export_crypto_model_complete(
     model: BaseEstimator,
-    scaler: Optional[BaseEstimator],
-    feature_names: List[str],
-    X_test: Union[np.ndarray, pd.DataFrame],
-    output_dir: Union[str, Path],
+    scaler: BaseEstimator | None,
+    feature_names: list[str],
+    X_test: np.ndarray | pd.DataFrame,
+    output_dir: str | Path,
     model_name: str = "crypto_v1",
     tolerance: float = 1e-5
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Complete model export pipeline with all validation and artifacts.
     

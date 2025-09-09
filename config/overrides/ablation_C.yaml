@@ -1,0 +1,18 @@
+# Ablation C: Residuals + VolFix enabled
+features:
+  residuals: true
+  volfix: true
+  allowlist: results/production/features_whitelist.json
+train:
+  horizon: 10
+  embargo_days: 3
+  device: cuda
+  random_seed: 42
+eval:
+  costs: base
+  slippage_bps: 5
+  fee_per_share: 0.001
+notes: |
+  Full configuration for ablation study.
+  Includes residualization and volatility fixes.
+  Using safe feature allowlist from leakage elimination.

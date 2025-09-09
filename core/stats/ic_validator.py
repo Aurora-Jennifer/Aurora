@@ -10,7 +10,6 @@ This module implements professional-grade IC analysis with:
 
 import warnings
 from dataclasses import dataclass
-from typing import Tuple, Optional, List
 import numpy as np
 import pandas as pd
 from scipy import stats
@@ -24,7 +23,7 @@ class ICResult:
     ic_std: float
     t_stat: float
     p_value: float
-    confidence_interval: Tuple[float, float]
+    confidence_interval: tuple[float, float]
     hit_rate: float  # Proportion of positive IC periods
     num_observations: int
     method: str = "pearson"
@@ -37,18 +36,17 @@ class ICResult:
         """Classify IC quality."""
         if abs(self.mean_ic) < 0.02:
             return "weak"
-        elif abs(self.mean_ic) < 0.05:
+        if abs(self.mean_ic) < 0.05:
             return "moderate"
-        elif abs(self.mean_ic) < 0.10:
+        if abs(self.mean_ic) < 0.10:
             return "strong"
-        else:
-            return "exceptional"
+        return "exceptional"
 
 
 class ICValidator:
     """Professional IC validation with statistical rigor."""
     
-    def __init__(self, bootstrap_samples: int = 1000, block_length: Optional[int] = None):
+    def __init__(self, bootstrap_samples: int = 1000, block_length: int | None = None):
         """
         Initialize IC validator.
         
@@ -64,7 +62,7 @@ class ICValidator:
         predictions: pd.Series, 
         returns: pd.Series,
         method: str = "pearson",
-        lags: Optional[int] = None
+        lags: int | None = None
     ) -> ICResult:
         """
         Compute IC statistics with HAC standard errors and bootstrap CI.
@@ -204,7 +202,7 @@ class ICValidator:
         returns: np.ndarray, 
         method: str,
         alpha: float = 0.05
-    ) -> Tuple[float, float]:
+    ) -> tuple[float, float]:
         """
         Compute bootstrap confidence interval using block bootstrap.
         
@@ -257,7 +255,7 @@ class ICValidator:
         predictions: np.ndarray, 
         returns: np.ndarray, 
         block_length: int
-    ) -> Tuple[np.ndarray, np.ndarray]:
+    ) -> tuple[np.ndarray, np.ndarray]:
         """
         Perform block bootstrap resampling.
         
@@ -354,9 +352,9 @@ class ICValidator:
     
     def multiple_testing_adjustment(
         self, 
-        ic_results: List[ICResult], 
+        ic_results: list[ICResult], 
         method: str = "bonferroni"
-    ) -> List[ICResult]:
+    ) -> list[ICResult]:
         """
         Apply multiple testing correction to IC results.
         

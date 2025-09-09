@@ -1,0 +1,65 @@
+seed: 42
+
+data:
+  symbols: ["SPY","QQQ"]
+  min_days: 800         # guardrail
+  align_method: "inner" # no forward-fill across test
+
+folds:
+  lookback_days: 400
+  test_days: 120
+  n_folds: 3
+  purge_days: 5         # gap between train/test
+
+model:
+  d_in: 128             # post-feature count (increased from 64)
+  arch: "mlp_128_256_128_3" # Increased capacity for better learning
+  params_cap: 50000     # Increased cap to allow more parameters
+  per_symbol_heads: false
+
+features:
+  topk_supervised: 128  # keep best 128 by MI on TRAIN only (increased from 64)
+  use_pca: true         # enable PCA with 128 components
+  winsor_p: 0.01
+
+train:
+  epochs_max: 20
+  early_stop_patience: 3
+  batch_size: 1024
+  lr: 3e-4
+  warm_start_lr: 3e-4    # Higher LR for warm-start phase
+  weight_decay: 1e-4
+  amp_dtype: "fp16"
+  class_weights: [1.2, 1.2, 0.8]
+  entropy_bonus: 0.005
+
+loader:
+  num_workers: 8
+  pin_memory: true
+  prefetch_factor: 4
+  persistent_workers: true
+
+decision:
+  hold_id: 2
+  costs_bps: 4.0                 # comm+slip entry+exit
+  calibrate_temperature: true
+  tau_search: [0.33, 0.60, 28]   # start, stop, steps
+  selective_quantile: 0.80       # top-20% confidence only
+  margin_bps_mult: 1.0           # 1.0 * costs_bps as margin
+  use_advantage_gating: true     # use Q-V advantage instead of probs
+  trade_topk: null               # null = no limit, int = top-k symbols per day
+  min_trade_frac: 0.0            # minimum fraction of days to trade
+
+report:
+  benchmarks: ["BH","MOM20","HOLD"]
+  cost_grid_bps: [0,2,4,8]
+  gates:
+    sr_min: 0.30
+    pval_max: 0.10
+    max_dd: 0.10
+    turnover_yr_max: 2.5
+
+ops:
+  save_dir: "artifacts"
+  fail_fast_on_insufficient_data: true
+  resume: true

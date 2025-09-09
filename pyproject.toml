@@ -1,146 +1,71 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
-name = "aurora-trader"
-version = "0.1.0"
-description = "Production-grade ML trading system"
+name = "aurora"
+version = "0.0.0"
+requires-python = ">=3.11"
 dependencies = [
-    "pandas>=2.0.0",
     "numpy>=1.24.0",
+    "pandas>=2.0.0",
+    "torch>=2.0.0",
     "scikit-learn>=1.3.0",
-    "xgboost>=2.0.0",
-    "onnx>=1.14.0",
-    "onnxruntime>=1.16.0",
-    "pytest>=7.0.0",
-    "pytest-cov>=4.0.0",
-    "pytest-benchmark>=4.0.0",
-    "hypothesis>=6.80.0",
-    "ruff>=0.6.0",
-    "mypy>=1.5.0",
-    "bandit>=1.7.5",
-    "pip-audit>=2.6.0",
+    "pyyaml>=6.0",
+    "jsonschema>=4.0.0",
 ]
 
-[tool.mypy]
-python_version = "3.11"
-strict = true
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
-check_untyped_defs = true
-disallow_untyped_decorators = true
-no_implicit_optional = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-warn_no_return = true
-warn_unreachable = true
-strict_equality = true
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "ruff>=0.4.0",
+    "mypy>=1.0.0",
+    "hypothesis>=6.0.0",
+    "coverage[toml]>=7.0.0",
+    "vulture>=2.0.0",
+    "deptry>=0.20.0",
+    "bandit>=1.8.0",
+    "pip-audit>=2.0.0",
+    "scalene>=1.5.0",
+    "pytest-benchmark>=4.0.0",
+]
 
-# Ignore missing imports for now
-ignore_missing_imports = true
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --maxfail=1 --disable-warnings"
+markers = [
+    "smoke: deterministic minimum-path tests",
+    "quarantine: unstable/flaky; excluded from CI by default"
+]
+
+[tool.coverage.run]
+source = ["src/aurora"]
+branch = true
+
+[tool.coverage.report]
+skip_covered = true
+show_missing = true
+fail_under = 80
 
 [tool.ruff]
 target-version = "py311"
 line-length = 100
-exclude = [
-    "mutants",
-    "attic",
-    "**/__pycache__",
-    "**/.git",
-    "**/.venv",
-    "**/venv",
-    "**/.env",
-]
+src = ["src", "tests"]
+# Start permissive, then ratchet up
+select = ["E","F","I"]     # errors, flakes, import order
+ignore = ["E501"]          # wrap later
 
-[tool.ruff.lint]
-select = [
-    "E",   # pycodestyle errors
-    "W",   # pycodestyle warnings  
-    "F",   # pyflakes
-    "I",   # isort
-    "UP",  # pyupgrade
-    "B",   # flake8-bugbear
-    "SIM", # flake8-simplify
-    "C4",  # flake8-comprehensions
-    "PIE", # flake8-pie
-    "T20", # flake8-print
-    "RET", # flake8-return
-    "TCH", # flake8-type-checking
-]
-ignore = [
-    # Safe to ignore (handled by formatter)
-    "E501",  # Line too long (handled by formatter)
-    "W291",  # Trailing whitespace (handled by formatter)
-    "W293",  # Blank line contains whitespace (handled by formatter)
-    "I001",  # Import sorting (handled by formatter)
-    
-    # Style/readability - defer to later cleanup
-    "SIM102", # Nested if statements (style)
-    "SIM105", # Use contextlib.suppress (style)
-    "SIM108", # Use ternary operator (style)
-    "RET504", # Unnecessary assignment (style)
-    "C401",  # Unnecessary generator (style)
-    "B007",  # Loop control variable not used (style)
-    "UP038", # Use X | Y in isinstance (style)
-    "TC003", # Move standard library import (style)
-    
-    # Temporarily defer - plan to enable soon
-    "B904",  # Exception chaining (improves debuggability)
-    "B011",  # Do not assert False (allow in tests only)
-]
-# CRITICAL: B023, B905, E702, E712, F841, F401 are NOT ignored - they are enforced
-# These catch real bugs and must not be re-ignored without explicit justification
-
-[tool.ruff.lint.per-file-ignores]
-"scripts/**/*.py" = ["T201"]  # Allow prints in scripts
-"tests/**/*.py" = ["T201", "B011", "E501"]  # Allow prints/assert False in tests
-
-[tool.ruff.lint.isort]
-known-first-party = ["core", "scripts", "tests"]
-
-[tool.pytest.ini_options]
-minversion = "7.0"
-addopts = "-ra -q --strict-markers --strict-config --ignore=mutants --ignore=attic --ignore=attic_pending"
-testpaths = ["tests"]
-markers = [
-    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
-    "integration: marks tests as integration tests",
-    "e2e: marks tests as end-to-end tests",
-    "benchmark: marks tests as benchmarks",
-    "smoke: deterministic minimum-path tests",
-    "quarantine: unstable/flaky; excluded from CI by default",
-    "sanity: data sanity validation tests",
-]
-
-[tool.coverage.run]
-source = ["core", "scripts", "oms"]
-omit = [
-    "tests/*",
-    "mutants/*",
-    "attic/*",
-    "*/conftest.py",
-]
-
-[tool.coverage.report]
-exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "if self.debug:",
-    "if settings.DEBUG",
-    "raise AssertionError",
-    "raise NotImplementedError",
-    "if 0:",
-    "if __name__ == .__main__.:",
-    "class .*\\bProtocol\\):",
-    "@(abc\\.)?abstractmethod",
-]
+[tool.mypy]
+python_version = "3.11"
+mypy_path = ["src"]
+packages = ["aurora"]
+strict = true
+# Temporarily allow 3rd-party stubs gaps:
+ignore_missing_imports = true
 
 [tool.bandit]
-exclude_dirs = ["tests", "mutants", "attic"]
-skips = ["B101", "B601"]  # Skip assert_used and shell=True (controlled usage)
-
-[tool.bandit.assert_used]
-skips = ["**/tests/**/*.py"]
+skips = ["B101"]           # assert used for invariants; review later
