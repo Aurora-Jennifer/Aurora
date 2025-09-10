@@ -39,6 +39,12 @@ class PositionSizingConfig:
     min_shares: int = 1
     # New: capital utilization factor to scale positions
     capital_utilization_factor: float = 1.0
+    # Professional-grade position management
+    position_cap: float = 15000.0  # Hard risk cap per position
+    buffer_band_pct: float = 0.05  # 5% buffer zone around target
+    rebalance_trigger: str = "signal_change"  # signal_change, periodic, threshold_breach
+    order_lot_size: int = 5  # Round to nearest N shares
+    min_rebalance_threshold: float = 0.02  # 2% minimum deviation to trigger rebalance
 
 
 class PositionSizer:
@@ -290,6 +296,105 @@ class PositionSizer:
         # Note: qty here is TARGET position, not order delta
         logger.info(f"SizeDecision: {symbol} qty={qty:+d} (TARGET), notional={notional:.2f}, intended_val={intended_val:.2f}")
         return SizeDecision(qty=qty, ref_price=price, notional=abs(notional))
+
+    def compute_size_with_buffer(self, symbol: str, target_weight: float, price: float,
+                                portfolio_value: float, current_position: int,
+                                min_notional: float, capital_utilization_factor: float = 1.0) -> Optional[SizeDecision]:
+        """
+        Professional-grade position sizing with buffer zones and proper rebalancing triggers.
+        
+        This method implements the logic described in the user's request:
+        - Separate signal target vs risk cap
+        - Add buffer zone/band to prevent micro-rebalancing
+        - Choose appropriate rebalance trigger
+        - Order granularity to avoid micro-scalping
+        
+        Args:
+            symbol: Trading symbol
+            target_weight: Target position weight (-1.0 to 1.0)
+            price: Current price per share
+            portfolio_value: Total portfolio value
+            current_position: Current position in shares
+            min_notional: Minimum order notional
+            capital_utilization_factor: Factor to scale intended position values
+            
+        Returns:
+            SizeDecision with order delta (not target position), None if no action needed
+        """
+        # Calculate signal target (what the model wants)
+        intended_val = abs(target_weight) * portfolio_value * capital_utilization_factor
+        signal_target_val = min(intended_val, self.config.position_cap)  # Clip at risk cap
+        
+        # Calculate current position value
+        current_pos_val = current_position * price
+        
+        # Calculate buffer zone
+        buffer_band = self.config.buffer_band_pct
+        lower_bound = signal_target_val * (1 - buffer_band)
+        upper_bound = signal_target_val * (1 + buffer_band)
+        
+        # Determine if we need to rebalance
+        rebalance_needed = False
+        new_target_val = signal_target_val
+        
+        if current_pos_val < lower_bound:
+            # Need to buy up to lower bound
+            new_target_val = lower_bound
+            rebalance_needed = True
+            logger.debug(f"{symbol}: Current ${current_pos_val:.2f} < lower bound ${lower_bound:.2f}, buying to ${new_target_val:.2f}")
+        elif current_pos_val > upper_bound:
+            # Need to sell down to upper bound
+            new_target_val = upper_bound
+            rebalance_needed = True
+            logger.debug(f"{symbol}: Current ${current_pos_val:.2f} > upper bound ${upper_bound:.2f}, selling to ${new_target_val:.2f}")
+        else:
+            # Within buffer zone - no action needed
+            logger.debug(f"{symbol}: Current ${current_pos_val:.2f} within buffer zone [${lower_bound:.2f}, ${upper_bound:.2f}], no action")
+            return None
+        
+        # Check minimum rebalance threshold
+        rebalance_amount = abs(new_target_val - current_pos_val)
+        min_rebalance_val = portfolio_value * self.config.min_rebalance_threshold
+        
+        if rebalance_amount < min_rebalance_val:
+            logger.debug(f"{symbol}: Rebalance amount ${rebalance_amount:.2f} below threshold ${min_rebalance_val:.2f}, no action")
+            return None
+        
+        # Convert target value to shares with lot size rounding
+        target_shares = new_target_val / price
+        target_shares_rounded = round(target_shares / self.config.order_lot_size) * self.config.order_lot_size
+        
+        # Calculate order delta
+        order_delta = int(target_shares_rounded - current_position)
+        
+        # Apply direction based on target weight
+        if target_weight < 0:
+            order_delta = -abs(order_delta)
+        else:
+            order_delta = abs(order_delta)
+        
+        # Final validation
+        if order_delta == 0:
+            logger.debug(f"{symbol}: Order delta is zero after rounding, no action")
+            return None
+        
+        # Check minimum notional
+        order_notional = abs(order_delta) * price
+        if order_notional < min_notional:
+            logger.debug(f"{symbol}: Order notional ${order_notional:.2f} below minimum ${min_notional:.2f}")
+            return None
+        
+        # Create SizeDecision with order delta (not target position)
+        logger.info(f"SizeDecision: {symbol} order_delta={order_delta:+d}, current={current_position:+d}, "
+                   f"target_shares={target_shares_rounded:.0f}, notional=${order_notional:.2f}, "
+                   f"signal_target=${signal_target_val:.2f}, buffer=[${lower_bound:.2f}, ${upper_bound:.2f}]")
+        
+        return SizeDecision(
+            qty=order_delta,  # This is the ORDER DELTA, not target position
+            ref_price=price,
+            notional=order_notional,
+            reason=f"buffer_rebalance_{'buy' if order_delta > 0 else 'sell'}"
+        )
 
     def _convert_to_shares(self, position_value: float, current_price: float) -> int:
         """

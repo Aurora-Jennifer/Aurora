@@ -256,41 +256,38 @@ class ExecutionEngine:
                         logger.info("Skip shorting %s (policy long-only)", symbol)
                         continue
                 
-                # Calculate position size using new compute_size method
+                # Calculate position size using professional-grade buffer method
                 ref_price = current_prices[symbol]
                 min_notional = self.risk_manager.risk_limits.min_order_notional
                 max_order_notional = self.risk_manager.risk_limits.max_order_notional
                 
-                logger.debug(f"Computing size for {symbol}: signal={signal:.4f}, price={ref_price:.2f}, min_notional={min_notional}, max_notional={max_order_notional}")
+                # Get current position for buffer-based sizing
+                current_position = pos_qty(current_positions.get(symbol, 0))
+                
+                logger.debug(f"Computing size for {symbol}: signal={signal:.4f}, price={ref_price:.2f}, current_pos={current_position}, min_notional={min_notional}")
                 
                 # Get capital utilization factor from config
                 capital_utilization_factor = getattr(self.config, 'capital_utilization_factor', 1.0)
                 
-                size_decision = self.position_sizer.compute_size(
+                # Use buffer-based position sizing to prevent micro-rebalancing
+                size_decision = self.position_sizer.compute_size_with_buffer(
                     symbol=symbol,
                     target_weight=signal,
                     price=ref_price,
                     portfolio_value=portfolio_metrics.total_value,
+                    current_position=current_position,
                     min_notional=min_notional,
-                    max_order_notional=max_order_notional,
                     capital_utilization_factor=capital_utilization_factor
                 )
                 
                 if size_decision is None:
-                    # Determine skip reason for telemetry
-                    if ref_price > max_order_notional:
-                        if symbol not in skipped_symbols:
-                            self.metrics['skips_price_cap'] += 1
-                            skipped_symbols.add(symbol)
-                        logger.info("HOLD %s: price=%.2f > cap=%.2f (w=%.4f)", symbol, ref_price, max_order_notional, signal)
-                    else:
-                        self.metrics['skips_size_zero'] += 1
-                        logger.info("HOLD %s: size zero (w=%.4f, px=%.2f)", symbol, signal, ref_price)
+                    # No action needed (within buffer zone or below thresholds)
+                    logger.debug(f"HOLD {symbol}: within buffer zone or below thresholds (signal={signal:.4f}, current_pos={current_position})")
                     continue
                 
-                # Store target position
-                target_shares[symbol] = size_decision.qty
-                logger.debug(f"Target position for {symbol}: {size_decision.qty} shares")
+                # Store order delta (not target position)
+                target_shares[symbol] = size_decision.qty  # This is now the ORDER DELTA
+                logger.debug(f"Order delta for {symbol}: {size_decision.qty} shares (current={current_position}, new_target={current_position + size_decision.qty})")
                 
                 
             except Exception as e:
@@ -301,26 +298,32 @@ class ExecutionEngine:
         if target_shares:
             logger.info(f"Planning two-phase execution for {len(target_shares)} symbols")
             
-            # Debug: log deltas before planning with explicit cur/tgt/delta
+            # Debug: log order deltas (target_shares now contains order deltas, not target positions)
             min_shares = getattr(self.config, 'min_shares', 1)
             min_notional = self.risk_manager.risk_limits.min_order_notional
             
-            for symbol, target_qty in target_shares.items():
+            for symbol, order_delta in target_shares.items():
                 current_qty = pos_qty(current_positions.get(symbol, 0))
-                delta = target_qty - current_qty
+                new_target_qty = current_qty + order_delta
                 
                 # Apply minimum trade threshold to prevent churn
-                if abs(delta) < min_shares:
-                    delta = 0
-                elif abs(delta * current_prices.get(symbol, 0)) < min_notional:
-                    delta = 0
+                if abs(order_delta) < min_shares:
+                    order_delta = 0
+                elif abs(order_delta * current_prices.get(symbol, 0)) < min_notional:
+                    order_delta = 0
                 
-                logger.info(f"PLAN_DELTA {symbol} cur={current_qty:+d} tgt={target_qty:+d} delta={delta:+d}")
+                logger.info(f"PLAN_DELTA {symbol} cur={current_qty:+d} order_delta={order_delta:+d} new_tgt={new_target_qty:+d}")
             
             # Plan batches: reducers first, then openers
+            # Convert order deltas to target positions for plan_batches
+            target_positions = {}
+            for symbol, order_delta in target_shares.items():
+                current_qty = pos_qty(current_positions.get(symbol, 0))
+                target_positions[symbol] = current_qty + order_delta
+            
             reducers, openers = plan_batches(
                 current_positions={symbol: pos_qty(pos) for symbol, pos in current_positions.items()},
-                target_shares=target_shares,
+                target_shares=target_positions,  # Now contains target positions, not order deltas
                 ref_prices=current_prices
             )
             

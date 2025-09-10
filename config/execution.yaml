@@ -22,6 +22,12 @@ position_sizing:
   order_notional_cap: 15000.0  # Increased from 500 to 5000
   min_shares: 1
   capital_utilization_factor: 2.0  # Scale positions by 2x to use more capital
+  # Professional-grade position management
+  position_cap: 15000.0  # Hard risk cap per position
+  buffer_band_pct: 0.05  # 5% buffer zone around target
+  rebalance_trigger: "signal_change"  # signal_change, periodic, threshold_breach
+  order_lot_size: 5  # Round to nearest 5 shares
+  min_rebalance_threshold: 0.02  # 2% minimum deviation to trigger rebalance
 risk_management:
   max_daily_loss: 0.02
   max_position_risk: 0.05
