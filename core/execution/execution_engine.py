@@ -209,6 +209,9 @@ class ExecutionEngine:
                 metadata={}
             )
         
+        # Clear transient state at start of each bar to prevent phantom updates
+        self.order_manager.submitted_order_ids.clear()
+        
         # Get current portfolio metrics
         portfolio_metrics = self.portfolio_manager.calculate_portfolio_metrics()
         current_positions = self.portfolio_manager.get_all_positions()
@@ -307,19 +310,32 @@ class ExecutionEngine:
                 new_target_qty = current_qty + order_delta
                 
                 # Apply minimum trade threshold to prevent churn
+                original_delta = order_delta
+                why_not = None
+                
                 if abs(order_delta) < min_shares:
+                    why_not = f"under_min_shares({abs(order_delta)}<{min_shares})"
                     order_delta = 0
                 elif abs(order_delta * current_prices.get(symbol, 0)) < min_notional:
+                    notional = abs(order_delta * current_prices.get(symbol, 0))
+                    why_not = f"under_min_notional(${notional:.2f}<${min_notional})"
                     order_delta = 0
                 
-                logger.info(f"PLAN_DELTA {symbol} cur={current_qty:+d} order_delta={order_delta:+d} new_tgt={new_target_qty:+d}")
+                if why_not:
+                    logger.info(f"FILTERED {symbol}: {why_not} (original_delta={original_delta:+d})")
+                else:
+                    logger.info(f"PLAN_DELTA {symbol} cur={current_qty:+d} order_delta={order_delta:+d} new_tgt={new_target_qty:+d}")
+                
+                # Update target_shares with filtered delta
+                target_shares[symbol] = order_delta
             
             # Plan batches: reducers first, then openers
-            # Convert order deltas to target positions for plan_batches
+            # Filter out zero deltas and convert to target positions for plan_batches
             target_positions = {}
             for symbol, order_delta in target_shares.items():
-                current_qty = pos_qty(current_positions.get(symbol, 0))
-                target_positions[symbol] = current_qty + order_delta
+                if order_delta != 0:  # Only include non-zero deltas
+                    current_qty = pos_qty(current_positions.get(symbol, 0))
+                    target_positions[symbol] = current_qty + order_delta
             
             reducers, openers = plan_batches(
                 current_positions={symbol: pos_qty(pos) for symbol, pos in current_positions.items()},
@@ -486,9 +502,11 @@ class ExecutionEngine:
             session_start = now_utc().replace(hour=0, minute=0, second=0, microsecond=0)
             recent_fills = self.order_manager.get_filled_orders(since=session_start)
             
-            # Update portfolio for each fill
+            # Update portfolio for each fill (only for orders submitted by this session)
+            submitted_order_ids = getattr(self.order_manager, 'submitted_order_ids', set())
             for order in recent_fills:
-                if order.filled_at and order.filled_price and order.filled_quantity > 0:
+                if (order.filled_at and order.filled_price and order.filled_quantity > 0 and 
+                    order.id in submitted_order_ids):
                     self.portfolio_manager.update_position_from_fill(
                         symbol=order.symbol,
                         quantity=order.filled_quantity,

@@ -309,6 +309,7 @@ class OrderManager:
         self.filled_orders: Dict[str, Order] = {}   # alpaca_order_id -> Order
         self.cancelled_orders: Dict[str, Order] = {} # alpaca_order_id -> Order
         self.inflight_orders: Set[str] = set()  # Orders awaiting ACK
+        self.submitted_order_ids: Set[str] = set()  # Orders submitted by this session
         
         # Initialize pre-trade gate
         # Self.config should contain risk and order settings; pass clients for richer checks
@@ -629,6 +630,7 @@ class OrderManager:
             
             # Track the order
             self.pending_orders[alpaca_order.id] = order
+            self.submitted_order_ids.add(alpaca_order.id)
             
             # Get broker status
             broker_status = getattr(alpaca_order, 'status', 'unknown')
