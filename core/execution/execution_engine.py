@@ -112,6 +112,10 @@ class ExecutionEngine:
         self.last_execution = None
         self.execution_count = 0
         
+        # Transient state for each bar
+        self.planned_orders = []
+        self.fills_this_bar = []
+        
         # Telemetry counters
         self.metrics = {
             'skips_price_cap': 0,
@@ -210,7 +214,10 @@ class ExecutionEngine:
             )
         
         # Clear transient state at start of each bar to prevent phantom updates
-        self.order_manager.submitted_order_ids.clear()
+        # Note: submitted_order_ids should persist across bars to track session orders
+        # Clear other transient state that could cause phantom updates
+        self.planned_orders = []
+        self.fills_this_bar = []
         
         # Get current portfolio metrics
         portfolio_metrics = self.portfolio_manager.calculate_portfolio_metrics()
@@ -454,8 +461,11 @@ class ExecutionEngine:
         
         # Calculate execution metrics
         execution_time = time.time() - start_time
+        
+        # Only count fills for orders submitted by this session
+        submitted_order_ids = getattr(self.order_manager, 'submitted_order_ids', set())
         filled_orders = self.order_manager.get_filled_orders()
-        orders_filled = len(filled_orders)
+        orders_filled = len([order for order in filled_orders if order.id in submitted_order_ids])
         
         # Update execution state
         self.last_execution = now_utc()
@@ -463,6 +473,12 @@ class ExecutionEngine:
         
         # Collect telemetry from order manager
         order_manager_metrics = getattr(self.order_manager, 'metrics', {})
+        
+        # Invariant guard: no fills without submissions
+        if submitted_orders_count == 0 and orders_filled > 0:
+            logger.error(f"INVARIANT BREACH: orders_submitted={submitted_orders_count}, orders_filled={orders_filled}")
+            # Reset orders_filled to 0 to prevent phantom accounting
+            orders_filled = 0
         
         # Prepare result
         result = ExecutionResult(
@@ -504,15 +520,20 @@ class ExecutionEngine:
             
             # Update portfolio for each fill (only for orders submitted by this session)
             submitted_order_ids = getattr(self.order_manager, 'submitted_order_ids', set())
-            for order in recent_fills:
-                if (order.filled_at and order.filled_price and order.filled_quantity > 0 and 
-                    order.id in submitted_order_ids):
-                    self.portfolio_manager.update_position_from_fill(
-                        symbol=order.symbol,
-                        quantity=order.filled_quantity,
-                        price=order.filled_price,
-                        side=order.side.value
-                    )
+            
+            # Only process fills if we actually submitted orders this session
+            if submitted_order_ids:
+                for order in recent_fills:
+                    if (order.filled_at and order.filled_price and order.filled_quantity > 0 and 
+                        order.id in submitted_order_ids):
+                        self.portfolio_manager.update_position_from_fill(
+                            symbol=order.symbol,
+                            quantity=order.filled_quantity,
+                            price=order.filled_price,
+                            side=order.side.value
+                        )
+            else:
+                logger.debug("No orders submitted this session - skipping fill processing")
             
             logger.debug(f"Updated portfolio with {len(recent_fills)} fills")
             
