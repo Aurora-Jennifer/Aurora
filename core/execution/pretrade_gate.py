@@ -311,11 +311,14 @@ class PreTradeGate:
                 
                 logger.info(f"GateIn {symbol}: CLIPPED from {qty_target} to {clipped_qty} (${notional:.2f} → ${clipped_notional:.2f})")
                 
+                # Sanity assertions to prevent constructor errors
+                assert isinstance(clipped_qty, int), f"clipped_qty must be int, got {type(clipped_qty)}"
+                assert clipped_qty != 0, "clipped_qty cannot be zero"
+                
                 return GateDecision(
                     result=GateResult.APPROVE,
                     reason="CLIPPED_PER_TRADE",
-                    qty=clipped_qty,
-                    price=last_price,
+                    shares=clipped_qty,
                     metadata={
                         "original_qty": qty_target,
                         "original_notional": notional,
@@ -323,7 +326,8 @@ class PreTradeGate:
                         "clipped_notional": clipped_notional,
                         "max_notional": max_notional,
                         "intent": "reduce" if reducer else "open",
-                        "clip_ratio": abs(clipped_qty) / abs(qty_target)
+                        "clip_ratio": abs(clipped_qty) / abs(qty_target),
+                        "price": last_price
                     }
                 )
             
@@ -371,6 +375,10 @@ class PreTradeGate:
             
             # Round to lot size (simplified - assumes 1 share lots)
             final_shares = int(qty_target)
+            
+            # Sanity assertions to prevent constructor errors
+            assert isinstance(final_shares, int), f"final_shares must be int, got {type(final_shares)}"
+            assert final_shares != 0, "final_shares cannot be zero"
             
             # Note: Daily counters are now tracked by the risk manager
             
