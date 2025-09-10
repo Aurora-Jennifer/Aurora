@@ -217,7 +217,8 @@ def plan_batches(current_positions: Dict[str, int], target_shares: Dict[str, int
         # Create reducer order if needed
         if reduce_delta != 0:
             reduce_notional = abs(Decimal(reduce_delta) * Decimal(str(ref_price)))
-            reduce_side = "buy" if reduce_delta > 0 else "sell"
+            # For reducers: if current position is long, sell to reduce; if short, buy to cover
+            reduce_side = "sell" if current_qty > 0 else "buy"
             
             # Sanity guard: reducer cannot exceed current position
             assert not (reduce_side == "sell" and abs(reduce_delta) > abs(current_qty)), \
@@ -613,7 +614,7 @@ class OrderManager:
         # For now, skip BP checks in submit_order since the gate and two-phase system handle this
         logger.debug(f"Submitting order to Alpaca: {order.symbol} {order.side.value} {order.quantity}")
         
-        logger.info(f"Submitting order: {order}")
+        logger.info(f"Submitting order: {order.symbol} {order.side.value} {order.quantity} market @ {order.limit_price} - {order.status}")
         
         try:
             # Convert to Alpaca order request
