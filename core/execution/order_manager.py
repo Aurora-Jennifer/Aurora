@@ -157,6 +157,35 @@ HAIRCUT = Decimal("0.98")
 CASH_BUFFER = Decimal("500")
 
 
+def split_delta(current_sh: int, delta_sh: int) -> tuple[int, int]:
+    """
+    Split a cross-zero delta into reduce-to-flat and open phases.
+    
+    Args:
+        current_sh: Current position quantity (signed)
+        delta_sh: Order delta quantity (signed)
+        
+    Returns:
+        Tuple of (reduce_sh, open_sh) - both signed
+    """
+    target_sh = current_sh + delta_sh
+    
+    # Reducer leg to flat
+    reduce_sh = 0
+    if current_sh > 0 and target_sh < 0:   # long → short
+        reduce_sh = -current_sh            # sell current to 0
+    elif current_sh < 0 and target_sh > 0: # short → long
+        reduce_sh = -current_sh            # buy to 0
+    else:
+        # same side or shrinking → reducer is min(|delta|, |current|)
+        if (current_sh > 0 and delta_sh < 0) or (current_sh < 0 and delta_sh > 0):
+            reduce_sh = max(min(delta_sh, -current_sh), -abs(current_sh))  # keep sign
+        else:
+            reduce_sh = 0
+
+    open_sh = delta_sh - reduce_sh  # whatever remains after flattening
+    return reduce_sh, open_sh
+
 def plan_batches(current_positions: Dict[str, int], target_shares: Dict[str, int], ref_prices: Dict[str, float]) -> tuple[List[Dict], List[Dict]]:
     """
     Plan two-phase order batching: reducers first, then openers.
@@ -181,25 +210,49 @@ def plan_batches(current_positions: Dict[str, int], target_shares: Dict[str, int
         ref_price = ref_prices.get(symbol, 0.0)
         if ref_price <= 0:
             continue
+        
+        # Split cross-zero deltas into reduce-to-flat and open phases
+        reduce_delta, open_delta = split_delta(current_qty, delta)
+        
+        # Create reducer order if needed
+        if reduce_delta != 0:
+            reduce_notional = abs(Decimal(reduce_delta) * Decimal(str(ref_price)))
+            reduce_side = "buy" if reduce_delta > 0 else "sell"
             
-        notional = abs(Decimal(delta) * Decimal(str(ref_price)))
-        side = "buy" if delta > 0 else "sell"
+            # Sanity guard: reducer cannot exceed current position
+            assert not (reduce_side == "sell" and abs(reduce_delta) > abs(current_qty)), \
+                f"Reducer cannot exceed current position: {symbol} reduce={reduce_delta} current={current_qty}"
+            
+            reducer_plan = {
+                "symbol": symbol,
+                "qty": abs(reduce_delta),
+                "side": reduce_side,
+                "notional": float(reduce_notional),
+                "current_qty": current_qty,
+                "target_qty": current_qty + reduce_delta,  # After reducer
+                "ref_price": ref_price,
+                "intent": "reduce",
+                "leg": "reduce_to_flat"
+            }
+            reducers.append(reducer_plan)
         
-        order_plan = {
-            "symbol": symbol,
-            "qty": abs(delta),
-            "side": side,
-            "notional": float(notional),
-            "current_qty": current_qty,
-            "target_qty": target_qty,
-            "ref_price": ref_price
-        }
-        
-        # Classify as reducer or opener
-        if (current_qty > 0 and side == "sell") or (current_qty < 0 and side == "buy"):
-            reducers.append(order_plan)  # Reduces exposure
-        else:
-            openers.append(order_plan)   # Increases exposure
+        # Create opener order if needed
+        if open_delta != 0:
+            open_notional = abs(Decimal(open_delta) * Decimal(str(ref_price)))
+            open_side = "buy" if open_delta > 0 else "sell"
+            
+            opener_plan = {
+                "symbol": symbol,
+                "qty": abs(open_delta),
+                "side": open_side,
+                "notional": float(open_notional),
+                "current_qty": current_qty + reduce_delta,  # After reducer
+                "target_qty": target_qty,
+                "ref_price": ref_price,
+                "intent": "open",
+                "leg": "open_position"
+            }
+            openers.append(opener_plan)
     
     # Sort reducers by notional (biggest first to free most cash)
     reducers.sort(key=lambda o: o["notional"], reverse=True)
@@ -531,10 +584,7 @@ class OrderManager:
         if decision.shares is not None and decision.shares != order.quantity:
             logger.info(f"Gate adjusted order quantity: {order.quantity} -> {decision.shares}")
             order.quantity = abs(decision.shares)
-            if decision.shares < 0:
-                order.side = OrderSide.SELL
-            else:
-                order.side = OrderSide.BUY
+            # Keep the original side - don't flip it based on shares sign
         
         # Submit the approved order
         order_id, broker_status = self.submit_order(order)
