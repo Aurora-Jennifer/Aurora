@@ -282,20 +282,48 @@ class PreTradeGate:
                         }
                     )
             
-            # Max notional (split by intent)
+            # Max notional (split by intent) - CLIP instead of REJECT
             if reducer:
                 max_notional = self.risk_config.get('max_notional_reducer', None)  # None = unlimited
             else:
                 max_notional = self.risk_config.get('max_notional_opener', 600)
             
             if max_notional is not None and notional > max_notional:
+                # Clip to max notional instead of rejecting
+                lot_size = self.risk_config.get('lot_size', 5)
+                max_shares = int(max_notional // last_price)
+                clipped_shares = (max_shares // lot_size) * lot_size
+                
+                if clipped_shares <= 0:
+                    return GateDecision(
+                        result=GateResult.REJECT,
+                        reason="TOO_LARGE_CANNOT_CLIP",
+                        metadata={
+                            "notional": notional,
+                            "max_notional": max_notional,
+                            "intent": "reduce" if reducer else "open"
+                        }
+                    )
+                
+                # Apply direction
+                clipped_qty = clipped_shares if qty_target > 0 else -clipped_shares
+                clipped_notional = abs(clipped_qty) * last_price
+                
+                logger.info(f"GateIn {symbol}: CLIPPED from {qty_target} to {clipped_qty} (${notional:.2f} → ${clipped_notional:.2f})")
+                
                 return GateDecision(
-                    result=GateResult.REJECT,
-                    reason="TOO_LARGE",
+                    result=GateResult.APPROVE,
+                    reason="CLIPPED_PER_TRADE",
+                    qty=clipped_qty,
+                    price=last_price,
                     metadata={
-                        "notional": notional,
+                        "original_qty": qty_target,
+                        "original_notional": notional,
+                        "clipped_qty": clipped_qty,
+                        "clipped_notional": clipped_notional,
                         "max_notional": max_notional,
-                        "intent": "reduce" if reducer else "open"
+                        "intent": "reduce" if reducer else "open",
+                        "clip_ratio": abs(clipped_qty) / abs(qty_target)
                     }
                 )
             
