@@ -1,0 +1,39 @@
+{
+  "data_integrity": {
+    "monotonic_dates": true,
+    "missing_data": {
+      "symbol": "0",
+      "date": "0",
+      "excess_ret_fwd_5": "0",
+      "prediction": "0"
+    },
+    "excess_returns_consistent": false
+  },
+  "performance_baselines": {
+    "random_sharpe": -0.11035074602842528,
+    "buy_hold_sharpe": 1.631240510035724,
+    "buy_hold_return": 0.7018305657119971,
+    "buy_hold_vol": 0.43024346280894354,
+    "equal_weight_sharpe": 2.4590236679301545,
+    "equal_weight_return": 0.657453629729173,
+    "equal_weight_vol": 0.26736368515012077
+  },
+  "statistical_checks": {
+    "ic_mean": 0.015706982145627543,
+    "ic_std": 0.16081917685674962,
+    "ic_t_stat": 1.5318719670718344,
+    "ic_p_value": 0.12684423455569593,
+    "ic_significant": "False",
+    "sharpe_ci_lower": 2.208363657492299,
+    "sharpe_ci_upper": 2.70968367836801,
+    "sharpe_significant": "True"
+  },
+  "risk_validation": {
+    "extreme_returns_count": "0",
+    "extreme_returns_pct": 0.0,
+    "prediction_std": "0.32995605",
+    "prediction_skew": "0.9100989",
+    "prediction_kurtosis": "1.1145159",
+    "universe_coverage": 1.0
+  }
+}

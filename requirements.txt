@@ -39,3 +39,6 @@ pyyaml>=6.0
 requests>=2.25.0
 fastapi>=0.68.0
 pydantic>=1.8.0
+
+# Trading execution dependencies
+alpaca-py>=0.20.0

@@ -147,7 +147,17 @@ class DailyPaperTradingWithExecution:
             self.logger.info("✅ Alpaca client initialized (paper trading mode)")
             
             # Initialize execution components
-            self.order_manager = OrderManager(self.alpaca_client, self.execution_config.get('order_management', {}))
+            # Wire Alpaca data client for price sanity
+            try:
+                from alpaca.data.historical import StockHistoricalDataClient  # type: ignore
+                api_key = self.alpaca_api_key
+                api_secret = self.alpaca_secret_key
+                data_client = StockHistoricalDataClient(api_key, api_secret)
+                exec_cfg = dict(self.execution_config)
+                exec_cfg['data_client'] = data_client
+            except Exception:
+                exec_cfg = self.execution_config
+            self.order_manager = OrderManager(self.alpaca_client, exec_cfg)
             self.portfolio_manager = PortfolioManager(self.alpaca_client, self.execution_config.get('portfolio_management', {}))
             
             # Position sizing configuration
@@ -228,23 +238,37 @@ class DailyPaperTradingWithExecution:
             return self._generate_mock_signals(market_data)
         
         try:
-            # Apply sector residualization if sector map is available
-            if self.sector_map is not None:
-                # Get base features that need sector residualization (CSR features)
-                csr_features = [col for col in market_data.columns if col.endswith('_csr')]
-                if csr_features:
-                    market_data = sector_residualize(market_data, csr_features, self.sector_map)
-            
-            # Prepare features for XGBoost
-            X = prepare_X_for_xgb(market_data, self.model_loader.features_whitelist)
+            # Use unified feature preparation pipeline
+            X = self._prepare_features_for_model(market_data)
             
             # Generate predictions
             predictions = self.model_loader.predict(X)
             
+            # Debug: summarize predictions and sample
+            try:
+                import numpy as _np
+                pred_arr = _np.asarray(predictions).reshape(-1)
+                self.logger.info(f"Pred stats: n={pred_arr.size}, min={pred_arr.min():+.4f}, max={pred_arr.max():+.4f}, std={pred_arr.std(ddof=0):.4f}")
+                # Show top-10 absolute predictions (index only; symbols shown in signals below)
+                top_idx = _np.argsort(_np.abs(pred_arr))[::-1][:10]
+                top_vals = ", ".join(f"#{int(i)}:{pred_arr[int(i)]:+.4f}" for i in top_idx)
+                self.logger.info(f"Pred top-10 |values| (index:value): {top_vals}")
+            except Exception:
+                pass
+            
             # Convert predictions to trading signals
             signals = self._predictions_to_signals(predictions, market_data)
             
+            # Debug: show top-10 signals by magnitude
+            try:
+                top_signals = sorted(signals.items(), key=lambda kv: abs(kv[1]), reverse=True)[:10]
+                sig_text = ", ".join(f"{sym}:{val:+.4f}" for sym, val in top_signals)
+                self.logger.info(f"Signal top-10 by |value|: {sig_text}")
+            except Exception:
+                pass
+            
             self.logger.info(f"✅ USING MODEL ({len(self.model_loader.features_whitelist)}/{len(self.model_loader.features_whitelist)} features matched)")
+            self.logger.info(f"✅ Feature contract satisfied: {len(X.columns)}/{len(self.model_loader.features_whitelist)} features matched")
             self.logger.info(f"Generated {len(signals)} trading signals using production model")
             
             return {
@@ -261,37 +285,43 @@ class DailyPaperTradingWithExecution:
             return self._generate_mock_signals(market_data)
     
     def _predictions_to_signals(self, predictions: np.ndarray, market_data: pd.DataFrame) -> Dict:
-        """Convert model predictions to trading signals."""
-        # Simple long-short strategy based on predictions
-        # Top 20% long, bottom 20% short
-        n_assets = len(predictions)
-        n_long = max(1, int(n_assets * 0.2))
-        n_short = max(1, int(n_assets * 0.2))
-        
-        # Ensure we have symbols in the index
-        if 'symbol' in market_data.columns:
-            symbols = market_data['symbol'].values
+        """Convert model predictions to trading signals.
+        Continuous mapping: z-score predictions per cycle and scale to [-1, 1] via tanh.
+        """
+        # Normalize predictions
+        pred_arr = np.asarray(predictions).reshape(-1)
+        n_assets = pred_arr.size
+        if n_assets == 0:
+            return {}
+        mean = float(pred_arr.mean())
+        std = float(pred_arr.std())
+        if std < 1e-8:
+            z = np.zeros_like(pred_arr)
         else:
+            z = (pred_arr - mean) / std
+        # Map to [-1, 1] with gentle compression
+        mapped = np.tanh(z)
+        
+        # Ensure we have symbols in the same order length
+        if 'symbol' in market_data.columns and len(market_data['symbol'].values) == n_assets:
+            symbols = market_data['symbol'].values
+        elif hasattr(market_data.index, 'values') and len(market_data.index.values) == n_assets:
             symbols = market_data.index.values
+        else:
+            # Fallback: synthesize symbols by rank index
+            symbols = [f"SYM_{i}" for i in range(n_assets)]
         
-        # Rank predictions (descending order - highest scores first)
-        ranks = np.argsort(predictions)[::-1]
-        
-        signals = {}
-        for i, rank in enumerate(ranks):
-            symbol = symbols[rank]
-            if i < n_long:
-                signals[symbol] = 1.0 / n_long  # Equal weight long
-            elif i >= n_assets - n_short:
-                signals[symbol] = -1.0 / n_short  # Equal weight short
-            else:
-                signals[symbol] = 0.0  # Neutral
+        signals: Dict = {}
+        for i in range(n_assets):
+            symbol = symbols[i]
+            signals[symbol] = float(mapped[i])
         
         # Log signal distribution for sanity check
         signal_values = np.array(list(signals.values()))
-        self.logger.info(f"Signal distribution: mean={signal_values.mean():.3f}, std={signal_values.std():.3f}, "
-                        f"longs={(signal_values>0).mean():.1%}, shorts={(signal_values<0).mean():.1%}")
-        
+        self.logger.info(
+            f"Signal distribution: mean={signal_values.mean():.3f}, std={signal_values.std():.3f}, "
+            f"longs={(signal_values>0).mean():.1%}, shorts={(signal_values<0).mean():.1%}"
+        )
         return signals
     
     def _generate_mock_signals(self, market_data: pd.DataFrame) -> Dict:
@@ -339,7 +369,22 @@ class DailyPaperTradingWithExecution:
                 symbol: signal for symbol, signal in signals.items()
                 if abs(signal) >= self.execution_config['execution']['signal_threshold']
             }
-            
+
+            # Visibility: log top-5 absolute signals and threshold pass
+            try:
+                threshold = float(self.execution_config['execution']['signal_threshold'])
+                top5 = sorted(
+                    ((sym, val, abs(val) >= threshold) for sym, val in signals.items()),
+                    key=lambda x: abs(x[1]),
+                    reverse=True,
+                )[:5]
+                summary = ", ".join(
+                    f"{sym}:{val:+.4f}{'✓' if passed else '✗'}" for sym, val, passed in top5
+                )
+                self.logger.info(f"Top-5 signals (±, pass at >= {threshold:.2f}): {summary}")
+            except Exception:
+                pass
+
             if not filtered_signals:
                 self.logger.info("No signals above threshold for execution")
                 return {
@@ -348,14 +393,21 @@ class DailyPaperTradingWithExecution:
                     'orders_filled': 0,
                     'message': 'No signals above threshold'
                 }
-            
+
             self.logger.info(f"Executing {len(filtered_signals)} signals through execution engine")
-            
+
             # Execute signals
             result = self.execution_engine.execute_signals(filtered_signals, current_prices)
-            
+
+            # Visibility: log execution metadata if present
+            try:
+                meta = getattr(result, 'metadata', {}) or {}
+                self.logger.info(f"Exec meta: signals_processed={meta.get('signals_processed')}, orders_created={meta.get('orders_created')}, portfolio={meta.get('portfolio_metrics')}")
+            except Exception:
+                pass
+
             self.logger.info(f"Execution result: {result.orders_submitted} submitted, {result.orders_filled} filled")
-            
+
             return {
                 'status': 'success' if result.success else 'error',
                 'orders_submitted': result.orders_submitted,
@@ -400,34 +452,284 @@ class DailyPaperTradingWithExecution:
             return create_fallback_data(['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'NVDA', 'META', 'JPM', 'BAC', 'WFC'])
     
     def _add_technical_features(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Add technical features to market data."""
-        # This is a simplified version - in production you'd use your full feature engineering
-        for symbol in df.index.get_level_values(0).unique():
-            symbol_df = df.loc[symbol].copy()
+        """Add comprehensive technical features to market data."""
+        # If it's a MultiIndex, process each symbol separately and concatenate
+        if isinstance(df.index, pd.MultiIndex):
+            processed_symbols = []
+            symbols = df.index.get_level_values(0).unique()
+            
+            for symbol in symbols:
+                symbol_df = df.loc[symbol].copy()
+                
+                # Basic price features
+                symbol_df['returns'] = symbol_df['close'].pct_change()
+                symbol_df['log_returns'] = np.log(symbol_df['close'] / symbol_df['close'].shift(1))
+                
+                # Moving averages
+                symbol_df['ma_fast'] = symbol_df['close'].rolling(5).mean()
+                symbol_df['ma_slow'] = symbol_df['close'].rolling(20).mean()
+                symbol_df['ma_ratio'] = symbol_df['ma_fast'] / (symbol_df['ma_slow'] + 1e-8)
+                symbol_df['price_ma_ratio'] = symbol_df['close'] / (symbol_df['ma_slow'] + 1e-8)
+                
+                # Volatility features
+                symbol_df['vol_5'] = symbol_df['close'].rolling(5).std()
+                symbol_df['vol_20'] = symbol_df['close'].rolling(20).std()
+                symbol_df['vol_ratio'] = symbol_df['vol_5'] / (symbol_df['vol_20'] + 1e-8)
+                
+                # Volume features
+                symbol_df['volume_ratio'] = symbol_df['volume'] / (symbol_df['volume'].rolling(20).mean() + 1e-8)
+                symbol_df['volume_position_20'] = symbol_df['volume'] / (symbol_df['volume'].rolling(20).max() + 1e-8)
+                symbol_df['volume_accel'] = symbol_df['volume'].diff()
+                symbol_df['liquidity_proxy'] = symbol_df['volume'] * symbol_df['close']
+                
+                # Momentum features
+                symbol_df['momentum_5'] = symbol_df['close'].pct_change(5)
+                symbol_df['momentum_10'] = symbol_df['close'].pct_change(10)
+                symbol_df['momentum_20'] = symbol_df['close'].pct_change(20)
+                symbol_df['momentum_5_20'] = symbol_df['momentum_5'] - symbol_df['momentum_20']
+                
+                # Risk-adjusted returns
+                symbol_df['ret_vol_ratio'] = symbol_df['returns'] / (symbol_df['vol_20'] + 1e-8)
+                symbol_df['sharpe_5'] = symbol_df['momentum_5'] / (symbol_df['vol_5'] + 1e-8)
+                symbol_df['sharpe_20'] = symbol_df['momentum_20'] / (symbol_df['vol_20'] + 1e-8)
+                
+                # Bollinger Bands
+                bb_std = symbol_df['close'].rolling(20).std()
+                symbol_df['bb_upper'] = symbol_df['ma_slow'] + (2 * bb_std)
+                symbol_df['bb_lower'] = symbol_df['ma_slow'] - (2 * bb_std)
+                symbol_df['bb_width'] = (symbol_df['bb_upper'] - symbol_df['bb_lower']) / (symbol_df['ma_slow'] + 1e-8)
+                symbol_df['bb_position'] = (symbol_df['close'] - symbol_df['bb_lower']) / (symbol_df['bb_upper'] - symbol_df['bb_lower'] + 1e-8)
+                
+                # RSI
+                delta = symbol_df['close'].diff()
+                gain = (delta.where(delta > 0, 0)).rolling(14).mean()
+                loss = (-delta.where(delta < 0, 0)).rolling(14).mean()
+                rs = gain / (loss + 1e-8)
+                symbol_df['rsi_14'] = 100 - (100 / (1 + rs))
+                
+                # Volatility regime (use shorter window for live data)
+                vol_20 = symbol_df['vol_20']
+                # Use a shorter window for live data (20 instead of 100)
+                vol_percentile = vol_20.rolling(min(20, len(vol_20))).rank(pct=True)
+                symbol_df['vol_regime_high'] = (vol_percentile > 0.8).astype(int)
+                symbol_df['vol_regime_low'] = (vol_percentile < 0.2).astype(int)
+                
+                # Mean reversion signal
+                symbol_df['mean_reversion'] = -symbol_df['returns'] * symbol_df['bb_position']
+                
+                # Breakout signal
+                symbol_df['breakout_signal'] = (symbol_df['close'] > symbol_df['bb_upper']).astype(int) - (symbol_df['close'] < symbol_df['bb_lower']).astype(int)
+                
+                # Add symbol back to the index
+                symbol_df.index = pd.MultiIndex.from_tuples([(symbol, date) for date in symbol_df.index], names=['symbol', 'date'])
+                processed_symbols.append(symbol_df)
+            
+            # Concatenate all processed symbols
+            result_df = pd.concat(processed_symbols, axis=0)
+        else:
+            # Single level index - process as single symbol
+            result_df = df.copy()
+            
+            # Basic price features
+            result_df['returns'] = result_df['close'].pct_change()
+            result_df['log_returns'] = np.log(result_df['close'] / result_df['close'].shift(1))
             
             # Moving averages
-            symbol_df['ma_fast'] = symbol_df['close'].rolling(5).mean()
-            symbol_df['ma_slow'] = symbol_df['close'].rolling(20).mean()
-            symbol_df['ma_ratio'] = symbol_df['ma_fast'] / (symbol_df['ma_slow'] + 1e-8)
+            result_df['ma_fast'] = result_df['close'].rolling(5).mean()
+            result_df['ma_slow'] = result_df['close'].rolling(20).mean()
+            result_df['ma_ratio'] = result_df['ma_fast'] / (result_df['ma_slow'] + 1e-8)
+            result_df['price_ma_ratio'] = result_df['close'] / (result_df['ma_slow'] + 1e-8)
             
-            # Volatility
-            symbol_df['vol_20'] = symbol_df['close'].rolling(20).std()
+            # Volatility features
+            result_df['vol_5'] = result_df['close'].rolling(5).std()
+            result_df['vol_20'] = result_df['close'].rolling(20).std()
+            result_df['vol_ratio'] = result_df['vol_5'] / (result_df['vol_20'] + 1e-8)
             
-            # Update the dataframe
-            df.loc[symbol] = symbol_df
+            # Volume features
+            result_df['volume_ratio'] = result_df['volume'] / (result_df['volume'].rolling(20).mean() + 1e-8)
+            result_df['volume_position_20'] = result_df['volume'] / (result_df['volume'].rolling(20).max() + 1e-8)
+            result_df['volume_accel'] = result_df['volume'].diff()
+            result_df['liquidity_proxy'] = result_df['volume'] * result_df['close']
+            
+            # Momentum features
+            result_df['momentum_5'] = result_df['close'].pct_change(5)
+            result_df['momentum_10'] = result_df['close'].pct_change(10)
+            result_df['momentum_20'] = result_df['close'].pct_change(20)
+            result_df['momentum_5_20'] = result_df['momentum_5'] - result_df['momentum_20']
+            
+            # Risk-adjusted returns
+            result_df['ret_vol_ratio'] = result_df['returns'] / (result_df['vol_20'] + 1e-8)
+            result_df['sharpe_5'] = result_df['momentum_5'] / (result_df['vol_5'] + 1e-8)
+            result_df['sharpe_20'] = result_df['momentum_20'] / (result_df['vol_20'] + 1e-8)
+            
+            # Bollinger Bands
+            bb_std = result_df['close'].rolling(20).std()
+            result_df['bb_upper'] = result_df['ma_slow'] + (2 * bb_std)
+            result_df['bb_lower'] = result_df['ma_slow'] - (2 * bb_std)
+            result_df['bb_width'] = (result_df['bb_upper'] - result_df['bb_lower']) / (result_df['ma_slow'] + 1e-8)
+            result_df['bb_position'] = (result_df['close'] - result_df['bb_lower']) / (result_df['bb_upper'] - result_df['bb_lower'] + 1e-8)
+            
+            # RSI
+            delta = result_df['close'].diff()
+            gain = (delta.where(delta > 0, 0)).rolling(14).mean()
+            loss = (-delta.where(delta < 0, 0)).rolling(14).mean()
+            rs = gain / (loss + 1e-8)
+            result_df['rsi_14'] = 100 - (100 / (1 + rs))
+            
+            # Volatility regime (use shorter window for live data)
+            vol_20 = result_df['vol_20']
+            # Use a shorter window for live data (20 instead of 100)
+            vol_percentile = vol_20.rolling(min(20, len(vol_20))).rank(pct=True)
+            result_df['vol_regime_high'] = (vol_percentile > 0.8).astype(int)
+            result_df['vol_regime_low'] = (vol_percentile < 0.2).astype(int)
+            
+            # Mean reversion signal
+            result_df['mean_reversion'] = -result_df['returns'] * result_df['bb_position']
+            
+            # Breakout signal
+            result_df['breakout_signal'] = (result_df['close'] > result_df['bb_upper']).astype(int) - (result_df['close'] < result_df['bb_lower']).astype(int)
         
-        return df
+        return result_df
+
+    def _prepare_features_for_model(self, bars_df: pd.DataFrame) -> pd.DataFrame:
+        """
+        bars_df: MultiIndex (symbol, date) with at least ['close','high','low','volume'].
+        Returns a DataFrame with columns exactly matching self.feature_whitelist (order preserved).
+        
+        This replicates the exact feature generation pipeline from ml/panel_builder.py
+        """
+        try:
+            # 1) Add comprehensive technical features
+            feats = self._add_technical_features(bars_df)
+            
+            # 2) Convert MultiIndex to flat DataFrame with symbol/date columns (required for groupby operations)
+            if isinstance(feats.index, pd.MultiIndex):
+                feats = feats.reset_index()
+                if 'level_0' in feats.columns:
+                    feats = feats.rename(columns={'level_0': 'symbol', 'level_1': 'date'})
+                elif len(feats.index.names) == 2:
+                    feats = feats.rename(columns={feats.index.names[0]: 'symbol', feats.index.names[1]: 'date'})
+            else:
+                # Single level index - create dummy date column
+                feats['date'] = pd.Timestamp.now().date()
+                feats['symbol'] = feats.index
+            
+            # 3) Add sector column for residualization (simplified first-letter grouping)
+            feats['sector'] = feats['symbol'].astype(str).str[0]
+            
+            # 4) Classify features for appropriate transforms (based on panel_builder.py)
+            excluded_cols = ['date', 'symbol', 'sector']
+            feat_cols = [c for c in feats.columns if c not in excluded_cols]
+            
+            # Classify features by type
+            rank_like = [c for c in feat_cols if any(k in c.lower() for k in
+                         ['vol_', 'volume', 'liquidity', 'turnover', 'beta', 'sharpe', 'momentum', 'skew', 'kurt', 'close'])]
+            ratio_like = [c for c in feat_cols if any(k in c.lower() for k in
+                         ['ratio', '_pct', 'percentile', 'position', '_z', 'cs', 'rel', 'bb_', 'ma_', 'rsi', 'stoch']) and c not in rank_like]
+            level_like = [c for c in feat_cols if c not in set(rank_like) | set(ratio_like)]
+            
+            self.logger.info(f"Feature classification: {len(rank_like)} rank-like, {len(ratio_like)} ratio-like, {len(level_like)} level-like")
+            
+            # 5) Cross-sectional ranking (CSR) for rank_like + level_like features
+            rank_features = [c for c in rank_like + level_like if c in feats.columns]
+            if rank_features:
+                for c in rank_features:
+                    feats[c + '_csr'] = feats.groupby('date', group_keys=False)[c].transform(
+                        lambda s: s.rank(method='average', pct=True) if s.nunique() > 1 else pd.Series(0.5, index=s.index)
+                    )
+            
+            # 6) Cross-sectional z-scoring (CSZ) for ratio_like features
+            zscore_features = [c for c in ratio_like if c in feats.columns]
+            if zscore_features:
+                for c in zscore_features:
+                    feats[c + '_csz'] = feats.groupby('date', group_keys=False)[c].transform(
+                        lambda s: (s - s.mean()) / (s.std() + 1e-8) if s.std() > 0 else pd.Series(0.0, index=s.index)
+                    )
+            
+            # 7) Sector residualization for CSR features (include vol_regime features)
+            # Get all CSR features that need sector residualization based on the model whitelist
+            csr_features = [c for c in feats.columns if c.endswith('_csr')]
+            
+            # Prioritize vol_regime and sharpe features to ensure they get sector residualization
+            vol_regime_csr = [c for c in csr_features if 'vol_regime' in c]
+            sharpe_csr = [c for c in csr_features if 'sharpe' in c]
+            other_csr = [c for c in csr_features if 'vol_regime' not in c and 'sharpe' not in c]
+            
+            # Process ALL CSR features for sector residualization (not limited to 16)
+            # This ensures all required features get the _sec_res suffix
+            all_csr_features = vol_regime_csr + sharpe_csr + other_csr
+            
+            if all_csr_features and len(feats.groupby('sector')) > 1:
+                for c in all_csr_features:
+                    if c in feats.columns:
+                        # Calculate sector means and subtract
+                        sector_means = feats.groupby(['date', 'sector'])[c].transform('mean')
+                        feats[c + '_sec_res'] = feats[c] - sector_means
+                        self.logger.debug(f"Added sector residualization for {c}")
+            elif all_csr_features:
+                # If no sector data, just copy CSR features to _sec_res
+                for c in all_csr_features:
+                    if c in feats.columns:
+                        feats[c + '_sec_res'] = feats[c]
+                        self.logger.debug(f"Copied {c} to {c}_sec_res (no sector data)")
+            
+            # 8) Create final feature matrix matching the whitelist
+            if hasattr(self, 'model_loader') and self.model_loader and hasattr(self.model_loader, 'features_whitelist'):
+                required = list(self.model_loader.features_whitelist)
+                
+                # Fill missing features with zeros (model will handle this)
+                missing_features = set(required) - set(feats.columns)
+                if missing_features:
+                    self.logger.warning(f"Missing {len(missing_features)} features, filling with zeros: {list(missing_features)[:5]}...")
+                    for feature in missing_features:
+                        feats[feature] = 0.0
+                
+                # Select features in the exact order expected by the model
+                X = feats.reindex(columns=required)
+                
+                # Fill any remaining NaN values
+                X = X.fillna(0.0)
+                
+                # Remove metadata columns if they exist
+                metadata_cols = ['date', 'symbol', 'sector']
+                X = X.drop(columns=[c for c in metadata_cols if c in X.columns])
+                
+                return X
+            else:
+                return feats
+                
+        except Exception as e:
+            self.logger.error(f"Feature preparation failed: {e}", exc_info=True)
+            raise
     
     def _get_current_prices(self, market_data: pd.DataFrame) -> Dict[str, float]:
         """Extract current prices from market data."""
         current_prices = {}
-        for symbol in market_data.index.get_level_values(0).unique():
-            try:
-                latest_price = market_data.loc[symbol, 'close'].iloc[-1]
-                current_prices[symbol] = float(latest_price)
-            except (IndexError, KeyError):
-                self.logger.warning(f"No current price available for {symbol}")
-                current_prices[symbol] = 100.0  # Fallback price
+        
+        # Handle both MultiIndex and regular DataFrame structures
+        if isinstance(market_data.index, pd.MultiIndex):
+            # MultiIndex case: (symbol, date) or similar
+            for symbol in market_data.index.get_level_values(0).unique():
+                try:
+                    latest_price = market_data.loc[symbol, 'close'].iloc[-1]
+                    current_prices[symbol] = float(latest_price)
+                except (IndexError, KeyError):
+                    self.logger.warning(f"No current price available for {symbol}")
+                    current_prices[symbol] = 100.0  # Fallback price
+        else:
+            # Regular DataFrame case: symbol is a column
+            for symbol in market_data['symbol'].unique():
+                try:
+                    symbol_data = market_data[market_data['symbol'] == symbol]
+                    if not symbol_data.empty:
+                        latest_price = symbol_data['close'].iloc[-1]
+                        current_prices[symbol] = float(latest_price)
+                    else:
+                        self.logger.warning(f"No data available for {symbol}")
+                        current_prices[symbol] = 100.0  # Fallback price
+                except (IndexError, KeyError):
+                    self.logger.warning(f"No current price available for {symbol}")
+                    current_prices[symbol] = 100.0  # Fallback price
         
         return current_prices
     
@@ -535,11 +837,16 @@ class DailyPaperTradingWithExecution:
                 # Fetch real market data from Alpaca API
                 market_data = self._fetch_real_market_data()
                 
-                # Generate trading signals using the model
-                signal_result = self._generate_trading_signals(market_data)
-                signals = signal_result['signals']
-                model_used = signal_result['model_used']
-                session_stats['model_used'] = model_used
+                # Generate trading signals using the model (with error handling)
+                try:
+                    signal_result = self._generate_trading_signals(market_data)
+                    signals = signal_result['signals']
+                    model_used = signal_result['model_used']
+                    session_stats['model_used'] = model_used
+                except Exception as e:
+                    self.logger.error(f"Feature prep failed; skipping cycle: {e}", exc_info=True)
+                    time.sleep(5)
+                    continue
                 
                 # Calculate entropy from signal distribution
                 signal_values = list(signals.values())
@@ -553,6 +860,14 @@ class DailyPaperTradingWithExecution:
                 execution_result = self._execute_trading_signals(signals, current_prices)
                 session_stats['orders_submitted'] += execution_result['orders_submitted']
                 session_stats['orders_filled'] += execution_result['orders_filled']
+                
+                # Collect telemetry counters
+                if 'metadata' in execution_result:
+                    metadata = execution_result['metadata']
+                    session_stats['skips_price_cap'] = session_stats.get('skips_price_cap', 0) + metadata.get('skips_price_cap', 0)
+                    session_stats['skips_size_zero'] = session_stats.get('skips_size_zero', 0) + metadata.get('skips_size_zero', 0)
+                    session_stats['gate_reject_small'] = session_stats.get('gate_reject_small', 0) + metadata.get('gate_reject_small', 0)
+                    session_stats['gate_reject_price_unknown'] = session_stats.get('gate_reject_price_unknown', 0) + metadata.get('gate_reject_price_unknown', 0)
                 
                 # Mock PnL calculation (in production, would use real portfolio PnL)
                 daily_pnl_pct = np.random.uniform(-0.01, 0.01)  # -1% to +1%
@@ -689,6 +1004,16 @@ class DailyPaperTradingWithExecution:
         print(f"Model used: {'Yes' if stats['model_used'] else 'No (Mock)'}")
         print(f"Alerts triggered: {stats['alerts_triggered']}")
         print(f"Emergency halts: {stats['emergency_halts']}")
+        
+        # Add skip/reject telemetry
+        if 'skips_price_cap' in stats:
+            print(f"Skipped (price > cap): {stats['skips_price_cap']}")
+        if 'skips_size_zero' in stats:
+            print(f"Skipped (size zero): {stats['skips_size_zero']}")
+        if 'gate_reject_small' in stats:
+            print(f"Gate reject (too small): {stats['gate_reject_small']}")
+        if 'gate_reject_price_unknown' in stats:
+            print(f"Gate reject (price unknown): {stats['gate_reject_price_unknown']}")
         
         if stats['orders_submitted'] > 0:
             fill_rate = stats['orders_filled'] / stats['orders_submitted']

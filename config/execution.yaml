@@ -1,142 +1,117 @@
-# Execution Infrastructure Configuration
-
 execution:
   enabled: true
-  mode: "paper"  # paper, live
-  signal_threshold: 0.1
-  max_orders_per_execution: 10
+  mode: paper
+  signal_threshold: 0.02
+  max_orders_per_execution: 8
   execution_timeout: 30
   reconciliation_interval: 60
-  allow_extended_hours: false  # Allow trading during extended hours
-
-# Model configuration (optional - if not provided, will use external signals)
+  allow_extended_hours: false
 model:
-  enabled: true  # Set to true to enable XGBoost model integration
-  model_path: "runs/top300_xgb_20250909_103247/cross_sectional_model.json"  # Path to XGBoost model file
-  features_path: "runs/top300_xgb_20250909_103247/features_whitelist.json"  # Path to features configuration
-  fallback_to_external_signals: true  # Use external signals if model fails
-
+  enabled: true
+  model_path: runs/top300_xgb_20250909_103247/cross_sectional_model.json
+  features_path: runs/top300_xgb_20250909_103247/features_whitelist.json
+  fallback_to_external_signals: true
 position_sizing:
-  max_position_size: 0.1  # 10% of portfolio per position
-  max_total_exposure: 0.8  # 80% of portfolio total
-  min_trade_size: 100.0  # $100 minimum trade
-  max_trade_size: 10000.0  # $10,000 maximum trade
-  signal_threshold: 0.1  # Minimum signal strength to trade
-  volatility_adjustment: true  # Adjust for asset volatility
-  portfolio_heat: 0.02  # 2% portfolio heat per trade
-
+  max_position_size: 0.15  # Increased from 10% to 15%
+  max_total_exposure: 0.8
+  min_trade_size: 25.0
+  max_trade_size: 25000.0  # Increased from 10k to 25k
+  signal_threshold: 0.02
+  volatility_adjustment: true
+  portfolio_heat: 0.02
+  order_notional_cap: 15000.0  # Increased from 500 to 5000
+  min_shares: 1
+  capital_utilization_factor: 2.0  # Scale positions by 2x to use more capital
 risk_management:
-  # Core risk limits
-  max_daily_loss: 0.02  # 2% daily loss limit
-  max_position_risk: 0.05  # 5% per position risk
-  max_sector_exposure: 0.3  # 30% sector exposure limit
-  max_correlation_exposure: 0.4  # 40% correlated exposure limit
-  max_leverage: 1.0  # No leverage
-  max_drawdown: 0.10  # 10% maximum drawdown
-  stop_loss_pct: 0.05  # 5% stop loss
-  
-  # Order throttling
-  max_orders_per_day: 200  # Maximum orders per day
-  max_orders_per_symbol: 5  # Maximum orders per symbol per day
-  
-  # Oh-shit guardrails
-  allow_shorts: false  # Start long-only
-  max_pos_pct: 0.05  # Per-symbol cap = 5% of equity
-  max_gross_exposure: 0.60  # Sum(|positions|) ≤ 60% of equity
-  max_order_notional: 10000  # Hard cap per order
-  min_order_notional: 50  # Ignore dust
-  stale_signal_secs: 120  # Reject old signals
-  max_slip_pct: 0.5  # Reject if price deviates >0.5% from ref
-  
-  # Circuit breakers
-  session_drawdown_limit: 0.01  # 1% session drawdown limit
-  symbol_move_limit: 0.10  # 10% intraday move limit
-  spread_limit_bps: 50  # 50 bps spread limit
-  
-  # Sector exposure checks (temporarily disabled until GICS data available)
-  sector_exposure_checks: false  # temp; re-enable when GICS wired
-
+  max_daily_loss: 0.02
+  max_position_risk: 0.05
+  max_sector_exposure: 0.3
+  max_correlation_exposure: 0.4
+  max_leverage: 1.0
+  max_drawdown: 0.1
+  stop_loss_pct: 0.05
+  max_daily_orders: 1000
+  max_orders_per_symbol_per_day: 50
+  max_submits_per_window: 10
+  max_submits_window_sec: 60
+  per_symbol_cooldown_sec: 2
+  max_submits_per_bar: 4
+  allow_shorts: true # Disable shorting for now due to BP issues
+  max_pos_pct: 0.15  # Increased from 5% to 15% to allow larger positions
+  max_gross_exposure: 0.6
+  max_order_notional: 15000
+  min_order_notional: 10
+  backstop_max_ticket: 18000
+  # Split caps by intent
+  max_notional_opener: 15000    # applies to BUY-to-open / SELL-to-open
+  max_notional_reducer: null    # null = unlimited; or set e.g. 100000
+  min_notional_opener: 10       # keep existing min
+  min_notional_reducer: 0       # allow tiny closes ("dust")
+  allow_dust_close: true        # let reducers < min go if they fully close
+  stale_signal_secs: 120
+  max_slip_pct: 0.5
+  session_drawdown_limit: 0.005
+  symbol_move_limit: 0.2
+  spread_limit_bps: 150
+  sector_exposure_checks: false
 order_management:
-  default_order_type: "market"  # market, limit, stop, stop_limit
-  limit_price_offset: 0.001  # 0.1% offset from market price
-  time_in_force: "day"  # day, gtc, ioc, fok
-  extended_hours: false  # Allow trading during extended hours
+  default_order_type: market
+  limit_price_offset: 0.001
+  time_in_force: day
+  extended_hours: false
   max_retries: 3
   retry_delay: 1.0
   reconciliation_interval: 30
-
 portfolio_management:
-  update_interval: 60  # seconds
-  history_days: 30  # days to keep portfolio history
-  rebalancing_threshold: 0.05  # 5% deviation triggers rebalancing
-
+  update_interval: 60
+  history_days: 30
+  rebalancing_threshold: 0.05
 monitoring:
-  health_check_interval: 300  # seconds
-  performance_report_interval: 3600  # seconds
+  health_check_interval: 300
+  performance_report_interval: 3600
   alert_thresholds:
-    daily_loss_pct: 0.015  # Alert at 1.5% daily loss
-    position_concentration: 0.08  # Alert at 8% position concentration
-    order_failure_rate: 0.1  # Alert at 10% order failure rate
-
-# Sector mapping for risk management
+    daily_loss_pct: 0.015
+    position_concentration: 0.08
+    order_failure_rate: 0.1
 sector_mapping:
-  # Technology
-  AAPL: "Technology"
-  MSFT: "Technology"
-  GOOGL: "Technology"
-  AMZN: "Technology"
-  TSLA: "Technology"
-  NVDA: "Technology"
-  META: "Technology"
-  
-  # Financial
-  JPM: "Financial"
-  BAC: "Financial"
-  WFC: "Financial"
-  GS: "Financial"
-  MS: "Financial"
-  
-  # Healthcare
-  JNJ: "Healthcare"
-  PFE: "Healthcare"
-  UNH: "Healthcare"
-  ABBV: "Healthcare"
-  MRK: "Healthcare"
-  
-  # Consumer
-  PG: "Consumer"
-  KO: "Consumer"
-  PEP: "Consumer"
-  WMT: "Consumer"
-  HD: "Consumer"
-  
-  # Energy
-  XOM: "Energy"
-  CVX: "Energy"
-  COP: "Energy"
-  
-  # Industrial
-  BA: "Industrial"
-  CAT: "Industrial"
-  GE: "Industrial"
-  MMM: "Industrial"
-  
-  # Utilities
-  NEE: "Utilities"
-  DUK: "Utilities"
-  SO: "Utilities"
-  
-  # Real Estate
-  AMT: "Real Estate"
-  PLD: "Real Estate"
-  EQIX: "Real Estate"
-  
-  # Materials
-  LIN: "Materials"
-  APD: "Materials"
-  SHW: "Materials"
-  
-  # Communication
-  VZ: "Communication"
-  T: "Communication"
-  CMCSA: "Communication"
+  AAPL: Technology
+  MSFT: Technology
+  GOOGL: Technology
+  AMZN: Technology
+  TSLA: Technology
+  NVDA: Technology
+  META: Technology
+  JPM: Financial
+  BAC: Financial
+  WFC: Financial
+  GS: Financial
+  MS: Financial
+  JNJ: Healthcare
+  PFE: Healthcare
+  UNH: Healthcare
+  ABBV: Healthcare
+  MRK: Healthcare
+  PG: Consumer
+  KO: Consumer
+  PEP: Consumer
+  WMT: Consumer
+  HD: Consumer
+  XOM: Energy
+  CVX: Energy
+  COP: Energy
+  BA: Industrial
+  CAT: Industrial
+  GE: Industrial
+  MMM: Industrial
+  NEE: Utilities
+  DUK: Utilities
+  SO: Utilities
+  AMT: Real Estate
+  PLD: Real Estate
+  EQIX: Real Estate
+  LIN: Materials
+  APD: Materials
+  SHW: Materials
+  VZ: Communication
+  T: Communication
+  CMCSA: Communication

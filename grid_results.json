@@ -1,0 +1,920 @@
+[
+  {
+    "param_combo": {
+      "horizon": 3,
+      "eps_quantile": 0.25,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 1.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 3,
+      "eps_quantile": 0.25,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 10.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 3,
+      "eps_quantile": 0.25,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 100.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 3,
+      "eps_quantile": 0.25,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 1.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 3,
+      "eps_quantile": 0.25,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 10.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 3,
+      "eps_quantile": 0.25,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 100.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 3,
+      "eps_quantile": 0.35,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 1.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 3,
+      "eps_quantile": 0.35,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 10.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 3,
+      "eps_quantile": 0.35,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 100.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 3,
+      "eps_quantile": 0.35,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 1.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 3,
+      "eps_quantile": 0.35,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 10.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 3,
+      "eps_quantile": 0.35,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 100.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 3,
+      "eps_quantile": 0.45,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 1.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 3,
+      "eps_quantile": 0.45,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 10.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 3,
+      "eps_quantile": 0.45,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 100.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 3,
+      "eps_quantile": 0.45,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 1.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 3,
+      "eps_quantile": 0.45,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 10.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 3,
+      "eps_quantile": 0.45,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 100.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 5,
+      "eps_quantile": 0.25,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 1.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 5,
+      "eps_quantile": 0.25,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 10.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 5,
+      "eps_quantile": 0.25,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 100.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 5,
+      "eps_quantile": 0.25,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 1.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 5,
+      "eps_quantile": 0.25,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 10.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 5,
+      "eps_quantile": 0.25,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 100.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 5,
+      "eps_quantile": 0.35,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 1.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 5,
+      "eps_quantile": 0.35,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 10.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 5,
+      "eps_quantile": 0.35,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 100.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 5,
+      "eps_quantile": 0.35,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 1.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 5,
+      "eps_quantile": 0.35,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 10.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 5,
+      "eps_quantile": 0.35,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 100.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 5,
+      "eps_quantile": 0.45,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 1.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 5,
+      "eps_quantile": 0.45,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 10.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 5,
+      "eps_quantile": 0.45,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 100.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 5,
+      "eps_quantile": 0.45,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 1.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 5,
+      "eps_quantile": 0.45,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 10.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 5,
+      "eps_quantile": 0.45,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 100.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 10,
+      "eps_quantile": 0.25,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 1.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 10,
+      "eps_quantile": 0.25,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 10.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 10,
+      "eps_quantile": 0.25,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 100.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 10,
+      "eps_quantile": 0.25,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 1.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 10,
+      "eps_quantile": 0.25,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 10.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 10,
+      "eps_quantile": 0.25,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 100.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 10,
+      "eps_quantile": 0.35,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 1.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 10,
+      "eps_quantile": 0.35,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 10.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 10,
+      "eps_quantile": 0.35,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 100.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 10,
+      "eps_quantile": 0.35,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 1.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 10,
+      "eps_quantile": 0.35,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 10.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 10,
+      "eps_quantile": 0.35,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 100.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 10,
+      "eps_quantile": 0.45,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 1.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 10,
+      "eps_quantile": 0.45,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 10.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 10,
+      "eps_quantile": 0.45,
+      "temperature": 1.0,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 100.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 10,
+      "eps_quantile": 0.45,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 1.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 10,
+      "eps_quantile": 0.45,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 10.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  },
+  {
+    "param_combo": {
+      "horizon": 10,
+      "eps_quantile": 0.45,
+      "temperature": 1.5,
+      "turnover_band": [
+        0.08,
+        0.18
+      ],
+      "model": {
+        "type": "ridge",
+        "alpha": 100.0
+      }
+    },
+    "success": false,
+    "error": "cannot import name 'LinAlgWarning' from 'numpy.linalg' (/home/Jennifer/miniconda3/envs/trader/lib/python3.11/site-packages/numpy/linalg/__init__.py)"
+  }
+]

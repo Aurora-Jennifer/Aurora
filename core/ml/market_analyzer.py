@@ -88,19 +88,23 @@ class ComprehensiveMarketAnalyzer:
     def _build_technical_indicators(self, data: pd.DataFrame, features: pd.DataFrame) -> pd.DataFrame:
         """Build multi-timeframe technical indicators"""
         
+        # Ensure we have Series for rolling operations
+        close_series = data['Close'] if hasattr(data['Close'], 'rolling') else pd.Series(data['Close'])
+        volume_series = data['Volume'] if hasattr(data['Volume'], 'rolling') else pd.Series(data['Volume'])
+        
         # Convert data to float64 for TA-Lib compatibility
         if TALIB_AVAILABLE:
-            close_values = data['Close'].values.astype(np.float64)
-            volume_values = data['Volume'].values.astype(np.float64)
+            close_values = close_series.values.astype(np.float64)
+            volume_values = volume_series.values.astype(np.float64)
             high_values = data['High'].values.astype(np.float64)
             low_values = data['Low'].values.astype(np.float64)
             open_values = data['Open'].values.astype(np.float64)
         
         # Price-based indicators
         for period in [5, 10, 20, 50, 100, 200]:
-            features[f'sma_{period}'] = data['Close'].rolling(period).mean()
-            features[f'ema_{period}'] = data['Close'].ewm(span=period).mean()
-            features[f'std_{period}'] = data['Close'].rolling(period).std()
+            features[f'sma_{period}'] = close_series.rolling(period).mean()
+            features[f'ema_{period}'] = close_series.ewm(span=period).mean()
+            features[f'std_{period}'] = close_series.rolling(period).std()
             features[f'bb_upper_{period}'] = features[f'sma_{period}'] + (2 * features[f'std_{period}'])
             features[f'bb_lower_{period}'] = features[f'sma_{period}'] - (2 * features[f'std_{period}'])
             features[f'bb_position_{period}'] = (data['Close'] - features[f'bb_lower_{period}']) / (features[f'bb_upper_{period}'] - features[f'bb_lower_{period}'])
@@ -116,21 +120,23 @@ class ComprehensiveMarketAnalyzer:
                 features[f'stoch_d_{period}'] = talib.STOCH(high_values, low_values, close_values, fastk_period=period)[1]
             else:
                 # Simplified RSI calculation
-                delta = data['Close'].diff()
+                delta = close_series.diff()
                 gain = (delta.where(delta > 0, 0)).rolling(window=period).mean()
                 loss = (-delta.where(delta < 0, 0)).rolling(window=period).mean()
                 rs = gain / loss
                 features[f'rsi_{period}'] = 100 - (100 / (1 + rs))
                 
                 # Simplified stochastic
-                low_min = data['Low'].rolling(window=period).min()
-                high_max = data['High'].rolling(window=period).max()
-                features[f'stoch_k_{period}'] = 100 * (data['Close'] - low_min) / (high_max - low_min)
+                low_series = data['Low'] if hasattr(data['Low'], 'rolling') else pd.Series(data['Low'])
+                high_series = data['High'] if hasattr(data['High'], 'rolling') else pd.Series(data['High'])
+                low_min = low_series.rolling(window=period).min()
+                high_max = high_series.rolling(window=period).max()
+                features[f'stoch_k_{period}'] = 100 * (close_series - low_min) / (high_max - low_min)
                 features[f'stoch_d_{period}'] = features[f'stoch_k_{period}'].rolling(window=3).mean()
         
         # Volume indicators
-        features['volume_sma_20'] = data['Volume'].rolling(20).mean()
-        features['volume_ratio'] = data['Volume'] / features['volume_sma_20']
+        features['volume_sma_20'] = volume_series.rolling(20).mean()
+        features['volume_ratio'] = volume_series / features['volume_sma_20']
         
         if TALIB_AVAILABLE:
             features['obv'] = talib.OBV(close_values, volume_values)
@@ -148,12 +154,14 @@ class ComprehensiveMarketAnalyzer:
             features['trange'] = talib.TRANGE(high_values, low_values, close_values)
         else:
             # Simplified ATR
-            high_low = data['High'] - data['Low']
-            high_close = np.abs(data['High'] - data['Close'].shift())
-            low_close = np.abs(data['Low'] - data['Close'].shift())
+            high_series = data['High'] if hasattr(data['High'], 'rolling') else pd.Series(data['High'])
+            low_series = data['Low'] if hasattr(data['Low'], 'rolling') else pd.Series(data['Low'])
+            high_low = high_series - low_series
+            high_close = np.abs(high_series - close_series.shift())
+            low_close = np.abs(low_series - close_series.shift())
             true_range = np.maximum(high_low, np.maximum(high_close, low_close))
             features['atr_14'] = true_range.rolling(window=14).mean()
-            features['natr_14'] = features['atr_14'] / data['Close'] * 100
+            features['natr_14'] = features['atr_14'] / close_series * 100
             features['trange'] = true_range
         
         # Trend indicators
@@ -194,13 +202,14 @@ class ComprehensiveMarketAnalyzer:
         """Build market regime classification features"""
         
         # Trend strength
-        short_trend = data['Close'].rolling(20).mean()
-        long_trend = data['Close'].rolling(50).mean()
+        close_series = data['Close'] if hasattr(data['Close'], 'rolling') else pd.Series(data['Close'])
+        short_trend = close_series.rolling(20).mean()
+        long_trend = close_series.rolling(50).mean()
         features['trend_strength'] = (short_trend - long_trend) / long_trend
         features['trend_direction'] = np.where(features['trend_strength'] > 0, 1, -1)
         
         # Volatility regime (convert to numeric)
-        volatility = data['Close'].rolling(20).std()
+        volatility = close_series.rolling(20).std()
         vol_percentile = volatility.rolling(100).rank(pct=True)
         features['volatility_regime'] = np.where(vol_percentile > 0.8, 2,  # high
                                                np.where(vol_percentile < 0.2, 0, 1))  # low, normal
@@ -241,7 +250,8 @@ class ComprehensiveMarketAnalyzer:
         """Build risk and volatility features"""
         
         # Value at Risk (VaR)
-        returns = data['Close'].pct_change()
+        close_series = data['Close'] if hasattr(data['Close'], 'rolling') else pd.Series(data['Close'])
+        returns = close_series.pct_change()
         features['var_95'] = returns.rolling(20).quantile(0.05)
         features['var_99'] = returns.rolling(20).quantile(0.01)
         
@@ -257,8 +267,8 @@ class ComprehensiveMarketAnalyzer:
         features['kurtosis'] = returns.rolling(20).kurt()
         
         # Drawdown analysis
-        rolling_max = data['Close'].rolling(20).max()
-        features['drawdown'] = (data['Close'] - rolling_max) / rolling_max
+        rolling_max = close_series.rolling(20).max()
+        features['drawdown'] = (close_series - rolling_max) / rolling_max
         features['max_drawdown'] = features['drawdown'].rolling(20).min()
         
         return features
@@ -335,12 +345,13 @@ class ComprehensiveMarketAnalyzer:
         """Classify current market regime"""
         
         # Simple regime classification based on trend and volatility
-        short_trend = data['Close'].rolling(20).mean().iloc[-1]
-        long_trend = data['Close'].rolling(50).mean().iloc[-1]
+        close_series = data['Close'] if hasattr(data['Close'], 'rolling') else pd.Series(data['Close'])
+        short_trend = close_series.rolling(20).mean().iloc[-1]
+        long_trend = close_series.rolling(50).mean().iloc[-1]
         trend_strength = (short_trend - long_trend) / long_trend
         
-        volatility = data['Close'].rolling(20).std().iloc[-1]
-        vol_percentile = data['Close'].rolling(100).std().rank(pct=True).iloc[-1]
+        volatility = close_series.rolling(20).std().iloc[-1]
+        vol_percentile = close_series.rolling(100).std().rank(pct=True).iloc[-1]
         
         # Classify regime
         if trend_strength > 0.02 and vol_percentile < 0.6:

@@ -17,10 +17,11 @@ touch kill.flag
 
 ## ✨ Key Features
 
-- **🤖 Fully Automated**: Systemd-based automation with daily trading execution
+- **🤖 Fully Automated**: Systemd-based automation with 5-minute trading execution
 - **📊 Real-time Data**: Alpaca API integration with 130 symbol coverage
 - **🧠 Machine Learning**: XGBoost models with leakage prevention and feature engineering
-- **🛡️ Risk Management**: Market-neutral positions with capacity constraints
+- **🛡️ Risk Management**: Advanced execution engine with two-phase batching and capital scaling
+- **💰 Capital Scaling**: 2x position scaling with 15k order caps for maximum capital utilization
 - **📈 Monitoring**: Comprehensive logging and alerting system
 - **🔒 Production Ready**: Bulletproof data pipeline with 100% coverage validation
 
@@ -30,23 +31,24 @@ touch kill.flag
 - **📡 Data Pipeline**: `tools/fetch_bars_alpaca.py` - Real-time market data with symbol normalization
 - **⚙️ Feature Engineering**: `ml/panel_builder.py` - Cross-sectional features with dispersion guards
 - **🎯 Model Training**: `scripts/run_universe.py` - XGBoost training with leakage audit
-- **💼 Paper Trading**: `ml/paper_trading_runner.py` - Automated execution with risk controls
+- **💼 Execution Engine**: `core/execution/` - Advanced order management with two-phase batching
+- **🛡️ Risk Management**: `core/execution/risk_manager.py` - Comprehensive risk controls and throttling
+- **💰 Position Sizing**: `core/execution/position_sizing.py` - Capital scaling and position optimization
 - **📊 Monitoring**: `monitor_paper_trading.sh` - System health checks and status reporting
 
 ### 🤖 Automation Schedule
-- **07:30 CT**: Preflight validation (`paper-preflight.service`)
-- **08:00 CT**: Trading execution (`paper-trading.service`)
-- **09:00-15:00 CT**: Hourly monitoring (`paper-status.service`)
-- **15:15 CT**: End-of-day reporting (`paper-eod.service`)
-- **16:00 CT**: Next-day data fetch (`paper-data-fetch.service`)
+- **08:30-15:00 CT**: Every 5 minutes - Real-time trading execution (`paper-trading-session.service`)
+- **Continuous**: Order reconciliation and position management
+- **Real-time**: Risk monitoring and position sizing with capital scaling
 
 ## 📚 Documentation
 
 - **[Architecture Overview](docs/ARCHITECTURE_OVERVIEW.md)** - Complete system architecture
-- **[Launch Readiness Checklist](docs/LAUNCH_READINESS_CHECKLIST.md)** - Pre/post launch procedures
+- **[Execution System Status](docs/execution_system_final_status.md)** - Current execution engine status
 - **[Systemd Automation Guide](docs/SYSTEMD_AUTOMATION_GUIDE.md)** - Automation setup and troubleshooting
 - **[Data Pipeline Architecture](docs/DATA_PIPELINE_ARCHITECTURE.md)** - Data flow and quality assurance
 - **[Automated Paper Trading Guide](docs/AUTOMATED_PAPER_TRADING_GUIDE.md)** - Complete trading operations guide
+- **[Capital Scaling Guide](docs/CAPITAL_SCALING_GUIDE.md)** - Position sizing and capital utilization
 
 ## 🚀 Getting Started
 
@@ -102,6 +104,8 @@ print(f'Coverage: {df.symbol.nunique()}/130 symbols')
 - **⚙️ Feature Count**: 45 features with cross-sectional dispersion
 - **🎯 Model Accuracy**: IC < 0.1 (no leakage detected)
 - **🛡️ Risk Metrics**: Beta ≈ 0, sector neutral, capacity constrained
+- **💰 Capital Utilization**: 2x scaling with 15k order caps (~$44k deployed)
+- **⚡ Execution Speed**: 5-minute intervals with two-phase batching
 
 ## 🔧 Troubleshooting
 
@@ -183,13 +187,14 @@ This project is licensed under the Apache License 2.0 - see the LICENSE file for
 
 ## 🎯 Current Status
 
-**✅ PRODUCTION READY**: The system is fully operational with automated paper trading
+**✅ PRODUCTION READY**: Advanced execution engine with capital scaling operational
 **📊 DATA COVERAGE**: 130/130 symbols (100%)
-**🤖 AUTOMATION**: All systemd services active and scheduled
-**🛡️ RISK CONTROLS**: Market-neutral with capacity constraints
-**📈 MONITORING**: Comprehensive logging and alerting
+**🤖 AUTOMATION**: 5-minute trading intervals with systemd automation
+**🛡️ RISK CONTROLS**: Two-phase batching with comprehensive risk management
+**💰 CAPITAL SCALING**: 2x position scaling with 15k order caps
+**📈 MONITORING**: Real-time execution monitoring and alerting
 
-**🚀 Ready for automated launch tomorrow at 08:00 CT!**
+**🚀 Live and trading every 5 minutes during market hours!**
 
 ## Reality Check
 

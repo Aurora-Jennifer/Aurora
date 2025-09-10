@@ -1,0 +1,30 @@
+{
+  "random_seed": 42,
+  "python_version": "3.11.13 (main, Jun  5 2025, 13:12:00) [GCC 11.2.0]",
+  "platform": "Linux-6.16.4-arch1-1-x86_64-with-glibc2.42",
+  "python_hash_seed": "42",
+  "environment_variables": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "library_versions": {
+    "numpy": "2.2.6",
+    "pandas": "2.3.1",
+    "scipy": "1.16.1",
+    "sklearn": "not_installed",
+    "xgboost": "3.0.4",
+    "matplotlib": "3.10.5",
+    "plotly": "6.3.0",
+    "yfinance": "0.2.65",
+    "joblib": "1.5.1"
+  },
+  "timestamp": "2025-09-09 14:05:48 UTC",
+  "git_info": {
+    "commit_hash": "a595545a00b7fe522896ae08e8b6b3ae2b13d49e",
+    "branch": "fix/gauntlet",
+    "git_status": "dirty"
+  }
+}

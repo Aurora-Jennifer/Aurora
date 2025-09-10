@@ -1,0 +1,2047 @@
+{
+  "rolling_exposures": {
+    "2024-02-07": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.16360184425900137,
+      "momentum_exposure": -0.16141131642249323,
+      "n_observations": 6020
+    },
+    "2024-02-08": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.06039268115517826,
+      "momentum_exposure": -0.171923047360324,
+      "n_observations": 6020
+    },
+    "2024-02-09": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.08427586167923624,
+      "momentum_exposure": -0.13489550947728252,
+      "n_observations": 6020
+    },
+    "2024-02-12": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.03698083373055116,
+      "momentum_exposure": -0.07981566677006625,
+      "n_observations": 6020
+    },
+    "2024-02-13": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.062088020918077254,
+      "momentum_exposure": -0.022109187709435,
+      "n_observations": 6020
+    },
+    "2024-02-14": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.05047218640129655,
+      "momentum_exposure": -0.042836299794043714,
+      "n_observations": 6020
+    },
+    "2024-02-15": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.07130056137894521,
+      "momentum_exposure": 0.002156514760186734,
+      "n_observations": 6020
+    },
+    "2024-02-16": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.0971138721446796,
+      "momentum_exposure": 0.01357283666044564,
+      "n_observations": 6020
+    },
+    "2024-02-20": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.20399723191736965,
+      "momentum_exposure": -0.014666714713704223,
+      "n_observations": 6020
+    },
+    "2024-02-21": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.06637662747857573,
+      "momentum_exposure": -0.05612222767921334,
+      "n_observations": 6020
+    },
+    "2024-02-22": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.04401411653173737,
+      "momentum_exposure": -0.04083122848132209,
+      "n_observations": 6020
+    },
+    "2024-02-23": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.11599611042953387,
+      "momentum_exposure": -0.05349118779433604,
+      "n_observations": 6020
+    },
+    "2024-02-26": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.01919521148358247,
+      "momentum_exposure": -0.02599241364901329,
+      "n_observations": 6020
+    },
+    "2024-02-27": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.17253133773202153,
+      "momentum_exposure": 0.00016403028688051445,
+      "n_observations": 6020
+    },
+    "2024-02-28": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.09850699563585649,
+      "momentum_exposure": 0.04970524382888284,
+      "n_observations": 6020
+    },
+    "2024-02-29": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.07063534512370678,
+      "momentum_exposure": 0.0522175222837769,
+      "n_observations": 6020
+    },
+    "2024-03-01": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.0697546904936986,
+      "momentum_exposure": 0.07857738994479148,
+      "n_observations": 6020
+    },
+    "2024-03-04": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.2556139719515145,
+      "momentum_exposure": 0.06257512886762862,
+      "n_observations": 6020
+    },
+    "2024-03-05": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.36133377735559724,
+      "momentum_exposure": 0.09543434597367019,
+      "n_observations": 6020
+    },
+    "2024-03-06": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.18011884547581736,
+      "momentum_exposure": 0.13954055269235124,
+      "n_observations": 6020
+    },
+    "2024-03-07": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.2300102295846579,
+      "momentum_exposure": 0.18012752223201886,
+      "n_observations": 6020
+    },
+    "2024-03-08": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.1662395930176482,
+      "momentum_exposure": 0.20037254262250498,
+      "n_observations": 6020
+    },
+    "2024-03-11": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.010958090179096918,
+      "momentum_exposure": 0.24128408372126428,
+      "n_observations": 6020
+    },
+    "2024-03-12": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.14237857228785428,
+      "momentum_exposure": 0.1939879251346588,
+      "n_observations": 6020
+    },
+    "2024-03-13": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.08977866761814872,
+      "momentum_exposure": 0.09694200209919113,
+      "n_observations": 6020
+    },
+    "2024-03-14": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.05824467112528219,
+      "momentum_exposure": 0.03748606878003989,
+      "n_observations": 6020
+    },
+    "2024-03-15": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.042343924045862714,
+      "momentum_exposure": -0.02121126518497883,
+      "n_observations": 6020
+    },
+    "2024-03-18": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.006388987440272125,
+      "momentum_exposure": -0.06290742357258694,
+      "n_observations": 6020
+    },
+    "2024-03-19": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.015182821932301265,
+      "momentum_exposure": -0.05464416868425237,
+      "n_observations": 6020
+    },
+    "2024-03-20": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.073163005326645,
+      "momentum_exposure": -0.027361945733390066,
+      "n_observations": 6020
+    },
+    "2024-03-21": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.15035727410618535,
+      "momentum_exposure": 0.0007586711831879706,
+      "n_observations": 6020
+    },
+    "2024-03-22": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.2387860411692694,
+      "momentum_exposure": 0.04635068931336901,
+      "n_observations": 6020
+    },
+    "2024-03-25": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.1796037082357579,
+      "momentum_exposure": 0.08792228495571837,
+      "n_observations": 6020
+    },
+    "2024-03-26": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.08063302803523612,
+      "momentum_exposure": 0.12051583614075659,
+      "n_observations": 6020
+    },
+    "2024-03-27": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.07997176687286776,
+      "momentum_exposure": 0.13548739129808843,
+      "n_observations": 6020
+    },
+    "2024-03-28": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.17999678401210914,
+      "momentum_exposure": 0.1119936541824777,
+      "n_observations": 6020
+    },
+    "2024-04-01": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.25179219936164243,
+      "momentum_exposure": 0.043922954651706855,
+      "n_observations": 6020
+    },
+    "2024-04-02": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.25628213696263813,
+      "momentum_exposure": -0.04836568291191508,
+      "n_observations": 6020
+    },
+    "2024-04-03": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.05168086244614137,
+      "momentum_exposure": -0.11879889686644728,
+      "n_observations": 6020
+    },
+    "2024-04-04": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.14427186340013795,
+      "momentum_exposure": -0.12492766881312824,
+      "n_observations": 6020
+    },
+    "2024-04-05": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.11770120088787304,
+      "momentum_exposure": -0.14391782697602903,
+      "n_observations": 6020
+    },
+    "2024-04-08": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.03450520274755651,
+      "momentum_exposure": -0.12991571765797996,
+      "n_observations": 6020
+    },
+    "2024-04-09": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.1689121918385054,
+      "momentum_exposure": -0.08159972221212618,
+      "n_observations": 6020
+    },
+    "2024-04-10": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.24361376328315182,
+      "momentum_exposure": -0.058004036059335545,
+      "n_observations": 6020
+    },
+    "2024-04-11": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.07406560102451987,
+      "momentum_exposure": -0.09425020163385382,
+      "n_observations": 6020
+    },
+    "2024-04-12": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.12238614044618117,
+      "momentum_exposure": -0.061524912526235646,
+      "n_observations": 6020
+    },
+    "2024-04-15": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.28459746041642003,
+      "momentum_exposure": 0.01143783385839636,
+      "n_observations": 6020
+    },
+    "2024-04-16": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.2252257378733175,
+      "momentum_exposure": 0.07687975814784986,
+      "n_observations": 6020
+    },
+    "2024-04-17": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.19470058900983878,
+      "momentum_exposure": 0.11122606559526022,
+      "n_observations": 6020
+    },
+    "2024-04-18": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.2070215269959519,
+      "momentum_exposure": 0.17513433241583215,
+      "n_observations": 6020
+    },
+    "2024-04-19": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.012585977826127175,
+      "momentum_exposure": 0.18093802397226932,
+      "n_observations": 6020
+    },
+    "2024-04-22": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.12204237055980645,
+      "momentum_exposure": 0.16224909672197899,
+      "n_observations": 6020
+    },
+    "2024-04-23": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.25401773982373593,
+      "momentum_exposure": 0.1669328711249835,
+      "n_observations": 6020
+    },
+    "2024-04-24": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.16515783393502814,
+      "momentum_exposure": 0.17998130561419795,
+      "n_observations": 6020
+    },
+    "2024-04-25": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.09026266114192062,
+      "momentum_exposure": 0.15278419760586634,
+      "n_observations": 6020
+    },
+    "2024-04-26": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.08447163935217285,
+      "momentum_exposure": 0.14072866564699313,
+      "n_observations": 6020
+    },
+    "2024-04-29": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.04345209159523413,
+      "momentum_exposure": 0.13984940722798633,
+      "n_observations": 6020
+    },
+    "2024-04-30": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.005001068048681295,
+      "momentum_exposure": 0.11211846531972183,
+      "n_observations": 6020
+    },
+    "2024-05-01": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.004080942863505194,
+      "momentum_exposure": 0.066441968883401,
+      "n_observations": 6020
+    },
+    "2024-05-02": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.006942034829565813,
+      "momentum_exposure": 0.039374916321285425,
+      "n_observations": 6020
+    },
+    "2024-05-03": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.010030235851063992,
+      "momentum_exposure": 0.02390144822897806,
+      "n_observations": 6020
+    },
+    "2024-05-06": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.08165976854676577,
+      "momentum_exposure": 0.012505713691723807,
+      "n_observations": 6020
+    },
+    "2024-05-07": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.0038237564231683183,
+      "momentum_exposure": -0.0003835492177052948,
+      "n_observations": 6020
+    },
+    "2024-05-08": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.005242895733568371,
+      "momentum_exposure": 0.008654085267872265,
+      "n_observations": 6020
+    },
+    "2024-05-09": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.015135773971180485,
+      "momentum_exposure": 0.003006403633018699,
+      "n_observations": 6020
+    },
+    "2024-05-10": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.016556545696071717,
+      "momentum_exposure": -0.012187588025896746,
+      "n_observations": 6020
+    },
+    "2024-05-13": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.00032430239549587195,
+      "momentum_exposure": -0.008060643741841398,
+      "n_observations": 6020
+    },
+    "2024-05-14": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.03866863358371507,
+      "momentum_exposure": 0.009684900664788878,
+      "n_observations": 6020
+    },
+    "2024-05-15": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.07550947569183779,
+      "momentum_exposure": -0.0051425208285353985,
+      "n_observations": 6020
+    },
+    "2024-05-16": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.06396333574437314,
+      "momentum_exposure": -0.029654793581886968,
+      "n_observations": 6020
+    },
+    "2024-05-17": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.2469115591953173,
+      "momentum_exposure": -0.035981660579044825,
+      "n_observations": 6020
+    },
+    "2024-05-20": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.20155480890031283,
+      "momentum_exposure": -0.08576962204369702,
+      "n_observations": 6020
+    },
+    "2024-05-21": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.15048501672443798,
+      "momentum_exposure": -0.12246301493570536,
+      "n_observations": 6020
+    },
+    "2024-05-22": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.1732865792850815,
+      "momentum_exposure": -0.14192458709941613,
+      "n_observations": 6020
+    },
+    "2024-05-23": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.05732743041260448,
+      "momentum_exposure": -0.1561133425633769,
+      "n_observations": 6020
+    },
+    "2024-05-24": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.24736288059868175,
+      "momentum_exposure": -0.12470709031446653,
+      "n_observations": 6020
+    },
+    "2024-05-28": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.2297651921425511,
+      "momentum_exposure": -0.0253536928101754,
+      "n_observations": 6020
+    },
+    "2024-05-29": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.20047699784871592,
+      "momentum_exposure": 0.05456311286667268,
+      "n_observations": 6020
+    },
+    "2024-05-30": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.10678988261823923,
+      "momentum_exposure": 0.12314989261775558,
+      "n_observations": 6020
+    },
+    "2024-05-31": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.03329379284150319,
+      "momentum_exposure": 0.1642918032259347,
+      "n_observations": 6020
+    },
+    "2024-06-03": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.09709746860901176,
+      "momentum_exposure": 0.16264057082457403,
+      "n_observations": 6020
+    },
+    "2024-06-04": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.17675290760672388,
+      "momentum_exposure": 0.10725363735748734,
+      "n_observations": 6020
+    },
+    "2024-06-05": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.12379175123866787,
+      "momentum_exposure": 0.02872759189816121,
+      "n_observations": 6020
+    },
+    "2024-06-06": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.09414457384291174,
+      "momentum_exposure": -0.04089467925539836,
+      "n_observations": 6020
+    },
+    "2024-06-07": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.1964647916539798,
+      "momentum_exposure": -0.10450717303045082,
+      "n_observations": 6020
+    },
+    "2024-06-10": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.24226313577439068,
+      "momentum_exposure": -0.1394148565736435,
+      "n_observations": 6020
+    },
+    "2024-06-11": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.1682927737422576,
+      "momentum_exposure": -0.16996334051462994,
+      "n_observations": 6020
+    },
+    "2024-06-12": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.15827317944053462,
+      "momentum_exposure": -0.1619659749971709,
+      "n_observations": 6020
+    },
+    "2024-06-13": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.1236535760498996,
+      "momentum_exposure": -0.1725916926414185,
+      "n_observations": 6020
+    },
+    "2024-06-14": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.011823761713968367,
+      "momentum_exposure": -0.15348754465625866,
+      "n_observations": 6020
+    },
+    "2024-06-17": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.2377016618847848,
+      "momentum_exposure": -0.12521636880533446,
+      "n_observations": 6020
+    },
+    "2024-06-18": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.2633519497973727,
+      "momentum_exposure": -0.04699047202606854,
+      "n_observations": 6020
+    },
+    "2024-06-20": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.2744199309356099,
+      "momentum_exposure": 0.032167139882530275,
+      "n_observations": 6020
+    },
+    "2024-06-21": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.238767033768955,
+      "momentum_exposure": 0.14117396514543493,
+      "n_observations": 6020
+    },
+    "2024-06-24": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.2044042094236546,
+      "momentum_exposure": 0.19875984557620902,
+      "n_observations": 6020
+    },
+    "2024-06-25": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.009053424738754475,
+      "momentum_exposure": 0.2327841539145312,
+      "n_observations": 6020
+    },
+    "2024-06-26": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.03449467525214235,
+      "momentum_exposure": 0.1886840084585153,
+      "n_observations": 6020
+    },
+    "2024-06-27": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.06346447691858464,
+      "momentum_exposure": 0.13106037275923255,
+      "n_observations": 6020
+    },
+    "2024-06-28": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.16420192026710625,
+      "momentum_exposure": 0.057602649135481285,
+      "n_observations": 6020
+    },
+    "2024-07-01": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.18741315781566398,
+      "momentum_exposure": -0.011487901944922909,
+      "n_observations": 6020
+    },
+    "2024-07-02": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.05318529106334308,
+      "momentum_exposure": -0.08198082546621081,
+      "n_observations": 6020
+    },
+    "2024-07-03": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.00610598876164551,
+      "momentum_exposure": -0.10325085463344867,
+      "n_observations": 6020
+    },
+    "2024-07-05": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.16178609773903388,
+      "momentum_exposure": -0.10594991657678182,
+      "n_observations": 6020
+    },
+    "2024-07-08": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.19063350919996697,
+      "momentum_exposure": -0.05664521582693398,
+      "n_observations": 6020
+    },
+    "2024-07-09": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.10066168713269785,
+      "momentum_exposure": 0.027168587430437704,
+      "n_observations": 6020
+    },
+    "2024-07-10": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.1560973718410706,
+      "momentum_exposure": 0.08156169169033109,
+      "n_observations": 6020
+    },
+    "2024-07-11": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.24124478006573516,
+      "momentum_exposure": 0.12693525628138996,
+      "n_observations": 6020
+    },
+    "2024-07-12": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.13851943584450532,
+      "momentum_exposure": 0.17118009878691814,
+      "n_observations": 6020
+    },
+    "2024-07-15": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.10160391786235574,
+      "momentum_exposure": 0.15206075478691344,
+      "n_observations": 6020
+    },
+    "2024-07-16": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.08322659725571604,
+      "momentum_exposure": 0.12840441686186668,
+      "n_observations": 6020
+    },
+    "2024-07-17": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.07973038174334104,
+      "momentum_exposure": 0.12788800173440892,
+      "n_observations": 6020
+    },
+    "2024-07-18": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.13644455443600312,
+      "momentum_exposure": 0.10555460852749148,
+      "n_observations": 6020
+    },
+    "2024-07-19": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.09122702442483607,
+      "momentum_exposure": 0.07005764695192301,
+      "n_observations": 6020
+    },
+    "2024-07-22": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.17256390707742936,
+      "momentum_exposure": 0.04908590053886768,
+      "n_observations": 6020
+    },
+    "2024-07-23": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.24132361669019747,
+      "momentum_exposure": -0.006288165731733227,
+      "n_observations": 6020
+    },
+    "2024-07-24": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.21105973492039717,
+      "momentum_exposure": -0.06324122154236564,
+      "n_observations": 6020
+    },
+    "2024-07-25": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.1651941389560991,
+      "momentum_exposure": -0.11365429954739018,
+      "n_observations": 6020
+    },
+    "2024-07-26": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.22840776160255685,
+      "momentum_exposure": -0.13700573985096412,
+      "n_observations": 6020
+    },
+    "2024-07-29": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.3359853601273501,
+      "momentum_exposure": -0.17184552664686303,
+      "n_observations": 6020
+    },
+    "2024-07-30": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.37062953006332383,
+      "momentum_exposure": -0.20367628290458895,
+      "n_observations": 6020
+    },
+    "2024-07-31": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.30147183533968325,
+      "momentum_exposure": -0.22968132946386932,
+      "n_observations": 6020
+    },
+    "2024-08-01": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.3765527966716518,
+      "momentum_exposure": -0.24206853701948045,
+      "n_observations": 6020
+    },
+    "2024-08-02": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.21349378915242748,
+      "momentum_exposure": -0.2962631709469049,
+      "n_observations": 6020
+    },
+    "2024-08-05": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.10532621799894913,
+      "momentum_exposure": -0.31573792338012596,
+      "n_observations": 6020
+    },
+    "2024-08-06": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.15841025022008218,
+      "momentum_exposure": -0.22649018188191344,
+      "n_observations": 6020
+    },
+    "2024-08-07": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.20884783871391083,
+      "momentum_exposure": -0.1337575006723955,
+      "n_observations": 6020
+    },
+    "2024-08-08": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.23642761159334374,
+      "momentum_exposure": -0.058866925903171094,
+      "n_observations": 6020
+    },
+    "2024-08-09": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.30901951101351527,
+      "momentum_exposure": 0.06002233889114582,
+      "n_observations": 6020
+    },
+    "2024-08-12": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.2938939737844016,
+      "momentum_exposure": 0.17852759841951382,
+      "n_observations": 6020
+    },
+    "2024-08-13": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.3844071474152143,
+      "momentum_exposure": 0.22047174068577338,
+      "n_observations": 6020
+    },
+    "2024-08-14": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.2805711807025339,
+      "momentum_exposure": 0.2651980065042507,
+      "n_observations": 6020
+    },
+    "2024-08-15": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.3092714286345222,
+      "momentum_exposure": 0.27358440239160886,
+      "n_observations": 6020
+    },
+    "2024-08-16": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.024485918885868437,
+      "momentum_exposure": 0.2925189429175077,
+      "n_observations": 6020
+    },
+    "2024-08-19": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.23550078788451437,
+      "momentum_exposure": 0.2529871223495542,
+      "n_observations": 6020
+    },
+    "2024-08-20": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.14443172969417062,
+      "momentum_exposure": 0.24260607926066474,
+      "n_observations": 6020
+    },
+    "2024-08-21": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.18108510291219843,
+      "momentum_exposure": 0.19875856838284253,
+      "n_observations": 6020
+    },
+    "2024-08-22": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.12263445487157643,
+      "momentum_exposure": 0.1906988032285388,
+      "n_observations": 6020
+    },
+    "2024-08-23": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.14310796227830244,
+      "momentum_exposure": 0.16463977695121015,
+      "n_observations": 6020
+    },
+    "2024-08-26": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.02019080039111116,
+      "momentum_exposure": 0.1612004894466404,
+      "n_observations": 6020
+    },
+    "2024-08-27": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.003975633600887313,
+      "momentum_exposure": 0.11503433125235286,
+      "n_observations": 6020
+    },
+    "2024-08-28": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.0650096327226674,
+      "momentum_exposure": 0.07346018515680763,
+      "n_observations": 6020
+    },
+    "2024-08-29": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.010243593484939093,
+      "momentum_exposure": 0.031878005794634116,
+      "n_observations": 6020
+    },
+    "2024-08-30": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.09561341992550704,
+      "momentum_exposure": -0.012627828115598802,
+      "n_observations": 6020
+    },
+    "2024-09-03": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.037136064753025985,
+      "momentum_exposure": -0.025518219064890955,
+      "n_observations": 6020
+    },
+    "2024-09-04": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.13784068698342555,
+      "momentum_exposure": -0.022993149889569128,
+      "n_observations": 6020
+    },
+    "2024-09-05": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.022464730581681826,
+      "momentum_exposure": -0.052799695599624545,
+      "n_observations": 6020
+    },
+    "2024-09-06": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.0022464420187232707,
+      "momentum_exposure": -0.04444560668795977,
+      "n_observations": 6020
+    },
+    "2024-09-09": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.12708908565760102,
+      "momentum_exposure": -0.035792461038199226,
+      "n_observations": 6020
+    },
+    "2024-09-10": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.19491700523993014,
+      "momentum_exposure": -0.0017679464323946408,
+      "n_observations": 6020
+    },
+    "2024-09-11": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.4232667643400496,
+      "momentum_exposure": 0.04052289071042815,
+      "n_observations": 6020
+    },
+    "2024-09-12": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.272578866968042,
+      "momentum_exposure": 0.16097038137760536,
+      "n_observations": 6020
+    },
+    "2024-09-13": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.4455969096558731,
+      "momentum_exposure": 0.21643055699775657,
+      "n_observations": 6020
+    },
+    "2024-09-16": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.35161333706598946,
+      "momentum_exposure": 0.29463223897480495,
+      "n_observations": 6020
+    },
+    "2024-09-17": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.32214271821864576,
+      "momentum_exposure": 0.3369650634441326,
+      "n_observations": 6020
+    },
+    "2024-09-18": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.22081310445465457,
+      "momentum_exposure": 0.36190030313423666,
+      "n_observations": 6020
+    },
+    "2024-09-19": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.09557263616744328,
+      "momentum_exposure": 0.31227667162831985,
+      "n_observations": 6020
+    },
+    "2024-09-20": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.1481131824006722,
+      "momentum_exposure": 0.2653979365063428,
+      "n_observations": 6020
+    },
+    "2024-09-23": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.15012974888327385,
+      "momentum_exposure": 0.200514114881268,
+      "n_observations": 6020
+    },
+    "2024-09-24": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.13947715175661607,
+      "momentum_exposure": 0.1646208014621175,
+      "n_observations": 6020
+    },
+    "2024-09-25": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.014777884172157295,
+      "momentum_exposure": 0.12769349327244342,
+      "n_observations": 6020
+    },
+    "2024-09-26": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.0032820210255946076,
+      "momentum_exposure": 0.09594200422693086,
+      "n_observations": 6020
+    },
+    "2024-09-27": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.008886384391291297,
+      "momentum_exposure": 0.08256837717823054,
+      "n_observations": 6020
+    },
+    "2024-09-30": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.027792667143186702,
+      "momentum_exposure": 0.0749277685557054,
+      "n_observations": 6020
+    },
+    "2024-10-01": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.004434569916480141,
+      "momentum_exposure": 0.04540724293193696,
+      "n_observations": 6020
+    },
+    "2024-10-02": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.030794346003422103,
+      "momentum_exposure": 0.025948256548118432,
+      "n_observations": 6020
+    },
+    "2024-10-03": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.1021146652163771,
+      "momentum_exposure": 0.03301006361403641,
+      "n_observations": 6020
+    },
+    "2024-10-04": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.06964648087761457,
+      "momentum_exposure": 0.03186491525186208,
+      "n_observations": 6020
+    },
+    "2024-10-07": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.09003939754637667,
+      "momentum_exposure": 0.019963546182114152,
+      "n_observations": 6020
+    },
+    "2024-10-08": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.09394396451611127,
+      "momentum_exposure": 0.02531686329614981,
+      "n_observations": 6020
+    },
+    "2024-10-09": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.2599809771973668,
+      "momentum_exposure": 0.05263327710478071,
+      "n_observations": 6020
+    },
+    "2024-10-10": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.21585588372982428,
+      "momentum_exposure": 0.1008579046835813,
+      "n_observations": 6020
+    },
+    "2024-10-11": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.13121321069705835,
+      "momentum_exposure": 0.13562800750013643,
+      "n_observations": 6020
+    },
+    "2024-10-14": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.12449650183790463,
+      "momentum_exposure": 0.1560687676668412,
+      "n_observations": 6020
+    },
+    "2024-10-15": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.051559954529777643,
+      "momentum_exposure": 0.15556046811099314,
+      "n_observations": 6020
+    },
+    "2024-10-16": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.1306193096071154,
+      "momentum_exposure": 0.1438680932007298,
+      "n_observations": 6020
+    },
+    "2024-10-17": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.09497018640951976,
+      "momentum_exposure": 0.08108099321107336,
+      "n_observations": 6020
+    },
+    "2024-10-18": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.0058990783329116656,
+      "momentum_exposure": 0.029188635874231334,
+      "n_observations": 6020
+    },
+    "2024-10-21": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.08114287653244821,
+      "momentum_exposure": -0.0073369498243750055,
+      "n_observations": 6020
+    },
+    "2024-10-22": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.18551769160954729,
+      "momentum_exposure": -0.011916289403188065,
+      "n_observations": 6020
+    },
+    "2024-10-23": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.1288132136919993,
+      "momentum_exposure": 0.018232831345671788,
+      "n_observations": 6020
+    },
+    "2024-10-24": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.13817351053951227,
+      "momentum_exposure": 0.07811345325124418,
+      "n_observations": 6020
+    },
+    "2024-10-25": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.09067880047110131,
+      "momentum_exposure": 0.12708574273071974,
+      "n_observations": 6020
+    },
+    "2024-10-28": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.01572702452412327,
+      "momentum_exposure": 0.13395097677216639,
+      "n_observations": 6020
+    },
+    "2024-10-29": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.03789826907678005,
+      "momentum_exposure": 0.11647199634936073,
+      "n_observations": 6020
+    },
+    "2024-10-30": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.005393667372405059,
+      "momentum_exposure": 0.07434699603154608,
+      "n_observations": 6020
+    },
+    "2024-10-31": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.16252709566992943,
+      "momentum_exposure": 0.05707907955739759,
+      "n_observations": 6020
+    },
+    "2024-11-01": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.21572448803316305,
+      "momentum_exposure": -0.018130796815068313,
+      "n_observations": 6020
+    },
+    "2024-11-04": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.22666029987174874,
+      "momentum_exposure": -0.05982174574728115,
+      "n_observations": 6020
+    },
+    "2024-11-05": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.22398717573860086,
+      "momentum_exposure": -0.09925226509455501,
+      "n_observations": 6020
+    },
+    "2024-11-06": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.2917594431422399,
+      "momentum_exposure": -0.14505840408269,
+      "n_observations": 6020
+    },
+    "2024-11-07": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.2352347994601361,
+      "momentum_exposure": -0.20345674020146765,
+      "n_observations": 6020
+    },
+    "2024-11-08": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.2347520956993332,
+      "momentum_exposure": -0.21270052498194914,
+      "n_observations": 6020
+    },
+    "2024-11-11": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.09433265571062978,
+      "momentum_exposure": -0.21309070391922974,
+      "n_observations": 6020
+    },
+    "2024-11-12": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.04885387609430886,
+      "momentum_exposure": -0.19521195153789686,
+      "n_observations": 6020
+    },
+    "2024-11-13": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.08077534044243974,
+      "momentum_exposure": -0.16264208095046984,
+      "n_observations": 6020
+    },
+    "2024-11-14": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.09575579294659485,
+      "momentum_exposure": -0.0989373785112415,
+      "n_observations": 6020
+    },
+    "2024-11-15": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.004821412391936616,
+      "momentum_exposure": -0.04250175543095359,
+      "n_observations": 6020
+    },
+    "2024-11-18": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.06691545717802287,
+      "momentum_exposure": 0.0037003442278689207,
+      "n_observations": 6020
+    },
+    "2024-11-19": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.17045853740028988,
+      "momentum_exposure": 0.037855481742006904,
+      "n_observations": 6020
+    },
+    "2024-11-20": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.07183314973896827,
+      "momentum_exposure": 0.06752984431670311,
+      "n_observations": 6020
+    },
+    "2024-11-21": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.1064198765804064,
+      "momentum_exposure": 0.07841545730685186,
+      "n_observations": 6020
+    },
+    "2024-11-22": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.1520843110060195,
+      "momentum_exposure": 0.09626490453822147,
+      "n_observations": 6020
+    },
+    "2024-11-25": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.24497629230280749,
+      "momentum_exposure": 0.1241017114580099,
+      "n_observations": 6020
+    },
+    "2024-11-26": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.02530709215783013,
+      "momentum_exposure": 0.13900891910224886,
+      "n_observations": 6020
+    },
+    "2024-11-27": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.039952563062654066,
+      "momentum_exposure": 0.1074210773535806,
+      "n_observations": 6020
+    },
+    "2024-11-29": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.07975659645453526,
+      "momentum_exposure": 0.0959557013316737,
+      "n_observations": 6020
+    },
+    "2024-12-02": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.0035271622041795386,
+      "momentum_exposure": 0.07119300579884982,
+      "n_observations": 6020
+    },
+    "2024-12-03": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.02812164001531081,
+      "momentum_exposure": 0.034614504569676526,
+      "n_observations": 6020
+    },
+    "2024-12-04": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.06282153682613764,
+      "momentum_exposure": -0.005689344717380003,
+      "n_observations": 6020
+    },
+    "2024-12-05": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.007129246778935007,
+      "momentum_exposure": -0.025294447427484143,
+      "n_observations": 6020
+    },
+    "2024-12-06": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.057221956431751125,
+      "momentum_exposure": -0.03858831264260127,
+      "n_observations": 6020
+    },
+    "2024-12-09": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.06485105947752885,
+      "momentum_exposure": -0.04637448872681308,
+      "n_observations": 6020
+    },
+    "2024-12-10": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.26401135380896573,
+      "momentum_exposure": -0.05705068500230787,
+      "n_observations": 6020
+    },
+    "2024-12-11": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.19167729366825384,
+      "momentum_exposure": -0.09479545194445652,
+      "n_observations": 6020
+    },
+    "2024-12-12": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.13521446607497475,
+      "momentum_exposure": -0.11700026904915799,
+      "n_observations": 6020
+    },
+    "2024-12-13": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.11742172729990061,
+      "momentum_exposure": -0.12198998132539818,
+      "n_observations": 6020
+    },
+    "2024-12-16": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.11132093577617483,
+      "momentum_exposure": -0.1390915762810482,
+      "n_observations": 6020
+    },
+    "2024-12-17": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.04765294195232523,
+      "momentum_exposure": -0.14723469889504212,
+      "n_observations": 6020
+    },
+    "2024-12-18": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.06364713750449394,
+      "momentum_exposure": -0.10619637449066394,
+      "n_observations": 6020
+    },
+    "2024-12-19": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.018736080021181236,
+      "momentum_exposure": -0.06115778484613018,
+      "n_observations": 6020
+    },
+    "2024-12-20": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.12411526554958552,
+      "momentum_exposure": -0.048044239472357246,
+      "n_observations": 6020
+    },
+    "2024-12-23": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.09212845613139387,
+      "momentum_exposure": 0.005022688552778182,
+      "n_observations": 6020
+    },
+    "2024-12-24": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": 0.07684203058458837,
+      "momentum_exposure": 0.05361125173090727,
+      "n_observations": 6020
+    },
+    "2024-12-26": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.00584192603696089,
+      "momentum_exposure": 0.04092818894745085,
+      "n_observations": 6020
+    },
+    "2024-12-27": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.04070100457538592,
+      "momentum_exposure": 0.027222335187606,
+      "n_observations": 6020
+    },
+    "2024-12-30": {
+      "market_beta": NaN,
+      "market_alpha": NaN,
+      "market_r_squared": NaN,
+      "sector_exposures": {},
+      "size_exposure": -0.09272909858220181,
+      "momentum_exposure": 0.010409282314468738,
+      "n_observations": 6020
+    }
+  },
+  "summary_stats": {
+    "avg_market_beta": NaN,
+    "std_market_beta": NaN,
+    "avg_market_alpha": NaN,
+    "avg_r_squared": NaN,
+    "n_rolling_windows": 226
+  },
+  "lookback_window": 20,
+  "n_dates": 246
+}

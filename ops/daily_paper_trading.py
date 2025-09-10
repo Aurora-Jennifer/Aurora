@@ -32,6 +32,10 @@ import subprocess
 from ops.paper_trading_guards import PaperTradingGuards
 from ops.pre_market_dry_run import run_pre_market_dry_run
 from ml.production_logging import setup_production_logging
+from core.walk.xgb_model_loader import XGBModelLoader
+from core.ml.feature_gate import prepare_X_for_xgb
+from core.data.ingest import fetch_alpaca_bars, create_fallback_data
+from core.ml.sector_residualizer import load_sector_map, sector_residualize
 # from ml.paper_trading_reports import generate_daily_report, generate_weekly_report
 # Note: Using mock reporting for now - will be implemented in full integration
 
@@ -41,20 +45,394 @@ class DailyPaperTradingOperations:
     
     def __init__(self):
         """Initialize daily operations."""
+        # Load environment variables from .env file
+        self._load_environment()
+        
         self.logger = setup_production_logging(
             log_dir="logs",
             log_level="INFO"
         )
+        self.logger.info("Daily paper trading operations initialized")
         
         self.trading_active = False
         self.daily_stats = {}
         self.alerts = []
         
+        # Load production model
+        self.model_loader = None
+        self.sector_map = None
+        self._load_production_model()
+        self._load_sector_map()
+        
         # Setup signal handlers for graceful shutdown
         signal.signal(signal.SIGINT, self._signal_handler)
         signal.signal(signal.SIGTERM, self._signal_handler)
+    
+    def _load_environment(self):
+        """Load environment variables from .env file."""
+        from pathlib import Path
         
-        self.logger.info("Daily paper trading operations initialized")
+        env_file = Path('~/.config/paper-trading.env').expanduser()
+        if env_file.exists():
+            with open(env_file, 'r') as f:
+                for line in f:
+                    if '=' in line and not line.startswith('#'):
+                        key, value = line.strip().split('=', 1)
+                        os.environ[key] = value
+    
+    def _load_production_model(self):
+        """Load the production XGBoost model."""
+        try:
+            model_path = "results/production/model.json"
+            features_path = "results/production/features_whitelist.json"
+            
+            if not Path(model_path).exists():
+                self.logger.warning(f"Production model not found at {model_path}, using mock trading")
+                return
+                
+            if not Path(features_path).exists():
+                self.logger.warning(f"Features whitelist not found at {features_path}, using mock trading")
+                return
+            
+            self.model_loader = XGBModelLoader(model_path, features_path)
+            
+            self.logger.info("✅ Production XGBoost model loaded successfully")
+            self.logger.info(f"   Model: {model_path}")
+            self.logger.info(f"   Features: {len(self.model_loader.features_whitelist)} features")
+            
+        except Exception as e:
+            self.logger.error(f"Failed to load production model: {e}")
+            self.logger.warning("Falling back to mock trading mode")
+            self.model_loader = None
+    
+    def _load_sector_map(self):
+        """Load sector classifications for residualization."""
+        try:
+            self.sector_map = load_sector_map()
+            self.logger.info(f"✅ Sector map loaded: {len(self.sector_map)} records")
+        except Exception as e:
+            self.logger.error(f"Failed to load sector map: {e}")
+            self.sector_map = None
+    
+    def _generate_trading_signals(self, market_data: pd.DataFrame) -> Dict:
+        """
+        Generate trading signals using the production model with strict feature contract.
+        
+        Args:
+            market_data: DataFrame with market data and features
+            
+        Returns:
+            Dict with signals, positions, and metadata
+        """
+        if self.model_loader is None:
+            self.logger.warning("MODEL DISABLED: No model loaded → MOCK mode")
+            return self._generate_mock_signals(market_data)
+        
+        try:
+            # Apply sector residualization if sector map is available
+            if self.sector_map is not None:
+                # Get base features that need sector residualization (CSR features)
+                csr_features = [f.replace('_sec_res', '') for f in self.model_loader.features_whitelist 
+                              if f.endswith('_sec_res') and '_csr' in f]
+                
+                if csr_features:
+                    market_data = sector_residualize(market_data, csr_features, self.sector_map)
+                    self.logger.debug(f"Applied sector residualization to {len(csr_features)} CSR features")
+            
+            # Enforce feature contract - this will raise SystemExit if violated
+            X = prepare_X_for_xgb(market_data, self.model_loader.features_whitelist)
+            
+            # Generate predictions using the model
+            predictions = self.model_loader.predict(X)
+            
+            # Convert predictions to trading signals
+            signals = self._predictions_to_signals(predictions, market_data)
+            
+            self.logger.info(f"✅ USING MODEL ({len(self.model_loader.features_whitelist)}/{len(self.model_loader.features_whitelist)} features matched)")
+            self.logger.info(f"Generated {len(signals)} trading signals using production model")
+            
+            return {
+                'signals': signals,
+                'predictions': predictions,
+                'model_used': True,
+                'feature_count': len(self.model_loader.features_whitelist),
+                'timestamp': datetime.now().isoformat()
+            }
+            
+        except SystemExit as e:
+            # Feature contract violated - abort trading
+            self.logger.critical(f"Feature contract violation: {e}")
+            self.logger.critical("ABORTING TRADING - Feature contract not satisfied")
+            raise  # Re-raise to stop the trading loop
+            
+        except Exception as e:
+            self.logger.error(f"Error generating trading signals: {e}")
+            self.logger.warning("MODEL DISABLED: Error in prediction → MOCK mode")
+            return self._generate_mock_signals(market_data)
+    
+    def _predictions_to_signals(self, predictions: np.ndarray, market_data: pd.DataFrame) -> Dict:
+        """Convert model predictions to trading signals."""
+        # Simple long-short strategy based on predictions
+        # Top 20% long, bottom 20% short
+        n_assets = len(predictions)
+        n_long = max(1, int(n_assets * 0.2))
+        n_short = max(1, int(n_assets * 0.2))
+        
+        # Rank predictions
+        ranks = np.argsort(predictions)[::-1]  # Descending order
+        
+        signals = {}
+        for i, rank in enumerate(ranks):
+            symbol = market_data.index[rank]
+            if i < n_long:
+                signals[symbol] = 1.0 / n_long  # Equal weight long
+            elif i >= n_assets - n_short:
+                signals[symbol] = -1.0 / n_short  # Equal weight short
+            else:
+                signals[symbol] = 0.0  # Neutral
+        
+        return signals
+    
+    def _generate_mock_signals(self, market_data: pd.DataFrame) -> Dict:
+        """Generate mock trading signals for testing."""
+        np.random.seed(42)
+        n_assets = len(market_data)
+        
+        # Random long-short signals
+        signals = {}
+        for symbol in market_data.index:
+            signal = np.random.choice([-0.1, 0.0, 0.1], p=[0.2, 0.6, 0.2])
+            signals[symbol] = signal
+        
+        return {
+            'signals': signals,
+            'predictions': np.random.randn(n_assets),
+            'model_used': False,
+            'feature_count': 0,
+            'timestamp': datetime.now().isoformat()
+        }
+    
+    def _fetch_real_market_data(self) -> pd.DataFrame:
+        """Fetch real market data from Alpaca API."""
+        try:
+            # Use a subset of symbols for real-time trading
+            symbols = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'META', 'NVDA', 'NFLX', 'AMD', 'INTC']
+            
+            # Fetch latest prices from Alpaca
+            df = fetch_alpaca_bars(symbols, timeframe="5Min", lookback_minutes=60)
+            
+            if df.empty:
+                self.logger.warning("No data from Alpaca, using fallback")
+                return self._generate_fallback_data(symbols)
+            
+            # Apply basic feature engineering (in production, this would be more sophisticated)
+            df = self._engineer_features(df)
+            
+            self.logger.info(f"✅ Fetched real market data: {len(df)} records for {df['symbol'].nunique()} symbols")
+            return df
+            
+        except Exception as e:
+            self.logger.error(f"Error fetching real market data: {e}")
+            self.logger.warning("Falling back to mock data")
+            return self._generate_fallback_data(['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA'])
+    
+    def _generate_fallback_data(self, symbols: List[str]) -> pd.DataFrame:
+        """Generate fallback mock data when Alpaca is unavailable."""
+        self.logger.warning("Using fallback mock data - Alpaca unavailable")
+        
+        data = []
+        base_time = datetime.now()
+        
+        for symbol in symbols:
+            # Generate realistic mock data
+            base_price = 100 + hash(symbol) % 200  # Consistent base price per symbol
+            price_change = np.random.normal(0, 0.02)  # 2% daily volatility
+            
+            close = base_price * (1 + price_change)
+            high = close * (1 + abs(np.random.normal(0, 0.01)))
+            low = close * (1 - abs(np.random.normal(0, 0.01)))
+            open_price = close * (1 + np.random.normal(0, 0.005))
+            
+            data.append({
+                'date': base_time,
+                'symbol': symbol,
+                'open': open_price,
+                'high': high,
+                'low': low,
+                'close': close,
+                'volume': int(np.random.uniform(100000, 1000000))
+            })
+        
+        df = pd.DataFrame(data)
+        df = self._engineer_features(df)
+        return df
+    
+    def _engineer_features(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Apply comprehensive feature engineering to match the exact features used in training.
+        This generates all the features needed for cross-sectional rank (csr) and z-score (csz) transformations.
+        """
+        # Ensure we have the required columns
+        df = df.copy()
+        df['close'] = df['close'].astype(float)
+        df['volume'] = df['volume'].astype(float)
+        
+        # Sort by date and symbol for consistent processing
+        df = df.sort_values(['date', 'symbol']).reset_index(drop=True)
+        
+        # Calculate features for each symbol individually to avoid index issues
+        feature_dfs = []
+        
+        for symbol in df['symbol'].unique():
+            symbol_df = df[df['symbol'] == symbol].copy().reset_index(drop=True)
+            
+            # Basic price features
+            symbol_df['price_change'] = symbol_df['close'].pct_change().fillna(0)
+            
+            # Volatility features (using price changes)
+            symbol_df['vol_5'] = symbol_df['price_change'].rolling(5).std().fillna(0)
+            symbol_df['vol_20'] = symbol_df['price_change'].rolling(20).std().fillna(0)
+            
+            # Volume features
+            symbol_df['volume_ratio'] = symbol_df['volume'] / symbol_df['volume'].rolling(20).mean().fillna(symbol_df['volume'])
+            
+            # Momentum features
+            symbol_df['momentum_5'] = symbol_df['close'].pct_change(5).fillna(0)
+            symbol_df['momentum_10'] = symbol_df['close'].pct_change(10).fillna(0)
+            symbol_df['momentum_20'] = symbol_df['close'].pct_change(20).fillna(0)
+            symbol_df['momentum_5_20'] = symbol_df['momentum_5'] - symbol_df['momentum_20']
+            
+            # Volatility features
+            symbol_df['vol_ratio'] = symbol_df['vol_5'] / (symbol_df['vol_20'] + 1e-8)
+            symbol_df['ret_vol_ratio'] = symbol_df['price_change'] / (symbol_df['vol_5'] + 1e-8)
+            
+            # Sharpe ratios
+            symbol_df['sharpe_5'] = symbol_df['momentum_5'] / (symbol_df['vol_5'] + 1e-8)
+            symbol_df['sharpe_20'] = symbol_df['momentum_20'] / (symbol_df['vol_20'] + 1e-8)
+            
+            # Volume acceleration
+            symbol_df['volume_accel'] = symbol_df['volume'].pct_change().fillna(0)
+            
+            # Volume position
+            symbol_df['volume_position_20'] = symbol_df['volume'] / (symbol_df['volume'].rolling(20).max().fillna(symbol_df['volume']) + 1e-8)
+            
+            # Liquidity proxy
+            symbol_df['liquidity_proxy'] = symbol_df['volume'] * symbol_df['close']
+            
+            # Moving averages
+            symbol_df['ma_fast'] = symbol_df['close'].rolling(10).mean().fillna(symbol_df['close'])
+            symbol_df['ma_slow'] = symbol_df['close'].rolling(20).mean().fillna(symbol_df['close'])
+            symbol_df['ma_ratio'] = symbol_df['ma_fast'] / (symbol_df['ma_slow'] + 1e-8)
+            
+            # Breakout signal
+            symbol_df['breakout_signal'] = (symbol_df['close'] > symbol_df['ma_slow']).astype(int)
+            
+            # Bollinger Bands
+            symbol_df['bb_upper'] = symbol_df['ma_slow'] + 2 * symbol_df['vol_20']
+            symbol_df['bb_lower'] = symbol_df['ma_slow'] - 2 * symbol_df['vol_20']
+            symbol_df['bb_width'] = (symbol_df['bb_upper'] - symbol_df['bb_lower']) / (symbol_df['ma_slow'] + 1e-8)
+            symbol_df['bb_position'] = (symbol_df['close'] - symbol_df['bb_lower']) / (symbol_df['bb_upper'] - symbol_df['bb_lower'] + 1e-8)
+            
+            # RSI calculation
+            delta = symbol_df['close'].diff().fillna(0)
+            gain = delta.where(delta > 0, 0)
+            loss = -delta.where(delta < 0, 0)
+            avg_gain = gain.rolling(14).mean().fillna(0)
+            avg_loss = loss.rolling(14).mean().fillna(0)
+            rs = avg_gain / (avg_loss + 1e-8)
+            symbol_df['rsi_14'] = 100 - (100 / (1 + rs))
+            
+            # Price-MA ratio
+            symbol_df['price_ma_ratio'] = symbol_df['close'] / (symbol_df['ma_slow'] + 1e-8)
+            
+            # Mean reversion
+            symbol_df['mean_reversion'] = (symbol_df['close'] - symbol_df['ma_slow']) / (symbol_df['vol_20'] + 1e-8)
+            
+            # Volatility regime (cross-sectional, will be calculated after combining)
+            symbol_df['vol_regime_high'] = 0  # Placeholder
+            symbol_df['vol_regime_low'] = 0   # Placeholder
+            
+            feature_dfs.append(symbol_df)
+        
+        # Combine all symbol data
+        df = pd.concat(feature_dfs, ignore_index=True)
+        
+        # Calculate cross-sectional volatility regime features
+        vol_median = df['vol_20'].median()
+        df['vol_regime_high'] = (df['vol_20'] > vol_median * 1.5).astype(int)
+        df['vol_regime_low'] = (df['vol_20'] < vol_median * 0.5).astype(int)
+        
+        # Fill any remaining NaN values and handle infinities
+        df = df.fillna(0)
+        df = df.replace([float('inf'), float('-inf')], 0)
+        
+        # Apply cross-sectional transformations
+        df = self._apply_cross_sectional_transforms(df)
+        
+        return df
+    
+    def _apply_cross_sectional_transforms(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Apply cross-sectional rank (csr) and z-score (csz) transformations.
+        """
+        # Base features for cross-sectional transformation
+        base_features = [
+            'close', 'volume', 'vol_5', 'vol_20', 'volume_ratio', 'vol_ratio', 'ret_vol_ratio',
+            'momentum_5', 'momentum_10', 'momentum_20', 'momentum_5_20',
+            'sharpe_5', 'sharpe_20', 'volume_accel', 'vol_regime_high', 'vol_regime_low',
+            'volume_position_20', 'liquidity_proxy', 'breakout_signal'
+        ]
+        
+        # Apply cross-sectional rank (csr) transformation
+        for feature in base_features:
+            if feature in df.columns:
+                # Cross-sectional rank (0-1)
+                df[f'{feature}_csr'] = df.groupby('date')[feature].rank(pct=True)
+        
+        # Apply cross-sectional z-score (csz) transformation  
+        csz_features = [
+            'bb_upper', 'bb_lower', 'bb_width', 'bb_position',
+            'ma_fast', 'ma_slow', 'ma_ratio', 'rsi_14', 'price_ma_ratio', 'mean_reversion'
+        ]
+        
+        for feature in csz_features:
+            if feature in df.columns:
+                # Cross-sectional z-score
+                mean_val = df.groupby('date')[feature].transform('mean')
+                std_val = df.groupby('date')[feature].transform('std')
+                df[f'{feature}_csz'] = (df[feature] - mean_val) / (std_val + 1e-8)
+        
+        # Final cleanup of any remaining NaN/Inf values
+        df = df.fillna(0)
+        df = df.replace([float('inf'), float('-inf')], 0)
+        
+        return df
+    
+    def _calculate_signal_entropy(self, signal_values: List[float]) -> float:
+        """Calculate entropy of signal distribution."""
+        if not signal_values:
+            return 0.0
+        
+        # Convert to numpy array and remove zeros
+        signals = np.array(signal_values)
+        signals = signals[signals != 0]
+        
+        if len(signals) == 0:
+            return 0.0
+        
+        # Normalize to probabilities
+        abs_signals = np.abs(signals)
+        total = np.sum(abs_signals)
+        
+        if total == 0:
+            return 0.0
+        
+        probs = abs_signals / total
+        
+        # Calculate entropy
+        entropy = -np.sum(probs * np.log(probs + 1e-10))
+        
+        return entropy
     
     def _signal_handler(self, signum, frame):
         """Handle shutdown signals gracefully."""
@@ -274,12 +652,16 @@ class DailyPaperTradingOperations:
             'emergency_halts': 0
         }
         
-        # Mock trading loop (in production, this would be real market data)
+        # Real trading loop with model integration
         try:
             bar_count = 0
             consecutive_low_entropy = 0
             
             print("🔄 Starting trading loop...")
+            if self.model_loader:
+                print("   Using production XGBoost model for signal generation")
+            else:
+                print("   Using mock signals (no model loaded)")
             print("   Monitoring: entropy, PnL, slippage, ADV breaches")
             
             # Simulate trading session (normally runs for market hours)
@@ -288,13 +670,19 @@ class DailyPaperTradingOperations:
             while self.trading_active and bar_count < max_bars:
                 bar_count += 1
                 
-                # Simulate market conditions
-                np.random.seed(42 + bar_count)
+                # Fetch real market data from Alpaca API
+                market_data = self._fetch_real_market_data()
                 
-                # Mock entropy calculation
-                action_entropy = np.random.uniform(0.5, 1.2)
+                # Generate trading signals using the model
+                signal_result = self._generate_trading_signals(market_data)
+                signals = signal_result['signals']
+                model_used = signal_result['model_used']
                 
-                # Mock PnL calculation
+                # Calculate entropy from signal distribution
+                signal_values = list(signals.values())
+                action_entropy = self._calculate_signal_entropy(signal_values)
+                
+                # Mock PnL calculation (in production, would use real portfolio PnL)
                 daily_pnl_pct = np.random.uniform(-0.01, 0.01)  # -1% to +1%
                 
                 # Mock slippage tracking
@@ -332,7 +720,10 @@ class DailyPaperTradingOperations:
                 
                 # Progress update every 10 bars
                 if bar_count % 10 == 0:
-                    print(f"   Bar {bar_count}: entropy={action_entropy:.3f}, PnL={daily_pnl_pct:.2%}, slippage={realized_slippage*10000:.1f}bps")
+                    model_status = "MODEL" if model_used else "MOCK"
+                    n_signals = len([s for s in signal_values if s != 0])
+                    feature_count = signal_result.get('feature_count', 0)
+                    print(f"   Bar {bar_count}: {model_status} ({feature_count}/45) entropy={action_entropy:.3f}, signals={n_signals}, PnL={daily_pnl_pct:.2%}, slippage={realized_slippage*10000:.1f}bps")
                 
                 session_stats['bars_processed'] = bar_count
                 

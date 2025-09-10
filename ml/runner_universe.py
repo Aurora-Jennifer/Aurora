@@ -2145,16 +2145,28 @@ def run_cross_sectional_universe(universe_cfg_path: str, grid_cfg_path: str, out
     panel = finalize_columns(panel)
     
     # HARD FENCE #1: Freeze schema when you first compute features
-    FEATURES = sorted([c for c in panel.columns if c.startswith("f_")])
+    # Enforce whitelist: persist only approved features
+    FEATURES = sorted([c for c in feature_cols if c in panel.columns])
     schema_file = os.path.join(out_dir, "features_schema.json")
     with open(schema_file, 'w') as f:
         json.dump(FEATURES, f, indent=2)
     print(f"🔒 Schema frozen: {len(FEATURES)} features saved to {schema_file}")
     
     def make_views(df):
-        """Strict schema enforcement using frozen features list"""
-        # Load frozen schema
-        FEATURES = json.load(open(schema_file))
+        """Strict schema enforcement using frozen features list or whitelist"""
+        # Prefer whitelist if available (stronger guarantee), else fallback to frozen schema
+        wl_path = os.path.join(out_dir, "features_whitelist.json")
+        FEATURES = None
+        try:
+            if os.path.exists(wl_path):
+                with open(wl_path, 'r') as _wf:
+                    FEATURES = json.load(_wf).get("feature_cols", [])
+        except Exception:
+            FEATURES = None
+        if not FEATURES:
+            FEATURES = json.load(open(schema_file))
+        # Ensure FEATURES exist in the current dataframe after any renames
+        FEATURES = [c for c in FEATURES if c in df.columns]
         
         X = (df.reindex(columns=FEATURES)
                .astype("float32")
@@ -2164,7 +2176,7 @@ def run_cross_sectional_universe(universe_cfg_path: str, grid_cfg_path: str, out
         # HARD FENCE tripwires:
         bad = [c for c in X.columns if ("ret_fwd" in c or c.startswith("y_"))]
         assert not bad, f"Forward-looking columns in X: {bad}"
-        assert X.shape[1] == len(FEATURES), f"Schema mismatch: X.shape={X.shape}, FEATURES={len(FEATURES)}"
+        assert X.shape[1] == len(FEATURES), f"Schema mismatch: X.shape={X.shape}, expected_FEATURES={len(FEATURES)}"
         
         M = df[["date", "symbol"]]
         Y = df[[c for c in df.columns if c.startswith("y_")]]
@@ -3333,18 +3345,18 @@ def run_cross_sectional_universe(universe_cfg_path: str, grid_cfg_path: str, out
         P, R = P.loc[idx], R.loc[idx]
 
         rebal_dates = P.index.to_series().resample(rebalance).last().dropna().index
-        W_last = pd.Series(0, index=P.columns)
+        W_last = pd.Series(0.0, index=P.columns, dtype="float64")
         W_list = []
         for d in P.index:
             if d in rebal_dates:
                 rnk = P.loc[d].rank(method="first")
-                w = pd.Series(0, index=P.columns)
+                w = pd.Series(0.0, index=P.columns, dtype="float64")
                 w[rnk >= len(rnk)-k+1] = +1.0/k
                 w[rnk <= k] = -1.0/k
                 # IMPORTANT: exposures/neutralization must use only info ≤ d (not future)
                 W_last = w
             W_list.append(W_last)
-        W = pd.DataFrame(W_list, index=P.index, columns=P.columns)
+        W = pd.DataFrame(W_list, index=P.index, columns=P.columns, dtype="float64")
 
         # Use next-day realized returns for weights formed at d
         ls = (W.shift(0) * R.shift(-1)).sum(axis=1)  # t-weights × t+1 returns
@@ -3751,6 +3763,8 @@ def run_cross_sectional_universe(universe_cfg_path: str, grid_cfg_path: str, out
     
     # Print results summary with gate reasons
     for row in rows:
+        if row is None:  # Skip None results (benchmark tickers)
+            continue
         # FIXED: Use single print statement to avoid race conditions
         gate_status = "PASS" if row['gate_pass'] else f"FAIL({row.get('gate_reason', 'unknown')})"
         # Format NaN values properly
@@ -3762,8 +3776,12 @@ def run_cross_sectional_universe(universe_cfg_path: str, grid_cfg_path: str, out
         alpha_ann_str = f"{alpha_ann_val:.2%}" if not np.isnan(alpha_ann_val) else "—"
         beta_str = f"{beta_val:.2f}" if not np.isnan(beta_val) else "—"
         
-        turnover_pct = row.get('turnover_pct', 0)
-        turnover_one_way = row.get('turnover_one_way_ann', 0)
+        turnover_pct = float(row.get('turnover_pct', 0) or 0)
+        if 'turnover_one_way_ann' in row:
+            turnover_one_way = float(row.get('turnover_one_way_ann') or 0)
+        else:
+            mt = float(row.get('median_turnover', 0) or 0)
+            turnover_one_way = mt * np.sqrt(252/5)
         print(f"✅ {row['ticker']}: NW-Sharpe={row['best_median_sharpe']:.3f}, Classic={row['classic_sharpe']:.3f}, "
               f"IR_mkt={ir_mkt_str}, α_ann={alpha_ann_str}, β={beta_str}, "
               f"trades={row['median_trades']:.0f}, trades_days_pct={turnover_pct:.1f}%, turnover_one_way_ann={turnover_one_way:.2f}, "
@@ -3778,9 +3796,15 @@ def run_cross_sectional_universe(universe_cfg_path: str, grid_cfg_path: str, out
         
         # Calculate summary statistics
         med_sharpe_pass = df_results.loc[df_results['gate_pass'] == True, 'best_median_sharpe'].median()
-        med_turnover = df_results['turnover_one_way_ann'].median()
-        p10_turnover = df_results['turnover_one_way_ann'].quantile(0.1)
-        p90_turnover = df_results['turnover_one_way_ann'].quantile(0.9)
+        if 'turnover_one_way_ann' in df_results.columns:
+            med_turnover = df_results['turnover_one_way_ann'].astype(float).median()
+            p10_turnover = df_results['turnover_one_way_ann'].astype(float).quantile(0.1)
+            p90_turnover = df_results['turnover_one_way_ann'].astype(float).quantile(0.9)
+        else:
+            # Fallback: derive from median_turnover
+            med_turnover = df_results['median_turnover'].astype(float).median() * np.sqrt(252/5)
+            p10_turnover = df_results['median_turnover'].astype(float).quantile(0.1) * np.sqrt(252/5)
+            p90_turnover = df_results['median_turnover'].astype(float).quantile(0.9) * np.sqrt(252/5)
         
         print(f"\n📊 Evaluation Summary:")
         print(f"   Total tickers: {total_count}")
@@ -4042,6 +4066,11 @@ def run_cross_sectional_universe(universe_cfg_path: str, grid_cfg_path: str, out
     frozen_preds.to_parquet(frozen_preds_file, index=False)
     print(f"🔒 FROZEN PREDICTIONS: {frozen_preds_file} (shape: {frozen_preds.shape})")
     
+    # Save model and metadata FIRST (before manifest generation)
+    model_path = os.path.join(out_dir, "cross_sectional_model.json")
+    model.save_model(model_path)
+    print(f"💾 Model saved to: {model_path}")
+    
     # 🔧 GENERATE RUN MANIFEST for lineage tracking
     print("📋 Generating run manifest and model card...")
     
@@ -4052,7 +4081,7 @@ def run_cross_sectional_universe(universe_cfg_path: str, grid_cfg_path: str, out
     
     # Collect information for manifest
     feature_info = collect_feature_info(test, feature_cols)
-    data_info = collect_data_info(train, test, cfg)
+    data_info = collect_data_info(train, test, gcfg)
     model_info = collect_model_info(model, gcfg, flat_params.get('device', 'cpu'))
     performance_metrics = track_performance_metrics(frozen_preds)
     
