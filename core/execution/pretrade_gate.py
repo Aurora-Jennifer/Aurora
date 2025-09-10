@@ -282,11 +282,8 @@ class PreTradeGate:
                         }
                     )
             
-            # Max notional (split by intent) - CLIP instead of REJECT
-            if reducer:
-                max_notional = self.risk_config.get('max_notional_reducer', None)  # None = unlimited
-            else:
-                max_notional = self.risk_config.get('max_notional_opener', 600)
+            # Max notional (per-trade limit applies to both reducers and openers)
+            max_notional = self.risk_config.get('max_order_notional', 15000)  # Per-trade limit
             
             if max_notional is not None and notional > max_notional:
                 # Clip to max notional instead of rejecting
@@ -309,7 +306,8 @@ class PreTradeGate:
                 clipped_qty = clipped_shares if qty_target > 0 else -clipped_shares
                 clipped_notional = abs(clipped_qty) * last_price
                 
-                logger.info(f"GateIn {symbol}: CLIPPED from {qty_target} to {clipped_qty} (${notional:.2f} → ${clipped_notional:.2f})")
+                intent_str = "reduce" if reducer else "open"
+                logger.info(f"GateIn {symbol}: CLIPPED {intent_str} from {qty_target} to {clipped_qty} (${notional:.2f} → ${clipped_notional:.2f})")
                 
                 # Sanity assertions to prevent constructor errors
                 assert isinstance(clipped_qty, int), f"clipped_qty must be int, got {type(clipped_qty)}"
@@ -331,15 +329,31 @@ class PreTradeGate:
                     }
                 )
             
-            # Safety: reducers must not increase position magnitude
+            # Safety: reducers must not increase position magnitude - CLIP instead of REJECT
             if reducer and abs(qty_target) > abs(current_position):
+                # Clip to current position size
+                clipped_qty = abs(current_position) if qty_target > 0 else -abs(current_position)
+                clipped_notional = abs(clipped_qty) * last_price
+                
+                logger.info(f"GateIn {symbol}: CLIPPED reduce_over from {qty_target} to {clipped_qty} (${notional:.2f} → ${clipped_notional:.2f})")
+                
+                # Sanity assertions
+                assert isinstance(clipped_qty, int), f"clipped_qty must be int, got {type(clipped_qty)}"
+                assert clipped_qty != 0, "clipped_qty cannot be zero"
+                
                 return GateDecision(
-                    result=GateResult.REJECT,
-                    reason="TOO_LARGE",
+                    result=GateResult.APPROVE,
+                    reason="CLIPPED_REDUCE_OVER",
+                    shares=clipped_qty,
                     metadata={
-                        "qty": qty_target,
+                        "original_qty": qty_target,
+                        "original_notional": notional,
+                        "clipped_qty": clipped_qty,
+                        "clipped_notional": clipped_notional,
                         "current_pos": current_position,
-                        "intent": "reduce_over"
+                        "intent": "reduce_over_clipped",
+                        "clip_ratio": abs(clipped_qty) / abs(qty_target),
+                        "price": last_price
                     }
                 )
             
