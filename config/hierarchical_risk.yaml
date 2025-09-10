@@ -1,0 +1,117 @@
+# Hierarchical Risk & Sizing Policy Configuration
+# Professional-grade risk management with cadence-based rebalancing
+
+risk:
+  # Micro-level: per-trade constraints
+  per_trade:
+    max_notional: 1500          # hard ceiling per single order
+    lot_size: 5                 # shares rounded to nearest lot
+    min_order_notional: 200     # skip dust orders
+
+  # Symbol-level: per-symbol caps and bands
+  per_symbol:
+    default_cap: 15000          # fallback cap if symbol not specified
+    overrides:
+      NVDA: 20000              # higher cap for liquid names
+      BAC: 15000
+      AAPL: 18000
+      MSFT: 18000
+      GOOGL: 20000
+      AMZN: 20000
+      TSLA: 25000              # higher volatility, higher cap
+      META: 18000
+      JPM: 15000
+      WFC: 12000
+    band_pct: 0.05              # ±5% drift band before resize
+    rebalance_cadence: "30m"    # only check/act every 30m or on signal change
+
+  # Group-level: sectors/factors
+  groups:
+    type: "sector"              # or "factor"
+    map_file: "data/sectors/sector_map.parquet"
+    cap_by_group:
+      Technology: 60000         # higher cap for tech sector
+      Financial: 50000
+      Healthcare: 45000
+      Consumer: 40000
+      Energy: 35000
+      Industrial: 40000
+      Utilities: 30000
+      Real_Estate: 30000
+      Materials: 35000
+      Communication: 40000
+      Default: 40000
+
+  # Portfolio-level: gross/net exposure and volatility targeting
+  portfolio:
+    gross_cap: 100000           # max gross exposure
+    net_cap: 20000              # |long-short| <= 20k
+    vol_target:
+      enabled: true
+      lookback_days: 20
+      target_daily_vol: 0.01    # ~1% of capital
+      clamp: [0.5, 1.5]         # multiplier bounds
+
+policy:
+  rebalance_triggers:
+    on_signal_change: true      # act when target changes materially
+    on_cadence_tick: true       # evaluate every 30m
+    on_threshold_breach: true   # act when outside bands
+    signal_change_threshold: 0.05  # 5% material change threshold
+  
+  rounding:
+    shares_lot: 5               # round to nearest 5 shares
+    cash_buffer_pct: 0.01       # keep 1% unallocated cash
+  
+  abstain_rules:
+    expected_ret_minus_cost_bps: 0   # act only if ER > costs
+    uncertainty_z_max: 1.0           # abstain if too uncertain
+    min_confidence_threshold: 0.1    # minimum signal confidence
+
+# Position intent tracking (for signal change detection)
+position_intent:
+  enabled: true
+  store_file: "state/position_intents.json"
+  max_age_hours: 24             # expire old intents after 24h
+  material_change_threshold: 0.05  # 5% change triggers rebalance
+
+# Telemetry and monitoring
+telemetry:
+  enabled: true
+  log_level: "INFO"             # DEBUG, INFO, WARNING, ERROR
+  structured_logging: true
+  metrics_interval: 300         # 5 minutes
+  dashboard_enabled: true
+  
+  # Key metrics to track
+  metrics:
+    - orders_allowed
+    - orders_clipped_per_trade
+    - orders_clipped_per_symbol
+    - orders_clipped_group
+    - orders_clipped_portfolio
+    - orders_denied_per_trade
+    - orders_denied_per_symbol
+    - orders_denied_group
+    - orders_denied_portfolio
+    - noop_band
+    - noop_cadence
+    - avg_clip_ratio
+    - turnover_daily
+    - band_hit_rate
+
+# Integration settings
+integration:
+  order_manager:
+    use_policy_decisions: true
+    log_all_decisions: true
+    shadow_mode: false          # set to true for testing
+  
+  portfolio_manager:
+    update_exposures: true
+    track_group_exposures: true
+    vol_target_scaling: true
+  
+  execution_engine:
+    policy_override: false      # allow manual overrides
+    emergency_bypass: false     # emergency override for system issues
