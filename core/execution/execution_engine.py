@@ -379,7 +379,18 @@ class ExecutionEngine:
             submitted_orders_count = cycle_stats["reducers_submitted"] + cycle_stats["openers_submitted"]
             rejected_orders_count = cycle_stats["openers_skipped"]
         else:
-            logger.info("No target positions to execute")
+            # Diagnose why no target positions were generated
+            why_not_reasons = []
+            if not signals:
+                why_not_reasons.append("no_signals")
+            elif not target_shares:
+                why_not_reasons.append("all_filtered_out")
+            elif not target_positions:
+                why_not_reasons.append("all_zero_deltas")
+            else:
+                why_not_reasons.append("unknown")
+            
+            logger.info(f"No target positions to execute (why_not: {', '.join(why_not_reasons)})")
             submitted_orders_count = 0
             rejected_orders_count = 0
         
@@ -455,6 +466,10 @@ class ExecutionEngine:
         
         # Reconcile orders
         reconciliation_stats = self.order_manager.reconcile_orders()
+        
+        # Invariant check after reconciliation
+        if submitted_orders_count == 0 and reconciliation_stats.get('moved_to_filled', 0) > 0:
+            logger.error(f"INVARIANT BREACH after reconciliation: no orders submitted but {reconciliation_stats.get('moved_to_filled', 0)} moved to filled")
         
         # Update portfolio with fills
         self._update_portfolio_from_fills()

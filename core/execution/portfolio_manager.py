@@ -147,7 +147,7 @@ class PortfolioManager:
             self.last_updated = datetime.now()
             self.last_sync = datetime.now()
             
-            logger.info(f"Updated {len(self.positions)} positions, portfolio value: ${self.portfolio_value:.2f}")
+            logger.info(f"Marked-to-market {len(self.positions)} positions, portfolio value: ${self.portfolio_value:.2f}")
             return True
             
         except APIError as e:

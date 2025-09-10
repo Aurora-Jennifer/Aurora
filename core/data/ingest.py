@@ -194,16 +194,9 @@ def fetch_intraday_panel(symbols: List[str], bar_size: str = "5Min", lookback_da
         # Select and order columns
         df = df[["date", "symbol", "open", "high", "low", "close", "volume"]]
         
-        # Check freshness
+        # Log fetch success (freshness check handled by caller)
         latest_ts = df["date"].max()
-        freshness_cutoff = now_utc - pd.Timedelta(bar_size) - pd.Timedelta("10s")
-        
-        if latest_ts < freshness_cutoff:
-            logger.warning(f"⚠️ STALE_DATA: Latest bar {latest_ts} is older than {freshness_cutoff}")
-        else:
-            logger.info(f"✅ FRESH_DATA: Latest bar {latest_ts} is within {bar_size} of now")
-        
-        logger.info(f"✅ Fetched {len(df)} bars for {len(symbols)} symbols")
+        logger.info(f"✅ Fetched {len(df)} bars for {len(symbols)} symbols (latest: {latest_ts.strftime('%H:%M:%S')})")
         return df
         
     except ImportError:
