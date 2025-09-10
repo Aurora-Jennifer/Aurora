@@ -35,7 +35,7 @@ from ops.pre_market_dry_run import run_pre_market_dry_run
 # from ml.production_logging import setup_production_logging  # Removed - causes queue handler conflicts
 from core.walk.xgb_model_loader import XGBModelLoader
 from core.ml.feature_gate import prepare_X_for_xgb
-from core.data.ingest import fetch_alpaca_bars, create_fallback_data
+from core.data.ingest import fetch_alpaca_bars, fetch_intraday_panel, create_fallback_data, check_data_freshness, compute_feature_hash, compute_raw_entropy
 from core.ml.sector_residualizer import load_sector_map, sector_residualize
 
 # Import execution infrastructure
@@ -274,6 +274,8 @@ class DailyPaperTradingWithExecution:
             return {
                 'signals': signals,
                 'predictions': predictions,
+                'raw_predictions': predictions,  # For raw entropy calculation
+                'feature_matrix': X,  # For feature hash calculation
                 'model_used': True,
                 'feature_count': len(self.model_loader.features_whitelist),
                 'timestamp': datetime.now().isoformat()
@@ -428,19 +430,28 @@ class DailyPaperTradingWithExecution:
             }
     
     def _fetch_real_market_data(self) -> pd.DataFrame:
-        """Fetch real market data from Alpaca API."""
+        """Fetch real market data from Alpaca API with intraday freshness."""
         try:
-            # Use existing data fetching logic with correct parameters
+            # Use new intraday panel fetching for fresh data
             symbols = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'NVDA', 'META', 'JPM', 'BAC', 'WFC']
-            bars = fetch_alpaca_bars(
+            
+            # Fetch combined historical + intraday data
+            bars = fetch_intraday_panel(
                 symbols=symbols,
-                timeframe='1Day',
-                lookback_minutes=43200  # 30 days in minutes
+                bar_size='5Min',  # 5-minute intraday bars
+                lookback_days=30,  # 30 days of historical data
+                market_tz='America/New_York'
             )
             
             if bars is None or bars.empty:
                 self.logger.warning("No market data available, using fallback")
                 return create_fallback_data(symbols)
+            
+            # Check data freshness
+            is_fresh = check_data_freshness(bars, bar_size='5Min', slack_seconds=10)
+            if not is_fresh:
+                self.logger.warning("⚠️ STALE_DATA: Refusing to trade on stale features")
+                return None  # Signal to skip this bar
             
             # Add technical features
             bars = self._add_technical_features(bars)
@@ -837,12 +848,29 @@ class DailyPaperTradingWithExecution:
                 # Fetch real market data from Alpaca API
                 market_data = self._fetch_real_market_data()
                 
+                # Skip if data is stale
+                if market_data is None:
+                    self.logger.warning("Skipping bar due to stale data")
+                    time.sleep(5)
+                    continue
+                
                 # Generate trading signals using the model (with error handling)
                 try:
                     signal_result = self._generate_trading_signals(market_data)
                     signals = signal_result['signals']
                     model_used = signal_result['model_used']
                     session_stats['model_used'] = model_used
+                    
+                    # Log feature hash for change detection
+                    if 'feature_matrix' in signal_result:
+                        feat_hash = compute_feature_hash(signal_result['feature_matrix'])
+                        self.logger.info(f"Feature hash: {feat_hash}")
+                    
+                    # Log raw entropy if available
+                    if 'raw_predictions' in signal_result:
+                        raw_entropy = compute_raw_entropy(signal_result['raw_predictions'])
+                        self.logger.info(f"Raw entropy: {raw_entropy:.6f}")
+                        
                 except Exception as e:
                     self.logger.error(f"Feature prep failed; skipping cycle: {e}", exc_info=True)
                     time.sleep(5)
