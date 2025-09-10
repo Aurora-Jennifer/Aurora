@@ -127,9 +127,12 @@ def fetch_intraday_panel(symbols: List[str], bar_size: str = "5Min", lookback_da
         today_start = now_market.replace(hour=9, minute=30, second=0, microsecond=0)  # Market open
         lookback_start = today_start - timedelta(days=lookback_days)
         
+        # Avoid current forming bar by ending 15 seconds ago
+        intraday_end = now_market - timedelta(seconds=15)
+        
         logger.info(f"📡 Fetching intraday panel: {len(symbols)} symbols, {bar_size} bars")
         logger.info(f"   Historical: {lookback_start.date()} to {today_start.date()}")
-        logger.info(f"   Intraday: {today_start.date()} {today_start.time()} to {now_market.time()}")
+        logger.info(f"   Intraday: {today_start.date()} {today_start.time()} to {intraday_end.time()}")
         
         all_bars = []
         
@@ -150,7 +153,7 @@ def fetch_intraday_panel(symbols: List[str], bar_size: str = "5Min", lookback_da
                     symbol,
                     bar_size,
                     today_start.isoformat(),
-                    now_utc.isoformat(),
+                    intraday_end.astimezone(timezone.utc).isoformat(),
                     asof=None,
                     feed='iex'
                 ).df
@@ -291,14 +294,17 @@ def create_fallback_data(symbols: List[str]) -> pd.DataFrame:
     
     return pd.DataFrame(data)
 
-def check_data_freshness(df: pd.DataFrame, bar_size: str = "5Min", slack_seconds: int = 10) -> bool:
+def check_data_freshness(df: pd.DataFrame, bar_size: str = "5Min", lag_seconds: int = 90) -> bool:
     """
     Check if data is fresh enough for trading decisions.
+    
+    Uses proper bar boundary logic: only demand the last COMPLETED bar,
+    not the bar that's still closing. Adds grace window for provider posting lag.
     
     Args:
         df: DataFrame with 'date' column
         bar_size: Expected bar size (5Min, 15Min, etc.)
-        slack_seconds: Allowable slack in seconds
+        lag_seconds: Grace window for provider posting lag
         
     Returns:
         True if data is fresh, False if stale
@@ -307,16 +313,44 @@ def check_data_freshness(df: pd.DataFrame, bar_size: str = "5Min", slack_seconds
         logger.warning("STALE_DATA: Empty DataFrame")
         return False
     
-    latest_ts = df["date"].max()
-    now_utc = datetime.now(timezone.utc)
-    freshness_cutoff = now_utc - pd.Timedelta(bar_size) - pd.Timedelta(f"{slack_seconds}s")
+    import pytz
     
-    is_fresh = latest_ts >= freshness_cutoff
+    # Market timezone
+    MARKET_TZ = pytz.timezone("America/New_York")
+    BAR = pd.Timedelta(bar_size)
+    LAG = pd.Timedelta(f"{lag_seconds}s")
+    
+    def now_et():
+        return datetime.now(MARKET_TZ)
+    
+    def floor_to_5m(dt):
+        return dt.replace(second=0, microsecond=0) - timedelta(minutes=dt.minute % 5)
+    
+    def expected_last_completed_end(et_now):
+        # At 15:35:06, floor→15:35:00; last *completed* ends at 15:30:00
+        return floor_to_5m(et_now) - timedelta(minutes=5)
+    
+    # Get latest bar timestamp (should be UTC)
+    latest_ts_utc = df["date"].max()
+    
+    # Calculate expected last completed bar end time
+    et_now = now_et()
+    expected_et = expected_last_completed_end(et_now)
+    expected_utc = expected_et.astimezone(pytz.UTC)
+    
+    # Allow late posting with grace window
+    freshness_cutoff = expected_utc - LAG
+    is_fresh = latest_ts_utc >= freshness_cutoff
+    
+    # Calculate lag for logging
+    lag_actual = (expected_utc - latest_ts_utc).total_seconds()
     
     if is_fresh:
-        logger.info(f"✅ FRESH_DATA: Latest bar {latest_ts} is within {bar_size} of now")
+        logger.info(f"✅ FRESH_DATA: latest_utc={latest_ts_utc.strftime('%H:%M:%S')}, "
+                   f"expected_utc={expected_utc.strftime('%H:%M:%S')}, lag={lag_actual:.0f}s, fresh=True")
     else:
-        logger.warning(f"⚠️ STALE_DATA: Latest bar {latest_ts} is older than {freshness_cutoff}")
+        logger.warning(f"⚠️ STALE_DATA: latest_utc={latest_ts_utc.strftime('%H:%M:%S')}, "
+                      f"expected_utc={expected_utc.strftime('%H:%M:%S')}, lag={lag_actual:.0f}s, fresh=False")
     
     return is_fresh
 

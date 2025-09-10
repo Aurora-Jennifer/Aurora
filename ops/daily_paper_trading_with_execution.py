@@ -448,7 +448,7 @@ class DailyPaperTradingWithExecution:
                 return create_fallback_data(symbols)
             
             # Check data freshness
-            is_fresh = check_data_freshness(bars, bar_size='5Min', slack_seconds=10)
+            is_fresh = check_data_freshness(bars, bar_size='5Min', lag_seconds=90)
             if not is_fresh:
                 self.logger.warning("⚠️ STALE_DATA: Refusing to trade on stale features")
                 return None  # Signal to skip this bar
@@ -848,15 +848,28 @@ class DailyPaperTradingWithExecution:
                 # Fetch real market data from Alpaca API
                 market_data = self._fetch_real_market_data()
                 
-                # Skip if data is stale
+                # Guard against None (stale data or API failure)
                 if market_data is None:
-                    self.logger.warning("Skipping bar due to stale data")
+                    self.logger.warning("Skipping bar due to stale data or API failure")
+                    time.sleep(5)
+                    continue
+                
+                # Guard against empty data
+                if market_data.empty:
+                    self.logger.warning("Skipping bar due to empty market data")
                     time.sleep(5)
                     continue
                 
                 # Generate trading signals using the model (with error handling)
                 try:
                     signal_result = self._generate_trading_signals(market_data)
+                    
+                    # Guard against None signal result
+                    if signal_result is None:
+                        self.logger.warning("Signal generation returned None, skipping bar")
+                        time.sleep(5)
+                        continue
+                    
                     signals = signal_result['signals']
                     model_used = signal_result['model_used']
                     session_stats['model_used'] = model_used
