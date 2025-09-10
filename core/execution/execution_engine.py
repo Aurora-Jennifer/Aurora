@@ -251,7 +251,7 @@ class ExecutionEngine:
                 # Check shorting policy
                 order_side = "buy" if signal >= 0 else "sell"
                 if order_side == "sell" and current_positions.get(symbol, 0) == 0:
-                    allow_shorts = getattr(self.config, 'allow_shorts', False)
+                    allow_shorts = self.risk_manager.risk_limits.allow_shorts
                     if not allow_shorts:
                         logger.info("Skip shorting %s (policy long-only)", symbol)
                         continue
