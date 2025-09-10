@@ -345,13 +345,18 @@ class PositionSizer:
             logger.debug(f"{symbol}: Current ${current_pos_val:.2f} within buffer zone [${lower_bound:.2f}, ${upper_bound:.2f}], no action")
             return None
         
-        # 3) Move to nearest band edge (keep sign)
+        # 3) Move to nearest band edge (keep sign) - but never exceed cap
         if current_pos_val < lower_bound:
             new_target_val = lower_bound
             logger.debug(f"{symbol}: Current ${current_pos_val:.2f} < lower bound ${lower_bound:.2f}, moving to ${new_target_val:.2f}")
         else:  # current_pos_val > upper_bound
             new_target_val = upper_bound
             logger.debug(f"{symbol}: Current ${current_pos_val:.2f} > upper bound ${upper_bound:.2f}, moving to ${new_target_val:.2f}")
+        
+        # CRITICAL: Ensure we never exceed the cap
+        if abs(new_target_val) > cap_val:
+            new_target_val = cap_val if new_target_val > 0 else -cap_val
+            logger.debug(f"{symbol}: Clipped to cap: ${new_target_val:.2f}")
         
         # Check minimum rebalance threshold
         rebalance_amount = abs(new_target_val - current_pos_val)
@@ -362,31 +367,44 @@ class PositionSizer:
             return None
         
         # 4) Convert to SIGNED shares and round to lots
-        target_shares = round(new_target_val / price / self.config.order_lot_size) * self.config.order_lot_size  # SIGNED
-        order_delta = int(target_shares - current_position)  # SIGNED
+        signed_target_shares = round(new_target_val / price / self.config.order_lot_size) * self.config.order_lot_size  # SIGNED
+        delta_shares = int(signed_target_shares - current_position)  # SIGNED
+        
+        # SANITY ASSERTIONS (catch sign bugs forever)
+        assert delta_shares == signed_target_shares - current_position, f"Delta calculation error: {delta_shares} != {signed_target_shares} - {current_position}"
+        
+        # Cap-satisfied assertions
+        if intended_val < -cap_val and current_pos_val <= upper_bound:
+            assert delta_shares >= 0, f"cap-satisfied short attempted to sell more: delta={delta_shares}"
+        if intended_val > cap_val and current_pos_val >= lower_bound:
+            assert delta_shares <= 0, f"cap-satisfied long attempted to buy more: delta={delta_shares}"
         
         # Final validation
-        if order_delta == 0:
+        if delta_shares == 0:
             logger.debug(f"{symbol}: Order delta is zero after rounding, no action")
             return None
         
         # Check minimum notional
-        order_notional = abs(order_delta) * price
+        order_notional = abs(delta_shares) * price
         if order_notional < min_notional:
             logger.debug(f"{symbol}: Order notional ${order_notional:.2f} below minimum ${min_notional:.2f}")
             return None
         
+        # Derive side from signed delta
+        side = "buy" if delta_shares > 0 else "sell"
+        qty = abs(delta_shares)
+        
         # Create SizeDecision with order delta (not target position)
-        logger.info(f"SizeDecision: {symbol} order_delta={order_delta:+d}, current={current_position:+d}, "
-                   f"target_shares={target_shares:.0f}, notional=${order_notional:.2f}, "
+        logger.info(f"SizeDecision: {symbol} order_delta={delta_shares:+d}, current={current_position:+d}, "
+                   f"target_shares={signed_target_shares:.0f}, side={side}, qty={qty}, notional=${order_notional:.2f}, "
                    f"signal_target=${intended_val:.2f}, cap_target=${cap_target_val:.2f}, "
                    f"buffer=[${lower_bound:.2f}, ${upper_bound:.2f}]")
         
         return SizeDecision(
-            qty=order_delta,  # This is the ORDER DELTA, not target position
+            qty=delta_shares,  # This is the SIGNED ORDER DELTA
             ref_price=price,
             notional=order_notional,
-            reason=f"buffer_rebalance_{'buy' if order_delta > 0 else 'sell'}"
+            reason=f"buffer_rebalance_{side}"
         )
 
     def _convert_to_shares(self, position_value: float, current_price: float) -> int:
