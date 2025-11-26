@@ -95,6 +95,56 @@ tmp/
 **/secrets*.{json,yaml}
 **/credentials*.{json,yaml}
 
+# Heavy data directories (all folders containing parquet/large data files)
+# Barrier target and feature directories
+*_comprehensive_features*/
+*_with_barrier_targets*/
+barrier_*/
+*_barrier_*/
+
+# Crypto data
+binance_*/
+crypto_*/
+
+# Test and output directories with data
+test_output*/
+test_pipeline_output*/
+test_strategy_output*/
+test_models/
+test_barrier_fix/
+
+# Model and training outputs
+models/
+ml/zoo/
+checkpoints/
+snapshots/
+storage/
+runs/
+output/
+results/
+reports/
+artifacts/
+portfolios/
+zoo/
+
+# Backup and archive
+backup/
+attic/
+cleanup/
+falsification_results/
+
+# Grid and experiment results
+grid_results.*
+strategy_comparison_test/
+
+# Voltage Park data
+VOLTAGE_PARK/output/
+VOLTAGE_PARK/data/
+
+# Any directory with interval= or symbol= structure (parquet data)
+**/interval=*/
+**/symbol=*/
+
 # Ensure core source modules are never ignored
 !core/data/**
 
