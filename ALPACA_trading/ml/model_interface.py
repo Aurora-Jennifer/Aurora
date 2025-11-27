@@ -15,3 +15,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Any, Protocol
+
+
+class Model(Protocol):
+    def predict(self, X) -> Any: ...
+
+
+@dataclass
+class ModelSpec:
+    kind: str
+    path: str
+    metadata: dict
